@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>为人民服务的公司:90 天执行规划</title>
+<meta name="description" content="v2.1 之后的 90 天落地——田野 + 技术 + 上线 + 合规">
+<style>
+:root {
+  --bg: #fbfaf6;
+  --bg-soft: #f4f1ea;
+  --text: #1a1a1a;
+  --text-muted: #5a5a5a;
+  --accent: #8b1e2d;
+  --accent-soft: rgba(139, 30, 45, 0.08);
+  --accent-strong: rgba(139, 30, 45, 0.15);
+  --green: #2d6a3f;
+  --green-soft: rgba(45, 106, 63, 0.08);
+  --gold: #b08d2e;
+  --gold-soft: rgba(176, 141, 46, 0.1);
+  --blue: #2e5f8b;
+  --blue-soft: rgba(46, 95, 139, 0.08);
+  --border: #d4d0c8;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-size: 17px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+.nav-back {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.4em 1em;
+  font-size: 0.85em;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.2s;
+  z-index: 100;
+}
+.nav-back:hover { color: var(--accent); border-color: var(--accent); }
+
+.toc {
+  position: fixed;
+  top: 80px;
+  right: 30px;
+  width: 220px;
+  font-size: 0.84em;
+  line-height: 1.5;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 1em;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  z-index: 50;
+}
+.toc-title {
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.6em 0;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid var(--border);
+}
+.toc a {
+  color: var(--text-muted);
+  text-decoration: none;
+  display: block;
+  padding: 0.25em 0;
+  padding-left: 0.6em;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+}
+.toc a:hover { color: var(--accent); border-left-color: var(--accent); }
+
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 70px 30px 100px;
+}
+.header {
+  margin-bottom: 3em;
+  border-bottom: 3px solid var(--accent);
+  padding-bottom: 1.4em;
+}
+h1 {
+  font-size: 2.3em;
+  font-weight: 700;
+  margin: 0 0 0.4em 0;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+.meta {
+  color: var(--text-muted);
+  font-size: 0.92em;
+  font-style: italic;
+  margin: 0;
+}
+.meta span { margin-right: 1.5em; display: inline-block; }
+.meta a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+.meta a:hover { border-bottom-color: var(--accent); }
+.audience {
+  background: var(--bg-soft);
+  padding: 0.8em 1.2em;
+  border-radius: 4px;
+  margin-top: 1.2em;
+  font-size: 0.92em;
+  color: var(--text-muted);
+}
+.audience strong { color: var(--text); }
+h2 {
+  font-size: 1.55em;
+  font-weight: 600;
+  margin: 3em 0 0.8em;
+  padding-bottom: 0.4em;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: 30px;
+}
+h3 {
+  font-size: 1.18em;
+  font-weight: 600;
+  margin: 2em 0 0.5em;
+  color: var(--accent);
+  scroll-margin-top: 30px;
+}
+h4 {
+  font-size: 1.02em;
+  font-weight: 600;
+  margin: 1.5em 0 0.4em;
+  color: var(--text);
+}
+p { margin: 0 0 1.1em 0; }
+strong { font-weight: 600; }
+ul, ol { padding-left: 1.6em; margin: 0.6em 0 1.3em; }
+li { margin-bottom: 0.5em; }
+code {
+  background: var(--bg-soft);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+  font-size: 0.88em;
+  font-family: "SF Mono", Consolas, monospace;
+}
+
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  margin: 1.5em 0;
+  padding: 1em 1.4em;
+  border-radius: 0 4px 4px 0;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 0.92em;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+th {
+  background: var(--bg-soft);
+  text-align: left;
+  padding: 0.7em 0.9em;
+  border-bottom: 2px solid var(--border);
+  font-weight: 600;
+  font-size: 0.92em;
+}
+td {
+  padding: 0.6em 0.9em;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover { background: var(--bg-soft); }
+
+hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+
+.distillation {
+  background: linear-gradient(135deg, var(--accent-soft), var(--gold-soft));
+  border-left: 4px solid var(--accent);
+  padding: 1.4em 1.8em;
+  margin: 2em 0;
+  font-size: 1.04em;
+  line-height: 1.7;
+  border-radius: 4px;
+}
+.distillation-label {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.6em;
+}
+.distillation p:last-child { margin-bottom: 0; }
+
+.phase {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 1.3em 1.5em;
+  margin: 1.5em 0;
+}
+.phase-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.6em;
+}
+.phase-num {
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.phase-days {
+  font-size: 0.82em;
+  color: var(--text-muted);
+  font-style: italic;
+}
+.phase-title {
+  font-size: 1.18em;
+  font-weight: 600;
+  margin-bottom: 0.4em;
+}
+
+.field-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.2em 1.5em;
+  margin-bottom: 1.3em;
+}
+.field-card h4 {
+  margin-top: 0;
+  font-size: 1.06em;
+  color: var(--accent);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4em;
+  margin-bottom: 0.6em;
+}
+
+.rule {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--green);
+  border-radius: 4px;
+  padding: 1em 1.3em;
+  margin: 1.2em 0;
+}
+.rule-label {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4em;
+}
+
+.warning {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 1em 1.3em;
+  margin: 1.2em 0;
+}
+.warning-label {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4em;
+}
+
+.note-soft {
+  background: var(--blue-soft);
+  border-left: 4px solid var(--blue);
+  border-radius: 0 4px 4px 0;
+  padding: 1em 1.3em;
+  margin: 1.2em 0;
+  font-size: 0.95em;
+}
+.note-label {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--blue);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4em;
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.8em;
+  margin: 1.5em 0;
+}
+.week {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 1em;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.9em 1.2em;
+  align-items: start;
+}
+.week-num {
+  font-size: 0.82em;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+.week-num span {
+  display: block;
+  font-size: 0.78em;
+  color: var(--text-muted);
+  font-weight: normal;
+  margin-top: 0.2em;
+}
+.week-body {
+  font-size: 0.95em;
+}
+.week-body p { margin: 0 0 0.3em 0; }
+.week-body p:last-child { margin-bottom: 0; }
+
+.checklist {
+  list-style: none;
+  padding-left: 0;
+}
+.checklist li {
+  padding-left: 1.8em;
+  position: relative;
+  margin-bottom: 0.5em;
+}
+.checklist li::before {
+  content: "☐";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 1.1em;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--accent);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.2em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 50;
+}
+.back-to-top.visible { opacity: 1; }
+
+@media (max-width: 1100px) {
+  .toc { display: none; }
+}
+@media (max-width: 600px) {
+  .container { padding: 50px 20px 60px; }
+  h1 { font-size: 1.7em; }
+  h2 { font-size: 1.3em; }
+  body { font-size: 16px; }
+  table { font-size: 0.85em; }
+  th, td { padding: 0.5em 0.6em; }
+  .week { grid-template-columns: 75px 1fr; }
+}
+</style>
+</head>
+<body>
+
+<a href="./index.html" class="nav-back">← 返回</a>
+
+<nav class="toc">
+  <p class="toc-title">目录</p>
+  <a href="#s0">零、整体框架</a>
+  <a href="#s1">一、选题方法论</a>
+  <a href="#s2">二、田野调查具体安排</a>
+  <a href="#s3">三、技术架构</a>
+  <a href="#s4">四、上线路径</a>
+  <a href="#s5">五、合规专题:ICP 备案</a>
+  <a href="#s6">六、合规专题:数据保护</a>
+  <a href="#s7">七、周历(13 周)</a>
+  <a href="#s8">八、决策点与失败应变</a>
+  <a href="#s9">九、人员分工</a>
+</nav>
+
+<div class="container">
+
+<div class="header">
+  <h1>90 天执行规划</h1>
+  <p class="meta">
+    <span><strong>版本:</strong>v2.1 配套</span>
+    <span><strong>日期:</strong>2026-05-13 起</span>
+    <span><strong>结束:</strong>2026-08-10</span>
+  </p>
+  <p class="meta" style="margin-top: 0.8em;">v2.1 的执行层细节——田野 + 技术 + 上线 + 合规的 13 周展开</p>
+  <div class="audience">
+    <strong>用途说明:</strong>把 v2.1 的"试点期"压实到周级动作。<strong>三个人对照执行</strong>(Sun + 学徒 + 高中同学如已入伙)。每周日复盘,允许调整,但不允许默默漂移。
+  </div>
+</div>
+
+<h2 id="s0">零、整体框架</h2>
+
+<p>13 周分三阶段,每阶段 4-5 周。每阶段结束有一个明确的<strong>判断点</strong>:</p>
+
+<table>
+  <thead>
+    <tr><th>阶段</th><th>周次</th><th>核心任务</th><th>结束时判断点</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>阶段 1<br/>田野</strong></td>
+      <td>Week 1-5</td>
+      <td>3-5 个并行 CD 轨道,选定 1-2 个 MVP 方向</td>
+      <td>有没有发现真痛点?痛点对应工具能不能 1-2 周建出来?</td>
+    </tr>
+    <tr>
+      <td><strong>阶段 2<br/>建造</strong></td>
+      <td>Week 6-9</td>
+      <td>第一个 MVP 完整开发 + 备案 + 数据合规</td>
+      <td>能不能上线?有没有把法律雷区都拆完?</td>
+    </tr>
+    <tr>
+      <td><strong>阶段 3<br/>验证</strong></td>
+      <td>Week 10-13</td>
+      <td>50 个种子用户(≥20 来自目标人群)+ 每周迭代</td>
+      <td>有 active retention 吗?是 continue / pivot / kill?</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="distillation">
+  <span class="distillation-label">90 天一句话蒸馏</span>
+  <p>5 周田野调查识别真痛点,4 周建一个能上线的微信小程序,4 周用 50 个种子用户验证——结束时拿到一个清晰的 continue/pivot/kill 决策,以及一份足以指导下一个 90 天的复盘。</p>
+</div>
+
+<h2 id="s1">一、选题方法论</h2>
+
+<h3>1.1 三条筛选原则(同时满足)</h3>
+
+<ol>
+  <li><strong>目标用户是第一/二/服务业劳动者</strong>(v2.1 核心承诺,不可妥协)</li>
+  <li><strong>3 人小队 + AI 能在 4 周内做出可用 MVP</strong>(否则 90 天兜不住一个完整循环)</li>
+  <li><strong>用户能(也愿意)在 6 个月内付费 ≥ 10 元/月,或贡献等价的内容/数据</strong>(否则商业模型不闭环,养不起项目)</li>
+</ol>
+
+<h3>1.2 候选轨道(田野前的初步清单)</h3>
+
+<p>v2.1 没限定具体方向。下面 5 个候选都满足上面三条筛选,前 5 周田野并行展开,Week 5 末选 1-2 个进 Phase 2:</p>
+
+<table>
+  <thead>
+    <tr><th>候选方向</th><th>用户</th><th>可能的 MVP</th><th>风险</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>外卖骑手收入/路径助手</strong></td>
+      <td>美团/饿了么/达达骑手</td>
+      <td>AI 帮算"这单值不值"、"这片区今晚补贴预测"、收入流水自动整理</td>
+      <td>跟美团抢饭碗易被封号,数据合规复杂</td>
+    </tr>
+    <tr>
+      <td><strong>新手妈妈生活助手</strong></td>
+      <td>0-1 岁宝妈,主要县城/三四线</td>
+      <td>AI 问诊预筛(发烧/起疹/吐奶判轻重)+ 二手母婴流转 + 月嫂vetting</td>
+      <td>儿童信息合规雷区;医疗类内容审查严</td>
+    </tr>
+    <tr>
+      <td><strong>电子厂工人生活工具</strong></td>
+      <td>富士康/立讯/比亚迪等流水线工人</td>
+      <td>工时/加班/工资自动核对、宿舍/食堂/兼职信息汇总、AI 帮写请假/投诉信</td>
+      <td>用户碎片时间少,留存难;工厂方可能反感</td>
+    </tr>
+    <tr>
+      <td><strong>家政/月嫂/育儿嫂工具</strong></td>
+      <td>家政从业者(供给侧)</td>
+      <td>客户管理 + 自动账单 + 雇主沟通模板 + 接单口碑</td>
+      <td>从业者数字化程度差异大,小白用户教育成本高</td>
+    </tr>
+    <tr>
+      <td><strong>小餐馆/夫妻店经营助手</strong></td>
+      <td>30 平米以下个体经营者</td>
+      <td>AI 帮写菜单文案、采购清单、社区团购对接、给小红书发宣传</td>
+      <td>竞品多(美团商家版等),价值差异化弱</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="note-soft">
+  <span class="note-label">备注</span>
+  <p>这 5 个里面我把 <strong>外卖骑手</strong> 和 <strong>新手妈妈</strong> 标为最优先,因为你已经显示出对这两个的倾向(注册骑手 + b 超室门口聊天)。但 Week 1-4 期间至少同时跑 3 个轨道,不要早期 lock-in 一个。</p>
+</div>
+
+<h3>1.3 田野方法:三三制 + 24h demo + 真金白银</h3>
+
+<p>从 v2.0 继承,在此具体化:</p>
+
+<ol>
+  <li><strong>三三制</strong>:每个轨道每周接触 3 类用户(典型/边缘/反例),每类 3 个人,共 9 人。每周复盘是"9 个故事 → 1 个抽象痛点"</li>
+  <li><strong>24h demo</strong>:每个候选轨道,在田野第二周必须有一个"24 小时内能跑通核心流程的 demo"(不需要好看,需要可见)。让用户看着 demo 评论,比让他描述需求更准</li>
+  <li><strong>真金白银</strong>:每次访谈给受访者 50-100 元红包或等价实物。<strong>这件事是设计 feature 不是 nice-to-have</strong>——付费的访谈数据质量比免费的高 3 倍以上(沉没成本让受访者愿意"出力"),而且 50 元对你便宜,对工友是有意义的</li>
+</ol>
+
+<h2 id="s2">二、田野调查具体安排</h2>
+
+<p>你点名了三个具体动作——<strong>注册骑手、应聘电子厂、b 超室门口聊天</strong>。我把每个动作的实操细节、时间投入、隐藏风险全部摊开,你看完决定是否照执行。</p>
+
+<h3>2.1 注册外卖骑手(Sun 主要承担)</h3>
+
+<div class="field-card">
+  <h4>实操流程</h4>
+  <ol>
+    <li><strong>选平台</strong>:美团骑手最大(单量多)、饿了么蜂鸟其次、顺丰同城/达达再次。建议美团——数据样本最有代表性</li>
+    <li><strong>下载美团骑手 App,选择"众包"类型</strong>(不是"专送")。众包没有班次约束,Sun 想跑就跑</li>
+    <li><strong>实名认证</strong>:身份证 + 拍证件照</li>
+    <li><strong>办健康证</strong>:大部分城市强制,当地疾控中心或指定医院,抽血 + 胸透,100-200 元,1-3 天出证</li>
+    <li><strong>看视频培训 + 考试</strong>:1-2 小时内完成</li>
+    <li><strong>开始跑单</strong></li>
+  </ol>
+  <h4>时间投入建议</h4>
+  <p><strong>不少于 2 周,每周 ≥ 20 小时实际跑单</strong>(主要在中午 11-13、晚上 17-20 高峰)。少于这个量,你只算"体验过",不算"真理解骑手"。</p>
+  <h4>核心目的(优先级排序)</h4>
+  <ol>
+    <li>在 <strong>等单 / 取餐排队 / 充电桩</strong> 等场景跟其他骑手聊天 —— 这是金矿,不是跑单本身</li>
+    <li>体验 App 算法:跑单价格波动、派单逻辑、补贴规则、惩罚机制</li>
+    <li>体验劳动强度 + 风险(电瓶车事故、超时罚款、商家催促)</li>
+    <li>顺便挣点跑单费(50 元/次访谈预算的一部分可以从这里出)</li>
+  </ol>
+</div>
+
+<div class="warning">
+  <span class="warning-label">需要警觉的事</span>
+  <ul>
+    <li><strong>你不会真的变成骑手</strong>。你是"穿骑手皮的程序员",其他骑手大多数会看出来(口音、用词、对超时的反应)。<strong>不要装</strong>——直接说"我是个程序员想做工具帮骑手,能跟你聊 30 分钟吗?给你 50 块"。"诚实的外人"比"潜入式"高效得多</li>
+    <li><strong>美团 KOL 化的骑手</strong>(已经做小红书/抖音的骑手)<strong>不是好样本</strong>。他们看世界的方式更接近自媒体而不是普通骑手。专门找"什么自媒体都不做的骑手"</li>
+    <li><strong>电瓶车安全</strong>。北京/杭州冬天跑骑手摔车风险很真实,买好头盔,雨天别跑</li>
+  </ul>
+</div>
+
+<h3>2.2 应聘电子厂(学徒主要承担,Sun 配合)</h3>
+
+<div class="field-card">
+  <h4>实操流程</h4>
+  <ol>
+    <li><strong>找派遣公司</strong>:在 BOSS 直聘 / 智联 / 58 同城搜"电子厂 普工 短期",大量派遣公司发单。也可以去富士康直招通道(郑州/深圳)</li>
+    <li><strong>选短期合同/小时工</strong>:3-7 天试工免费,7 天后转正可走可留。这个机制对你刚好——目的是访谈不是真打工</li>
+    <li><strong>体检</strong>:进厂前体检,大多数派遣公司负担费用</li>
+    <li><strong>进厂</strong>:住宿舍 + 上流水线</li>
+  </ol>
+  <h4>时间投入建议</h4>
+  <p><strong>学徒进厂 7-10 天</strong>(身体能承受、信息收集足够)。Sun 不建议进厂——一个 30+ 的男性中级程序员进流水线显眼,反而妨碍学徒做田野。Sun 在外配合(每天晚上跟学徒通话复盘 + 帮整理笔记)。</p>
+  <h4>核心目的</h4>
+  <ol>
+    <li><strong>宿舍生活</strong>:8 人间、谁玩什么手机 app、晚上聊什么、对加班的态度</li>
+    <li><strong>流水线日常</strong>:工时、计件 vs 计时、罚款规则、跟班长的关系</li>
+    <li><strong>食堂 + 班车</strong>:聊天最高频场景。学徒带本子记录(不要在工友面前拿手机录音)</li>
+    <li><strong>工资条</strong>:实际工资构成(底薪 + 加班费 + 满勤奖 + 各种扣)。这是工具方向的金矿——"自动核对工资"是个真痛点</li>
+  </ol>
+</div>
+
+<div class="warning">
+  <span class="warning-label">需要警觉的事</span>
+  <ul>
+    <li><strong>学徒不是真打工赚钱的</strong>。要在心里清楚他是"研究员",一旦觉得不行(身体撑不住、出现安全风险)立即出来。不要"为了田野咬牙顶"</li>
+    <li><strong>不要假身份</strong>。说"我对工厂生活好奇,想来看看,给我介绍工作的师傅我都告诉他了"。派遣链上有人不喜欢你套话也直接走</li>
+    <li><strong>女工人/男工人比例</strong>:大多数电子厂女工多,学徒是男性进去会被分到男工区(包装/物流/检测),女工的世界他接触不到。如果母婴方向是你的优先,这件事是个 gap——补救:Sun 或学徒的女性家属/朋友去电子厂女工聚集的地方(下班时的厂门口、商业街、宿舍楼下)做访谈</li>
+  </ul>
+</div>
+
+<h3>2.3 b 超室门口聊天(改进版)</h3>
+
+<div class="field-card">
+  <h4>原方案的问题</h4>
+  <p>妇幼保健院 b 超室门口大量是孕妇 + 陪同的父亲/婆婆/母亲。等候时间长(2-4 小时)、容易开口——你这个直觉对的。但<strong>有一个执行问题</strong>:一个陌生中年男性蹲在妇幼医院里找孕妇聊天,容易被保安请走,也容易引起警觉。这是结构问题,不是你不善聊。</p>
+  <h4>改进方案(三选一或多管齐下)</h4>
+  <ol>
+    <li><strong>找女性研究员</strong>:Sun 的太太/姐妹、学徒的家属、高中同学的太太——任何一个女性愿意帮忙做田野,她蹲妇幼医院门口的合法性 + 信任成本比 Sun 低 10 倍。承诺给她按小时付费(100 元/小时),把她当真正的研究员对待</li>
+    <li><strong>换场景</strong>:同样的孕妇/新手妈妈群体,在<strong>月嫂培训机构 / 月子中心 / 早教中心 / 母婴店</strong>更易接触,且这些地方店主/培训师本身就是潜在用户(供给侧)。聊天阻力小</li>
+    <li><strong>线上前置</strong>:微博/小红书/抖音搜"#新手妈妈" "#月嫂避坑"等标签,找发了很多帖子但粉丝不多的用户私信(她们正在表达但还没找到人听)。约 30 分钟视频访谈 + 50 元红包。这种用户访谈成本极低,质量极高</li>
+  </ol>
+  <h4>无论选哪个,核心要问的</h4>
+  <ul>
+    <li>"<strong>从怀孕到孩子 1 岁,你做的所有决定里最难做的是哪个?</strong>"</li>
+    <li>"<strong>这个决定你最后是问谁的?</strong>" (好友/婆婆/医生/抖音/淘宝评论)</li>
+    <li>"<strong>那个人给的建议对吗?</strong>" 和 "<strong>如果是错的,当时谁本来能告诉你正确的?</strong>"</li>
+    <li>"<strong>每个月你为孩子花的钱大头在哪?</strong>" (奶粉/纸尿裤/早教/医疗)</li>
+    <li>"<strong>有没有什么事情你想做但没做,因为没钱/没时间/没人帮?</strong>"</li>
+  </ul>
+</div>
+
+<h3>2.4 第四个轨道:线上扫一遍(高中同学如已入伙,他主导)</h3>
+
+<div class="field-card">
+  <h4>方法</h4>
+  <p>在小红书/抖音/快手搜索目标用户群的标签,找<strong>已经发声但还没成网红的用户</strong>(粉丝 200-2000、内容真实、最近 1 个月有更新)。私信约访,30 分钟视频访谈 + 50 元红包。</p>
+  <h4>典型搜索词</h4>
+  <ul>
+    <li>骑手:"#外卖员日常" "#送外卖" "#骑手日记"</li>
+    <li>新手妈妈:"#新手妈妈" "#一胎宝妈" "#月嫂避坑"</li>
+    <li>电子厂:"#富士康" "#流水线日记" "#工厂打工"</li>
+    <li>家政:"#月嫂日记" "#育儿嫂"</li>
+  </ul>
+  <h4>这条轨道的特殊价值</h4>
+  <p>面对面田野只能接触你物理上能去的人,但你的产品用户分布在全国。线上能采到 <strong>不同城市/省份</strong> 的用户,验证地域差异。每个 vertical 至少采到 3-5 个不同城市的样本。</p>
+</div>
+
+<h2 id="s3">三、技术架构</h2>
+
+<h3>3.1 一句话原则</h3>
+
+<blockquote>
+  <p>3 人小队 + AI + 90 天 + 50 用户 = <strong>用最简单成熟的技术栈,把复杂度推后到真有规模后再处理</strong>。所有"将来可能需要"的架构决策都先不做。</p>
+</blockquote>
+
+<h3>3.2 推荐技术栈</h3>
+
+<table>
+  <thead>
+    <tr><th>层</th><th>选择</th><th>理由</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>前端(主)</td>
+      <td><strong>Taro 4 + React 18 + TypeScript</strong></td>
+      <td>一套代码同时编译微信小程序 + 抖音小程序 + H5。中国 B2C 工友 90% 通过微信触达,小程序无应用商店审核,分享/支付/登录链路最短</td>
+    </tr>
+    <tr>
+      <td>UI 组件库</td>
+      <td><strong>NutUI-React Taro 版</strong></td>
+      <td>京东出品、Taro 官方推荐、组件最全(表单/弹层/列表/上拉刷新开箱即用)。比 Taroify 更适合工具型应用</td>
+    </tr>
+    <tr>
+      <td>样式</td>
+      <td>Tailwind CSS(Taro 4 已支持)</td>
+      <td>跟 sunmer-home 既有 patterns 一致,迁移零成本</td>
+    </tr>
+    <tr>
+      <td>状态管理</td>
+      <td><strong>Zustand</strong></td>
+      <td>轻量、跨端兼容、学徒友好(不需要学 Redux 思维)</td>
+    </tr>
+    <tr>
+      <td>数据层</td>
+      <td><strong>TanStack Query (React Query)</strong> + axios client</td>
+      <td>跨端可用、缓存策略成熟</td>
+    </tr>
+    <tr>
+      <td>后端</td>
+      <td><strong>NestJS (Node.js)</strong></td>
+      <td>TS 端到端,与 Taro 前端共享类型/逻辑代码最自然。可复用 Payload CMS 部分能力</td>
+    </tr>
+    <tr>
+      <td>数据库</td>
+      <td><strong>PostgreSQL</strong>(主)+ Redis(缓存)</td>
+      <td>关系型够用,JSONB 字段灵活,免去早期 schema 焦虑</td>
+    </tr>
+    <tr>
+      <td>对象存储</td>
+      <td><strong>阿里云 OSS</strong> 或 腾讯云 COS</td>
+      <td>图片/视频/文档存储,境内服务,合规友好</td>
+    </tr>
+    <tr>
+      <td>LLM</td>
+      <td><strong>DeepSeek API</strong>(主)+ Qwen/Doubao(备)</td>
+      <td>国内访问稳定、价格低、合规;v2.0 提到的"模型主权"长期路径起点</td>
+    </tr>
+    <tr>
+      <td>后端部署</td>
+      <td>阿里云轻量服务器 ECS + RDS PostgreSQL</td>
+      <td>试点期 1 台 2c4g + RDS 基础版,月成本 < 300 元。备案前先用境外节点开发,备案完切回</td>
+    </tr>
+    <tr>
+      <td>小程序 CI</td>
+      <td>GitHub Actions + <strong>miniprogram-ci</strong>(微信官方)</td>
+      <td>自动上传体验版到微信开发者工具,PR 触发预览</td>
+    </tr>
+    <tr>
+      <td>CI/CD</td>
+      <td>GitHub Actions(免费 + 团队熟)</td>
+      <td>不要花时间搭 Jenkins,够用就行</td>
+    </tr>
+    <tr>
+      <td>监控</td>
+      <td>Sentry(错误) + 阿里云内置(基础指标)</td>
+      <td>SaaS 免费层够用</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>3.3 不要做的事(显式列出)</h3>
+
+<ul>
+  <li><strong>不要造微服务</strong>。单体应用,1 个 git repo,1 个数据库。直到用户超过 5000 都不需要拆</li>
+  <li><strong>不要做 App</strong>(原生 iOS/Android)。商店审核 + 各种 SDK + 推送资质 + 隐私清单 = 6 周时间在合规上,不划算</li>
+  <li><strong>不要自部署模型</strong>(本阶段)。v2.0 模型主权是<strong>长期</strong>目标,试点期用 API 就够。等用户量 > 1000 再考虑</li>
+  <li><strong>不要做"中台/低代码平台"</strong>。先把第一个产品做出来。多团队的工具放到 v2.1 §7.3 推迟决策清单里</li>
+  <li><strong>不要追求 100% 测试覆盖</strong>。关键链路(支付、登录、数据写入)有冒烟测试就够</li>
+  <li><strong>不要做用户增长黑客技术</strong>。前 50 用户全部线下/线上人肉拉到,不需要 SEO/广告投放</li>
+</ul>
+
+<h3>3.4 仓库起点:fork sunmer-home</h3>
+
+<p>Sun 既有项目 <code>Stupidism/sunmer-home</code>(Turborepo 多 app monorepo)作为新项目骨架,fork 之后剥离不相关 apps,新建 Taro app:</p>
+
+<pre style="background: var(--bg-soft); padding: 1em 1.2em; border-radius: 4px; font-size: 0.85em; overflow-x: auto;"><code># 1. Fork + clone
+gh repo fork Stupidism/sunmer-home --fork-name code-for-people-app --clone
+cd code-for-people-app
+
+# 2. 剥离不相关 apps
+rm -rf apps/wedding-invite apps/nunu-island apps/nunu-log
+
+# 3. 新建 Taro 小程序 app
+cd apps
+pnpm dlx @tarojs/cli init gongyou-mp
+# 选项:React + TypeScript + Tailwind CSS
+
+# 4. 安装 NutUI-React Taro 版
+cd gongyou-mp
+pnpm add @nutui/nutui-react-taro
+
+# 5. 注册微信小程序开发者账号(个人,免费)
+# https://mp.weixin.qq.com/  Sun 个人微信注册,试点期用个人账号
+# 公司注册之后(Week 5)切企业账号
+</code></pre>
+
+<p><strong>最终的 monorepo 结构:</strong></p>
+
+<pre style="background: var(--bg-soft); padding: 1em 1.2em; border-radius: 4px; font-size: 0.85em; overflow-x: auto;"><code>code-for-people-app/
+├── apps/
+│   ├── gongyou-mp/        # Taro 小程序(主力)
+│   ├── gongyou-web/       # Next.js 落地页(自媒体导流;bubu-log 改造)
+│   └── gongyou-api/       # NestJS 后端
+├── packages/
+│   ├── ui-mp/             # Taro 端组件(基于 NutUI-React 二次封装)
+│   ├── ui-web/            # Web 端组件(继承 sunmer-home 的 shadcn/ui)
+│   ├── shared/            # 业务逻辑、类型、API client(跨端共享)
+│   └── typescript-config/ # 继承 sunmer-home
+├── .github/workflows/
+│   ├── miniprogram-deploy.yml  # 小程序自动上传体验版
+│   └── vercel-preview.yml      # Web 落地页 PR preview
+└── (其他基础设施从 sunmer-home 继承)
+</code></pre>
+
+<div class="note-soft">
+  <span class="note-label">关键判断</span>
+  <p><code>packages/ui-mp</code> 和 <code>packages/ui-web</code> <strong>拆开两个</strong>,不强求"一套组件跨端"。Taro 理论支持但 Web 和小程序的交互模式差异(下拉刷新、原生导航、键盘行为)让"统一组件"得不偿失。<strong>业务逻辑共享(packages/shared),UI 各自实现</strong>——这是 Taro 多端成熟范式。</p>
+</div>
+
+<h3>3.5 AI 协作约定</h3>
+
+<p>3 人小队 + AI 协作的工程产出能达到过去 8-10 人团队,但需要明确约定:</p>
+
+<ul>
+  <li><strong>每个人有一个 Claude / DeepSeek / Cursor 的固定工作流</strong>。新人入伙第一周内完成自己的 setup</li>
+  <li><strong>代码 review 不可省</strong>。AI 生成的代码必须有人读懂再 merge——盲信 AI 是项目最大的隐藏债务来源</li>
+  <li><strong>架构决策不让 AI 拍板</strong>。AI 适合执行已定型的技术决策,不适合在两个方案间做选择</li>
+  <li><strong>提示词共享</strong>。三个人维护一个内部仓库,把好用的 prompt 模板沉淀下来</li>
+</ul>
+
+<h2 id="s4">四、上线路径</h2>
+
+<h3>4.1 已锁定:小程序优先(Taro)</h3>
+
+<p>不再比较 Web / 小程序 / App 三选一——已决:<strong>微信小程序作为主入口,Web 作为自媒体落地页,App 完全不做</strong>。</p>
+
+<ol>
+  <li><strong>主要产品:微信小程序</strong>(Taro 编译产物)——所有核心功能在这里,目标用户(工友)的默认入口</li>
+  <li><strong>导流落地页:H5</strong>(Taro 同代码编译)——自媒体内容 + "下面扫码进小程序"的桥</li>
+  <li><strong>公众号</strong>——内容沉淀 + 关注后的私域池 + 客服</li>
+</ol>
+
+<h3>4.2 小程序具体上线流程</h3>
+
+<ol>
+  <li><strong>注册小程序账号</strong>:个人 / 企业。<strong>个人小程序类目受限</strong>(不能做电商、不能做支付、不能做互动社区),所以推荐<strong>用企业账号</strong></li>
+  <li><strong>注册时机的矛盾</strong>:v2.1 说 90 天试点不注册公司,但小程序企业账号需要公司。<strong>解决路径见下面 §4.4</strong></li>
+  <li><strong>小程序 ICP 备案</strong>(2024 新规):提交后 7-20 工作日</li>
+  <li><strong>类目审核</strong>:选错类目会反复打回,提前看好微信小程序类目清单</li>
+  <li><strong>开发 → 提审 → 上线</strong></li>
+</ol>
+
+<h3>4.3 公司注册时机的现实建议(修订 v2.1)</h3>
+
+<div class="warning">
+  <span class="warning-label">v2.1 修订点</span>
+  <p>v2.1 §3.1 阶段 2 的触发条件原本是"用户 ≥ 100"。<strong>实际操作中,公司注册要先于此</strong>——因为没有公司你跑不通"小程序企业账号 + ICP 备案"这条线。</p>
+  <p><strong>修订建议:</strong>公司注册时间提前到 <strong>Week 5 末</strong>(田野结束、确定方向之时),不是等到用户 100。原因是:</p>
+  <ul>
+    <li>公司注册本身要 1-2 周</li>
+    <li>对公账户 + 银行 U 盾要 1-2 周</li>
+    <li>小程序企业认证(账号申请 + 微信认证 300 元/年)要 1-2 周</li>
+    <li>ICP 备案要 7-20 个工作日</li>
+    <li>总共 4-6 周走完。如果 Week 5 启动,Week 11 上线刚好</li>
+  </ul>
+  <p>公司注册形式仍按 v2.1:普通有限公司 + 章程自约束(不分红、利润转工资、解散归社会)。</p>
+</div>
+
+<h2 id="s5">五、合规专题:ICP 备案</h2>
+
+<h3>5.1 ICP 备案到底是什么</h3>
+
+<p>中国法律要求:任何<strong>面向国内用户提供网站/小程序服务</strong>的主体,在工信部完成"非经营性互联网信息服务备案"(简称 ICP 备案)。没备案的境内网站 80 端口会在 24-48 小时内被切断,小程序无法发布。</p>
+
+<h3>5.2 备案要求</h3>
+
+<table>
+  <thead>
+    <tr><th>项目</th><th>个人备案</th><th>企业备案</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>主体材料</td><td>身份证</td><td>营业执照 + 法人身份证</td></tr>
+    <tr><td>服务器</td><td>必须国内云(阿里/腾讯/华为/百度等)</td><td>同左</td></tr>
+    <tr><td>域名</td><td>已实名认证的 .cn/.com 等</td><td>同左</td></tr>
+    <tr><td>内容限制</td><td><strong>不能做经营性</strong>:电商、互动社区、知识付费、教育培训、医疗资讯等几乎都被禁</td><td>按公司经营范围,大部分都可</td></tr>
+    <tr><td>时间</td><td>7-20 工作日</td><td>同左</td></tr>
+    <tr><td>对本项目适用度</td><td>❌ 内容限制基本封死</td><td>✅</td></tr>
+  </tbody>
+</table>
+
+<h3>5.3 试点期备案策略</h3>
+
+<ol>
+  <li><strong>Week 1-4 田野期</strong>:用 Surge / Vercel / Cloudflare Pages 部署原型,自己人和早期访谈对象用,<strong>不公开宣传</strong>。无需备案</li>
+  <li><strong>Week 5</strong>:启动公司注册</li>
+  <li><strong>Week 6-9</strong>:边开发边走备案。开发用境外服务器(Vercel 等),备案下来切换到境内</li>
+  <li><strong>Week 10+</strong>:备案完成,小程序提审,正式上线</li>
+</ol>
+
+<h3>5.4 备案的隐藏雷</h3>
+
+<ul>
+  <li><strong>注册地址不一致</strong>:营业执照地址 vs 实际办公地址,备案审核会查。建议公司地址用真实办公地址(哪怕是租的"虚拟办公室")</li>
+  <li><strong>负责人手持身份证拍照</strong>:大部分省份现在要求"备案专用幕布 + 手持身份证视频"。提前做好</li>
+  <li><strong>名称包含"教育"、"医疗"、"金融"、"新闻"等敏感词</strong>:触发额外前置审批(教育部门、卫健委等),时间翻倍。<strong>这就是 v2.1 §3.3 漂白命名的现实根据——"数字素养服务中心"不触发,"工友教育"会触发</strong></li>
+  <li><strong>小程序专项备案</strong>:小程序在 ICP 主备案之外,还要在微信生态内单独备案。两个流程并行</li>
+</ul>
+
+<h2 id="s6">六、合规专题:数据保护</h2>
+
+<h3>6.1 适用法律(扫一遍)</h3>
+
+<ul>
+  <li><strong>《个人信息保护法》(PIPL)</strong>(2021):个人信息收集、使用、跨境传输的总章</li>
+  <li><strong>《数据安全法》</strong>(2021):数据分级、重要数据出境</li>
+  <li><strong>《网络安全法》</strong>(2017):网络运营者义务、关键信息基础设施保护</li>
+  <li><strong>《未成年人保护法》</strong>(2021):14 岁以下儿童信息特别保护</li>
+</ul>
+
+<h3>6.2 试点期的最小化合规配置</h3>
+
+<div class="rule">
+  <span class="rule-label">原则</span>
+  <p><strong>最小化收集 + 明示授权 + 国内存储 + 加密传输。</strong>这四条做到,试点期(50 用户内)绝大多数风险被覆盖。</p>
+</div>
+
+<h4>具体到字段层面</h4>
+
+<table>
+  <thead>
+    <tr><th>字段</th><th>建议</th><th>风险</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>微信 OpenID</td><td>✅ 必收(用作 user ID)</td><td>低</td></tr>
+    <tr><td>用户昵称 + 头像</td><td>✅ 微信授权获取</td><td>低</td></tr>
+    <tr><td>手机号</td><td>⚠ 非必要不收,真要收需短信验证 + 明示授权</td><td>中(属敏感个人信息)</td></tr>
+    <tr><td>身份证号</td><td>❌ 试点期不收</td><td>极高</td></tr>
+    <tr><td>位置(精确)</td><td>⚠ 用户每次主动授权,不持久保存</td><td>中</td></tr>
+    <tr><td>位置(模糊,如城市)</td><td>✅ 可保存,但要明示</td><td>低</td></tr>
+    <tr><td>支付信息</td><td>由微信支付/支付宝处理,你的服务不接触卡号</td><td>由平台兜底</td></tr>
+    <tr><td>儿童信息(<14)</td><td>❌ 试点期完全不收,避免 PIPL 第 31 条</td><td>极高</td></tr>
+    <tr><td>医疗/健康</td><td>❌ 试点期完全不收</td><td>极高</td></tr>
+    <tr><td>聊天/AI 对话</td><td>✅ 加密存储,默认 90 天后删除</td><td>低</td></tr>
+  </tbody>
+</table>
+
+<h3>6.3 必须做的最小动作</h3>
+
+<ol>
+  <li><strong>《用户协议》和《隐私政策》</strong>:小程序上线必备。可参考开源模板(GitHub 上有大量中国合规版本),自己改一下</li>
+  <li><strong>首次启动弹窗</strong>:用户同意《隐私政策》才能继续。这是 PIPL 强制要求</li>
+  <li><strong>数据存储位置</strong>:全部在中国大陆服务器(阿里云 / 腾讯云的国内 region)</li>
+  <li><strong>加密传输</strong>:HTTPS,小程序也强制 HTTPS</li>
+  <li><strong>用户数据导出 + 删除接口</strong>:PIPL 给用户的权利。试点期可以做"用户提交工单后人工处理",不需要自动化</li>
+  <li><strong>数据访问日志</strong>:谁在什么时候访问了谁的数据,留 6 个月</li>
+</ol>
+
+<h3>6.4 跨境数据问题(特别提醒)</h3>
+
+<div class="warning">
+  <span class="warning-label">关键合规点</span>
+  <p>试点期如果你把<strong>用户数据发到境外</strong>(包括但不限于:用 OpenAI / Claude 的 API 跑用户聊天、用 Vercel 等境外服务存数据、用 Notion / Airtable 等境外 SaaS 做用户管理),<strong>属于"个人信息跨境传输"</strong>,理论上需要走 PIPL 第 38 条规定的安全评估。</p>
+  <p><strong>试点期实操规避:</strong></p>
+  <ul>
+    <li>AI 调用全部走<strong>国内 LLM API</strong>(DeepSeek / 通义 / 文心 / 豆包)</li>
+    <li>用户数据不用境外 SaaS。CRM 用国内的(石墨/飞书),分析工具用国内的(神策的免费版/友盟+)</li>
+    <li>团队协作工具(代码 GitHub / 文档)<strong>不涉及用户数据</strong>就 OK</li>
+  </ul>
+</div>
+
+<h3>6.5 数据合规的诚实声明</h3>
+
+<p>上面的策略是<strong>试点期</strong>(50 用户、低敏感度数据)的最小合规配置。如果产品方向走向以下任何一个,合规复杂度会指数级上升,需要专门请律师:</p>
+
+<ul>
+  <li>涉及医疗、健康、心理咨询类信息</li>
+  <li>涉及 14 岁以下儿童(母婴产品里的婴儿信息)</li>
+  <li>涉及金融/借贷/保险</li>
+  <li>用户数据规模超过 100 万(触发 PIPL 关键信息基础设施)</li>
+  <li>涉及定位、人脸识别、生物特征</li>
+</ul>
+
+<p>这些复杂度本身就是产品方向选择的<strong>负权重</strong>——同样有商业价值的方向,合规越轻的越优先做。</p>
+
+<h2 id="s7">七、周历(13 周)</h2>
+
+<div class="week-grid">
+
+  <div class="week">
+    <div class="week-num">Week 1<br/><span>5/13 - 5/19</span></div>
+    <div class="week-body">
+      <p><strong>启动周。</strong>跟高中同学完成 4 阶段对话(每 2 天一次,深度递进)。跟学徒确认"满足生活"具体数字。占用 6 个平台账号"为工友敲键盘"。Sun 跟银行客户经理对美元结汇流程。</p>
+      <p><strong>技术 setup(1-2 小时):</strong>fork sunmer-home → 剥离不相关 apps → 新建 Taro 小程序 app(<code>gongyou-mp</code>)→ 安装 NutUI-React → 注册个人微信小程序开发者账号。这一项可以在等同学/学徒响应的间隙完成,不影响主线。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 2<br/><span>5/20 - 5/26</span></div>
+    <div class="week-body">
+      <p><strong>田野启动。</strong>Sun 注册成为美团骑手,办健康证,开始众包跑单(目标:本周 ≥ 10 小时)。学徒应聘电子厂派遣工,Week 2 末或 Week 3 初进厂。高中同学(如已入伙)启动线上田野(小红书/抖音找受访者)。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 3<br/><span>5/27 - 6/2</span></div>
+    <div class="week-body">
+      <p><strong>田野第一密集周。</strong>Sun 跑骑手 + 同时找妇幼/月嫂方向的女性研究员协助。学徒在电子厂(7-10 天)。每天晚上 3 人通话复盘 + 整理田野笔记。本周访谈 ≥ 15 人。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 4<br/><span>6/3 - 6/9</span></div>
+    <div class="week-body">
+      <p><strong>第一个 24h demo 周。</strong>学徒出厂复盘。每个候选轨道做一个粗糙的 24h prototype(Sun 主写,学徒帮测)。带着 prototype 找田野中已经认识的用户来"评论"(给 50 元红包),收集第一轮反馈。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 5<br/><span>6/10 - 6/16</span></div>
+    <div class="week-body">
+      <p><strong>判断点 #1 + 公司注册启动。</strong>周中三人开"方向选择会"(2-3 小时):基于过去 4 周田野 + 4 个 prototype 反馈,选 1 个主方向(可保留 1 个备方向)。<strong>选定后,周末 Sun 启动公司注册</strong>(场地、章程、营业执照流程)。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 6<br/><span>6/17 - 6/23</span></div>
+    <div class="week-body">
+      <p><strong>建造启动。</strong>技术栈已定型(Taro + NestJS + 国内云,见 §3.2/3.4),Week 1 已完成的 Taro 骨架在此进入实质开发。MVP 功能列表压缩到"必须有"5 项以内。学徒做小程序基础页面(在 Sun 监督下)。Sun 写 NestJS 后端 + LLM 集成。公司注册并行(等回执 1-2 周)。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 7<br/><span>6/24 - 6/30</span></div>
+    <div class="week-body">
+      <p><strong>核心功能开发。</strong>MVP 第一版可用 alpha 完成(团队内能跑)。小程序账号企业认证启动(等公司营业执照)。ICP 备案材料准备。每天 demo 给 1-2 个田野期认识的用户看(他们仍然是你的"内测员")。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 8<br/><span>7/1 - 7/7</span></div>
+    <div class="week-body">
+      <p><strong>内测 + 备案推进。</strong>邀请 10 个目标用户做封闭内测(每人付 50 元访谈费,他们用 1 周给反馈)。修 bug + 改交互。ICP 备案提交,小程序企业账号申请提交。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 9<br/><span>7/8 - 7/14</span></div>
+    <div class="week-body">
+      <p><strong>上线准备。</strong>《用户协议》《隐私政策》定稿。小程序提审。客服流程(微信公众号 + 1 个固定客服人,3 人轮值)。自媒体起号(确定平台 + 第一条内容)。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 10<br/><span>7/15 - 7/21</span></div>
+    <div class="week-body">
+      <p><strong>上线 + 第一批种子用户。</strong>小程序通过审核 → 上线。第一波种子用户主要来自田野期接触过的用户(他们已经被你 onboard 过)。本周目标:20 个真实用户用上,其中 ≥ 8 个来自第一二产业。<strong>自媒体发第一条正式内容</strong>。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 11<br/><span>7/22 - 7/28</span></div>
+    <div class="week-body">
+      <p><strong>线下推广 + 迭代。</strong>"到群众中去"——三人分别去工友驿站 / 妇幼医院 / 技工学校做线下推广(扫码送 5 元红包送上小程序,跟新用户聊 10 分钟)。每周迭代发版 1-2 次。本周目标:30-40 个用户。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 12<br/><span>7/29 - 8/4</span></div>
+    <div class="week-body">
+      <p><strong>判断点 #2 - 留存观察周。</strong>本周不发新功能,主要观察 Week 10-11 的用户留存情况(7-day retention、活跃度、付费意愿)。访谈每一个流失用户。本周目标:50 个用户达成,其中 ≥ 20 个第一二产业。</p>
+    </div>
+  </div>
+
+  <div class="week">
+    <div class="week-num">Week 13<br/><span>8/5 - 8/10</span></div>
+    <div class="week-body">
+      <p><strong>90 天复盘 + 决策。</strong>三人开 1-2 天的复盘会:continue / pivot / kill 三选一。写下一个 90 天的规划(在本文档的格式上迭代)。把整个 90 天的田野笔记 + 复盘整理成对外可发的内容(自媒体长文 / v2.2 文档)。</p>
+    </div>
+  </div>
+
+</div>
+
+<h2 id="s8">八、决策点与失败应变</h2>
+
+<h3>8.1 三个判断点(显式写出)</h3>
+
+<table>
+  <thead>
+    <tr><th>判断点</th><th>时间</th><th>核心问题</th><th>判断标准</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>#1 方向选择</td><td>Week 5 末</td><td>有没有真痛点?</td><td>过去 4 周访谈中,有 ≥ 5 个独立用户主动描述了同一个痛点 + 愿意花钱解决</td></tr>
+    <tr><td>#2 留存观察</td><td>Week 12 中</td><td>用户回来吗?</td><td>Week 10 上线的用户里,Week 12 还在用的 ≥ 30%</td></tr>
+    <tr><td>#3 90 天决策</td><td>Week 13</td><td>continue / pivot / kill?</td><td>见下面 §8.3</td></tr>
+  </tbody>
+</table>
+
+<h3>8.2 阶段性失败的几种情况</h3>
+
+<div class="field-card">
+  <h4>失败 A:Week 5 找不到主方向</h4>
+  <p>意味着田野结果太分散,没有任何一个轨道收敛到清晰痛点。<strong>应变</strong>:Week 5-6 多花 2 周再做一轮田野(把田野期延长到 7 周,Phase 2 压缩到 3 周)。仍然找不到,意味着团队对目标用户群理解不够——这是一个项目级警告,不是产品级失败。</p>
+</div>
+
+<div class="field-card">
+  <h4>失败 B:Week 9 备案/小程序审核没过</h4>
+  <p>常见原因:类目选错、内容触发审查、企业资质问题。<strong>应变</strong>:H5 + 公众号先上(微信生态内无需 ICP 备案的边角通道)。把小程序当作下一个版本的目标。备案问题不影响产品迭代。</p>
+</div>
+
+<div class="field-card">
+  <h4>失败 C:Week 12 留存 < 30%</h4>
+  <p>意味着产品有人用但留不住。<strong>应变</strong>:Week 13 复盘聚焦"为什么不回来"——访谈每一个流失用户。常见原因:解决的不是 P0 痛点 / 替代方案太多 / 体验有硬伤。决定是<strong>pivot</strong>(改产品方向)而非 kill。</p>
+</div>
+
+<div class="field-card">
+  <h4>失败 D:50 用户里没有 20 个第一二产业</h4>
+  <p>意味着传播渠道走偏了——自然增长把你引到错的人群里。<strong>应变</strong>:这是 v2.1 §5.1 强调的"种子用户成分锁死"问题。Week 11-12 必须人为干预——把传播流量重新引到目标人群。如果实在做不到,意味着产品包装/语言/触达渠道根本上不对工友胃口,Week 13 复盘必须严肃对待。</p>
+</div>
+
+<h3>8.3 90 天决策矩阵</h3>
+
+<table>
+  <thead>
+    <tr><th>留存</th><th>用户成分</th><th>付费/数据贡献意愿</th><th>决策</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>≥ 30%</td><td>≥ 20 个目标人群</td><td>≥ 10 个用户愿意付 ≥ 10 元/月</td><td>✅ <strong>Continue</strong> - 进入下一个 90 天</td></tr>
+    <tr><td>≥ 30%</td><td>< 20 个目标人群</td><td>有付费意愿</td><td>⚠ <strong>Pivot (用户)</strong> - 产品 OK,但用户群错了,重新定位</td></tr>
+    <tr><td>< 30%</td><td>≥ 20 个目标人群</td><td>有意愿</td><td>⚠ <strong>Pivot (产品)</strong> - 用户对,但产品没解决他们最痛的</td></tr>
+    <tr><td>< 30%</td><td>< 20 个目标人群</td><td>没意愿</td><td>❌ <strong>Kill</strong> - 整体方向错,Week 13 选一个新方向启动下一个 90 天</td></tr>
+  </tbody>
+</table>
+
+<div class="note-soft">
+  <span class="note-label">提示</span>
+  <p>kill 不是项目失败。kill 是 90 天投资了 ~20 万人民币 + 三人精力,买到了一个清晰的"这条路走不通"的判断。比"继续耗下去"省钱也省时间。<strong>项目级别的失败信号</strong>是连续 2-3 个 90 天都 kill,意味着团队对市场的判断力有问题——那时再考虑根本性调整。</p>
+</div>
+
+<h2 id="s9">九、人员分工</h2>
+
+<h3>9.1 三人各自承担</h3>
+
+<table>
+  <thead>
+    <tr><th>角色</th><th>Phase 1 (田野)</th><th>Phase 2 (建造)</th><th>Phase 3 (验证)</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Sun</strong></td>
+      <td>骑手轨道主调研 + 母婴轨道协调女性研究员 + 田野笔记整合</td>
+      <td>后端 + LLM + 架构决策 + 公司注册 + ICP 备案</td>
+      <td>主访谈 + 复盘主持 + 自媒体内容主笔</td>
+    </tr>
+    <tr>
+      <td><strong>学徒</strong></td>
+      <td>电子厂轨道(进厂) + 帮 Sun 整理笔记 + 跟 Sun 学田野方法</td>
+      <td>前端 + 测试 + 客服流程搭建 + 跟 Sun 学后端</td>
+      <td>线下推广(工友驿站、技校)+ 用户访谈记录</td>
+    </tr>
+    <tr>
+      <td><strong>高中同学</strong></td>
+      <td>线上田野(小红书/抖音找受访者)+ 远程访谈</td>
+      <td>前端主力 + 小程序架构 + UI/UX</td>
+      <td>用户增长跟踪 + 数据分析 + 远程访谈</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>9.2 协作节奏</h3>
+
+<ul>
+  <li><strong>每天 21:00-21:30 全员视频站会</strong>:每人讲 1 分钟当日进展 + 1 个 blocker</li>
+  <li><strong>每周日下午 14:00-17:00 复盘</strong>:Week 总结 + 下 Week 规划。复盘内容写到共享文档(石墨/飞书/Obsidian)</li>
+  <li><strong>每两周 1 次"师徒复盘"</strong>:Sun 和学徒一对一 1 小时,聊技术成长 + 心态。这是师徒制的核心仪式</li>
+</ul>
+
+<h3>9.3 高中同学未加入情况下的备选分工</h3>
+
+<p>如果高中同学第 2-4 阶段对话后选择不加入,执行方案降级为 Sun + 学徒两人:</p>
+
+<ul>
+  <li>Phase 1 田野期减一个轨道(从 3-4 个并行 → 2 个),把高中同学负责的"线上田野"挪给学徒晚上时间做</li>
+  <li>Phase 2 前端用模板/组件库(微信小程序 weui + Taro UI),Sun 兼前端</li>
+  <li>整体进度延后 1-2 周,Week 13 的判断点能否如期到达需再评估</li>
+</ul>
+
+<hr/>
+
+<p style="color: var(--text-muted); font-size: 0.9em; font-style: italic; text-align: center; margin-top: 4em;">
+90 天规划完成于 2026-05-13,基于 v2.1 v2.0 v1.0 的演化基础。<br/>
+诚实条款:本规划的所有时间节点和数字目标都是<strong>预期</strong>不是<strong>承诺</strong>——发现错了允许并应当修正,但每次修正要写下来,不允许默默漂移。
+</p>
+
+</div>
+
+<a href="#" class="back-to-top" id="backToTop" aria-label="回到顶部">↑</a>
+
+<script>
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 600);
+});
+backToTop.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+</body>
+</html>

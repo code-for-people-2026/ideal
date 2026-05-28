@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>为人民服务的公司：构想 v2.0</title>
+<meta name="description" content="经过 9 轮辩证 grilling 后的修正版本——师徒制 + 工人 AI 夜校 + 模型主权">
+<style>
+:root {
+  --bg: #fbfaf6;
+  --bg-soft: #f4f1ea;
+  --text: #1a1a1a;
+  --text-muted: #5a5a5a;
+  --accent: #8b1e2d;
+  --accent-soft: rgba(139, 30, 45, 0.08);
+  --accent-strong: rgba(139, 30, 45, 0.15);
+  --green: #2d6a3f;
+  --green-soft: rgba(45, 106, 63, 0.08);
+  --green-strong: rgba(45, 106, 63, 0.15);
+  --gold: #b08d2e;
+  --gold-soft: rgba(176, 141, 46, 0.1);
+  --border: #d4d0c8;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-size: 17px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+.nav-back {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.4em 1em;
+  font-size: 0.85em;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.2s;
+  z-index: 100;
+}
+.nav-back:hover { color: var(--accent); border-color: var(--accent); }
+
+.toc {
+  position: fixed;
+  top: 80px;
+  right: 30px;
+  width: 200px;
+  font-size: 0.84em;
+  line-height: 1.5;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 1em;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  z-index: 50;
+}
+.toc-title {
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.6em 0;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid var(--border);
+}
+.toc a {
+  color: var(--text-muted);
+  text-decoration: none;
+  display: block;
+  padding: 0.25em 0;
+  padding-left: 0.6em;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+}
+.toc a:hover { color: var(--accent); border-left-color: var(--accent); }
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 70px 30px 100px;
+}
+.header {
+  margin-bottom: 3em;
+  border-bottom: 3px solid var(--accent);
+  padding-bottom: 1.4em;
+}
+h1 {
+  font-size: 2.3em;
+  font-weight: 700;
+  margin: 0 0 0.4em 0;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+.meta {
+  color: var(--text-muted);
+  font-size: 0.92em;
+  font-style: italic;
+  margin: 0;
+}
+.meta span { margin-right: 1.5em; display: inline-block; }
+.meta a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+.meta a:hover { border-bottom-color: var(--accent); }
+h2 {
+  font-size: 1.55em;
+  font-weight: 600;
+  margin: 3em 0 0.8em;
+  padding-bottom: 0.4em;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: 30px;
+}
+h3 {
+  font-size: 1.18em;
+  font-weight: 600;
+  margin: 2em 0 0.5em;
+  color: var(--accent);
+  scroll-margin-top: 30px;
+}
+p { margin: 0 0 1.1em 0; }
+strong { font-weight: 600; }
+ul, ol { padding-left: 1.6em; margin: 0.6em 0 1.3em; }
+li { margin-bottom: 0.5em; }
+
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  margin: 1.5em 0;
+  padding: 1em 1.4em;
+  border-radius: 0 4px 4px 0;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 0.94em;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+th {
+  background: var(--bg-soft);
+  text-align: left;
+  padding: 0.8em 1em;
+  border-bottom: 2px solid var(--border);
+  font-weight: 600;
+  font-size: 0.95em;
+}
+td {
+  padding: 0.7em 1em;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover { background: var(--bg-soft); }
+
+hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+
+/* Distillation box */
+.distillation {
+  background: linear-gradient(135deg, var(--accent-soft), var(--gold-soft));
+  border-left: 4px solid var(--accent);
+  padding: 1.4em 1.8em;
+  margin: 2em 0;
+  font-size: 1.06em;
+  line-height: 1.7;
+  border-radius: 4px;
+}
+.distillation-label {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.6em;
+}
+.distillation p:last-child { margin-bottom: 0; }
+
+/* Round cards */
+.round {
+  margin: 1.5em 0 2em;
+  border-radius: 6px;
+  overflow: hidden;
+  background: white;
+  border: 1px solid var(--border);
+}
+.round-head {
+  padding: 0.9em 1.3em;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+}
+.round-num {
+  display: inline-block;
+  background: var(--accent);
+  color: white;
+  font-size: 0.78em;
+  font-weight: 600;
+  padding: 0.2em 0.7em;
+  border-radius: 3px;
+  margin-right: 0.7em;
+  letter-spacing: 0.05em;
+}
+.round-title {
+  font-weight: 600;
+  font-size: 1.02em;
+}
+.round-body { padding: 0; }
+.attack, .fix {
+  padding: 1em 1.3em;
+}
+.attack {
+  background: var(--accent-soft);
+  border-bottom: 1px solid var(--border);
+}
+.fix {
+  background: var(--green-soft);
+}
+.attack-label, .fix-label {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4em;
+}
+.attack-label { color: var(--accent); }
+.fix-label { color: var(--green); }
+.attack p, .fix p { margin-bottom: 0.5em; }
+.attack p:last-child, .fix p:last-child { margin-bottom: 0; }
+
+/* Problem cards */
+.problem {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: 4px;
+  padding: 1em 1.3em;
+  margin-bottom: 1em;
+}
+.problem strong { color: var(--gold); }
+
+/* Contingency cards */
+.contingency {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.2em 1.5em;
+  margin-bottom: 1.3em;
+}
+.contingency h3 {
+  margin-top: 0;
+  font-size: 1.08em;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4em;
+  margin-bottom: 0.8em;
+}
+.contingency-label {
+  display: inline-block;
+  font-size: 0.78em;
+  font-weight: 600;
+  padding: 0.15em 0.6em;
+  border-radius: 3px;
+  margin-right: 0.4em;
+  letter-spacing: 0.03em;
+}
+.label-plan { background: var(--accent-soft); color: var(--accent); }
+.label-note { background: var(--gold-soft); color: var(--gold); }
+.label-eval { background: var(--green-soft); color: var(--green); }
+
+/* Checklist */
+.checklist {
+  list-style: none;
+  padding-left: 0;
+}
+.checklist li {
+  padding-left: 1.8em;
+  position: relative;
+  margin-bottom: 0.7em;
+}
+.checklist li::before {
+  content: "☐";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 1.1em;
+}
+
+/* Back to top */
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--accent);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.2em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 50;
+}
+.back-to-top.visible { opacity: 1; }
+
+@media (max-width: 1100px) {
+  .toc { display: none; }
+}
+@media (max-width: 600px) {
+  .container { padding: 50px 20px 60px; }
+  h1 { font-size: 1.7em; }
+  h2 { font-size: 1.3em; }
+  body { font-size: 16px; }
+  table { font-size: 0.88em; }
+  th, td { padding: 0.5em 0.7em; }
+}
+</style>
+</head>
+<body>
+
+<a href="./index.html" class="nav-back">← 返回</a>
+
+<nav class="toc">
+  <p class="toc-title">目录</p>
+  <a href="#s1">一、关键转变</a>
+  <a href="#s2">二、核心命题</a>
+  <a href="#s3">三、9 轮 grilling</a>
+  <a href="#s4">四、当前组织形态</a>
+  <a href="#s5">五、不可解决问题</a>
+  <a href="#s6">六、应变机制</a>
+  <a href="#s7">七、v1 vs v2 对照</a>
+  <a href="#s8">八、下一步</a>
+</nav>
+
+<div class="container">
+
+<div class="header">
+  <h1>为人民服务的公司：构想 v2.0</h1>
+  <p class="meta">
+    <span><strong>版本：</strong>v2.0</span>
+    <span><strong>日期：</strong>2026-05-12</span>
+    <span><strong>对照：</strong><a href="./为人民服务的公司-构想.html">v1.0 →</a></span>
+  </p>
+  <p class="meta" style="margin-top: 0.8em;">经过 9 轮辩证 grilling 后的修正版本</p>
+</div>
+
+<h2 id="s1">一、v1.0 → v2.0 的关键转变（执行摘要）</h2>
+
+<p>v1.0 是一个<strong>思想姿态级别</strong>的构想：从马克思主义 + 比特币 + 集体记忆的混合出发，提出"代币 + 共产度 + 民主投票"的乌托邦企业形态。论证强项在历史类比和理论框架，弱项在<strong>经济可行性、组织动力学、阶级实现</strong>三块。</p>
+
+<p>v2.0 是一个<strong>可启动级别</strong>的构想。经过 9 轮针对性 grilling，主要修正：</p>
+
+<ol>
+  <li><strong>承认"代币 + 民主"是终极愿景而非启动机制</strong>——启动期是师徒制 + 创始人主导，明确为 v3.0 的演化目标；</li>
+  <li><strong>从"内部乌托邦"转向"外部服务运动"</strong>——接受列宁式 vanguard 框架，中产学徒（内圈）+ 工人学员（外圈）两层结构，呼应 1922 年安源工人夜校的组织形态；</li>
+  <li><strong>从 B2B 软件转向 B2C 直接服务</strong>——拒绝雇主作为客户，避免成为"数字鞭子"，依托 AI 让小规模软件可行的新经济学；</li>
+  <li><strong>从"代币系统"转向"模型主权 + 集体议价工具"</strong>——重新校准"生产资料"概念：数据是原料，模型 + 算力 + 训练能力才是生产资料；</li>
+  <li><strong>从"教育"扩展到"教育 + 互助 + 组织"三条腿</strong>——拒绝纯慈善型 AI 素养教育，互助内置于产品，组织以 voice 形态出现（集体定价、统一品牌、对工厂/医院的议价工具）。</li>
+</ol>
+
+<h2 id="s2">二、当前构想的核心命题</h2>
+
+<ol>
+  <li><strong>生产力跃迁判断</strong>：AI 让"最优软件生产单位"变小。三人小团队 + AI 工具可以做过去三十人产品团队做的事，让"专为 500 人做一个软件"从不可行变成可行。</li>
+  <li><strong>服务对象</strong>：第一/二/服务业劳动者（外卖骑手、仓库工人、家政、服务员、小工厂工人），以及他们的家庭。</li>
+  <li><strong>不直接转化的服务方式</strong>：不试图把工人变成程序员（不科学），而是增加他们对 AI 的可及性、提供他们处境改善所需的工具。</li>
+  <li><strong>vanguard + mass base</strong>：内圈是中产理想主义学徒（全职），外圈是工人学员（副业革命）。所有人都同时是学习者，<strong>包括创始人本人</strong>。</li>
+  <li><strong>三条腿不可分</strong>：教育（AI 素养课程）+ 互助（产品内置的社区互助网络）+ 组织（集体议价、统一品牌、互联网形态的工会替代物）。</li>
+  <li><strong>技术主权方向</strong>：短期国内廉价 API + DeepSeek 等开源模型为主，长期 fine-tuning + 自部署。避免成为大平台 AI 基础设施的依附性下游。</li>
+  <li><strong>裂变式扩散</strong>：学徒"出师"后回到自己熟悉的地方，开一家类似的公司。靠师承网络扩散，不靠融资 + 雇佣模式。</li>
+</ol>
+
+<div class="distillation">
+  <span class="distillation-label">V2.0 一句话蒸馏</span>
+  <p>一个由中产理想主义者主导的"软件师徒会社"，通过自有模型 + 自有算力，给被零工经济裹挟的工人提供 AI 素养教育、互助网络、和集体议价工具——让工人在 AI 时代不只是更高效率的被剥削对象，最终通过出师裂变扩散为分布式的"为人民服务"网络。</p>
+</div>
+
+<h2 id="s3">三、9 轮 grilling 演化轨迹</h2>
+
+<div class="round">
+  <div class="round-head"><span class="round-num">ROUND 1</span><span class="round-title">不可交易代币 → 灰色市场问题</span></div>
+  <div class="round-body">
+    <div class="attack"><span class="attack-label">攻击</span><p>苏联劳动券、文革工分、计划经济票证都产生了无法阻止的灰色市场。代币只要能换实物，就会形成私下交易渠道（代购、人情债、家庭账户合并、批条权力寻租）。</p></div>
+    <div class="fix"><span class="fix-label">修正</span><p>接受流通本身不可怕，可怕的是"既享受使用价值，又身居高位享有投票权"。引入"代币 = 投票权 + 消费券双重凭证"的机制——花掉代币会降低投票权。</p></div>
+  </div>
+</div>
+
+<div class="round">
+  <div class="round-head"><span class="round-num">ROUND 2</span><span class="round-title">外部财富购买内部权力</span></div>
+  <div class="round-body">
+    <div class="attack"><span class="attack-label">攻击</span><p>投票权与持有代币挂钩的设计，结构性地让<strong>有外部财富的人</strong>保留全部投票权（不需消耗代币），而<strong>真正需要保障的人</strong>消耗代币导致投票权衰减。这是资本主义结构的镜像复刻。基布兹（Kibbutz）就是被这个问题侵蚀的——能留下来的越来越是中产以上家庭。</p></div>
+    <div class="fix"><span class="fix-label">修正</span><p>引入两个机制——(a) 投票本身也消耗代币（每张票一次性）；(b) 累积代币随时间衰减。让"治理权"从存量变成流量，无法囤积。</p></div>
+  </div>
+</div>
+
+<div class="round">
+  <div class="round-head"><span class="round-num">ROUND 3</span><span class="round-title">内部劳动 vs 外部使命的异化</span></div>
+  <div class="round-body">
+    <div class="attack"><span class="attack-label">攻击</span><p>第二轮的修正导致一个新立场——"为人民服务 = 为外部人民服务，内部成员只是手段"。这是任何资本主义公司的同构结构（劳动者 + 工资 → 服务 → 顾客）。马克思把这叫<strong>异化</strong>，你只是把"被资本异化"换成了"被使命异化"。天主教传教士修会、Wikipedia、开源维护者、Patagonia 都是这个失败模式的案例。</p></div>
+    <div class="fix"><span class="fix-label">修正</span><p>重新定义"人民"——内外无差别。接受列宁式 vanguard 框架，承认现在与共产主义之间有巨大差距，需要过渡桥梁，桥梁本身有张力但是必要的。</p></div>
+  </div>
+</div>
+
+<div class="round">
+  <div class="round-head"><span class="round-num">ROUND 4</span><span class="round-title">B2B 软件 = 数字鞭子（digital whip）</span></div>
+  <div class="round-body">
+    <div class="attack"><span class="attack-label">攻击</span><p>声称"为工人优化生产"的 B2B 软件，实际是卖给管理者用来更密集监控 + 算法节拍 + 去技能化 + 替换工人的工具。Amazon 仓库、美团骑手、客服坐席都是历史教训。马克思自己用《资本论》大量篇幅证明"技术不改变生产关系就不会带来工人解放"。</p></div>
+    <div class="fix"><span class="fix-label">修正</span><p>转向 B2C，直接为消费端服务——给依法受雇者提供生活软件（家政、药品、婴儿护理），给自由职业者提供工作软件。论据是 AI 让小规模软件经济可行（long tail software）。</p></div>
+  </div>
+</div>
+
+<div class="round">
+  <div class="round-head"><span class="round-num">ROUND 5</span><span class="round-title">工人付不起 → 钱从哪来</span></div>
+  <div class="round-body">
+    <div class="attack"><span class="attack-label">攻击</span><p>你想服务的人定义上是支付能力最弱的人。第一/二/服务业劳动者月入 3500-8000，可承担软件订阅每月不超过 30 元——而且这 30 元已经被腾讯/字节分掉。如果产品免费，钱从哪来？广告？补贴？每条路都带来治理俘获。</p></div>
+    <div class="fix"><span class="fix-label">修正</span><p>自筹启动（远程工作月薪 10w 支持 3-4 人小团队） + 中产家庭应届生为主 + 鼓励成员保留外部工作。拒绝传统"先算账后开干"思路，采用 Customer Development（搭讪 + 24h demo + 三三制小组）。</p></div>
+  </div>
+</div>
+
+<div class="round">
+  <div class="round-head"><span class="round-num">ROUND 6</span><span class="round-title">创始人 = 单一金主 → 隐性独裁</span></div>
+  <div class="round-body">
+    <div class="attack"><span class="attack-label">攻击</span><p>你是唯一真实经济基础（远程工作工资 100%），所谓"民主决策"在你掌握现金流的情况下是橱窗。中国民营企业有一个成熟的失败剧本——"理想主义启动 → 创始人个人帝国 → 理想被现金流稀释"。</p></div>
+    <div class="fix"><span class="fix-label">修正</span><p>承认"代币 + 民主"是终极形态，启动期是<strong>师徒制</strong>。已经有一个学徒自费在 Sun 家附近租房学编程。设计"双重出师"：个人级出师是技术独立 + 自养能力，公司级出师是回到熟悉的地方开一家类似公司，靠师承裂变扩散。</p></div>
+  </div>
+</div>
+
+<div class="round">
+  <div class="round-head"><span class="round-num">ROUND 7</span><span class="round-title">自费学徒制 = 阶级过滤器</span></div>
+  <div class="round-body">
+    <div class="attack"><span class="attack-label">攻击</span><p>自费学徒结构系统性排除工人阶级子弟（外卖骑手家的孩子、农村第一代大学生、单亲家庭青年）。你的招募事实上是中产家庭过滤器。这正是 20 世纪所有马列实践失败的核心机制——党核心成员的阶级背景与声称代表的群体不重合，"代表性"变成修辞。</p></div>
+    <div class="fix"><span class="fix-label">修正</span><p>参考 1922 年安源工人夜校——"副业革命，主业管生计"的两层结构。内圈是中产学徒（cadres），外圈是工人学员（mass base）。明确放弃"把所有工人变成程序员"的乌托邦，目标降到"增加 AI 可及性"。批判碎片化视频（抖音/小红书）作为学习来源，主张系统性课程。</p></div>
+  </div>
+</div>
+
+<div class="round">
+  <div class="round-head"><span class="round-num">ROUND 8</span><span class="round-title">教育没有互助和组织 = 慈善而非革命</span></div>
+  <div class="round-body">
+    <div class="attack"><span class="attack-label">攻击</span><p>安源工人夜校之所以有效，是<strong>三条腿</strong>结构（教育 + 工人消费合作社/医疗互助 + 工人俱乐部→工会→大罢工）。你只有教育这一条腿——产出的觉悟工人无处可去，最有能力的工人会用 AI 技能跳出工人阶级（"技能培训的政治保守性"问题）。</p></div>
+    <div class="fix"><span class="fix-label">修正</span><p>互助内置于软件社区（母婴 app 例子：二手流转 + 工厂集体议价 + 医疗互助 + 互相带娃）。组织以"私域流量小平台"形态出现（网约车司机绕过滴滴接私单的现象）。明确判断传统工会（美国走狗化、中国福利化）已过时。</p></div>
+  </div>
+</div>
+
+<div class="round">
+  <div class="round-head"><span class="round-num">ROUND 9</span><span class="round-title">数据 ≠ 生产资料 / 化整为零 = exit 而非 voice</span></div>
+  <div class="round-body">
+    <div class="attack"><span class="attack-label">攻击 1（范畴错误）</span><p>数据是<strong>原材料</strong>（19 世纪类比：棉花），不是<strong>生产资料</strong>（纺织机）。19 世纪农民拥有自己种的棉花仍被低价收购，因为没有纺织机。AI 时代真正的生产资料是<strong>模型 + 算力 + 训练能力</strong>。</p></div>
+    <div class="attack"><span class="attack-label">攻击 2（exit vs voice）</span><p>网约车司机绕过滴滴接私单是"逃避剥削，不是消除剥削"。Hirschman 的 Exit / Voice 分析：exit 削弱 voice，最不满的人离开导致剩下的人更顺从。</p></div>
+    <div class="fix"><span class="fix-label">修正</span><p>技术主权目标重新校准为<strong>模型主权</strong>——短期国内廉价 API + DeepSeek 开源，长期 fine-tuning + 自部署。创始人承认自己目前没有这个能力，需要在研发中学习。集体定价、互助保险、统一品牌、对工厂/医院的集体议价工具被接受为产品方向——把化整为零从 exit 升级成 voice。</p></div>
+  </div>
+</div>
+
+<h2 id="s4">四、当前组织形态（v2.0 启动期）</h2>
+
+<h3>人员构成（3 人小队）</h3>
+
+<table>
+  <thead>
+    <tr><th>角色</th><th>背景</th><th>财务状态</th><th>项目角色</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Sun</strong>（创始人）</td><td>远程工作 ×2 互为备份，月入 ~10w RMB</td><td>项目唯一稳定资金来源</td><td>主导 + 兼学习模型自部署</td></tr>
+    <tr><td><strong>学徒一号</strong></td><td>高中后初学编程</td><td>自费就近租房学习</td><td>学编程 + 跟产品</td></tr>
+    <tr><td><strong>高中同学</strong></td><td>中级程序员</td><td>本职 3000 USD/月远程（"较闲"）</td><td>兼职参与，认同"帮助他人带来的成就感"</td></tr>
+  </tbody>
+</table>
+
+<h3>90 天试点财务（月度）</h3>
+
+<table>
+  <thead>
+    <tr><th>项目</th><th>金额</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>办公室租金</td><td>3,500 RMB</td></tr>
+    <tr><td>网络 + 杂费</td><td>1,500 RMB</td></tr>
+    <tr><td>学徒一号工资（半薪试用）</td><td>750 USD ≈ 5,400 RMB</td></tr>
+    <tr><td>高中同学工资（半薪试用）</td><td>1,500 USD ≈ 10,800 RMB</td></tr>
+    <tr><td><strong>月度 burn</strong></td><td><strong>~21,200 RMB</strong></td></tr>
+    <tr><td>Sun 可投入</td><td>~100,000 RMB</td></tr>
+    <tr><td><strong>缓冲倍数</strong></td><td><strong>~4.7×</strong></td></tr>
+  </tbody>
+</table>
+
+<p>90 天试用结束后转正：学徒 1,500 USD / 月、高中同学 3,000 USD / 月，月度 burn 升至约 38,000 RMB。</p>
+
+<h2 id="s5">五、不可解决问题清单（诚实声明）</h2>
+
+<p>把这些写在文档里，是为了让自己和后续加入的人都不会忘记这些是<strong>当前阶段无法消除的张力</strong>，不是设计漏洞。</p>
+
+<div class="problem"><p><strong>1. 创始人 = 单一金主</strong>：代币 + 民主机制在此结构下物理上无法真正运转。明确承认前 2-3 年是<strong>创始人开明专制期</strong>，不要包装成民主。</p></div>
+
+<div class="problem"><p><strong>2. 学徒招募 = 阶级过滤器</strong>：自费学徒结构系统性排除工人阶级子弟。组织内部成员构成与服务对象不重合。通过"工人学员（外圈）副业革命"模式缓解但不消除。</p></div>
+
+<div class="problem"><p><strong>3. 教育抽走最优秀工人</strong>：技能培训项目历史上的政治保守性问题（最有能力的工人通过学习离开本阶级）。只能通过"出师创业 + 留下扎根本地"导向缓解。</p></div>
+
+<div class="problem"><p><strong>4. AI 基础设施暂时仍依附</strong>：短期使用国内 API，创始人本人目前没有 fine-tuning 能力，需要在研发中学习。2026-2027 年仍然是依赖期。</p></div>
+
+<div class="problem"><p><strong>5. 化整为零的政治意义有限</strong>：私域流量绕开大平台是 exit 而非 voice。承诺把它升级为 voice，但工具能否真的产生集体力量需要时间验证。</p></div>
+
+<div class="problem"><p><strong>6. 小规模软件经济可行性是赌博</strong>：100+ 方向探索 + 自媒体兜底是一个有道理但风险高的策略——3 人小队 100 方向 = 平均每方向 3% 注意力。</p></div>
+
+<h2 id="s6">六、应变机制（contingency）</h2>
+
+<div class="contingency">
+  <h3>学徒在出师前想退出</h3>
+  <p><span class="contingency-label label-plan">当前方案</span>签带违约费用的合同。</p>
+  <p><span class="contingency-label label-note">注意</span>与"自愿性 + 知情性"的 vanguard 原则有内在张力。建议合同条款明确"违约费用上限 = 培训期实际成本，不超过工资总额"，避免演变为强制性指证劳动。否则在道德论证上跟邪教合同区分不开。</p>
+</div>
+
+<div class="contingency">
+  <h3>产品 PMF 验证失败</h3>
+  <p><span class="contingency-label label-plan">当前方案</span>多方向同时探索（争取 100 个方向） + 同时进行自媒体创业（失败也转化为流量）。</p>
+  <p><span class="contingency-label label-note">注意</span>3 人小队 100 方向 = 每方向 3% 注意力，过于分散。建议演化为"3-5 个主方向并行 + 每周 1 个新方向轻量探索 + 自媒体作为常态化副产品（每个方向的过程本身就是内容）"。自媒体作为兜底是合理设计——它把"失败的项目"转化为"成功的内容"。</p>
+</div>
+
+<div class="contingency">
+  <h3>Sun 的 10w/月远程工作突然没了</h3>
+  <p><span class="contingency-label label-plan">当前方案</span>两份远程工作互为备份（同时被开除概率低） + 大哥罩着（被开除也有补偿） + 已形成的财务缓冲。</p>
+  <p><span class="contingency-label label-eval">评估</span>这是 v2.0 里<strong>结构最稳健</strong>的一块。备份冗余 + 社会资本 + 财务缓冲三重保护，是真实可行的风险管理。比一份工作"梭哈"的创业者结构性更安全。</p>
+</div>
+
+<h2 id="s7">七、v1.0 vs v2.0 对照表</h2>
+
+<table>
+  <thead>
+    <tr><th>维度</th><th>v1.0</th><th>v2.0</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>启动机制</td><td>代币 + 共产度 + 民主投票</td><td>师徒制 + 创始人主导</td></tr>
+    <tr><td>服务对象</td><td>"为人民服务"（模糊）</td><td>第一/二/服务业劳动者 + 中产学徒（双重）</td></tr>
+    <tr><td>组织形态</td><td>大型公司演化路径</td><td>三人小队 + 裂变扩散</td></tr>
+    <tr><td>收入模型</td><td>代币内循环 + 现金外部</td><td>B2C 小规模软件 + 自媒体兜底</td></tr>
+    <tr><td>治理目标</td><td>全员代币民主</td><td>启动期创始人主导 → 2-3 年后开始向民主演化</td></tr>
+    <tr><td>技术主权</td><td>未明确</td><td>短期 API → 长期开源模型自部署</td></tr>
+    <tr><td>互助机制</td><td>模糊</td><td>内置于产品（社区议价、二手、医疗互助）</td></tr>
+    <tr><td>组织斗争</td><td>隐含但未操作化</td><td>明确为 voice 工具（集体定价、统一品牌）</td></tr>
+    <tr><td>边界</td><td>全员人民</td><td>vanguard（中产学徒）+ mass base（工人学员）</td></tr>
+    <tr><td>终极愿景</td><td>共产主义</td><td>共产主义（未变），但承认距离 + 桥梁性质</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s8">八、待启动的下一步</h2>
+
+<ul class="checklist">
+  <li><strong>90 天执行规划</strong>：第一个 MVP 产品方向、用户研究路径、学徒培养节奏、自媒体矩阵筹划</li>
+  <li><strong>AI 自部署 PoC</strong>：选一个开源模型（DeepSeek-V3 / Qwen 等），完成第一次 fine-tuning 实验</li>
+  <li><strong>学徒合同模板</strong>：起草违约费用条款的具体细则，参考"培训期实际成本上限"原则</li>
+  <li><strong>第一次 Customer Development</strong>：选 2-3 个备选场景（母婴 / 网约车 / 家政 / 月嫂 / 小餐馆 / 货车司机 等），每个搭讪 5-10 人，决定第一批 demo 方向</li>
+  <li><strong>自媒体起号</strong>：内容定位（创业过程 / AI 教学 / 阶级分析 / 三选一或融合）</li>
+</ul>
+
+</div>
+
+<a href="#" class="back-to-top" id="backToTop" aria-label="回到顶部">↑</a>
+
+<script>
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 600);
+});
+backToTop.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+</body>
+</html>

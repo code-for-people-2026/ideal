@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>为人民服务的公司:构想 v2.1</title>
+<meta name="description" content="v2.0 之后的执行层文档——制度骨架 + 法律外壳 + 品牌 + 入伙流程">
+<style>
+:root {
+  --bg: #fbfaf6;
+  --bg-soft: #f4f1ea;
+  --text: #1a1a1a;
+  --text-muted: #5a5a5a;
+  --accent: #8b1e2d;
+  --accent-soft: rgba(139, 30, 45, 0.08);
+  --accent-strong: rgba(139, 30, 45, 0.15);
+  --green: #2d6a3f;
+  --green-soft: rgba(45, 106, 63, 0.08);
+  --gold: #b08d2e;
+  --gold-soft: rgba(176, 141, 46, 0.1);
+  --blue: #2e5f8b;
+  --blue-soft: rgba(46, 95, 139, 0.08);
+  --border: #d4d0c8;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-size: 17px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+.nav-back {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.4em 1em;
+  font-size: 0.85em;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.2s;
+  z-index: 100;
+}
+.nav-back:hover { color: var(--accent); border-color: var(--accent); }
+
+.toc {
+  position: fixed;
+  top: 80px;
+  right: 30px;
+  width: 210px;
+  font-size: 0.84em;
+  line-height: 1.5;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 1em;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  z-index: 50;
+}
+.toc-title {
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 0.6em 0;
+  padding-bottom: 0.5em;
+  border-bottom: 1px solid var(--border);
+}
+.toc a {
+  color: var(--text-muted);
+  text-decoration: none;
+  display: block;
+  padding: 0.25em 0;
+  padding-left: 0.6em;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+}
+.toc a:hover { color: var(--accent); border-left-color: var(--accent); }
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 70px 30px 100px;
+}
+.header {
+  margin-bottom: 3em;
+  border-bottom: 3px solid var(--accent);
+  padding-bottom: 1.4em;
+}
+h1 {
+  font-size: 2.3em;
+  font-weight: 700;
+  margin: 0 0 0.4em 0;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+.meta {
+  color: var(--text-muted);
+  font-size: 0.92em;
+  font-style: italic;
+  margin: 0;
+}
+.meta span { margin-right: 1.5em; display: inline-block; }
+.meta a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+.meta a:hover { border-bottom-color: var(--accent); }
+.audience {
+  background: var(--bg-soft);
+  padding: 0.8em 1.2em;
+  border-radius: 4px;
+  margin-top: 1.2em;
+  font-size: 0.92em;
+  color: var(--text-muted);
+}
+.audience strong { color: var(--text); }
+h2 {
+  font-size: 1.55em;
+  font-weight: 600;
+  margin: 3em 0 0.8em;
+  padding-bottom: 0.4em;
+  border-bottom: 1px solid var(--border);
+  scroll-margin-top: 30px;
+}
+h3 {
+  font-size: 1.18em;
+  font-weight: 600;
+  margin: 2em 0 0.5em;
+  color: var(--accent);
+  scroll-margin-top: 30px;
+}
+h4 {
+  font-size: 1.02em;
+  font-weight: 600;
+  margin: 1.5em 0 0.4em;
+  color: var(--text);
+}
+p { margin: 0 0 1.1em 0; }
+strong { font-weight: 600; }
+ul, ol { padding-left: 1.6em; margin: 0.6em 0 1.3em; }
+li { margin-bottom: 0.5em; }
+
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  margin: 1.5em 0;
+  padding: 1em 1.4em;
+  border-radius: 0 4px 4px 0;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 0.93em;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+th {
+  background: var(--bg-soft);
+  text-align: left;
+  padding: 0.7em 0.9em;
+  border-bottom: 2px solid var(--border);
+  font-weight: 600;
+  font-size: 0.93em;
+}
+td {
+  padding: 0.6em 0.9em;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover { background: var(--bg-soft); }
+
+hr { border: none; border-top: 1px solid var(--border); margin: 3em 0; }
+
+.distillation {
+  background: linear-gradient(135deg, var(--accent-soft), var(--gold-soft));
+  border-left: 4px solid var(--accent);
+  padding: 1.4em 1.8em;
+  margin: 2em 0;
+  font-size: 1.04em;
+  line-height: 1.7;
+  border-radius: 4px;
+}
+.distillation-label {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.6em;
+}
+.distillation p:last-child { margin-bottom: 0; }
+
+.problem {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--gold);
+  border-radius: 4px;
+  padding: 1em 1.3em;
+  margin-bottom: 1em;
+}
+.problem strong { color: var(--gold); }
+
+.problem.new {
+  border-left-color: var(--accent);
+}
+.problem.new strong { color: var(--accent); }
+
+.rule {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--green);
+  border-radius: 4px;
+  padding: 1em 1.3em;
+  margin: 1.2em 0;
+}
+.rule-label {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--green);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4em;
+}
+
+.warning {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 1em 1.3em;
+  margin: 1.2em 0;
+}
+.warning-label {
+  display: block;
+  font-size: 0.78em;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4em;
+}
+
+.deferred {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--blue);
+  border-radius: 4px;
+  padding: 1em 1.3em;
+  margin-bottom: 1em;
+}
+.deferred-head {
+  font-weight: 600;
+  margin-bottom: 0.3em;
+}
+.deferred-trigger {
+  font-size: 0.88em;
+  color: var(--blue);
+  font-style: italic;
+  margin-bottom: 0.5em;
+}
+
+.checklist {
+  list-style: none;
+  padding-left: 0;
+}
+.checklist li {
+  padding-left: 1.8em;
+  position: relative;
+  margin-bottom: 0.7em;
+}
+.checklist li::before {
+  content: "☐";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 1.1em;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: var(--accent);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 1.2em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 50;
+}
+.back-to-top.visible { opacity: 1; }
+
+@media (max-width: 1100px) {
+  .toc { display: none; }
+}
+@media (max-width: 600px) {
+  .container { padding: 50px 20px 60px; }
+  h1 { font-size: 1.7em; }
+  h2 { font-size: 1.3em; }
+  body { font-size: 16px; }
+  table { font-size: 0.86em; }
+  th, td { padding: 0.5em 0.6em; }
+}
+</style>
+</head>
+<body>
+
+<a href="./index.html" class="nav-back">← 返回</a>
+
+<nav class="toc">
+  <p class="toc-title">目录</p>
+  <a href="#s1">一、v2.0 → v2.1 关键补充</a>
+  <a href="#s2">二、制度骨架</a>
+  <a href="#s3">三、法律外壳</a>
+  <a href="#s4">四、品牌与传播</a>
+  <a href="#s5">五、种子用户与扩散</a>
+  <a href="#s6">六、人员入伙流程</a>
+  <a href="#s7">七、推迟决策清单</a>
+  <a href="#s8">八、不可解决问题(更新)</a>
+  <a href="#s9">九、本周行动清单</a>
+  <a href="#s10">十、版本演化路径</a>
+</nav>
+
+<div class="container">
+
+<div class="header">
+  <h1>为人民服务的公司:构想 v2.1</h1>
+  <p class="meta">
+    <span><strong>版本:</strong>v2.1</span>
+    <span><strong>日期:</strong>2026-05-12</span>
+    <span><strong>对照:</strong><a href="./code-for-people-v1.html">v1.0</a> · <a href="./code-for-people-v2.html">v2.0</a></span>
+  </p>
+  <p class="meta" style="margin-top: 0.8em;">v2.0 之后的执行层文档——制度骨架 + 法律外壳 + 品牌 + 入伙流程</p>
+  <div class="audience">
+    <strong>用途说明:</strong>本文档为创始人自用 / 决策清单。<strong>不直接给高中同学或外部人看</strong>——信息密度和承诺密度过高,需通过分阶段对话呈现(见 §6.2)。
+  </div>
+</div>
+
+<h2 id="s1">一、v2.0 → v2.1 的关键补充(执行摘要)</h2>
+
+<p>v2.0 解决的是"思想框架 + 启动期组织形态"问题。v2.1 不修改 v2.0 的任何核心命题,只在以下层面补充<strong>可执行规则和近期行动</strong>:</p>
+
+<ol>
+  <li><strong>制度骨架成型</strong>——公司治理(BDFL + 数量级触发 + 2/3 决议)、工资 1:3 永恒条款、资金捐款性质、产品决策机制,从模糊承诺压实到可执行规则</li>
+  <li><strong>法律外壳路径明确</strong>——三阶段路径(90 天试点 → 普通公司 + 章程自约束 → 民非),包括业务主管单位选择、政治敏感性、外汇合规</li>
+  <li><strong>中文品牌确定</strong>——"为工友敲键盘",法律名 / 品牌名 / 项目认同三层分离</li>
+  <li><strong>种子用户成分干预</strong>——前 50 用户硬性配额(≥20 来自第一二产业),防止路径锁死为"程序员互助小组"</li>
+  <li><strong>入伙流程</strong>——学徒已入伙但需确认"满足生活"具体数字;高中同学未入伙,设计四阶段对话</li>
+  <li><strong>推迟决策清单形式化</strong>——把"现在不决策"的事项明确列出,避免"以后再说"演变为"以后忘了"</li>
+</ol>
+
+<div class="distillation">
+  <span class="distillation-label">V2.1 一句话蒸馏</span>
+  <p>v2.0 的思想姿态在 v2.1 被压到可执行层——每一项承诺都有具体规则、触发条件、和锁定机制;每一项"以后再决策"都有具体触发条件,不靠记忆维持。</p>
+</div>
+
+<h2 id="s2">二、制度骨架</h2>
+
+<h3>2.1 公司治理</h3>
+
+<p><strong>Sun 是事实 BDFL</strong>(Benevolent Dictator For Life)。这一事实需要书面承认而不是模糊化——"现在大家民主决定"在 3 人小队 + Sun 单一金主的结构下是橱窗,模糊化的代价是当未来某次冲突真的发生,没有任何文件可以指向说"我们当初就是这么约定的"。</p>
+
+<div class="rule">
+  <span class="rule-label">规则</span>
+  <p><strong>数量级触发条件:</strong>每扩一个数量级(3 → 30 → 300 → 3000 → 3 万),治理机制必须重新决定,不允许线性渐变。每次跨越数量级,所有规则需要全员重新设计并投票决定。</p>
+</div>
+
+<div class="rule">
+  <span class="rule-label">规则</span>
+  <p><strong>人事决议:招新人 / 开人 / 批准离职均需 2/3 同意</strong>(参照 1918 年新民学会规则)。3 人时即任何两人即可决定,Sun 一票不足以单独决定人事。</p>
+</div>
+
+<h3>2.2 工资约束:1:3 永恒条款</h3>
+
+<div class="rule">
+  <span class="rule-label">规则·永恒条款</span>
+  <p><strong>最高工资 ≤ 最低工资 × 3。</strong></p>
+  <p>应用范围:现金 + 代币 + 任何形式的物质回报。</p>
+  <p><strong>锁定层级:永恒条款。</strong>写入章程的"不可被任何决议修改的条款"清单。即使全员一致同意也不能修改。仿照美国宪法第五条对参议院代表平等的特别保护、德国基本法第七十九条永恒条款机制。</p>
+</div>
+
+<p><strong>已知代价(feature 而非 bug):</strong></p>
+
+<ul>
+  <li>招募池受限——大厂中级程序员年包 50-80 万,1:3 上限下学徒 5500 元/月起、师傅最高约 16500 元/月。这是自动筛选机制——能留下来的要么真信、要么没有别的去处</li>
+  <li>历史先例:Mondragón 合作社 1956 年成立时即 1:3,1990 年代屈服于外部劳动力市场压力放至 1:6 → 1:9。<strong>永恒条款是给未来自己的 commitment device,防止重蹈 Mondragón 路径</strong></li>
+</ul>
+
+<h3>2.3 资金性质:只接受捐款</h3>
+
+<div class="rule">
+  <span class="rule-label">规则</span>
+  <p><strong>所有进入项目的资金均为捐款,包括创始人投入。</strong></p>
+</div>
+
+<p>具体含义:</p>
+
+<ul>
+  <li>Sun 自己投入的房租和工资 → 捐款,不可回收</li>
+  <li>学徒和高中同学的工资来源 → 项目从 Sun 的捐款支付</li>
+  <li>未来用户付费 → 项目收入(不属于 Sun)</li>
+  <li>未来外部捐款 → 直接给项目,捐赠人不获得股权或控制权</li>
+</ul>
+
+<p><strong>关键属性:</strong></p>
+
+<ul>
+  <li><strong>创始人投入不可回收</strong>。Sun 60 岁离开时,带不走任何东西——这件事注册民非后是法律强制,不是主观选择</li>
+  <li><strong>项目不可上市、不可并购、不可创始人套现</strong>——永远没有 exit</li>
+  <li><strong>无投资人概念</strong>——只有"捐赠人",捐赠不换股权</li>
+</ul>
+
+<h3>2.4 BDFL 与决议的边界</h3>
+
+<table>
+  <thead>
+    <tr><th>决策类型</th><th>谁决定</th><th>备注</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>单产品功能 / bug</td><td>产品 BDFL(1-3 maintainer 中的带头人)</td><td>乱搞 → 产品自然挂掉,市场纪律</td></tr>
+    <tr><td>公司层产品方向选择</td><td>不存在中央决策,小团队自决</td><td>"广泛撒网试错",符合宗旨即可开启</td></tr>
+    <tr><td>招新人 / 开人 / 批准离职</td><td>2/3 决议</td><td>新民学会规则</td></tr>
+    <tr><td>工资比例调整</td><td><strong>不可决议</strong></td><td>永恒条款</td></tr>
+    <tr><td>接受外部捐款</td><td>公司层 BDFL(Sun)</td><td>但 BDFL 无任何套现权</td></tr>
+    <tr><td>治理机制本身的修改</td><td>数量级触发后全员重新设计</td><td>不允许渐变</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s3">三、法律外壳</h2>
+
+<h3>3.1 三阶段路径</h3>
+
+<table>
+  <thead>
+    <tr><th>阶段</th><th>时间</th><th>法律形式</th><th>下阶段触发条件</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>阶段 1 · 试点</strong></td><td>0-3 个月</td><td>不注册任何实体,个人转账 + 个人合同发工资</td><td>第一个产品有用户 ≥ 100</td></tr>
+    <tr><td><strong>阶段 2 · 公司</strong></td><td>3 月 - 用户 ~1000</td><td>普通有限公司 + 章程自约束(不分红、利润全转工资、解散归社会)</td><td>找到业务主管单位 + 第一阶段稳定运营满 6 个月</td></tr>
+    <tr><td><strong>阶段 3 · 民非</strong></td><td>用户 1000+</td><td>社会服务机构(民办非企业)</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<p>阶段 2 是关键过渡期:享受有限公司便利(开发票、签合同、招人),通过章程约束实现"民非的精神"。这一段是法律意义上"Sun 个人控股"的灰色地带,需 Sun 在心理上把这段时间也当作"暂时托管"。</p>
+
+<h3>3.2 形式选择:为什么民非</h3>
+
+<table>
+  <thead>
+    <tr><th>形式</th><th>适用性</th><th>主要原因</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>公募基金会</td><td>❌</td><td>注册资金 ≥ 800 万</td></tr>
+    <tr><td>非公募基金会</td><td>⚠ 边缘</td><td>注册资金 ≥ 200 万,定位是"资助方"非"运营方"</td></tr>
+    <tr><td>社会团体</td><td>❌</td><td>适合行业协会,不适合产品型项目</td></tr>
+    <tr><td><strong>民非(社会服务机构)</strong></td><td>✅</td><td>5-30 万注册资金,可收服务费,可发工资,禁止分红,资产归社会</td></tr>
+  </tbody>
+</table>
+
+<p>民非的关键吸引点:</p>
+
+<ul>
+  <li><strong>无股权,无所有权</strong>——跟"创始人投入也算捐款"完全一致</li>
+  <li><strong>可收服务费</strong>——B2C 软件订阅收入合法</li>
+  <li><strong>可发工资</strong>——1:3 工资比可正常执行</li>
+  <li><strong>禁止分红</strong>——盈余必须再投入业务,法律级保证"无 exit"</li>
+  <li><strong>解散后资产归社会</strong>——比章程锁死强,连理论可能性都消除</li>
+</ul>
+
+<h3>3.3 业务主管单位与政治敏感性</h3>
+
+<p>民非注册的真实门槛不是注册资金,是<strong>业务主管单位</strong>(政府某个部门承担监管责任)。</p>
+
+<p>候选(按当前判断的可能性排序):</p>
+
+<ol>
+  <li><strong>民政局</strong>——部分省市试点直接登记,可跳过业务主管单位(优先尝试)</li>
+  <li><strong>教育部门 / 人社部门</strong>——若框架成"职业培训"</li>
+  <li><strong>共青团</strong>——若框架成"青年技能教育"</li>
+  <li><strong>网信办 / 工信部</strong>——若框架成"数字素养"</li>
+  <li><strong>总工会 / 地方工会</strong>——最对口但对独立工友组织态度复杂,放在最后试</li>
+</ol>
+
+<div class="warning">
+  <span class="warning-label">政治敏感性</span>
+  <p>中国"工友 / 劳工"主题 NGO 自 2015 年起处于持续紧缩环境。番禺打工族服务部、深圳手牵手等多数已停止运作。这是结构性环境,不可改变。</p>
+  <p><strong>实务结论:</strong>法律名 ≠ 品牌名。法律注册用"数字素养 / 灵活就业服务 / 信息技术普惠"等漂白名称,品牌叙述保留"为工友敲键盘"。里子和面子分开是合法的、必要的、不算虚伪。</p>
+</div>
+
+<h3>3.4 外汇合规</h3>
+
+<p>Sun 资金来源包括外企美元工资。<strong>操作路径决定一切</strong>——同样的钱走不同路径,法律意义完全不同。</p>
+
+<div class="rule">
+  <span class="rule-label">规则·安全路径</span>
+  <p>美元 → 境外个人账户 → 入境结汇 → 境内人民币账户 → <strong>完税</strong> → 以<strong>人民币、个人名义</strong>捐赠给项目实体。</p>
+  <p>账面记录:"个人捐赠,捐赠人 Sun,人民币"。<strong>与外汇/外企/境外完全无关</strong>。</p>
+</div>
+
+<div class="warning">
+  <span class="warning-label">禁止操作</span>
+  <ul>
+    <li>外企直接以美元打款给项目</li>
+    <li>境外账户直接为项目支出(再以"报销"形式回款)</li>
+    <li>接受境外组织资金或品牌授权</li>
+    <li>在境外注册相关组织再支持境内实体</li>
+  </ul>
+  <p>任何一条都会实质性踩到《境外 NGO 管理法》。</p>
+</div>
+
+<p><strong>实操细节(本周对一遍):</strong></p>
+
+<ul>
+  <li>个人结汇额度 5 万美元/年。超过需走"个人特殊业务",备齐工资单 + 完税证明 + 用途证明</li>
+  <li>完整保留外企工资条 + 完税证明,5 年内可能被询问</li>
+  <li>所有项目支出从境内项目账户出,不在境外为项目消费</li>
+  <li>避免每年 3 月、7 月、10 月等敏感时点的大额结汇 / 捐赠</li>
+</ul>
+
+<h2 id="s4">四、品牌与传播</h2>
+
+<h3>4.1 中文品牌:为工友敲键盘</h3>
+
+<p>选这个名字的理由:</p>
+
+<ul>
+  <li><strong>"工友"</strong>——既指服务对象,也是程序员自嘲("码农"、"互联网工友"在 996.ICU 之后已成真实自称)。涵盖第一二产业劳动者 + 中产程序员学徒的双重人民</li>
+  <li><strong>"敲键盘"</strong>——把"编程"这个略带精英气的词降到工友能听懂的层级;同时带"键盘侠"的自嘲味,消解"为工友"可能引发的居高临下感</li>
+  <li>整体语气是劳动姿态:"我们不是什么科技公司,我们就是一群敲键盘的"</li>
+</ul>
+
+<p>简称:"工友敲键盘" / "敲键盘"用于非正式场合。</p>
+
+<div class="warning">
+  <span class="warning-label">商标提示</span>
+  <p>"为工友敲键盘"作为<strong>使用</strong>不需审批,可马上启用。但<strong>注册商标</strong>大概率被驳回——描述性过强(《商标法》第 11 条缺显问题)。补救路径是"为工友敲键盘 + 臆造词后缀"或"图形 + 文字"组合。商标注册可推迟到项目规模有起色后再处理。</p>
+</div>
+
+<h3>4.2 公司法律名分层</h3>
+
+<table>
+  <thead>
+    <tr><th>层级</th><th>名称</th><th>用途</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>法律名(公司 / 民非)</td><td>XX 数字素养服务中心(或类似漂白名)</td><td>工商登记、合同、税务、对接政府部门</td></tr>
+    <tr><td>品牌名(对外)</td><td>为工友敲键盘</td><td>产品、官网、自媒体、用户口语</td></tr>
+    <tr><td>项目认同(对内)</td><td>为人民服务的公司</td><td>创始团队内部、师徒誓约、本档文件系列</td></tr>
+  </tbody>
+</table>
+
+<p>三层分离是设计选择,不是虚伪——法律外壳与精神核心解耦,是中国监管环境下的现实必要。</p>
+
+<h3>4.3 自媒体定位</h3>
+
+<p><strong>核心:吸引目标用户,而不是技术分享(避免引来程序员观众池)。</strong></p>
+
+<p>内容方向:</p>
+
+<ul>
+  <li>AI 工具教学(目标受众:第一二产业劳动者)</li>
+  <li>工友处境观察 + 解决思路</li>
+  <li>项目过程透明分享(失败也是内容)</li>
+</ul>
+
+<div class="warning">
+  <span class="warning-label">算法层面的现实预期</span>
+  <p>抖音 / B 站 / 小红书的推荐系统按"内容标签 + 用户画像"做相似性推荐。"工友 AI 教学"会被推给目标受众,也会推给"对底层叙事感兴趣的中产观众"——后者<strong>点赞但不转化为用户</strong>。</p>
+  <p>预期落差:6 个月内涨粉 5 万但转化用户 500。这是结构性差,不是做得不够好。</p>
+</div>
+
+<h3>4.4 获客方法</h3>
+
+<p><strong>核心:到群众中去。</strong>绑定既有线下基础设施,比自建社群效率高 10 倍:</p>
+
+<ul>
+  <li><strong>工友驿站</strong>(外卖员歇脚点,全国几万个)</li>
+  <li>工地党群服务中心</li>
+  <li>县城技工学校 / 中职</li>
+  <li>工会职工书屋</li>
+  <li>"工会户外劳动者驿站"等</li>
+</ul>
+
+<p>90 天试点期内即可启动一线行动,不需要等任何治理设计完成。</p>
+
+<h2 id="s5">五、种子用户与扩散</h2>
+
+<h3>5.1 前 50 用户成分干预</h3>
+
+<p>决定一个软件社区基因的<strong>不是规模 1000 之后的多数人,是 50 以内的活跃少数</strong>。</p>
+
+<div class="rule">
+  <span class="rule-label">规则</span>
+  <p><strong>前 50 个种子用户中,硬性 ≥ 20 个来自第一二产业。</strong></p>
+</div>
+
+<p>不付这个代价的后果:产品早期从程序员圈传播开,种子用户 80% 是程序员,一年后第一二产业用户进入会被"程序员氛围"挤出。半年后"为工友敲键盘"自动退化为"程序员互助小组"。</p>
+
+<p>具体代价(必须承担):</p>
+
+<ul>
+  <li>前期获客效率显著下降——程序员通过 demo 链接就来了,工人需要面对面、需要被理解他们的真实需求</li>
+  <li>需要主动到工友驿站、技校等地方做线下接触,这是 90 天试点期的核心活动之一</li>
+  <li>产品体验对工人可能还不完善,但要硬接住前 20 个,在他们身上迭代</li>
+</ul>
+
+<h3>5.2 学徒裂变机制(承袭 v2.0)</h3>
+
+<p>出师后回乡开类似公司,师承网络扩散。</p>
+
+<p><strong>v2.1 新增的现实判断:</strong>学徒出师后大概率不会复制本项目的<strong>全部</strong>承诺(包括 1:3 永恒条款、民非形式、外汇合规等)。师承裂变不要求基因 100% 复制,<strong>精神方向延续</strong>即足够——他/她在自己的地方开普通商业公司服务工友,也是项目目标的一部分。</p>
+
+<h2 id="s6">六、人员入伙流程</h2>
+
+<h3>6.1 学徒(已入伙)</h3>
+
+<p><strong>当前位置:</strong>南通大学软件工程专业毕业,已自费就近租房投入项目实战,愿意接受半薪试用 750 USD / 月。</p>
+
+<p><strong>自我定位原话:</strong></p>
+
+<blockquote>
+  <p>"我觉得像马克思那样穷困潦倒、颠沛流离我做不到,但是像恩格斯那样在满足生活的情况下搞革命是可以的。"</p>
+</blockquote>
+
+<p>这是极其清醒的自我边界——他不是"含糊愿意奉献",是"精确知道愿意奉献到什么程度"。</p>
+
+<p><strong>需要 Sun 心里标记的三件事:</strong></p>
+
+<ol>
+  <li><strong>他是"参与者"不是"共承诺者"</strong>。困难期不能假设他陪走超出"满足生活"线之下的部分</li>
+  <li><strong>"满足生活"的具体数字必须 7 天内确认</strong>——他现在住哪、月固定支出多少、5500 元 / 月够不够。如果不够,要么调数字、要么调住地。这个错配会在第二个月就显化</li>
+  <li><strong>出师后大概率回乡开普通商业公司</strong>,可能做工友相关产品但用传统公司形式。这件事 OK,不要试图强求他复制全部承诺</li>
+</ol>
+
+<h3>6.2 高中同学(待入伙·关键执行)</h3>
+
+<p><strong>当前位置:</strong>未提及完整构想。本职 3000 USD / 月稳定远程,中级前端程序员。</p>
+
+<p><strong>已知信息:</strong></p>
+
+<ul>
+  <li>Sun 是他的技术 mentor(把他带进前端行业)——<strong>已存在师徒关系</strong></li>
+  <li>价值观与 Sun 接近,对马列主义和各类哲学的学习<strong>可能比 Sun 更多</strong></li>
+  <li>35 岁左右,可能有家庭</li>
+</ul>
+
+<div class="warning">
+  <span class="warning-label">关键风险</span>
+  <ol>
+    <li><strong>现有师徒关系会让他难以说"不"</strong>。出于义气可能加入,但未必是 visceral 认同。义气入伙是炸弹,半年后必爆</li>
+    <li><strong>理论比 Sun 深</strong>,他的 grill 力度会比预期大。需准备好被反向 grill,不要因为是 BDFL 就硬撑维护自己的版本——他能 grill 是项目的资产,不是威胁</li>
+  </ol>
+</div>
+
+<h4>分阶段对话(必须遵守,不可一次性把本文档给他看)</h4>
+
+<table>
+  <thead>
+    <tr><th>阶段</th><th>内容</th><th>听他什么</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>第一次</td><td>产品想法 + "为工友"宗旨</td><td>有没有 visceral 共鸣?</td></tr>
+    <tr><td>第二次</td><td>师徒制 + 工资 1:3 + 90 天试点</td><td>接受 3000 → 1500 USD/月差价?</td></tr>
+    <tr><td>第三次</td><td>公司治理(BDFL + 数量级触发 + 2/3 决议)</td><td>接受 Sun 做 BDFL?他想要什么权力?</td></tr>
+    <tr><td>第四次<br/>(可能 1-2 月后)</td><td>长期承诺(民非 + 无 exit + 不可回收)</td><td>最终承诺测试</td></tr>
+  </tbody>
+</table>
+
+<h4>关键执行细节</h4>
+
+<ul>
+  <li><strong>第一次见面面对面</strong>,不视频通话、不文字、不电话</li>
+  <li><strong>第一次明说一句话:</strong>"无论你最后是否加入,我们的关系不会因此改变,我不希望你因为'欠我'而加入,我希望你因为'你也想做'而加入" —— 把"退出空间"从理论变成事实,让他听见</li>
+  <li>允许每阶段退出。如果他在第二阶段说"工资差价 1500 USD 接受不了"——损失是两顿饭,重新找人。如果直接灌完本文档让他签字,他在心里默默退场,半年后才显化——损失是 6 个月精力 + 一个朋友</li>
+  <li>本文档<strong>对自己用</strong>,不直接给他。它是 Sun 在每次对话前对照的备忘录,而不是给他读的"已设计完毕的合同"</li>
+</ul>
+
+<h2 id="s7">七、推迟决策清单</h2>
+
+<p>明确列出<strong>当前阶段不决策</strong>的事项,防止"以后再说"演变为"以后忘了"。每项都标记触发条件——一旦满足,就必须真正决策,不能继续推。</p>
+
+<div class="deferred">
+  <p class="deferred-head">7.1 议程权与投票机制</p>
+  <p class="deferred-trigger">触发条件:用户规模 ≥ 500 OR 活跃贡献者 ≥ 50</p>
+  <p>当前选项库存(不实际选择):</p>
+  <ul>
+    <li>双轨制:产品功能 BDFL + 组织事务投票</li>
+    <li>流动民主 + 委托上限 10% + 委托衰减 90 天</li>
+    <li>AI 代理民主:已被否决——会沿阶级线复制不平等</li>
+  </ul>
+</div>
+
+<div class="deferred">
+  <p class="deferred-head">7.2 代币系统</p>
+  <p class="deferred-trigger">触发条件:第一个产品有稳定收入 + 内部经济活动复杂到需要中间货币</p>
+  <p>v2.0 时空着,v2.1 仍空着。需要回答:</p>
+  <ul>
+    <li>代币的功能(投票 / 消费 / 收益分配 / 都有?)</li>
+    <li>发行机制(贡献奖励? 出资换取?)</li>
+    <li>1:3 上限应用于"个人持有量"还是"年度新增分配"?</li>
+    <li>衰减机制是否需要</li>
+  </ul>
+</div>
+
+<div class="deferred">
+  <p class="deferred-head">7.3 多团队资源分配</p>
+  <p class="deferred-trigger">触发条件:9-12 个月后,如果"广泛撒网试错"真的产生 ≥ 3 个并行小团队</p>
+  <p>当前选项库存:中央分配 / 自筹捐款 / 成熟产品养实验产品。三种各有代价,推迟到压力出现再选。</p>
+</div>
+
+<div class="deferred">
+  <p class="deferred-head">7.4 反向师徒的具体机制</p>
+  <p class="deferred-trigger">触发条件:第一个产品有稳定用户社区</p>
+  <p>v2.0 提到,v2.1 未压实。何同学失败模式警告:<strong>单向抽取不署名不分钱 ≠ 反向师徒</strong>。需回答:工人学员的知识如何进入产品、决策、收入分配,不只是当素材库。</p>
+</div>
+
+<div class="deferred">
+  <p class="deferred-head">7.5 解散程序</p>
+  <p class="deferred-trigger">触发条件:阶段 3(民非)注册前</p>
+  <p>民非法律规定解散后资产归社会,但"归社会"的具体路径需在章程中预先指定。比如"指定捐赠给某某基金会或同类公益机构"。这件事写在章程里,创始人对未来失败有更诚实的预期。</p>
+</div>
+
+<h2 id="s8">八、不可解决问题清单(更新)</h2>
+
+<p>v2.0 原 6 项保持不变(见 v2.0 文档第五节)。v2.1 新增 3 项:</p>
+
+<div class="problem new">
+  <p><strong>7. 法律形式过渡期 = 政治时间漂移期</strong>:从公司转民非需要 1-2 年。这段时间项目实际形态是"个人控股公司",与"创始人不掌握所有权"的承诺有名义上的不一致。代价是 Sun 需要在心理上把这段时间也当作"暂时托管",不当作"我的资产"——这件事承诺易、心理难。</p>
+</div>
+
+<div class="problem new">
+  <p><strong>8. "工友"主题在中国当前监管环境中的脆弱性</strong>:民非注册可能因业务主管单位拒绝而被卡死。预案是"数字素养教育"漂白名称 + 长期暂用普通有限公司形式。如果连这条路也走不通(比如所有候选业务主管单位都拒绝),需要重新评估整个项目在中国本土的可行性。<strong>这是一个真实的、可能永远卡死的瓶颈,不是设计漏洞。</strong></p>
+</div>
+
+<div class="problem new">
+  <p><strong>9. "满足生活"标准会随地域和家庭责任浮动</strong>:学徒(刚毕业、无家庭)和高中同学(35 岁、可能有家庭)对"满足生活"的具体数字差距很大。1:3 永恒条款在年轻无家庭者身上 OK,在有家庭责任的合伙人身上可能不够——这是"信仰者过滤"的副产品。预案是接受高中同学如果因家庭经济压力退出,不视为背叛,关系不变。</p>
+</div>
+
+<h2 id="s9">九、本周行动清单</h2>
+
+<p>具体的、可在 7 天内完成的:</p>
+
+<ul class="checklist">
+  <li><strong>对自己读一遍 v2.1</strong>——确认每个"已决定的事"都是 Sun 真心 commit 的,不是被对话节奏带跑的。如果有任何一条心里有疑,先标记下来,下次重新讨论再删除或修改</li>
+  <li><strong>跟学徒正式对一遍 "满足生活" 数字</strong>——他现住哪、月固定支出多少、5500 元够不够。不够则即时调整数字或住地</li>
+  <li><strong>把工资 1:3 永恒条款写成简短中文文字</strong>(一页 A4 内),作为未来章程基础</li>
+  <li><strong>跟高中同学约第一次见面</strong>——<strong>面对面</strong>、不被打扰的环境,只聊产品想法 + 宗旨,<strong>不要聊治理和工资</strong>。开场明说"无论你最后是否加入,我们的关系不会因此改变"</li>
+  <li><strong>跟境内主要银行客户经理对一遍美元入境结汇路径</strong>,确认 5 万美元额度的实际操作流程 + 需要的证明文件</li>
+  <li><strong>列出 3-5 个 "业务主管单位" 候选</strong>(民政 / 教育 / 共青团 / 网信 / 工会),开始非正式探询——但不要在 90 天试点期内真去注册</li>
+  <li><strong>占用平台账号</strong>——抖音、B 站、小红书、微信公众号、即刻、微博 6 个平台,统一注册"为工友敲键盘"或"工友敲键盘"。耗时半小时,避免一年后被抢</li>
+</ul>
+
+<h2 id="s10">十、版本演化路径</h2>
+
+<table>
+  <thead>
+    <tr><th>版本</th><th>状态</th><th>本版本完成的事</th><th>下版本触发条件</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>v1.0</td><td>已归档</td><td>思想姿态、代币 + 共产度 + 民主投票的乌托邦框架</td><td>已被 9 轮 grilling 推翻部分内容</td></tr>
+    <tr><td>v2.0</td><td>已归档</td><td>思想框架可启动、师徒制 + 工人 AI 夜校 + 模型主权</td><td>已完成执行层补充</td></tr>
+    <tr><td><strong>v2.1(本档)</strong></td><td><strong>当前</strong></td><td>制度骨架 + 法律外壳 + 品牌 + 入伙流程 + 推迟决策清单</td><td>高中同学完成第四阶段对话(加入或正式拒绝)</td></tr>
+    <tr><td>v3.0</td><td>待写</td><td>合伙人加入后的全员共识版本</td><td>用户规模跨过数量级(到 300)</td></tr>
+    <tr><td>v3.x / v4.0</td><td>待写</td><td>每个数量级跨越后重写治理</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<hr/>
+
+<p style="color: var(--text-muted); font-size: 0.9em; font-style: italic; text-align: center; margin-top: 4em;">
+v2.1 完成于 2026-05-12,Sun + Claude 一轮对话压实。<br/>
+诚实条款:本文档的任何条款,如果在实际执行中发现错误,允许且应当被修正——但"已决定的事"在被正式修改前应被遵守,不允许默默漂移。
+</p>
+
+</div>
+
+<a href="#" class="back-to-top" id="backToTop" aria-label="回到顶部">↑</a>
+
+<script>
+const backToTop = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 600);
+});
+backToTop.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+</script>
+
+</body>
+</html>

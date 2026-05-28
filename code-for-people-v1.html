@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>为人民服务的公司：构想 v1.0</title>
+<meta name="description" content="为人民服务的公司——初始构想，从马克思主义 + 比特币 + 集体记忆的混合出发">
+<style>
+:root {
+  --bg: #fbfaf6;
+  --bg-soft: #f4f1ea;
+  --text: #1a1a1a;
+  --text-muted: #5a5a5a;
+  --accent: #8b1e2d;
+  --accent-soft: rgba(139, 30, 45, 0.08);
+  --border: #d4d0c8;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-size: 17px;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+.nav-back {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.4em 1em;
+  font-size: 0.85em;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.2s;
+  z-index: 100;
+}
+.nav-back:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 70px 30px 100px;
+}
+.header {
+  margin-bottom: 3em;
+  border-bottom: 3px solid var(--accent);
+  padding-bottom: 1.2em;
+}
+h1 {
+  font-size: 2.3em;
+  font-weight: 700;
+  margin: 0 0 0.5em 0;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+.meta {
+  color: var(--text-muted);
+  font-size: 0.92em;
+  font-style: italic;
+  margin: 0;
+}
+.meta span {
+  margin-right: 1.5em;
+}
+h2 {
+  font-size: 1.55em;
+  font-weight: 600;
+  margin: 3em 0 0.8em;
+  padding-bottom: 0.4em;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  scroll-margin-top: 30px;
+}
+h3 {
+  font-size: 1.18em;
+  font-weight: 600;
+  margin: 2em 0 0.5em;
+  color: var(--accent);
+}
+h4 {
+  font-size: 1.05em;
+  font-weight: 600;
+  margin: 1.5em 0 0.4em;
+  color: var(--text);
+}
+p {
+  margin: 0 0 1.1em 0;
+}
+strong {
+  font-weight: 600;
+}
+ul, ol {
+  padding-left: 1.6em;
+  margin: 0.6em 0 1.3em;
+}
+li {
+  margin-bottom: 0.5em;
+}
+blockquote {
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  margin: 1.5em 0;
+  padding: 1em 1.4em;
+  border-radius: 0 4px 4px 0;
+  color: var(--text);
+}
+blockquote p:last-child { margin-bottom: 0; }
+.question-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 4px;
+  padding: 1.2em 1.5em;
+  margin-bottom: 1.2em;
+}
+.question-card h3 {
+  margin-top: 0;
+  font-size: 1.08em;
+}
+.question-card p:last-child { margin-bottom: 0; }
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 3em 0;
+}
+.intro-block {
+  background: var(--bg-soft);
+  border-radius: 6px;
+  padding: 1.5em 1.8em;
+  margin-bottom: 2em;
+  font-size: 1.02em;
+  line-height: 1.75;
+}
+.intro-block p:last-child { margin-bottom: 0; }
+@media (max-width: 600px) {
+  .container { padding: 50px 20px 60px; }
+  h1 { font-size: 1.7em; }
+  h2 { font-size: 1.3em; }
+  body { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<a href="./index.html" class="nav-back">← 返回</a>
+
+<div class="container">
+
+<div class="header">
+  <h1>为人民服务的公司：构想与未解问题</h1>
+  <p class="meta">
+    <span><strong>版本：</strong>v1.0</span>
+    <span><strong>起草：</strong>2026-05-12</span>
+    <span><strong>状态：</strong>早期构想，待打磨</span>
+  </p>
+</div>
+
+<h2 id="s1">一、核心判断</h2>
+
+<p><strong>生产力跃迁正在让"公司"这种生产关系形态变得不合时宜。</strong></p>
+
+<p>软件服务行业正在经历一次类似春秋战国（铁器牛耕）、工业革命（蒸汽机）级别的生产力大爆发——这次的引爆物是 AI 模型能力。当三人小团队加 AI 工具能完成过去三十人团队的工作时，巨头维持的"协调收益"不再值它收取的那部分"地租"。</p>
+
+<p>更深层的判断：<strong>AI 时代的"剩余"不会自动以剩余价值的形式被资本吸走</strong>，因为生产单位正在变小，资本的协调价值在贬值。如果这个判断成立，那么新的分配机制就不只是道德选择，而是经济必然。</p>
+
+<p><strong>人才是根本。</strong> Token、算力、模型权重，本质上都是生产资料。关键是被谁掌握、为谁服务。这一点跟马克思的核心洞察一脉相承。</p>
+
+<h2 id="s2">二、历史类比</h2>
+
+<h3>1. 春秋战国类比</h3>
+<p>铁器牛耕带来农业生产力大爆发 → 旧的井田制秩序崩塌 → 大量剩余人口 → 战争重新分配土地，缓解"人口过剩 vs 农业岗位不足"的矛盾。</p>
+
+<h3>2. 工业革命类比</h3>
+<p>蒸汽机带来工业生产力大爆发 → 旧的农业生产秩序崩溃 → 资本介入，把农业人口赶入工业领域 → 通过压低农产品价格、抬高工业品价格实现资本剥削 → 催生马克思主义。</p>
+
+<h3>3. 当下：AI / 软件服务革命</h3>
+<p>软件服务行业（AI 时代的"第三产业核心"）生产力大爆发 → 旧的互联网公司组织形态成为新型"封建领主"：</p>
+<ul>
+  <li>腾讯 = 通讯、游戏领主</li>
+  <li>阿里 = 支付、网购领主</li>
+  <li>美团 = 本地生活领主</li>
+  <li>苹果、Google、Meta 同理</li>
+</ul>
+<p>封建领主的本质不是"规模大"，而是<strong>基于稀缺资源建立的地租提取关系</strong>（应用商店、流量入口、社交关系链）。新生产力允许更小的协作单位，意味着这种地租关系需要被重构。</p>
+
+<h3>4. 两条已知路径都不该重走</h3>
+<ul>
+  <li>走回宗教指导下的"小国林立"——历史已证明会陷入长期冲突；</li>
+  <li>走回中国式"大一统"——历史也已证明效率与活力的代价。</li>
+</ul>
+<p><strong>有了马克思主义指导，我们应该能找到第三条路。</strong></p>
+
+<h2 id="s3">三、制度设计：为人民服务的公司</h2>
+
+<h3>3.1 内部代币机制</h3>
+<p>借鉴比特币的有限发行 + 集体时代的荣誉记账，设计一种<strong>不可交易、记名个人</strong>的代币：</p>
+<ul>
+  <li><strong>总量有限</strong>：类似比特币的发行曲线，随时间递减；</li>
+  <li><strong>集体稀释</strong>：加入的人越多，单位时间、单位贡献产出的币越少；</li>
+  <li><strong>非交易性</strong>：不能在人与人之间转让，只能由个人凭贡献"挣"，再用来兑换公司内部资源；</li>
+  <li><strong>使用场景</strong>：在公司内部兑换实际生活物品、服务，甚至租房；</li>
+  <li><strong>获取方式</strong>：仅通过对集体的贡献。</li>
+</ul>
+
+<h3>3.2 共产度（Communism Degree）</h3>
+<p>衡量公司"为人民服务"程度的核心参数：</p>
+<ul>
+  <li><strong>定义</strong>：薪酬中代币占比 vs 现金占比的比例；</li>
+  <li><strong>初始状态</strong>：100% 现金 / 0% 代币（与普通公司无异）；</li>
+  <li><strong>演进机制</strong>：通过集体民主投票逐步提高代币比例；</li>
+  <li><strong>下限保障</strong>：现金部分必须不低于当地法定最低工资；</li>
+  <li><strong>共产度提升的收益</strong>：现金支出降低 → 释放资源用于雇佣更多人 / 购买外部服务 / 投入生产。</li>
+</ul>
+<p>参考案例：华为的"虚拟股 + 现金"双轨制（注意区别：华为虚拟股可有限度兑现并分红，本设计的代币严格不可交易）。</p>
+
+<h3>3.3 外部传染机制</h3>
+<p>借鉴 GPL 等"传染式"开源协议的思路：</p>
+<ul>
+  <li>与本公司对接的另一家公司，如果也采用"为人民服务"协议（类似的股权 / 薪资结构），则<strong>天然获得更便宜的报价</strong>；</li>
+  <li>报价比例由对方的共产度决定——共产度越高，给到的折扣越大；</li>
+  <li>形成"为人民服务"网络的正反馈循环，逐步覆盖产业链上下游。</li>
+</ul>
+
+<h3>3.4 终极理想形态</h3>
+<p>每个人的代币账户记录其历史贡献，能换来房子、衣服、车子——但不可交易。这接近马克思设想的共产主义高级阶段（按需分配 + 个人贡献可追溯）。</p>
+
+<h2 id="s4">四、过渡路径</h2>
+<ol>
+  <li><strong>个体公司层面</strong>：从普通私人资本公司起步，逐步提高共产度，进行内部转化；</li>
+  <li><strong>公司间网络层面</strong>：通过传染式协议，把孤立的"为人民服务公司"连成网络；</li>
+  <li><strong>社会层面</strong>：从当前中国特色社会主义体制下出发，向这种社会形态过渡。</li>
+</ol>
+
+<h2 id="s5">五、未解问题（待 grill 的清单）</h2>
+
+<div class="question-card">
+  <h3>Q1：不可交易代币的灰色市场问题</h3>
+  <p>苏联劳动券、计划经济票证、文革工分制度，都产生过灰色市场。区块链能阻止账面交易，但阻止不了"我帮你刷工分、你把房子借我住"这类现实折价兑换。<strong>靠什么机制处理？</strong></p>
+</div>
+
+<div class="question-card">
+  <h3>Q2：贡献度量问题（兰格-米塞斯之争）</h3>
+  <p>如何客观度量一个程序员 / 产品经理 / 客服 / 行政对集体的贡献？现金薪酬之所以管用（即使不公），是因为市场价格机制聚合了无数主观判断。换成代币以后，<strong>谁来定价？投票？那为什么不会重蹈苏联工厂委员会的覆辙（人人给自己高分、给脏活低分）？</strong></p>
+</div>
+
+<div class="question-card">
+  <h3>Q3：通缩式发币的代际公平问题</h3>
+  <p>2026 年加入的"开创者"和 2030 年加入的"建设者"贡献相同，前者拿到的币会多几倍。<strong>这种事实阶层与"共产主义理想"的张力如何化解？</strong></p>
+</div>
+
+<div class="question-card">
+  <h3>Q4：外部协议的强制执行</h3>
+  <p>GPL 有版权法兜底。"为人民服务协议"靠什么强制执行？<strong>如果只是道德契约，假装高共产度骗低价、内部继续剥削的行为如何被识别和制裁？</strong></p>
+</div>
+
+<div class="question-card">
+  <h3>Q5：与外部资本主义市场的接口</h3>
+  <p>员工的房贷、孩子学费、父母医药费是刚性现金支出。除非公司垂直整合到不可思议的程度（自建食堂、宿舍、医院、学校 = 1980 年前的"单位制"），<strong>代币系统如何真正减轻对外部现金的依赖？</strong></p>
+</div>
+
+<div class="question-card">
+  <h3>Q6：边界问题——谁是"人民"？</h3>
+  <ul>
+    <li>仅公司内部成员 → 这是"先进合作社"；</li>
+    <li>所有交互方（用户、供应商）→ 这是"新型基础设施"；</li>
+    <li>全社会 → 这是事实上的政党组织。</li>
+  </ul>
+  <p><strong>三种边界对应完全不同的资本结构、决策机制、风险承担。要走哪条？</strong></p>
+</div>
+
+<h2 id="s6">六、需要进一步夯实的论证</h2>
+
+<p>最具价值的不是代币方案本身（其中很多老问题），而是<strong>核心判断</strong>——"AI 时代协调价值贬值，巨头地租关系不可持续"。</p>
+
+<p>建议补充以下案例论证：</p>
+<ul>
+  <li>自媒体替代传统媒体公司（协调价值贬值）</li>
+  <li>独立游戏对大厂（小团队 + 工具链的胜利）</li>
+  <li>AI 编程让独立开发者重新崛起</li>
+  <li>开源软件的"礼物经济"已经验证了非货币化协作可行</li>
+</ul>
+
+<p>如果这个核心判断能用 3-5 个硬案例夯实，整套构想才有不可绕开的现实根基。</p>
+
+<h2 id="s7">七、参考与可借鉴的历史经验</h2>
+<ul>
+  <li>中国 1949-1978 单位制（功能整合最彻底的现实实验）</li>
+  <li>中国人民公社（关于度量、激励、退出权的教训）</li>
+  <li>南斯拉夫工人自治</li>
+  <li>以色列基布兹（Kibbutz）</li>
+  <li>西班牙 Mondragon 合作社（最大、最成功的现代合作社联合体）</li>
+  <li>欧文、傅立叶等空想社会主义实验</li>
+  <li>华为 TUP / 虚拟股制度</li>
+  <li>开源运动（GPL、Apache、MIT 三种协议的传染性对比）</li>
+  <li>比特币 / Web3 DAO（已经踩过的坑很多，特别是"链上治理"的失败）</li>
+</ul>
+
+</div>
+</body>
+</html>

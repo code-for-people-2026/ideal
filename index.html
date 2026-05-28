@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>为人民服务的公司 · 构想档案</title>
+<meta name="description" content="一种 AI 时代新型企业组织形态的设计——经过辩证 grilling 的迭代演化记录">
+<meta property="og:title" content="为人民服务的公司 · 构想档案">
+<meta property="og:description" content="一种 AI 时代新型企业组织形态的设计——经过辩证 grilling 的迭代演化记录">
+<meta property="og:type" content="article">
+<style>
+:root {
+  --bg: #fbfaf6;
+  --bg-soft: #f4f1ea;
+  --text: #1a1a1a;
+  --text-muted: #5a5a5a;
+  --accent: #8b1e2d;
+  --accent-soft: rgba(139, 30, 45, 0.08);
+  --border: #d4d0c8;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 80px 30px 100px;
+}
+.hero {
+  text-align: center;
+  margin-bottom: 4em;
+}
+h1 {
+  font-size: 2.6em;
+  font-weight: 700;
+  margin: 0 0 0.2em 0;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+}
+.tagline {
+  font-size: 1.15em;
+  color: var(--text-muted);
+  font-style: italic;
+  margin: 0;
+}
+.lead {
+  font-size: 1.1em;
+  line-height: 1.85;
+  margin: 3em 0 4em;
+  color: var(--text);
+}
+.lead p {
+  margin-bottom: 1em;
+}
+.versions {
+  display: grid;
+  gap: 1.5em;
+  margin: 2em 0;
+}
+.version {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--accent);
+  border-radius: 6px;
+  padding: 1.8em 2em;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.version:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.version-label {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.78em;
+  font-weight: 600;
+  padding: 0.2em 0.7em;
+  border-radius: 3px;
+  margin-bottom: 0.6em;
+  letter-spacing: 0.05em;
+}
+.version h2 {
+  margin: 0 0 0.4em 0;
+  font-size: 1.35em;
+  font-weight: 600;
+}
+.version p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.96em;
+  line-height: 1.65;
+}
+.note {
+  background: var(--bg-soft);
+  border-radius: 6px;
+  padding: 1.3em 1.6em;
+  margin: 3em 0 0;
+  font-size: 0.95em;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+.note strong { color: var(--text); }
+footer {
+  margin-top: 5em;
+  text-align: center;
+  font-size: 0.85em;
+  color: var(--text-muted);
+  padding-top: 2em;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 600px) {
+  .container { padding: 50px 22px 60px; }
+  h1 { font-size: 2em; }
+  .version { padding: 1.4em 1.4em; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>为人民服务的公司</h1>
+  <p class="tagline">A.I. 时代新型企业组织形态的设计档案</p>
+</div>
+
+<div class="lead">
+  <p>已知，软件服务是一种服务。<br>
+  为人民服务是一种崇高的使命。<br>
+  现在 AI 模型能力爆发，导致软件服务生产力大爆发。<br>
+  生产过剩，需要消费升级。</p>
+
+  <p>这是一个长期演化的思想 + 实践项目。我们处在类似春秋战国（铁器牛耕）、工业革命（蒸汽机）级别的生产力大爆发——这次的引爆物是 AI。互联网巨头作为"封建领主"的形态正在失效。我们需要在马克思主义指导下，找到第三条路：既不是宗教指导下的小国林立，也不是大一统。</p>
+</div>
+
+<div class="versions">
+  <a href="./code-for-people-v1.html" class="version">
+    <span class="version-label">V1.0 · 思想姿态</span>
+    <h2>初始构想：代币 + 共产度 + 民主投票</h2>
+    <p>2026-05-12 起草。从马克思主义 + 比特币 + 集体记忆的混合出发，提出乌托邦企业形态。论证强项在历史类比和理论框架，弱项在经济可行性、组织动力学、阶级实现三块。</p>
+  </a>
+
+  <a href="./code-for-people-v2.html" class="version">
+    <span class="version-label">V2.0 · 可启动级别</span>
+    <h2>修正版：师徒制 + 工人 AI 夜校 + 模型主权</h2>
+    <p>经过 9 轮辩证 grilling 后的可启动版本。承认"代币 + 民主"是终极愿景；启动期采用列宁式 vanguard（中产学徒）+ mass base（工人学员）结构；从 B2B 转向 B2C；技术主权从依赖 API 走向开源模型自部署；教育 + 互助 + 组织三条腿不可分。</p>
+  </a>
+
+  <a href="./code-for-people-v2.1.html" class="version">
+    <span class="version-label">V2.1 · 执行层就绪</span>
+    <h2>制度骨架 + 法律外壳 + 品牌 + 入伙流程</h2>
+    <p>v2.0 之后的执行层文档。压实公司治理（BDFL + 数量级触发 + 2/3 决议）、工资 1:3 永恒条款、资金捐款性质；明确法律三阶段路径（试点→公司→民非）；确定中文品牌"为工友敲键盘"；设计高中同学的四阶段入伙对话。<strong>对自己用，不直接给外部人看。</strong></p>
+  </a>
+
+  <a href="./code-for-people-90day-plan.html" class="version">
+    <span class="version-label">附 · 90 天执行规划</span>
+    <h2>田野 + 技术 + 上线 + 合规的 13 周展开</h2>
+    <p>v2.1 第 9 节"本周行动"的展开版。包含选题方法论、田野调查具体安排（注册骑手 / 应聘电子厂 / 妇幼场景替代方案）、技术架构、上线路径选择、ICP 备案、数据保护合规、13 周周历、决策点与失败应变。三人对照执行用。</p>
+  </a>
+</div>
+
+<div class="note">
+  <strong>关于三个版本的关系：</strong>v1.0 是思想起点，v2.0 是被 9 轮 grilling 压到地面之后的可启动版本，v2.1 是把 v2.0 的承诺压到具体可执行规则 + 近期行动的执行层文档。三个版本对照阅读，能看到一个构想如何从"思想姿态"走到"可启动级别"再走到"执行层就绪"——每一步推进都是诚实回应锐利反驳的结果。
+</div>
+
+<footer>
+  <p>© 2026 · 为人民服务的公司 项目</p>
+</footer>
+
+</div>
+</body>
+</html>
