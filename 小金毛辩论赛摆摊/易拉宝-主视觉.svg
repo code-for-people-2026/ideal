@@ -61,10 +61,11 @@
   <text x="420" y="1360" font-size="18" font-weight="400" fill="#5a5a5a">（失败也公开）</text>
 
   <text x="56" y="1494" font-size="18" font-weight="400" fill="#5a5a5a">桌上有 7×7 地图、宣言传单与需求登记表，</text>
-  <text x="56" y="1524" font-size="18" font-weight="400" fill="#5a5a5a">欢迎来 grill 我们。</text>
+  <text x="56" y="1524" font-size="18" font-weight="400" fill="#5a5a5a">欢迎来挑刺。</text>
 
   <line x1="56" y1="1576" x2="624" y2="1576" stroke="#d4d0c8" stroke-width="1"/>
-  <text x="56" y="1622" font-size="22" font-weight="700" fill="#8b1e2d">（团队名待定）</text>
+  <text x="56" y="1622" font-size="22" font-weight="700" fill="#8b1e2d">码成工</text>
+  <text x="56" y="1654" font-size="15" font-weight="400" fill="#8a8a8a">一个为工友敲键盘的组织</text>
   <text x="624" y="1622" font-size="16" font-weight="400" fill="#8a8a8a" text-anchor="end">端午 · 华语辩坛小友赛</text>
 
 </g>
