@@ -45,3 +45,33 @@
 ## 状态
 
 私有档案，持续迭代。**诚实条款**：任何条款发现错误，允许且应当被修正；但每次修正都要写下来，不允许默默漂移。
+
+## 现场互动页部署
+
+这个仓库里的互动矩阵是 Next.js + Payload CMS。摊位现场二维码必须指向公网部署地址，不能指向 `localhost`。
+
+### Vercel 环境变量
+
+至少需要在 Vercel 配置：
+
+- `PAYLOAD_DATABASE_URL` 或 `DATABASE_URL`
+- `DATABASE_URL_UNPOOLED`，如果数据库供应商提供
+- `PAYLOAD_DATABASE_SCHEMA=ideal_interactive`
+- `PAYLOAD_SECRET`
+- `SUBMISSION_IP_HASH_SALT`
+- `NEXT_PUBLIC_SITE_URL`
+- `ADMIN_EMAIL`
+- `ADMIN_PASSWORD`
+
+### 首次初始化线上数据库
+
+```bash
+vercel login
+pnpm prod:init
+```
+
+### 重新生成二维码
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://你的线上域名 pnpm qr:flyer
+```
