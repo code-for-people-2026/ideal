@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>传单1 · 7×7 分析矩阵</title>
+<style>
+  :root{
+    --bg:#fbfaf6; --ink:#1a1a1a; --muted:#5a5a5a; --dim:#8a8a8a;
+    --accent:#8b1e2d; --green:#2d6a3f; --blue:#1e5aa0; --gold:#b08d2e;
+    --border:#d4d0c8; --border-l:#e8e4dc; --soft:#f4f1ea;
+    --hl:rgba(45,106,63,.12);
+    --red-bg:rgba(139,30,45,.07); --red-bd:rgba(139,30,45,.28);
+    --blue-bg:rgba(30,90,160,.08); --blue-bd:rgba(30,90,160,.28);
+  }
+  @page{ size:A2 portrait; margin:0; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; }
+  body{ background:#e9e6df;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+    color:var(--ink); -webkit-font-smoothing:antialiased; }
+  .sheet{ width:420mm; height:594mm; margin:0 auto; background:var(--bg); padding:12mm 13mm 10mm; position:relative;
+    display:flex; flex-direction:column; }
+  @media print{ body{background:#fff;} .sheet{margin:0;} }
+  @media screen{ .sheet{ box-shadow:0 4px 24px rgba(0,0,0,.18); margin:18px auto; } }
+
+  /* ---------- header ---------- */
+  .top{ border-bottom:3px solid var(--accent); padding-bottom:6px; margin-bottom:7px;
+    display:flex; justify-content:space-between; align-items:flex-end; }
+  .kicker{ font-size:14pt; letter-spacing:.26em; color:var(--accent); font-weight:700; }
+  h1{ font-size:30pt; margin:.1em 0 .12em; }
+  .sub{ color:var(--muted); font-size:13pt; margin:0; }
+  .tophint{ font-size:11pt; color:var(--dim); text-align:right; line-height:1.6; padding-bottom:2px; }
+
+  /* ---------- matrix ---------- */
+  table{ width:100%; border-collapse:collapse; table-layout:fixed; background:#fff; }
+  th,td{ border:1px solid var(--border-l); padding:8px 8px; vertical-align:top; text-align:left; }
+  thead th{ background:var(--soft); text-align:center; font-size:12.5pt; font-weight:700; padding:8px 5px; }
+  thead th small{ display:block; font-weight:400; color:var(--muted); font-size:9.5pt; margin-top:2px;}
+  thead th:first-child, tbody th{ width:29mm; background:var(--soft); }
+  thead th.unseg{ background:#efe9da; }
+  tbody td.unseg{ background:#fbf8f0; }
+  tbody th{ border-right:2px solid var(--border); font-size:12.5pt; font-weight:700; line-height:1.3; vertical-align:middle; text-align:center; }
+  tbody th small{ display:block; color:var(--muted); font-weight:400; font-size:9.5pt; margin-top:3px; }
+  tbody td{ height:60mm; }
+  td .id{ float:right; font-size:9pt; color:var(--dim); font-family:monospace; letter-spacing:.06em; margin:1px 0 2px 3px; }
+
+  .tag{ display:block; clear:left; font-size:10.5pt; line-height:1.35; border-radius:4px; padding:4px 7px; margin:0 0 5px; border:1px solid; }
+  .tr{ background:var(--red-bg); border-color:var(--red-bd); color:#7a1b28; }
+  .tb{ background:var(--blue-bg); border-color:var(--blue-bd); color:#174a85; font-weight:600; }
+  .tr0{ background:none; border:1px dashed var(--border); color:var(--dim); font-size:9.5pt; }
+  .tk{ background:#2b2b2b; border-color:#2b2b2b; color:#f5f2ea; }
+  .tg{ background:rgba(176,141,46,.16); border-color:rgba(176,141,46,.55); color:#6b500f; font-weight:600; }
+  .tm{ background:#c0392b; border:2px double #fff; outline:1.5px solid #8b1e2d; color:#fff; font-weight:700; }
+  .tm::before{ content:"★ "; color:#ffd34d; }
+
+  /* ---------- bottom: legend + QR ---------- */
+  .below{ display:flex; gap:14px; margin-top:10px; flex:1; align-items:stretch; }
+  .legend{ flex:1; font-size:11pt; color:var(--muted); line-height:1.7; background:var(--soft);
+    border:1px solid var(--border-l); border-radius:6px; padding:10px 14px; }
+  .legend b{ color:var(--accent); }
+  .legend .row{ margin-bottom:4px; }
+  .legend .demo{ display:inline-block; font-size:10pt; border-radius:3px; padding:1px 7px; border:1px solid; margin-right:5px; }
+  .legend .demo.r{ background:var(--red-bg); border-color:var(--red-bd); color:#7a1b28; }
+  .legend .demo.b{ background:var(--blue-bg); border-color:var(--blue-bd); color:#174a85; }
+  .legend .demo.k{ background:#2b2b2b; border-color:#2b2b2b; color:#f5f2ea; }
+  .legend .demo.g{ background:rgba(176,141,46,.16); border-color:rgba(176,141,46,.55); color:#6b500f; }
+  .qrbox{ display:flex; gap:12px; align-items:center; border:1px solid var(--border-l); background:#fff; border-radius:6px; padding:9px 12px; width:122mm; }
+  .qrbox svg{ width:36mm; height:36mm; flex:none; }
+  .qrbox .cap{ font-size:10.5pt; line-height:1.55; color:var(--ink); }
+  .qrbox .cap b{ display:block; font-size:11.5pt; margin-bottom:2px; }
+  .qrbox .cap span{ color:var(--muted); font-size:9.5pt; }
+  .qrbox .todo{ display:inline-block; margin-top:3px; color:var(--accent); font-size:9pt; font-weight:700; border:1px dashed var(--accent); border-radius:3px; padding:0 5px; }
+
+  .foot{ display:flex; justify-content:space-between; align-items:center; margin-top:9px; border-top:1px solid var(--border); padding-top:7px; font-size:10.5pt; color:var(--dim);}
+  .brand{ font-weight:700; color:var(--accent); font-size:12.5pt;}
+  .brand span{ color:var(--muted); font-weight:400;}
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="top">
+    <div>
+      <div class="kicker">数据平权 · AI 下乡</div>
+      <h1>牛马能力剥夺图</h1>
+      <p class="sub">7 类工友 × 7 样能力 = 49 个方向，看看你想在哪个方向实践。<br><span style="font-size:11pt;color:var(--dim);">这不是"做哪个最好"，是"哪些人、哪些被剥夺的能力，还没人认真看过"。</span></p>
+    </div>
+    <div class="tophint">横轴：人在生产关系里的位置<br>纵轴：被剥夺的能力<br>图例与说明见页底 ↓</div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>一产<small>农林牧渔/村医</small></th>
+        <th>二产<small>建筑/电子厂/装修</small></th>
+        <th>服务业新蓝领<small>骑手/快递/网约车/家政</small></th>
+        <th>个体经营<small>夫妻店/小摊/回收</small></th>
+        <th>过渡·失业·待业<small>返乡/工伤/NEET</small></th>
+        <th>无偿再生产<small>全职妈妈/照顾者</small></th>
+        <th>低级白领<small>(最低优先)码农/运营/文员</small></th>
+        <th class="unseg">未细分<small>所有人都在用，谁都没被认真服务</small></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>劳动议价<small>挣多少能不能谈</small></th>
+        <td><div class="id">A1</div><span class="tag tg">拼多多：农货上行，产地直连买家</span><span class="tag tb">农产品价格透明 + 直采对接</span></td>
+        <td><div class="id">B1</div><span class="tag tr">鱼泡网：工地招工记工</span><span class="tag tb">电子厂工时工资自动核对</span></td>
+        <td><div class="id">C1</div><span class="tag tk">哈啰：顺风车高速费议价</span><span class="tag tg">胖东来：把利让给员工而非股东</span><span class="tag tb">骑手收入/补贴预测</span></td>
+        <td><div class="id">D1</div><span class="tag tk">美团：商家经营后台</span><span class="tag tk">拼多多：仅退款+强制比价，小商家利润压到地板</span><span class="tag tb">小餐馆·夫妻店经营助手 / 回收价</span></td>
+        <td><div class="id">E1</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">零工跨平台社保+收入聚合</span></td>
+        <td><div class="id">F1</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">家务劳动价值量化报告</span></td>
+        <td><div class="id">G1</div><span class="tag tr">脉脉：职言薪资爆料</span><span class="tag tb">跨公司薪资透明 + 副业匹配</span></td>
+        <td class="unseg"><div class="id">H1</div><span class="tag tk">58同城：向找活的人收信息费，假岗位泛滥</span></td>
+      </tr>
+      <tr>
+        <th>时间主权<small>谁支配你的时间</small></th>
+        <td><div class="id">A2</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">农时季节排程助手</span></td>
+        <td><div class="id">B2</div><span class="tag tk">钉钉：考勤打卡</span><span class="tag tb">加班/调休/请假管理+维权</span></td>
+        <td><div class="id">C2</div><span class="tag tk">滴滴：网约车时间规划</span><span class="tag tr">高德：导航+聚合打车，司机的日常工具</span><span class="tag tb">代驾/网约车 单价博弈+时间规划</span></td>
+        <td><div class="id">D2</div><span class="tag tk">饿了么：商家营业设置</span><span class="tag tb">营业时间+接单优化</span></td>
+        <td><div class="id">E2</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">多份兼职时间冲突调度</span></td>
+        <td><div class="id">F2</div><span class="tag tr">京东健康：上门护理预约</span><span class="tag tb">喘息服务匹配(短期托管)</span></td>
+        <td><div class="id">G2</div><span class="tag tk">飞书：考勤工时统计</span><span class="tag tk">拼多多："本分"文化超长工时，客服运营当耗材</span><span class="tag tb">996 记录 + 合规举报</span></td>
+        <td class="unseg"><div class="id">H2</div><span class="tag tk">抖音/王者荣耀：算法围猎注意力，你的时间是它的库存</span></td>
+      </tr>
+      <tr>
+        <th>信任维权<small>制度内主张权利</small></th>
+        <td><div class="id">A3</div><span class="tag tr">蚂蚁链：农产品溯源</span><span class="tag tb">农产品溯源+品牌认证</span></td>
+        <td><div class="id">B3</div><span class="tag tr">国务院客户端：欠薪线索反映</span><span class="tag tb">建筑工欠薪维权 AI(证据/起诉书)</span></td>
+        <td><div class="id">C3</div><span class="tag tk">天鹅到家：阿姨背景核验</span><span class="tag tb">家政/月嫂 vetting + 客户管理</span></td>
+        <td><div class="id">D3</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">摊贩城管动态+选址+合规</span></td>
+        <td><div class="id">E3</div><span class="tag tr">国家政务服务平台：补贴查询</span><span class="tag tb">退役/失业 资格认证+政策福利</span></td>
+        <td><div class="id">F3</div><span class="tag tr">找法网：离婚律师咨询</span><span class="tag tb">离婚财产分割维权(无偿劳动评估)</span></td>
+        <td><div class="id">G3</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">劳动合同审查 + N+1 谈判</span></td>
+        <td class="unseg"><div class="id">H3</div><span class="tag tk">天眼查：工商数据本是公开的，圈起来卖会员</span><span class="tag tk">裁判文书网：判决书公开量锐减，普通人查不到同案判例</span></td>
+      </tr>
+      <tr>
+        <th>健康医疗<small>维持身体</small></th>
+        <td><div class="id">A4</div><span class="tag tr">微医：互联网问诊</span><span class="tag tb">村医 AI 辅助诊断</span></td>
+        <td><div class="id">B4</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">职业病(粉尘/重金属)长期监测</span></td>
+        <td><div class="id">C4</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">货车司机健康监测+远程亲子</span></td>
+        <td><div class="id">D4</div><span class="tag tr">Keep：肩颈放松课程</span><span class="tag tb">小老板过劳/颈椎自管</span></td>
+        <td><div class="id">E4</div><span class="tag tr">支付宝：社保工伤查询</span><span class="tag tb">工伤认定流程导航+同病互助</span></td>
+        <td><div class="id">F4</div><span class="tag tr">美柚：女性健康管理</span><span class="tag tb">照顾者心理健康 / 女性专属健康</span></td>
+        <td><div class="id">G4</div><span class="tag tr">丁香医生：健康科普问诊</span><span class="tag tb">体检报告解读+慢病筛查</span></td>
+        <td class="unseg"><div class="id">H4</div><span class="tag tk">百度：竞价排名卖医疗广告，搜症状越搜越慌</span></td>
+      </tr>
+      <tr>
+        <th>家庭再生产<small>育儿养老</small></th>
+        <td><div class="id">A5</div><span class="tag tr">国家中小学智慧教育平台</span><span class="tag tb">农村远程教育+跨代辅导</span></td>
+        <td><div class="id">B5</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">宿舍家属互助+集体托管</span></td>
+        <td><div class="id">C5</div><span class="tag tr">宝宝树：新手妈妈育儿</span><span class="tag tb">新手妈妈育儿+AI问诊</span></td>
+        <td><div class="id">D5</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">夫妻店家庭分工协调</span></td>
+        <td><div class="id">E5</div><span class="tag tr">小天才：手表亲情通话</span><span class="tag tb">留守儿童 AI 视频陪伴</span></td>
+        <td><div class="id">F5</div><span class="tag tr">亲宝宝：家庭育儿记录</span><span class="tag tb">育儿/养老 AI 助手 + 反丧偶育儿</span></td>
+        <td><div class="id">G5</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">异地家庭管理 + 代际沟通</span></td>
+        <td class="unseg"><div class="id">H5</div><span class="tag tr">微信：全民家庭视频通话</span><span class="tag tk">小红书：制造育儿焦虑，种草卖货</span><span class="tag tk">淘宝/京东：万能货架，谁都服务＝谁都没被服务</span></td>
+      </tr>
+      <tr>
+        <th>社交表达<small>连接与发声</small></th>
+        <td><div class="id">A6</div><span class="tag tg">抖音/快手：直播带货，砍掉中间商</span><span class="tag tb">乡村文艺/直播带货组织</span></td>
+        <td><div class="id">B6</div><span class="tag tr">伊对：视频相亲</span><span class="tag tb">电子厂女工 跨地恋爱/婚介</span></td>
+        <td><div class="id">C6</div><span class="tag tr">世纪佳缘：婚恋平台</span><span class="tag tr">QQ：工友群/老乡群的默认载体</span><span class="tag tb">蓝领相亲/工友互助圈</span></td>
+        <td><div class="id">D6</div><span class="tag tr">多多买菜：社区团购</span><span class="tag tb">小镇社区私域+团购组织</span></td>
+        <td><div class="id">E6</div><span class="tag tr">豆瓣：失业互助小组</span><span class="tag tb">失业抑郁援助互助</span></td>
+        <td><div class="id">F6</div><span class="tag tr">小红书：妈妈社区</span><span class="tag tb">照顾者互助社群 / 女性主义自媒体</span></td>
+        <td><div class="id">G6</div><span class="tag tr">脉脉：职场吐槽社区</span><span class="tag tk">视觉中国：碰瓷式版权诉讼，围猎自媒体小编</span><span class="tag tb">反内卷自媒体 + 同辈互助小组</span></td>
+        <td class="unseg"><div class="id">H6</div><span class="tag tk">微信：公众号收平台税，表达先给平台交租</span><span class="tag tg">华语辩坛小友赛：不带货、不收割，把发声的擂台让给年轻人</span><span class="tag tg">DeepSeek：开源压平全行业 token 价格，AI 对话人人用得起</span></td>
+      </tr>
+      <tr>
+        <th>教育技能<small>持续成长</small></th>
+        <td><div class="id">A7</div><span class="tag tr">快手：三农技术短视频</span><span class="tag tb">农技/养殖/兽医助手</span></td>
+        <td><div class="id">B7</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">普工→技工→调试 技能阶梯</span></td>
+        <td><div class="id">C7</div><span class="tag tk">美团大学：商家骑手培训</span><span class="tag tb">服务业语言/营销/沟通</span></td>
+        <td><div class="id">D7</div><span class="tag tk">抖音：电商商家课堂</span><span class="tag tb">数字化经营/抖音获客</span></td>
+        <td><div class="id">E7</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">50+ 二次就业 + 短视频</span></td>
+        <td><div class="id">F7</div><span class="tag tr0">大厂未覆盖</span><span class="tag tb">全职妈妈重返职场准备</span></td>
+        <td><div class="id">G7</div><span class="tag tr">粉笔：考公考编培训</span><span class="tag tb">考研考公导师 / 转行规划</span></td>
+        <td class="unseg"><div class="id">H7</div><span class="tag tm">我们的第一个产品：这张 7×7 矩阵——给每个有马克思主义理想的人，一份可上手的实践地图</span><span class="tag tk">猿辅导/学而思们：贩卖升学焦虑卖课</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="below">
+    <div class="legend">
+      <div class="row">
+        <span class="demo r">红底 = 红海</span>大公司已做成的对位产品（需求真实存在）。
+      </div>
+      <div class="row">
+        <span class="demo b">蓝底 = 蓝海</span>还没人认真做的空白；虚线"大厂未覆盖" = 连巨头都没动力沾边的需求。
+      </div>
+      <div class="row">
+        <span class="demo k">黑底 = 黑化</span>产品成熟，但站在平台/老板那边，工友只是被管理、被抽成的对象。
+      </div>
+      <div class="row">
+        <span class="demo g">金底 = 站到人民这边</span>把利让给人民也做成了的玩家（哪怕不彻底）——证明这条路走得通。
+      </div>
+      <div class="row"><span class="demo" style="background:#c0392b;border:2px double #fff;outline:1.5px solid #8b1e2d;color:#fff;"><span style="color:#ffd34d;">★</span> 我们的产品</span>这张矩阵本身就是第一个产品：面向所有人，把"该往哪使劲"交到每个马克思主义实践者手里（见 H7）。</div>
+      <div class="row"><b>格子里特意留了空白：拿起笔，把你的痛点和点子直接写上去。</b></div>
+    </div>
+
+    <!-- QR ① 纵轴：七个能力 -->
+    <div class="qrbox">
+      <svg viewBox="-2 -2 37 37" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect x="-2" y="-2" width="37" height="37" fill="#fff"/><path d="M0 0h7v1H0zM10 0h1v1H10zM12 0h2v1H12zM16 0h1v1H16zM19 0h3v1H19zM23 0h1v1H23zM26 0h7v1H26zM0 1h1v1H0zM6 1h1v1H6zM9 1h2v1H9zM13 1h4v1H13zM22 1h1v1H22zM24 1h1v1H24zM26 1h1v1H26zM32 1h1v1H32zM0 2h1v1H0zM2 2h3v1H2zM6 2h1v1H6zM8 2h3v1H8zM12 2h2v1H12zM16 2h1v1H16zM18 2h1v1H18zM20 2h2v1H20zM23 2h1v1H23zM26 2h1v1H26zM28 2h3v1H28zM32 2h1v1H32zM0 3h1v1H0zM2 3h3v1H2zM6 3h1v1H6zM8 3h3v1H8zM14 3h1v1H14zM16 3h2v1H16zM20 3h1v1H20zM23 3h1v1H23zM26 3h1v1H26zM28 3h3v1H28zM32 3h1v1H32zM0 4h1v1H0zM2 4h3v1H2zM6 4h1v1H6zM8 4h1v1H8zM11 4h2v1H11zM15 4h1v1H15zM18 4h4v1H18zM23 4h2v1H23zM26 4h1v1H26zM28 4h3v1H28zM32 4h1v1H32zM0 5h1v1H0zM6 5h1v1H6zM8 5h1v1H8zM11 5h3v1H11zM15 5h2v1H15zM22 5h1v1H22zM26 5h1v1H26zM32 5h1v1H32zM0 6h7v1H0zM8 6h1v1H8zM10 6h1v1H10zM12 6h1v1H12zM14 6h1v1H14zM16 6h1v1H16zM18 6h1v1H18zM20 6h1v1H20zM22 6h1v1H22zM24 6h1v1H24zM26 6h7v1H26zM8 7h1v1H8zM14 7h2v1H14zM21 7h1v1H21zM23 7h1v1H23zM0 8h1v1H0zM2 8h5v1H2zM11 8h1v1H11zM13 8h1v1H13zM15 8h1v1H15zM17 8h3v1H17zM22 8h1v1H22zM24 8h1v1H24zM26 8h5v1H26zM3 9h1v1H3zM5 9h1v1H5zM7 9h2v1H7zM10 9h3v1H10zM14 9h1v1H14zM17 9h4v1H17zM22 9h3v1H22zM26 9h2v1H26zM29 9h4v1H29zM1 10h1v1H1zM6 10h1v1H6zM8 10h2v1H8zM12 10h1v1H12zM15 10h2v1H15zM20 10h1v1H20zM22 10h1v1H22zM28 10h1v1H28zM30 10h1v1H30zM1 11h4v1H1zM7 11h1v1H7zM10 11h1v1H10zM12 11h1v1H12zM14 11h3v1H14zM20 11h3v1H20zM24 11h2v1H24zM28 11h5v1H28zM0 12h2v1H0zM3 12h5v1H3zM9 12h1v1H9zM12 12h1v1H12zM15 12h1v1H15zM18 12h1v1H18zM22 12h2v1H22zM27 12h3v1H27zM1 13h4v1H1zM7 13h1v1H7zM9 13h2v1H9zM12 13h15v1H12zM30 13h3v1H30zM5 14h2v1H5zM9 14h2v1H9zM12 14h3v1H12zM17 14h1v1H17zM21 14h2v1H21zM24 14h3v1H24zM29 14h3v1H29zM3 15h3v1H3zM7 15h1v1H7zM9 15h1v1H9zM11 15h4v1H11zM16 15h1v1H16zM18 15h5v1H18zM24 15h3v1H24zM30 15h1v1H30zM0 16h3v1H0zM5 16h2v1H5zM8 16h1v1H8zM11 16h1v1H11zM16 16h2v1H16zM19 16h1v1H19zM22 16h1v1H22zM24 16h2v1H24zM27 16h3v1H27zM32 16h1v1H32zM0 17h2v1H0zM3 17h3v1H3zM7 17h1v1H7zM9 17h1v1H9zM12 17h3v1H12zM17 17h5v1H17zM23 17h1v1H23zM26 17h2v1H26zM29 17h2v1H29zM32 17h1v1H32zM0 18h1v1H0zM4 18h1v1H4zM6 18h1v1H6zM8 18h2v1H8zM13 18h3v1H13zM17 18h1v1H17zM21 18h1v1H21zM24 18h2v1H24zM27 18h2v1H27zM30 18h2v1H30zM1 19h2v1H1zM4 19h2v1H4zM7 19h1v1H7zM9 19h1v1H9zM12 19h1v1H12zM14 19h8v1H14zM27 19h6v1H27zM0 20h1v1H0zM2 20h2v1H2zM6 20h5v1H6zM12 20h1v1H12zM15 20h2v1H15zM19 20h1v1H19zM22 20h1v1H22zM28 20h2v1H28zM31 20h2v1H31zM0 21h3v1H0zM4 21h1v1H4zM8 21h3v1H8zM13 21h3v1H13zM18 21h2v1H18zM21 21h1v1H21zM23 21h5v1H23zM32 21h1v1H32zM0 22h1v1H0zM2 22h5v1H2zM8 22h2v1H8zM12 22h7v1H12zM20 22h3v1H20zM25 22h1v1H25zM27 22h2v1H27zM30 22h2v1H30zM0 23h1v1H0zM2 23h3v1H2zM8 23h1v1H8zM11 23h1v1H11zM14 23h2v1H14zM20 23h2v1H20zM24 23h1v1H24zM26 23h1v1H26zM30 23h1v1H30zM32 23h1v1H32zM0 24h1v1H0zM6 24h2v1H6zM10 24h2v1H10zM14 24h4v1H14zM22 24h1v1H22zM24 24h6v1H24zM31 24h1v1H31zM8 25h2v1H8zM12 25h2v1H12zM18 25h2v1H18zM21 25h1v1H21zM24 25h1v1H24zM28 25h1v1H28zM30 25h1v1H30zM32 25h1v1H32zM0 26h7v1H0zM11 26h1v1H11zM13 26h1v1H13zM15 26h2v1H15zM18 26h1v1H18zM21 26h1v1H21zM23 26h2v1H23zM26 26h1v1H26zM28 26h1v1H28zM30 26h1v1H30zM0 27h1v1H0zM6 27h1v1H6zM8 27h2v1H8zM13 27h1v1H13zM16 27h1v1H16zM19 27h6v1H19zM28 27h3v1H28zM0 28h1v1H0zM2 28h3v1H2zM6 28h1v1H6zM8 28h4v1H8zM14 28h1v1H14zM18 28h2v1H18zM22 28h1v1H22zM24 28h6v1H24zM31 28h1v1H31zM0 29h1v1H0zM2 29h3v1H2zM6 29h1v1H6zM8 29h2v1H8zM12 29h1v1H12zM14 29h4v1H14zM19 29h3v1H19zM24 29h2v1H24zM28 29h1v1H28zM31 29h2v1H31zM0 30h1v1H0zM2 30h3v1H2zM6 30h1v1H6zM8 30h1v1H8zM12 30h1v1H12zM14 30h1v1H14zM17 30h1v1H17zM20 30h2v1H20zM23 30h2v1H23zM26 30h2v1H26zM29 30h2v1H29zM0 31h1v1H0zM6 31h1v1H6zM9 31h3v1H9zM13 31h1v1H13zM16 31h1v1H16zM18 31h6v1H18zM28 31h1v1H28zM30 31h1v1H30zM0 32h7v1H0zM8 32h1v1H8zM10 32h1v1H10zM13 32h1v1H13zM17 32h2v1H17zM22 32h1v1H22zM24 32h2v1H24zM27 32h1v1H27zM29 32h1v1H29zM31 32h1v1H31z" fill="#1a1a1a"/></svg>
+      <div class="cap">
+        <b>纵轴｜被剥夺的能力</b>
+        阿马蒂亚·森"能力进路"：人活得好不好，看"能做什么"。为什么是这七个能力？扫码看《以自由看待发展》导读。<br>
+        <span>张军 · 复旦发展研究院 · 文汇报</span>
+      </div>
+    </div>
+
+    <!-- QR ② 横轴：七种人群（占位，待替换为正式链接后重新生成） -->
+    <div class="qrbox">
+      <svg viewBox="-2 -2 33 33" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect x="-2" y="-2" width="33" height="33" fill="#fff"/><path d="M0 0h7v1H0zM8 0h4v1H8zM15 0h4v1H15zM22 0h7v1H22zM0 1h1v1H0zM6 1h1v1H6zM9 1h2v1H9zM12 1h3v1H12zM16 1h3v1H16zM20 1h1v1H20zM22 1h1v1H22zM28 1h1v1H28zM0 2h1v1H0zM2 2h3v1H2zM6 2h1v1H6zM8 2h1v1H8zM10 2h3v1H10zM14 2h4v1H14zM19 2h1v1H19zM22 2h1v1H22zM24 2h3v1H24zM28 2h1v1H28zM0 3h1v1H0zM2 3h3v1H2zM6 3h1v1H6zM10 3h2v1H10zM14 3h1v1H14zM17 3h3v1H17zM22 3h1v1H22zM24 3h3v1H24zM28 3h1v1H28zM0 4h1v1H0zM2 4h3v1H2zM6 4h1v1H6zM12 4h4v1H12zM17 4h1v1H17zM20 4h1v1H20zM22 4h1v1H22zM24 4h3v1H24zM28 4h1v1H28zM0 5h1v1H0zM6 5h1v1H6zM8 5h5v1H8zM15 5h1v1H15zM17 5h1v1H17zM20 5h1v1H20zM22 5h1v1H22zM28 5h1v1H28zM0 6h7v1H0zM8 6h1v1H8zM10 6h1v1H10zM12 6h1v1H12zM14 6h1v1H14zM16 6h1v1H16zM18 6h1v1H18zM20 6h1v1H20zM22 6h7v1H22zM12 7h1v1H12zM14 7h3v1H14zM19 7h2v1H19zM0 8h1v1H0zM2 8h1v1H2zM6 8h2v1H6zM9 8h3v1H9zM13 8h2v1H13zM19 8h1v1H19zM23 8h1v1H23zM26 8h1v1H26zM28 8h1v1H28zM2 9h4v1H2zM9 9h3v1H9zM13 9h2v1H13zM17 9h1v1H17zM19 9h1v1H19zM21 9h3v1H21zM27 9h2v1H27zM0 10h1v1H0zM2 10h1v1H2zM4 10h1v1H4zM6 10h2v1H6zM10 10h1v1H10zM15 10h1v1H15zM19 10h1v1H19zM21 10h2v1H21zM24 10h3v1H24zM28 10h1v1H28zM1 11h4v1H1zM7 11h2v1H7zM12 11h2v1H12zM18 11h3v1H18zM23 11h3v1H23zM3 12h1v1H3zM5 12h4v1H5zM10 12h1v1H10zM13 12h1v1H13zM15 12h2v1H15zM20 12h1v1H20zM22 12h2v1H22zM28 12h1v1H28zM2 13h3v1H2zM7 13h1v1H7zM10 13h3v1H10zM16 13h1v1H16zM18 13h2v1H18zM22 13h2v1H22zM27 13h2v1H27zM0 14h5v1H0zM6 14h1v1H6zM9 14h1v1H9zM11 14h1v1H11zM13 14h2v1H13zM16 14h2v1H16zM19 14h1v1H19zM24 14h1v1H24zM28 14h1v1H28zM1 15h2v1H1zM4 15h2v1H4zM14 15h3v1H14zM18 15h1v1H18zM20 15h1v1H20zM0 16h2v1H0zM3 16h1v1H3zM6 16h3v1H6zM11 16h4v1H11zM20 16h1v1H20zM22 16h2v1H22zM28 16h1v1H28zM2 17h2v1H2zM7 17h1v1H7zM9 17h6v1H9zM18 17h3v1H18zM22 17h2v1H22zM26 17h3v1H26zM0 18h4v1H0zM5 18h2v1H5zM10 18h1v1H10zM12 18h1v1H12zM15 18h1v1H15zM17 18h3v1H17zM22 18h4v1H22zM28 18h1v1H28zM2 19h1v1H2zM5 19h1v1H5zM9 19h2v1H9zM13 19h1v1H13zM19 19h3v1H19zM24 19h1v1H24zM0 20h2v1H0zM4 20h1v1H4zM6 20h5v1H6zM13 20h1v1H13zM15 20h2v1H15zM20 20h6v1H20zM27 20h1v1H27zM8 21h1v1H8zM10 21h3v1H10zM16 21h1v1H16zM18 21h1v1H18zM20 21h1v1H20zM24 21h3v1H24zM28 21h1v1H28zM0 22h7v1H0zM8 22h1v1H8zM10 22h5v1H10zM16 22h1v1H16zM18 22h1v1H18zM20 22h1v1H20zM22 22h1v1H22zM24 22h1v1H24zM28 22h1v1H28zM0 23h1v1H0zM6 23h1v1H6zM9 23h1v1H9zM12 23h1v1H12zM14 23h3v1H14zM18 23h3v1H18zM24 23h1v1H24zM0 24h1v1H0zM2 24h3v1H2zM6 24h1v1H6zM9 24h2v1H9zM13 24h2v1H13zM17 24h9v1H17zM0 25h1v1H0zM2 25h3v1H2zM6 25h1v1H6zM9 25h1v1H9zM11 25h4v1H11zM17 25h1v1H17zM19 25h2v1H19zM23 25h5v1H23zM0 26h1v1H0zM2 26h3v1H2zM6 26h1v1H6zM8 26h1v1H8zM10 26h2v1H10zM13 26h3v1H13zM19 26h3v1H19zM24 26h1v1H24zM27 26h2v1H27zM0 27h1v1H0zM6 27h1v1H6zM11 27h3v1H11zM17 27h1v1H17zM20 27h4v1H20zM25 27h1v1H25zM0 28h7v1H0zM8 28h2v1H8zM13 28h5v1H13zM20 28h2v1H20zM24 28h2v1H24zM28 28h1v1H28z" fill="#1a1a1a"/></svg>
+      <div class="cap">
+        <b>横轴｜人在生产关系里的位置</b>
+        按马克思阶级分析划分，不按行业分。为什么是这七种人？扫码看划分依据与各人群人口数据。<br>
+        <span>自建说明页</span>
+        <span class="todo">占位二维码 · 上线后替换</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="brand">（团队名待定）</div>
+    <div>把"剥夺"作为产品起点：AI 不该让工友只是效率更高的被剥削对象。</div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,28 +1,46 @@
-# manifesto
+# code-for-people
 
-为工友敲键盘 / 为人民服务的公司 — 构想档案
+为人民服务的公司 — 项目仓库
 
-AI 时代新型企业组织形态的设计文档系列。从思想姿态到执行层就绪,经多轮辩证 grilling 演化而成。
+> 软件也是一种服务，为何不还给人民。
 
-## 文档清单
+AI 时代一种新型企业组织形态的设计，与第一次产品。仓库按"复用寿命"分为三个区。
+
+## 目录结构
+
+### 初期头脑风暴/
+
+从思想姿态到执行层就绪、经多轮辩证 grilling 演化的构想档案（归档，不常动）。
 
 | 文档 | 阶段 | 内容 |
 |---|---|---|
-| [`index.html`](./index.html) | — | 导航页 |
-| [`code-for-people-v1.html`](./code-for-people-v1.html) | v1.0 思想姿态 | 代币 + 共产度 + 民主投票的初始乌托邦构想 |
-| [`code-for-people-v2.html`](./code-for-people-v2.html) | v2.0 可启动 | 9 轮 grilling 后的修正——师徒制 + 工人 AI 夜校 + 模型主权 |
-| [`code-for-people-v2.1.html`](./code-for-people-v2.1.html) | v2.1 执行层 | 制度骨架 + 法律外壳 + 品牌 + 入伙流程 |
-| [`code-for-people-90day-plan.html`](./code-for-people-90day-plan.html) | 90 天 | 田野 + 技术 + 上线 + 合规的 13 周展开 |
-| [`code-for-people-direction-matrix.html`](./code-for-people-direction-matrix.html) | 研究工具 | 7 × 7 方向矩阵(用户位置 × 能力维度) |
+| [`index.html`](./初期头脑风暴/index.html) | — | 导航页 |
+| [`code-for-people-v1.html`](./初期头脑风暴/code-for-people-v1.html) | v1.0 思想姿态 | 代币 + 共产度 + 民主投票的初始乌托邦构想 |
+| [`code-for-people-v2.html`](./初期头脑风暴/code-for-people-v2.html) | v2.0 可启动 | 9 轮 grilling 后的修正——师徒制 + 工人 AI 夜校 + 模型主权 |
+| [`code-for-people-v2.1.html`](./初期头脑风暴/code-for-people-v2.1.html) | v2.1 执行层 | 制度骨架 + 法律外壳 + 品牌 + 入伙流程 |
+| [`code-for-people-90day-plan.html`](./初期头脑风暴/code-for-people-90day-plan.html) | 90 天 | 田野 + 技术 + 上线 + 合规的 13 周展开 |
+| [`code-for-people-direction-matrix.html`](./初期头脑风暴/code-for-people-direction-matrix.html) | 研究工具 | 7 × 7 方向矩阵最初的思考稿（用户位置 × 能力维度） |
 
-## 本地查看
+### 第一个产品/
 
-```bash
-git clone git@github.com:code-for-people-2026/manifesto.git
-cd manifesto
-open index.html
-```
+第一次产品的核心资产——会长期复用，是对外网站与 webapp 的内容源。
+
+- `宣言-数据平权.md` —《数据平权宣言》（仿《共产党宣言》节奏的对外公开版）
+- `牛马互助协议.md` — 仿 GPL 的传染性互助协议：工友价 1/3 + 传染条款 + 发起方自我约束（含"收入差距 < 3:1"）
+- `参考-共产党宣言.md` — 写作参考
+
+> 对外展示网站、7×7 webapp、AI 问答站待建（见任务列表三个 TODO）。
+
+### 小金毛辩论赛摆摊/
+
+2026 端午 · 华语辩坛小友赛 摆摊专属材料（印刷 + 现场 + 提交）。
+
+- `易拉宝-主视觉.svg` / `.html` — 主视觉（svg 为印刷母版）
+- `传单1-7x7矩阵.html`、`传单2-宗旨宣言.html`、`传单3-生产端vs消费端.html`
+- `摊位策划案-数据平权AI下乡.docx` — 交主办方审核
+- `准备总览.html` — 准备 / 提交 / 时间线清单
+- `摊位对话备忘.html` — 现场对话内部小抄（也是 AI 问答站的内容母版）
 
 ## 状态
 
-私有档案,持续迭代中。设计原则:诚实条款——任何条款发现错误允许且应当被修正,但每次修正要写下来,不允许默默漂移。
+私有档案，持续迭代。诚实条款：任何条款发现错误允许且应当被修正，但每次修正要写下来，不允许默默漂移。

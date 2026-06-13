@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>传单2 · 数据平权宣言 / 牛马互助协议（正反面）</title>
+<style>
+  :root{
+    --bg:#fbfaf6; --ink:#1a1a1a; --muted:#5a5a5a; --dim:#8a8a8a;
+    --accent:#8b1e2d; --accent-soft:rgba(139,30,45,.07);
+    --green:#2d6a3f; --gold:#b08d2e; --gold-soft:rgba(176,141,46,.12); --border:#d4d0c8; --soft:#f4f1ea;
+  }
+  @page{ size:A4 portrait; margin:0; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; }
+  body{ background:#e9e6df;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+    color:var(--ink); -webkit-font-smoothing:antialiased; }
+  .sheet{ width:210mm; min-height:297mm; margin:0 auto; background:var(--bg); padding:0 0 11mm; position:relative;
+          page-break-after:always; }
+  @media print{ body{background:#fff;} .sheet{margin:0;} }
+  @media screen{ .sheet{ box-shadow:0 4px 24px rgba(0,0,0,.18); margin:18px auto; } }
+
+  .hero{ background:var(--accent); color:#fff; padding:12mm 14mm 10mm; }
+  .hero .kicker{ font-size:10.5pt; letter-spacing:.3em; opacity:.85; font-weight:700; }
+  .hero h1{ font-size:28pt; margin:.18em 0 .12em; line-height:1.14; }
+  .hero .one{ font-size:12.5pt; margin:.4em 0 0; opacity:.95; font-weight:300; }
+  .body{ padding:8mm 14mm 0; }
+
+  /* —— 正面：宣言体 —— */
+  .ghost{ font-size:12pt; line-height:1.7; margin:0 0 1em; }
+  .ghost b{ color:var(--accent); }
+  .sec{ margin:0 0 .9em; }
+  .sec .num{ color:var(--accent); font-weight:700; font-size:11.5pt; letter-spacing:.15em; }
+  .sec p{ font-size:10.6pt; line-height:1.62; margin:.25em 0 0; color:var(--ink); }
+  .sec p b{ color:var(--accent); }
+  .claims{ background:var(--accent-soft); border-left:4px solid var(--accent); border-radius:5px;
+           padding:10px 14px; margin:0 0 .9em; }
+  .claims p{ font-size:11.2pt; line-height:1.65; margin:2px 0; font-weight:700; }
+  .claims p span{ font-weight:400; color:var(--muted); font-size:9.6pt; }
+  .finale{ text-align:center; margin:1em 0 1.1em; }
+  .finale .pre{ font-size:10.5pt; color:var(--muted); line-height:1.6; }
+  .finale .cry{ font-size:17pt; font-weight:900; color:var(--accent); letter-spacing:.12em; margin-top:.3em; }
+
+  .cta{ background:var(--soft); border:1px dashed var(--accent); border-radius:6px; padding:10px 14px; }
+  .cta h3{ margin:0 0 6px; color:var(--accent); font-size:12pt; }
+  .cta ul{ margin:0; padding-left:1.2em; font-size:9.8pt; line-height:1.5; }
+  .cta li{ margin-bottom:2px; }
+  .qrow{ display:flex; gap:14px; align-items:center; margin-top:10px; }
+  .qr{ width:74px; height:74px; border:1px solid var(--border); border-radius:6px; background:#fff;
+       display:flex; align-items:center; justify-content:center; text-align:center; font-size:7.5pt; color:var(--dim); line-height:1.3;}
+  .qcap{ font-size:9pt; color:var(--muted); line-height:1.5; }
+  .qcap b{ color:var(--ink); }
+
+  .foot{ margin:11px 14mm 0; border-top:1px solid var(--border); padding-top:7px; display:flex; justify-content:space-between; font-size:8.5pt; color:var(--dim);}
+  .brand{ font-weight:700; color:var(--accent); font-size:10.5pt; }
+  .brand span{ color:var(--muted); font-weight:400; }
+
+  /* —— 背面：协议体 —— */
+  .hero2{ background:var(--ink); color:#fff; padding:11mm 14mm 9mm; }
+  .hero2 .kicker{ font-size:10pt; letter-spacing:.3em; opacity:.8; font-weight:700; color:#e8c66a; }
+  .hero2 h1{ font-size:26pt; margin:.18em 0 .1em; }
+  .hero2 .one{ font-size:11.5pt; opacity:.85; font-weight:300; margin:.3em 0 0; }
+  .preamble{ background:var(--gold-soft); border-left:4px solid var(--gold); border-radius:5px;
+             padding:10px 14px; margin:0 0 1em; font-size:10.4pt; line-height:1.6; }
+  .preamble b{ color:#8a6d1c; }
+  .clause{ margin:0 0 .8em; }
+  .clause .ct{ font-weight:700; font-size:11.5pt; color:var(--accent); }
+  .clause p{ font-size:10.2pt; line-height:1.58; margin:.2em 0 0; }
+  .clause p b{ color:var(--accent); }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:.4em 0 .9em; }
+  .card{ background:#fff; border:1px solid var(--border); border-top:3px solid var(--accent); border-radius:5px; padding:9px 11px; }
+  .card .t{ font-weight:700; font-size:10.8pt; }
+  .card .x{ font-size:8.8pt; color:var(--muted); line-height:1.45; margin-top:2px; }
+  .analogy{ background:var(--gold-soft); border-left:4px solid var(--gold); border-radius:5px; padding:10px 13px; font-size:10pt; line-height:1.55; margin:0 0 .5em; }
+  .analogy b{ color:#8a6d1c; }
+</style>
+</head>
+<body>
+
+<!-- ════════ 正面：数据平权宣言 ════════ -->
+<div class="sheet">
+  <div class="hero">
+    <div class="kicker">数据平权 · AI 下乡</div>
+    <h1>数据平权宣言</h1>
+    <p class="one">软件是一种服务，我们想把它，还给人民</p>
+  </div>
+
+  <div class="body">
+    <p class="ghost">一个幽灵，<b>数据平权</b>的幽灵，正在互联网上游荡。
+    旧世界的一切势力——平台与算法、资本与流量、推荐位与排行榜——都在为驱逐这个幽灵而结成同盟。</p>
+
+    <div class="sec"><span class="num">一</span>
+      <p>至今一切互联网的历史，是一部<b>收租</b>的历史。但首先要承认：平台曾经起过非常革命的作用——它把十亿人接进数字世界，不到二十年创造的连接，比过去一切世代还要多。然而它在所到之处，把一切关系都变成了流量关系：手艺变成评分，邻里变成私域，休息变成待接单状态；人和人之间除了赤裸裸的抽成，再没有任何别的联系。骑手的轨迹、商家的流水、用户的点击，本是劳动，却都成了领主的地租。<b>平台坐在生产者与消费者中间，活成了数字封建领主。</b></p>
+    </div>
+
+    <div class="sec"><span class="num">二</span>
+      <p>但 AI 来了。写软件的能力正在白菜化，生产力开始过剩——平台像魔法师，再也不能支配自己用法术呼唤出来的魔鬼。稀缺的时代，胜负看谁能生产；<b>过剩的时代，胜负看红利让给谁。</b>平台不仅锻造了置自身于死地的武器——白菜价的软件生产力；它还产生了将要运用这种武器的人——<b>被它收租二十年的工友</b>。</p>
+      <p style="font-size:8.6pt; color:var(--dim); line-height:1.45; margin:.3em 0 0;">注：工友，不按行业，按人在生产关系中的位置——指不占有平台、数据与算法，因而不得不向数字领主交租、出卖劳动来维持生活的一切人：一产二产劳动者、服务业新蓝领、个体经营者、失业待业者、无偿再生产劳动者（全职妈妈、照顾者）、被去技能化的低级白领。（详见背面《牛马互助协议》第二条）</p>
+    </div>
+
+    <div class="claims">
+      <p>全部主张，概括为一句话：红利归于人民。</p>
+      <p>数据归生产数据的人。<span>你的轨迹、流水、点击，是你的劳动，不是领主的地租。</span></p>
+      <p>软件是一种服务，不是一种租金。</p>
+      <p>过剩的生产力红利，应当归于人民。</p>
+    </div>
+
+    <div class="sec"><span class="num">三</span>
+      <p>有人已经被资本收益率逼着站到了消费端：拼多多、直播、团购、UGC……但这不是觉悟。其一，它们不彻底——踩着另一端的小生产者，<b>把一部分人民，喂给另一部分人民</b>；其二，让利只是饵——<b>大部分收益仍进了资本家的口袋</b>，阳谋不说出口，闷声装进腰包。但正因如此，它们每向消费端走一步，都在替我们证明红利让给人民是赢的方向：<b>资本家正在出售绞死自己的绞索</b>。我们要同时站在劳动的一端和使用的一端：不在工友之间套利，让出去的利也不绕回少数人的口袋。</p>
+    </div>
+
+    <div class="sec"><span class="num">四</span>
+      <p>我们不屑于隐瞒自己的观点和意图。全部打法都摆在桌面上——怎么定价、怎么让利、怎么自我约束，<b>见背面《牛马互助协议》</b>。</p>
+    </div>
+
+    <div class="finale">
+      <div class="pre">代替收租的平台的，将是这样一个联合体：在那里，<b>每一个工友的自由发展，是一切工友自由发展的条件</b>。<br>
+      工友们在这场变革中失去的只是平台的租金，他们获得的将是整个数字世界。</div>
+      <div class="cry">全世界工友，联合起来！</div>
+    </div>
+
+    <div class="cta">
+      <h3>今天摆这个摊，想找四种人 ——</h3>
+      <ul>
+        <li>有真实痛点、或愿意当<b>第一批用户</b>的工友（桌上有需求登记表）；</li>
+        <li>想一起敲键盘的<b>同路人 / 潜在合伙人</b>；</li>
+        <li>在做<b>马克思主义实践</b>、愿意交换思路的同行；</li>
+        <li>觉得我们哪里<b>想错了</b>、愿意当面 grill 我们的人。</li>
+      </ul>
+      <div class="qrow">
+        <div class="qr">微信二维码<br>（待替换）</div>
+        <div class="qr">自媒体矩阵<br>（待替换）</div>
+        <div class="qcap"><b>扫码：</b>加我们 / 看我们的过程（项目透明，失败也公开）。<br>
+        左：联系微信　右：抖音·B站·小红书·公众号矩阵。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="brand">（团队名待定）</div>
+    <div>正面《数据平权宣言》｜ 背面《牛马互助协议》</div>
+  </div>
+</div>
+
+<!-- ════════ 背面：牛马互助协议 ════════ -->
+<div class="sheet">
+  <div class="hero2">
+    <div class="kicker">CATTLE LICENSE · v0.1 草案</div>
+    <h1>牛马互助协议</h1>
+    <p class="one">仿 GPL 的传染性互助协议 —— 优惠像源代码一样传染</p>
+  </div>
+
+  <div class="body">
+    <div class="preamble">
+      <b>序言：</b>GPL 用版权反对版权垄断——你可以自由使用，但衍生品必须同样自由。
+      牛马互助协议用价格反对价格剥削——<b>工友享受 1/3 价；你想享受同样的优惠，就必须同样让利给工友。</b>
+    </div>
+
+    <div class="clause"><span class="ct">第一条　工友价</span>
+      <p>凡适用本协议的软件服务，向工友提供时，价格不超过同类服务市场价的 <b>1/3</b>。</p>
+    </div>
+
+    <div class="clause"><span class="ct">第二条　工友的定义</span>
+      <p>按人在生产关系中的位置划分，不按行业：一产二产劳动者、服务业新蓝领、个体经营者、失业待业者、无偿再生产劳动者（全职妈妈、照顾者）、被去技能化的低级白领。</p>
+    </div>
+
+    <div class="clause"><span class="ct">第三条　传染条款</span>
+      <p>任何公司，只要<b>公开承诺并实际遵守</b>本协议（同样以 ≤1/3 市场价向工友提供其软件服务），即可按 1/3 市场价享受我们及其他遵守方的软件服务。<b>优惠沿协议链传播，不设上限。</b></p>
+    </div>
+
+    <div class="clause"><span class="ct">第四条　失效与恢复</span>
+      <p>违反本协议者，自违反之日起丧失全部优惠资格，并<b>自违反之日起追缴欠款</b>——欠款，指违规期间所享优惠价与市场价之差。缴清欠款、恢复遵守并公示后，可重新加入。</p>
+    </div>
+
+    <div class="clause"><span class="ct">第五条　发起方的自我约束</span>
+      <p>我们以高于本协议的标准约束自己，写进章程、公开接受监督：</p>
+    </div>
+
+    <div class="grid">
+      <div class="card"><div class="t">① 收入差距 &lt; 3:1</div><div class="x">数字（现金）收入与可支配收入，最高都 ≤ 最低 ×3（含代币、福利等一切回报）。永恒条款，全员一致也不能改。</div></div>
+      <div class="card"><div class="t">② 只接受捐款</div><div class="x">没有投资人，只有捐赠人；捐款不换股权、不换控制权。创始人投入不可回收。</div></div>
+      <div class="card"><div class="t">③ 没有 exit</div><div class="x">不上市、不并购、不套现。创始人离开时一无所带，解散后资产归社会。</div></div>
+      <div class="card"><div class="t">④ 数量级触发重写</div><div class="x">团队每涨一个数量级（3→30→300），治理规则全员重新设计，不许线性漂移。</div></div>
+    </div>
+
+    <div class="analogy">
+      <b>为什么不怕被抄？</b> 你没法靠"也给农民分地"赢一场土地革命——真分了地，你就不再是地主。
+      资本能抄走产品，抄不走"不分红、不套现、资产归社会"。
+    </div>
+  </div>
+
+  <div class="foot">
+    <div class="brand">（团队名待定）</div>
+    <div>想加入协议链？翻到正面扫码找我们。</div>
+  </div>
+</div>
+
+</body>
+</html>

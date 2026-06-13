@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>端午摆摊 · 准备总览</title>
+<style>
+  :root{
+    --bg:#fbfaf6; --ink:#1a1a1a; --muted:#5a5a5a; --dim:#8a8a8a;
+    --accent:#8b1e2d; --accent-soft:rgba(139,30,45,.07);
+    --green:#2d6a3f; --green-soft:rgba(45,106,63,.10); --gold:#b08d2e; --gold-soft:rgba(176,141,46,.12);
+    --blue:#2e5f8b; --border:#d4d0c8; --soft:#f4f1ea;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); line-height:1.7;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif; }
+  .wrap{ max-width:900px; margin:0 auto; padding:48px 24px 90px; }
+  .head{ border-bottom:3px solid var(--accent); padding-bottom:1em; margin-bottom:1.6em; }
+  .kicker{ font-size:.8em; letter-spacing:.26em; color:var(--accent); font-weight:700; }
+  h1{ font-size:2em; margin:.2em 0 .1em; }
+  .meta{ color:var(--muted); font-style:italic; margin:0; }
+  h2{ font-size:1.3em; margin:2em 0 .5em; padding-bottom:.3em; border-bottom:1px solid var(--border); }
+  h3{ font-size:1.02em; color:var(--accent); margin:1.3em 0 .3em; }
+  p{ margin:.4em 0 .9em; }
+  ul{ padding-left:1.4em; } li{ margin-bottom:.35em; }
+  code{ background:var(--soft); padding:.1em .4em; border-radius:3px; font-size:.9em; }
+  a{ color:var(--accent); }
+
+  .check{ list-style:none; padding-left:0; }
+  .check li{ padding-left:1.7em; position:relative; }
+  .check li::before{ content:"☐"; position:absolute; left:0; color:var(--accent); font-size:1.05em; }
+
+  table{ width:100%; border-collapse:collapse; margin:1em 0; font-size:.92em; background:#fff;
+    box-shadow:0 1px 3px rgba(0,0,0,.04); border-radius:4px; overflow:hidden; }
+  th{ background:var(--soft); text-align:left; padding:.55em .8em; border-bottom:2px solid var(--border); font-size:.95em; }
+  td{ padding:.5em .8em; border-bottom:1px solid var(--border); vertical-align:top; }
+  tr:last-child td{ border-bottom:none; }
+
+  .box{ border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:4px;
+    padding:.9em 1.2em; margin:1.1em 0; background:#fff; }
+  .box .lab{ display:block; font-size:.75em; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); margin-bottom:.4em; }
+  .box.warn{ border-left-color:var(--gold); background:var(--gold-soft); } .box.warn .lab{ color:#8a6d1c; }
+  .box.note{ border-left-color:var(--blue); } .box.note .lab{ color:var(--blue); }
+
+  .files a{ display:inline-block; margin:.15em .6em .15em 0; text-decoration:none; padding:.2em .6em; background:#fff; border:1px solid var(--border); border-radius:5px; font-size:.9em; }
+  .files a:hover{ border-color:var(--accent); }
+  .you{ background:var(--accent-soft); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="head">
+    <div class="kicker">数据平权 · AI 下乡</div>
+    <h1>端午摆摊 · 准备总览</h1>
+    <p class="meta">华语辩坛小友赛 · 摊位「数据平权、AI 下乡」</p>
+  </div>
+
+  <p>这是这次摆摊要准备的全部东西的清单。带 <span class="you" style="padding:.05em .35em;border-radius:3px;">底色</span> 的是<strong>需要你拍板或补素材</strong>的，其余我已经做出初稿，等你 review。</p>
+
+  <h2>① 交给主办方审核（最优先）</h2>
+  <p>我们是<strong>不涉及销售</strong>的摊位，所以按要求交的是 <strong>Word 策划案</strong>（不是 Excel 制品清单）。</p>
+  <ul class="check">
+    <li><strong>缴费证明</strong> —— 摊位费缴费截图（你手上有，直接附）</li>
+    <li><strong>物资证明</strong> —— 用易拉宝 / 传单的设计图 + 印刷下单截图 / 到货物料照片，证明“不是空占摊位”</li>
+    <li><strong>摊位策划案（Word）</strong> —— 已生成 <code>摊位策划案-数据平权AI下乡.docx</code>，含主题 / 活动内容 / 空间设备 / 用电 / 预期效果 / 合规自查</li>
+    <li class="you" style="padding-left:1.7em;"><strong>补填联系方式</strong> —— 策划案“基本信息”表里手机 / 微信留空了，提交前填上</li>
+    <li class="you" style="padding-left:1.7em;"><strong>用电申请</strong> —— 决定要不要电（笔记本+展示屏需要）。要的话另付 <strong>100 元电箱电工费</strong>；不想花就走纯纸质+电池，策划案里已给了这个备选说法</li>
+  </ul>
+
+  <h2>② 印刷物料清单</h2>
+  <table>
+    <thead><tr><th>物料</th><th>规格建议</th><th>数量</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>易拉宝 主视觉</td><td>80×200cm 标准卷轴（铝合金底座）</td><td>1 座</td><td>远距离可读，放桌后</td></tr>
+      <tr><td>传单1：7×7 矩阵</td><td>A3 横版（铜版纸 200g 或对折 A4）</td><td>展示 2–3 张<br>+ 派发若干</td><td>信息密集，建议 A3 看得清</td></tr>
+      <tr><td>传单2：宗旨 / 宣言</td><td>A4 竖版 单页</td><td>派发主力 100–200</td><td>带二维码，主要派发件</td></tr>
+      <tr><td>传单3：生产vs消费</td><td>A4 竖版 单页</td><td>派发 100–200</td><td>最容易“勾住人”的一张</td></tr>
+      <tr><td>需求 / 意见登记表</td><td>A4，表格 + 留白</td><td>20–30 张 + 笔</td><td>现场收集痛点线索（见④）</td></tr>
+      <tr><td>桌面小立牌（可选）</td><td>A5 亚克力台卡</td><td>1–2</td><td>放二维码 / 一句话宗旨</td></tr>
+    </tbody>
+  </table>
+  <div class="box warn">
+    <span class="lab">交给印刷厂前的注意</span>
+    我做的是 HTML 设计稿（浏览器里 <code>Ctrl/Cmd+P → 另存为 PDF</code> 即可导出正确尺寸）。但正规印刷厂通常还需要：<strong>① 出血 3mm　② 文字转曲 / 嵌入字体　③ CMYK 色　④ 矢量 PDF</strong>。
+    HTML 转的 PDF 能用于打样和快印，要做精装易拉宝建议把稿子发我、我再导一版加出血的 PDF，或交给印刷厂按这个版式重排。
+  </div>
+
+  <h2>③ 现场布置</h2>
+  <p>桌子是<strong>普通酒店长桌</strong>，组委会配桌布。建议布局（面向人流）：</p>
+  <ul>
+    <li><strong>桌后：</strong>易拉宝立中间偏左；人站易拉宝右侧迎客。</li>
+    <li><strong>桌面左：</strong>7×7 矩阵 A3 立着（最显学术、最像“真有东西”）。</li>
+    <li><strong>桌面中：</strong>两摞派发传单（宗旨 / 生产vs消费）+ 二维码立牌。</li>
+    <li><strong>桌面右：</strong>需求登记表 + 笔 + 笔记本/展示屏循环播图。</li>
+  </ul>
+
+  <h2>④ 需要你补的素材</h2>
+  <ul class="check">
+    <li class="you" style="padding-left:1.7em;"><strong>两个二维码</strong>：① 联系微信（个人/群）② 自媒体矩阵（抖音/B站/小红书/公众号）。传单和易拉宝里都留了占位“待替换”。<br><span style="color:var(--muted);font-size:.9em;">提醒：团队名暂未定（原“为工友敲键盘”仅为候选），抢注 6 平台账号一事等定名后再做，本次物料一律用“（团队名待定）”占位。</span></li>
+    <li class="you" style="padding-left:1.7em;"><strong>联系方式</strong>（策划案 + 物料统一用哪个）</li>
+    <li class="you" style="padding-left:1.7em;"><strong>找印刷 / 快印店</strong>（广州本地或线上，赶在 6/18 前到货）</li>
+    <li class="you" style="padding-left:1.7em;"><strong>需求登记表</strong>要不要我也做一版（字段：人群/职业、遇到的数字化难题、是否愿当测试用户、联系方式选填）</li>
+  </ul>
+
+  <h2>⑤ 时间线</h2>
+  <table>
+    <thead><tr><th>时间</th><th>要做的事</th></tr></thead>
+    <tbody>
+      <tr><td>今天（6/12）</td><td>review 这套物料 + 文案；定二维码与联系方式；找印刷店</td></tr>
+      <tr><td>6/13–6/15</td><td>定稿 → 下单印刷（易拉宝交期通常 1–2 天，传单当天/隔天）；提交主办方审核材料</td></tr>
+      <tr><td>6/16–6/17</td><td>物料到货、检查；准备登记表、笔、插线板、零钱/胶带等杂物</td></tr>
+      <tr><td><strong>6/18</strong></td><td>可进场馆布置（提前踩点摊位位置、电源、桌子）</td></tr>
+      <tr><td><strong>6/19</strong></td><td>活动正式开始 —— 出摊</td></tr>
+    </tbody>
+  </table>
+
+  <h2>⑥ 物料文件</h2>
+  <p class="files">
+    <a href="./摊位策划案-数据平权AI下乡.docx">📄 摊位策划案.docx</a>
+    <a href="../第一个产品/宣言-数据平权.md">📜 数据平权宣言.md</a>
+    <a href="./传单1-7x7矩阵.html">🗺 传单1·7×7矩阵</a>
+    <a href="./传单2-宗旨宣言.html">⚑ 传单2·宗旨</a>
+    <a href="./传单3-生产端vs消费端.html">⚖ 传单3·生产vs消费</a>
+    <a href="./易拉宝-主视觉.html">🎏 易拉宝主视觉</a>
+  </p>
+
+  <div class="box note">
+    <span class="lab">两个我想请你拍板的判断</span>
+    <p style="margin:.2em 0;"><strong>1. 全部摊开 vs 现场被“辩”的准备。</strong> 你选了把 1:3 / 无 exit / 资产归社会都印上墙。这很有力，但也等于把项目最尖锐的承诺交给陌生人公开质疑——这正是辩论赛场的玩法，应该没问题。只是建议你心里先准备好三个最可能被攻击的点：① “1:3 招不到人，注定小” ② “只接受捐款=用爱发电不可持续” ③ “你现在是个人控股，凭什么说不可套现”。要不要我把这三问的应答也整理成一页小抄？</p>
+    <p style="margin:.2em 0;"><strong>2. “生产vs消费”那张的对手盘论点。</strong> 我替你加了一层辩证：拼多多/团购“站消费端却踩小生产者”。这是加分项，但也可能被反问“那你凭什么两端都站、不也得牺牲谁？”。这是个真问题（你的收入模型靠 B2C + 自媒体兜底，明确拒绝 B2B“数字鞭子”）——值得现场想清楚怎么答。</p>
+  </div>
+
+</div>
+</body>
+</html>
