@@ -5,7 +5,7 @@ import QRCode from 'qrcode'
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
   process.env.SITE_URL ||
-  'https://code-for-people-2026-ideal.vercel.app/'
+  'https://wam.codeforpeople.cn/'
 
 const publicDir = resolve('public')
 const outputPath = resolve(publicDir, 'qr-interactive.svg')

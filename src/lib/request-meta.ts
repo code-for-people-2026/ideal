@@ -7,6 +7,6 @@ export function getClientIp(request: Request): string {
 }
 
 export function hashIp(ip: string): string {
-  const salt = process.env.SUBMISSION_IP_HASH_SALT || process.env.PAYLOAD_SECRET || 'ideal-dev-salt'
+  const salt = process.env.SUBMISSION_IP_HASH_SALT || process.env.PAYLOAD_SECRET || 'wam-dev-salt'
   return createHash('sha256').update(`${salt}:${ip}`).digest('hex')
 }
