@@ -9,7 +9,7 @@ if ! command -v vercel >/dev/null 2>&1; then
   exit 1
 fi
 
-vercel env pull .env.production --environment production --yes
+vercel env pull .env.production --yes
 
 if [[ ! -f .env.production ]]; then
   echo "Could not pull Vercel env vars. Run: vercel login"
