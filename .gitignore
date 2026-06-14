@@ -19,7 +19,6 @@ npm-debug.log*
 .envrc.local
 
 # Build artifacts
-.next/
 dist/
 build/
 .cache/
