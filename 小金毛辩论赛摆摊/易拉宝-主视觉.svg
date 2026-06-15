@@ -42,26 +42,26 @@
   <text x="88" y="1098" font-size="29" font-weight="500" fill="#1a1a1a">AI 让算力与产能过剩。</text>
   <text x="88" y="1152" font-size="34" font-weight="700" fill="#1a1a1a">谁把红利<tspan fill="#8b1e2d">还给人民</tspan>，谁就赢。</text>
 
-  <rect x="56" y="1252" width="150" height="150" rx="10" fill="#ffffff" stroke="#d4d0c8" stroke-width="1.5"/>
-  <rect x="70" y="1266" width="30" height="30" rx="3" fill="none" stroke="#c9c4ba" stroke-width="5"/>
-  <rect x="162" y="1266" width="30" height="30" rx="3" fill="none" stroke="#c9c4ba" stroke-width="5"/>
-  <rect x="70" y="1358" width="30" height="30" rx="3" fill="none" stroke="#c9c4ba" stroke-width="5"/>
-  <text x="131" y="1338" font-size="17" font-weight="400" fill="#8a8a8a" text-anchor="middle">待替换</text>
-  <text x="131" y="1430" font-size="19" font-weight="700" fill="#1a1a1a" text-anchor="middle">加微信</text>
+  <rect x="56" y="1252" width="118" height="118" rx="9" fill="#ffffff" stroke="#d4d0c8" stroke-width="1.5"/>
+  <image href="./wechat-group-qr.jpg" x="62" y="1258" width="106" height="106" preserveAspectRatio="xMidYMid meet"/>
+  <text x="115" y="1398" font-size="17" font-weight="700" fill="#1a1a1a" text-anchor="middle">微信群</text>
 
-  <rect x="230" y="1252" width="150" height="150" rx="10" fill="#ffffff" stroke="#d4d0c8" stroke-width="1.5"/>
-  <rect x="244" y="1266" width="30" height="30" rx="3" fill="none" stroke="#c9c4ba" stroke-width="5"/>
-  <rect x="336" y="1266" width="30" height="30" rx="3" fill="none" stroke="#c9c4ba" stroke-width="5"/>
-  <rect x="244" y="1358" width="30" height="30" rx="3" fill="none" stroke="#c9c4ba" stroke-width="5"/>
-  <text x="305" y="1338" font-size="17" font-weight="400" fill="#8a8a8a" text-anchor="middle">待替换</text>
-  <text x="305" y="1430" font-size="19" font-weight="700" fill="#1a1a1a" text-anchor="middle">自媒体矩阵</text>
+  <rect x="196" y="1252" width="118" height="118" rx="9" fill="#ffffff" stroke="#d4d0c8" stroke-width="1.5"/>
+  <image href="./bilibili-qr.png" x="202" y="1258" width="106" height="106" preserveAspectRatio="xMidYMid meet"/>
+  <text x="255" y="1398" font-size="17" font-weight="700" fill="#1a1a1a" text-anchor="middle">B站</text>
 
-  <text x="420" y="1300" font-size="20" font-weight="500" fill="#1a1a1a">扫码加我们</text>
-  <text x="420" y="1332" font-size="18" font-weight="400" fill="#5a5a5a">看我们的过程</text>
-  <text x="420" y="1360" font-size="18" font-weight="400" fill="#5a5a5a">（失败也公开）</text>
+  <rect x="336" y="1252" width="118" height="118" rx="9" fill="#ffffff" stroke="#d4d0c8" stroke-width="1.5"/>
+  <image href="./douyin-qr.jpg" x="342" y="1258" width="106" height="106" preserveAspectRatio="xMidYMid meet"/>
+  <text x="395" y="1398" font-size="17" font-weight="700" fill="#1a1a1a" text-anchor="middle">抖音</text>
 
-  <text x="56" y="1494" font-size="18" font-weight="400" fill="#5a5a5a">桌上有 7×7 地图、宣言传单与需求登记表，</text>
-  <text x="56" y="1524" font-size="18" font-weight="400" fill="#5a5a5a">欢迎来挑刺。</text>
+  <rect x="476" y="1252" width="118" height="118" rx="9" fill="#ffffff" stroke="#d4d0c8" stroke-width="1.5"/>
+  <image href="./kuaishou-qr.jpg" x="482" y="1258" width="106" height="106" preserveAspectRatio="xMidYMid meet"/>
+  <text x="535" y="1398" font-size="17" font-weight="700" fill="#1a1a1a" text-anchor="middle">快手</text>
+
+  <text x="56" y="1450" font-size="18" font-weight="500" fill="#1a1a1a">扫码进群，或关注 B站 / 抖音 / 快手，看我们的过程。</text>
+
+  <text x="56" y="1504" font-size="18" font-weight="400" fill="#5a5a5a">桌上有 7×7 地图、宣言传单与需求登记表，</text>
+  <text x="56" y="1534" font-size="18" font-weight="400" fill="#5a5a5a">欢迎来挑刺。</text>
 
   <line x1="56" y1="1576" x2="624" y2="1576" stroke="#d4d0c8" stroke-width="1"/>
   <text x="56" y="1622" font-size="22" font-weight="700" fill="#8b1e2d">码成工</text>
