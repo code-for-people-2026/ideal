@@ -12,13 +12,13 @@
   <rect x="-12" y="-12" width="704" height="986" fill="#fbfaf6"/>
 
   <!-- 软件层 = 底座层：整条地层高亮带（置于网状之下，左右贯通到出血边） -->
-  <g transform="translate(0,150)">
+  <g transform="translate(0,115)">
   <rect x="-12" y="430" width="704" height="196" fill="#8b1e2d" opacity="0.055"/>
   <line x1="-12" y1="430" x2="692" y2="430" stroke="#8b1e2d" stroke-width="1.2" opacity="0.4" stroke-dasharray="6 4"/>
   </g>
 
   <!-- header（顶部，下移 40 留出竖版上边距） -->
-  <g transform="translate(0,40)">
+  <g transform="translate(0,30)">
   <text x="40" y="24" font-size="12" font-weight="500" letter-spacing="4" fill="#8b1e2d">数据平权 · AI 下乡</text>
   <text x="40" y="50" font-size="22" font-weight="700" fill="#8b1e2d">生产力发展，让"集结消费者"成为可能</text>
   <text x="40" y="68" font-size="11" fill="#5a5a5a">力量来自集结的人数——线多的一端，就是这个平台集结起来的人。</text>
@@ -26,7 +26,7 @@
   </g>
 
   <!-- 图表主体（下移 150，竖版居中） -->
-  <g transform="translate(0,150)">
+  <g transform="translate(0,115)">
   <!-- 列头 -->
   <text x="70" y="96" font-size="13" font-weight="700" fill="#2e5f8b" text-anchor="middle">生产者</text>
   <text x="255" y="96" font-size="13" font-weight="700" fill="#2e5f8b" text-anchor="middle">集结生产端</text>
@@ -122,7 +122,7 @@
   </g>
 
   <!-- 底部三栏注释 + 页脚（下移 215，落到竖版底部） -->
-  <g transform="translate(0,215)">
+  <g transform="translate(0,198)">
   <line x1="40" y1="638" x2="640" y2="638" stroke="#d4d0c8" stroke-width="1"/>
 
   <text x="40" y="656" font-size="12" font-weight="700" fill="#8b1e2d">电商层</text>
