@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="806mm" height="2006mm" viewBox="-2.55 -2.55 685.1 1705.1" role="img">
 <title>易拉宝主视觉 · 数据平权、AI 下乡</title>
-<desc>80×200cm 竖版易拉宝：软件是一种服务，我们想把它还给人民。含四条阳谋自缚、规律金句、二维码区与页脚。</desc>
+<desc>80×200cm 竖版易拉宝：软件是一种服务，我们想把它还给人民。含三条主张+一条自缚、打法金句、7×7 地图引导、二维码区与页脚。</desc>
 <g font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans SC, -apple-system, sans-serif">
 
   <rect x="-3" y="-3" width="686" height="1706" fill="#fbfaf6"/>
@@ -20,7 +20,7 @@
   <circle cx="76" cy="640" r="21" fill="none" stroke="#b08d2e" stroke-width="2"/>
   <text x="76" y="650" font-size="26" font-weight="700" fill="#b08d2e" text-anchor="middle">1</text>
   <text x="116" y="640" font-size="26" font-weight="700" fill="#1a1a1a">数据属于用户</text>
-  <text x="116" y="668" font-size="18" font-weight="400" fill="#5a5a5a">盈利向全体用户分红 —— 看的人、创作的人都分</text>
+  <text x="116" y="668" font-size="18" font-weight="400" fill="#5a5a5a">你的点击、轨迹是劳动，不是平台地租——该还你一份</text>
 
   <circle cx="76" cy="734" r="21" fill="none" stroke="#b08d2e" stroke-width="2"/>
   <text x="76" y="744" font-size="26" font-weight="700" fill="#b08d2e" text-anchor="middle">2</text>
@@ -34,13 +34,13 @@
 
   <circle cx="76" cy="922" r="21" fill="none" stroke="#b08d2e" stroke-width="2"/>
   <text x="76" y="932" font-size="26" font-weight="700" fill="#b08d2e" text-anchor="middle">4</text>
-  <text x="116" y="922" font-size="26" font-weight="700" fill="#1a1a1a">收入差距 &lt; 3:1</text>
-  <text x="116" y="950" font-size="18" font-weight="400" fill="#5a5a5a">数字收入与可支配收入，差距都 &lt; 3 倍（内部示范）</text>
+  <text x="116" y="922" font-size="26" font-weight="700" fill="#1a1a1a">我们先自缚自己</text>
+  <text x="116" y="950" font-size="18" font-weight="400" fill="#5a5a5a">收入差距&lt;3:1 · 只接受捐款 · 不套现 · 资产归社会</text>
 
   <rect x="56" y="1030" width="568" height="172" rx="8" fill="#f3e7e9"/>
   <rect x="56" y="1030" width="6" height="172" fill="#8b1e2d"/>
-  <text x="88" y="1098" font-size="29" font-weight="500" fill="#1a1a1a">AI 让算力与产能过剩。</text>
-  <text x="88" y="1152" font-size="34" font-weight="700" fill="#1a1a1a">谁把红利<tspan fill="#8b1e2d">还给人民</tspan>，谁就赢。</text>
+  <text x="88" y="1098" font-size="29" font-weight="500" fill="#1a1a1a">不跟平台抢山头。</text>
+  <text x="88" y="1152" font-size="34" font-weight="700" fill="#1a1a1a">从平台<tspan fill="#8b1e2d">顾不上的边角</tspan>做起。</text>
 
   <rect x="56" y="1252" width="118" height="118" rx="9" fill="#ffffff" stroke="#d4d0c8" stroke-width="1.5"/>
   <image href="./wechat-group-qr.jpg" x="62" y="1258" width="106" height="106" preserveAspectRatio="xMidYMid meet"/>
@@ -60,8 +60,8 @@
 
   <text x="56" y="1450" font-size="18" font-weight="500" fill="#1a1a1a">扫码进群，或关注 B站 / 抖音 / 快手，看我们的过程。</text>
 
-  <text x="56" y="1504" font-size="18" font-weight="400" fill="#5a5a5a">桌上有 7×7 地图、宣言传单与需求登记表，</text>
-  <text x="56" y="1534" font-size="18" font-weight="400" fill="#5a5a5a">欢迎来挑刺。</text>
+  <text x="56" y="1504" font-size="18" font-weight="400" fill="#5a5a5a">桌上有「牛马能力剥夺图」：7 类工友 × 7 样被剥夺的能力，</text>
+  <text x="56" y="1534" font-size="18" font-weight="400" fill="#5a5a5a">49 个还没人认真做的方向——欢迎来挑刺、填空白格。</text>
 
   <line x1="56" y1="1576" x2="624" y2="1576" stroke="#d4d0c8" stroke-width="1"/>
   <text x="56" y="1622" font-size="22" font-weight="700" fill="#8b1e2d">码成工</text>
