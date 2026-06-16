@@ -84,7 +84,17 @@
   .analogy{ background:var(--gold-soft); border-left:4px solid var(--gold); border-radius:5px; padding:10px 13px; font-size:10pt; line-height:1.55; margin:0 0 .5em; }
   .analogy b{ color:#1a1a1a; }
 </style>
-</head>
+<style>
+/* 黑白打印稳健：标题区改「深字浅底」，底边代替深底；padding 收回以保正面单页 */
+*{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.hero,.hero2{ background:#fff!important; color:#1a1a1a!important; border-bottom:3px solid #1a1a1a; }
+.hero{ padding-bottom:2.5mm!important; }
+.hero2{ padding-bottom:7mm!important; }
+.hero .kicker,.hero2 .kicker{ color:#1a1a1a!important; opacity:1!important; }
+.hero h1,.hero2 h1{ color:#1a1a1a!important; }
+.hero .one,.hero2 .one{ color:#333!important; opacity:1!important; }
+.online-qr{ color:#555!important; }
+</style></head>
 <body>
 
 <!-- ════════ 正面：数据平权宣言 ════════ -->

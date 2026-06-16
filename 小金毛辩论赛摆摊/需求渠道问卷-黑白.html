@@ -53,7 +53,15 @@
   .privacy{ text-align:right; max-width:62%; }
   .privacy b{ color:var(--accent); }
 </style>
-</head>
+<style>
+/* 黑白打印稳健：标题区改「深字浅底」，不依赖背景色（背景未印/复印仍清晰）*/
+*{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+.hero,.hero2{ background:#fff!important; color:#1a1a1a!important; border-bottom:3px solid #1a1a1a; }
+.hero .kicker,.hero2 .kicker{ color:#1a1a1a!important; opacity:1!important; }
+.hero h1,.hero2 h1{ color:#1a1a1a!important; }
+.hero .one,.hero2 .one{ color:#333!important; opacity:1!important; }
+.online-qr{ color:#555!important; }
+</style></head>
 <body>
 <div class="sheet">
   <div class="head">
