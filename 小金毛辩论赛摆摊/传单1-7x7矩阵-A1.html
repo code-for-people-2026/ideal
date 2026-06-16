@@ -72,9 +72,9 @@
   .legend .demo.b{ background:var(--blue-bg); border-color:var(--blue-bd); color:#174a85; }
   .legend .demo.k{ background:#2b2b2b; border-color:#2b2b2b; color:#f5f2ea; }
   .legend .demo.g{ background:rgba(176,141,46,.16); border-color:rgba(176,141,46,.55); color:#6b500f; }
-  .qrbox{ display:grid; grid-template-rows:1fr 1fr; gap:8px; border:1px solid var(--border-l); background:#fff; border-radius:6px; padding:10px 12px; min-width:0; }
-  .axismini{ display:flex; gap:10px; align-items:center; min-height:0; }
-  .qrbox svg,.qrbox img{ width:28mm; height:28mm; flex:none; }
+  .qrbox{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; border:1px solid var(--border-l); background:#fff; border-radius:6px; padding:10px 12px; min-width:0; text-align:center; }
+  .axismini{ display:flex; flex-direction:column; gap:7px; align-items:center; min-height:0; }
+  .qrbox svg,.qrbox img{ width:40mm; height:40mm; flex:none; }
   .qrbox .cap{ font-size:8.5pt; line-height:1.35; color:var(--ink); }
   .qrbox .cap b{ display:block; font-size:9.5pt; margin-bottom:1px; }
   .qrbox .cap span{ color:var(--muted); font-size:7.8pt; }
@@ -227,20 +227,13 @@
       <div class="row"><b>格子里特意留了空白：拿起笔，把你的痛点和点子直接写上去。</b></div>
     </div>
 
-    <!-- QR ① 纵轴：七个能力 -->
+    <!-- QR：矩阵导读（横纵轴依据合并到一页）-->
     <div class="qrbox">
       <div class="axismini">
-      <svg viewBox="-2 -2 37 37" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect x="-2" y="-2" width="37" height="37" fill="#fff"/><path d="M0 0h7v1H0zM10 0h1v1H10zM12 0h2v1H12zM16 0h1v1H16zM19 0h3v1H19zM23 0h1v1H23zM26 0h7v1H26zM0 1h1v1H0zM6 1h1v1H6zM9 1h2v1H9zM13 1h4v1H13zM22 1h1v1H22zM24 1h1v1H24zM26 1h1v1H26zM32 1h1v1H32zM0 2h1v1H0zM2 2h3v1H2zM6 2h1v1H6zM8 2h3v1H8zM12 2h2v1H12zM16 2h1v1H16zM18 2h1v1H18zM20 2h2v1H20zM23 2h1v1H23zM26 2h1v1H26zM28 2h3v1H28zM32 2h1v1H32zM0 3h1v1H0zM2 3h3v1H2zM6 3h1v1H6zM8 3h3v1H8zM14 3h1v1H14zM16 3h2v1H16zM20 3h1v1H20zM23 3h1v1H23zM26 3h1v1H26zM28 3h3v1H28zM32 3h1v1H32zM0 4h1v1H0zM2 4h3v1H2zM6 4h1v1H6zM8 4h1v1H8zM11 4h2v1H11zM15 4h1v1H15zM18 4h4v1H18zM23 4h2v1H23zM26 4h1v1H26zM28 4h3v1H28zM32 4h1v1H32zM0 5h1v1H0zM6 5h1v1H6zM8 5h1v1H8zM11 5h3v1H11zM15 5h2v1H15zM22 5h1v1H22zM26 5h1v1H26zM32 5h1v1H32zM0 6h7v1H0zM8 6h1v1H8zM10 6h1v1H10zM12 6h1v1H12zM14 6h1v1H14zM16 6h1v1H16zM18 6h1v1H18zM20 6h1v1H20zM22 6h1v1H22zM24 6h1v1H24zM26 6h7v1H26zM8 7h1v1H8zM14 7h2v1H14zM21 7h1v1H21zM23 7h1v1H23zM0 8h1v1H0zM2 8h5v1H2zM11 8h1v1H11zM13 8h1v1H13zM15 8h1v1H15zM17 8h3v1H17zM22 8h1v1H22zM24 8h1v1H24zM26 8h5v1H26zM3 9h1v1H3zM5 9h1v1H5zM7 9h2v1H7zM10 9h3v1H10zM14 9h1v1H14zM17 9h4v1H17zM22 9h3v1H22zM26 9h2v1H26zM29 9h4v1H29zM1 10h1v1H1zM6 10h1v1H6zM8 10h2v1H8zM12 10h1v1H12zM15 10h2v1H15zM20 10h1v1H20zM22 10h1v1H22zM28 10h1v1H28zM30 10h1v1H30zM1 11h4v1H1zM7 11h1v1H7zM10 11h1v1H10zM12 11h1v1H12zM14 11h3v1H14zM20 11h3v1H20zM24 11h2v1H24zM28 11h5v1H28zM0 12h2v1H0zM3 12h5v1H3zM9 12h1v1H9zM12 12h1v1H12zM15 12h1v1H15zM18 12h1v1H18zM22 12h2v1H22zM27 12h3v1H27zM1 13h4v1H1zM7 13h1v1H7zM9 13h2v1H9zM12 13h15v1H12zM30 13h3v1H30zM5 14h2v1H5zM9 14h2v1H9zM12 14h3v1H12zM17 14h1v1H17zM21 14h2v1H21zM24 14h3v1H24zM29 14h3v1H29zM3 15h3v1H3zM7 15h1v1H7zM9 15h1v1H9zM11 15h4v1H11zM16 15h1v1H16zM18 15h5v1H18zM24 15h3v1H24zM30 15h1v1H30zM0 16h3v1H0zM5 16h2v1H5zM8 16h1v1H8zM11 16h1v1H11zM16 16h2v1H16zM19 16h1v1H19zM22 16h1v1H22zM24 16h2v1H24zM27 16h3v1H27zM32 16h1v1H32zM0 17h2v1H0zM3 17h3v1H3zM7 17h1v1H7zM9 17h1v1H9zM12 17h3v1H12zM17 17h5v1H17zM23 17h1v1H23zM26 17h2v1H26zM29 17h2v1H29zM32 17h1v1H32zM0 18h1v1H0zM4 18h1v1H4zM6 18h1v1H6zM8 18h2v1H8zM13 18h3v1H13zM17 18h1v1H17zM21 18h1v1H21zM24 18h2v1H24zM27 18h2v1H27zM30 18h2v1H30zM1 19h2v1H1zM4 19h2v1H4zM7 19h1v1H7zM9 19h1v1H9zM12 19h1v1H12zM14 19h8v1H14zM27 19h6v1H27zM0 20h1v1H0zM2 20h2v1H2zM6 20h5v1H6zM12 20h1v1H12zM15 20h2v1H15zM19 20h1v1H19zM22 20h1v1H22zM28 20h2v1H28zM31 20h2v1H31zM0 21h3v1H0zM4 21h1v1H4zM8 21h3v1H8zM13 21h3v1H13zM18 21h2v1H18zM21 21h1v1H21zM23 21h5v1H23zM32 21h1v1H32zM0 22h1v1H0zM2 22h5v1H2zM8 22h2v1H8zM12 22h7v1H12zM20 22h3v1H20zM25 22h1v1H25zM27 22h2v1H27zM30 22h2v1H30zM0 23h1v1H0zM2 23h3v1H2zM8 23h1v1H8zM11 23h1v1H11zM14 23h2v1H14zM20 23h2v1H20zM24 23h1v1H24zM26 23h1v1H26zM30 23h1v1H30zM32 23h1v1H32zM0 24h1v1H0zM6 24h2v1H6zM10 24h2v1H10zM14 24h4v1H14zM22 24h1v1H22zM24 24h6v1H24zM31 24h1v1H31zM8 25h2v1H8zM12 25h2v1H12zM18 25h2v1H18zM21 25h1v1H21zM24 25h1v1H24zM28 25h1v1H28zM30 25h1v1H30zM32 25h1v1H32zM0 26h7v1H0zM11 26h1v1H11zM13 26h1v1H13zM15 26h2v1H15zM18 26h1v1H18zM21 26h1v1H21zM23 26h2v1H23zM26 26h1v1H26zM28 26h1v1H28zM30 26h1v1H30zM0 27h1v1H0zM6 27h1v1H6zM8 27h2v1H8zM13 27h1v1H13zM16 27h1v1H16zM19 27h6v1H19zM28 27h3v1H28zM0 28h1v1H0zM2 28h3v1H2zM6 28h1v1H6zM8 28h4v1H8zM14 28h1v1H14zM18 28h2v1H18zM22 28h1v1H22zM24 28h6v1H24zM31 28h1v1H31zM0 29h1v1H0zM2 29h3v1H2zM6 29h1v1H6zM8 29h2v1H8zM12 29h1v1H12zM14 29h4v1H14zM19 29h3v1H19zM24 29h2v1H24zM28 29h1v1H28zM31 29h2v1H31zM0 30h1v1H0zM2 30h3v1H2zM6 30h1v1H6zM8 30h1v1H8zM12 30h1v1H12zM14 30h1v1H14zM17 30h1v1H17zM20 30h2v1H20zM23 30h2v1H23zM26 30h2v1H26zM29 30h2v1H29zM0 31h1v1H0zM6 31h1v1H6zM9 31h3v1H9zM13 31h1v1H13zM16 31h1v1H16zM18 31h6v1H18zM28 31h1v1H28zM30 31h1v1H30zM0 32h7v1H0zM8 32h1v1H8zM10 32h1v1H10zM13 32h1v1H13zM17 32h2v1H17zM22 32h1v1H22zM24 32h2v1H24zM27 32h1v1H27zM29 32h1v1H29zM31 32h1v1H31z" fill="#1a1a1a"/></svg>
-      <div class="cap">
-        <b>纵轴｜能力依据</b>
-        <span>为什么是这七个能力？扫码看说明。</span>
-      </div>
-      </div>
-      <div class="axismini">
-        <img src="./who-people-qr.png" alt="人群分组依据二维码">
+        <img src="./matrix-guide-qr.svg" alt="矩阵导读二维码">
         <div class="cap">
-          <b>横轴｜人群依据</b>
-          <span>为什么按这些“工友位置”划分？扫码看说明。</span>
+          <b>矩阵导读</b>
+          <span>为什么是这七种人、这七个能力？横纵轴依据都在这页，扫码看说明。</span>
         </div>
       </div>
     </div>
