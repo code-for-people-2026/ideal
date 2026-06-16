@@ -1,21 +1,25 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="806mm" height="2006mm" viewBox="-2.55 -2.55 685.1 1705.1" role="img">
 <title>易拉宝主视觉 · 数据平权、AI 下乡</title>
-<desc>80×200cm 竖版易拉宝：软件是一种服务，我们想把它还给人民。含三条主张+一条自缚、打法金句、7×7 地图引导、二维码区与页脚。</desc>
+<desc>80×200cm 竖版易拉宝：软件是一种服务，我们想把它还给人民。含三条主张+一条约束、打法金句、7×7 地图引导、二维码区与页脚。</desc>
 <g font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans SC, -apple-system, sans-serif">
 
   <rect x="-3" y="-3" width="686" height="1706" fill="#fbfaf6"/>
 
   <rect x="-3" y="-3" width="686" height="383" fill="#8b1e2d"/>
   <text x="56" y="98" font-size="19" font-weight="500" letter-spacing="6" fill="#e7c87d">数据平权 · AI 下乡</text>
-  <text x="56" y="206" font-size="56" font-weight="700" fill="#ffffff">软件也是一种<tspan font-size="80" fill="#f2d07c">服务</tspan></text>
-  <text x="56" y="322" font-size="56" font-weight="700" fill="#ffffff"><tspan font-size="80" fill="#f2d07c">为</tspan>何不还给<tspan font-size="80" fill="#f2d07c">人民</tspan></text>
+  <!-- 主标题：金色大字按横向位置左→右 = 为·人民·服务（为人民服务视觉错觉）；小字何不/还给嵌中间，字面读「为何不还给人民」 -->
+  <text x="56" y="206" font-size="52" font-weight="700" fill="#ffffff">软件服务也是一种<tspan font-size="76" fill="#f2d07c">服务</tspan></text>
+  <text x="56" y="322" font-size="76" font-weight="700" fill="#f2d07c">为</text>
+  <text x="150" y="299" font-size="33" font-weight="700" fill="#ffffff">何不</text>
+  <text x="150" y="337" font-size="33" font-weight="700" fill="#ffffff">还给</text>
+  <text x="234" y="322" font-size="76" font-weight="700" fill="#f2d07c">人民</text>
 
   <text x="56" y="456" font-size="26" font-weight="700" fill="#8b1e2d">《数据平权宣言》</text>
   <text x="56" y="486" font-size="18" font-weight="400" fill="#5a5a5a">一个公开的、欢迎质疑的阳谋</text>
   <line x1="56" y1="506" x2="624" y2="506" stroke="#d4d0c8" stroke-width="1"/>
 
-  <text x="56" y="552" font-size="26" font-weight="700" fill="#8b1e2d">我们主张四件事</text>
-  <text x="56" y="582" font-size="18" font-weight="400" fill="#5a5a5a">在 AI 生产力彻底爆发之前，把 AI 的红利，还给普罗大众</text>
+  <text x="56" y="552" font-size="26" font-weight="700" fill="#8b1e2d">我们提出三个主张、一条约束</text>
+  <text x="56" y="582" font-size="18" font-weight="400" fill="#5a5a5a">在 AI 生产力彻底爆发之前，把 AI 的时代红利，还给普罗大众</text>
 
   <circle cx="76" cy="640" r="21" fill="none" stroke="#b08d2e" stroke-width="2"/>
   <text x="76" y="650" font-size="26" font-weight="700" fill="#b08d2e" text-anchor="middle">1</text>
@@ -34,7 +38,7 @@
 
   <circle cx="76" cy="922" r="21" fill="none" stroke="#b08d2e" stroke-width="2"/>
   <text x="76" y="932" font-size="26" font-weight="700" fill="#b08d2e" text-anchor="middle">4</text>
-  <text x="116" y="922" font-size="26" font-weight="700" fill="#1a1a1a">我们先自缚自己</text>
+  <text x="116" y="922" font-size="26" font-weight="700" fill="#1a1a1a">我们先约束自己</text>
   <text x="116" y="950" font-size="18" font-weight="400" fill="#5a5a5a">收入差距&lt;3:1 · 只接受捐款 · 不套现 · 资产归社会</text>
 
   <rect x="56" y="1030" width="568" height="172" rx="8" fill="#f3e7e9"/>
