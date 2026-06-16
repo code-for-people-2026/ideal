@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800mm" height="2000mm" viewBox="0 0 680 1700" role="img">
+<svg xmlns="http://www.w3.org/2000/svg" width="806mm" height="2006mm" viewBox="-2.55 -2.55 685.1 1705.1" role="img">
 <title>易拉宝主视觉 · 数据平权、AI 下乡</title>
 <desc>80×200cm 竖版易拉宝：软件是一种服务，我们想把它还给人民。含四条阳谋自缚、规律金句、二维码区与页脚。</desc>
 <g font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans SC, -apple-system, sans-serif">
 
-  <rect x="0" y="0" width="680" height="1700" fill="#fbfaf6"/>
+  <rect x="-3" y="-3" width="686" height="1706" fill="#fbfaf6"/>
 
-  <rect x="0" y="0" width="680" height="380" fill="#8b1e2d"/>
+  <rect x="-3" y="-3" width="686" height="383" fill="#8b1e2d"/>
   <text x="56" y="98" font-size="19" font-weight="500" letter-spacing="6" fill="#e7c87d">数据平权 · AI 下乡</text>
   <text x="56" y="206" font-size="56" font-weight="700" fill="#ffffff">软件也是一种<tspan font-size="80" fill="#f2d07c">服务</tspan></text>
   <text x="56" y="322" font-size="56" font-weight="700" fill="#ffffff"><tspan font-size="80" fill="#f2d07c">为</tspan>何不还给<tspan font-size="80" fill="#f2d07c">人民</tspan></text>
@@ -65,8 +65,8 @@
 
   <line x1="56" y1="1576" x2="624" y2="1576" stroke="#d4d0c8" stroke-width="1"/>
   <text x="56" y="1622" font-size="22" font-weight="700" fill="#8b1e2d">码成工</text>
-  <text x="56" y="1654" font-size="15" font-weight="400" fill="#8a8a8a">一个为工友敲键盘的组织</text>
-  <text x="624" y="1622" font-size="16" font-weight="400" fill="#8a8a8a" text-anchor="end">端午 · 华语辩坛小友赛</text>
+  <text x="56" y="1654" font-size="15" font-weight="400" fill="#6b6b6b">一个为工友敲键盘的组织</text>
+  <text x="624" y="1622" font-size="16" font-weight="400" fill="#6b6b6b" text-anchor="end">端午 · 华语辩坛小友赛</text>
 
 </g>
 </svg>

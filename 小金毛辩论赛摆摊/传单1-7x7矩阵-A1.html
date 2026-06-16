@@ -13,9 +13,11 @@
     --blue-bg:rgba(30,90,160,.08); --blue-bd:rgba(30,90,160,.28);
   }
   /* KT 板裁切尺寸 A2 420×594mm + 3mm 出血 → 页面 426×600mm（同比例可放大至 A1） */
-  @page{ size:426mm 600mm; margin:0; }
+  /* A1 版：整页 zoom √2 无损放大；裁切 A1 594×841mm + 3mm 出血 */
+  @page{ size:603mm 850mm; margin:0; }
   *{ box-sizing:border-box; }
   html,body{ margin:0; }
+  html{ zoom:1.414214; }
   body{ background:#e9e6df;
     font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
     color:var(--ink); -webkit-font-smoothing:antialiased; }

@@ -9,140 +9,140 @@
 <g font-family="PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto Sans SC, -apple-system, sans-serif">
 
   <!-- A4 竖版 210×297mm + 3mm 出血：1 单位=0.3088mm；裁切框 0..680 × 0..962；内容分块垂直重排 -->
-  <rect x="-12" y="-12" width="704" height="986" fill="#fbfaf6"/>
+  <rect x="-12" y="-12" width="704" height="986" fill="#ffffff"/>
 
   <!-- 软件层 = 底座层：整条地层高亮带（置于网状之下，左右贯通到出血边） -->
   <g transform="translate(0,150)">
-  <rect x="-12" y="430" width="704" height="196" fill="#8b1e2d" opacity="0.055"/>
-  <line x1="-12" y1="430" x2="692" y2="430" stroke="#8b1e2d" stroke-width="1.2" opacity="0.4" stroke-dasharray="6 4"/>
+  <rect x="-12" y="430" width="704" height="196" fill="#ececec"/>
+  <line x1="-12" y1="430" x2="692" y2="430" stroke="#1a1a1a" stroke-width="1.2" opacity="0.65" stroke-dasharray="6 4"/>
   </g>
 
   <!-- header（顶部，下移 40 留出竖版上边距） -->
   <g transform="translate(0,40)">
-  <text x="40" y="24" font-size="12" font-weight="500" letter-spacing="4" fill="#8b1e2d">数据平权 · AI 下乡</text>
-  <text x="40" y="50" font-size="22" font-weight="700" fill="#8b1e2d">生产力发展，让"集结消费者"成为可能</text>
-  <text x="40" y="68" font-size="11" fill="#5a5a5a">力量来自集结的人数——线多的一端，就是这个平台集结起来的人。</text>
-  <line x1="40" y1="76" x2="640" y2="76" stroke="#8b1e2d" stroke-width="2"/>
+  <text x="40" y="24" font-size="12" font-weight="500" letter-spacing="4" fill="#1a1a1a">数据平权 · AI 下乡</text>
+  <text x="40" y="50" font-size="22" font-weight="700" fill="#1a1a1a">生产力发展，让"集结消费者"成为可能</text>
+  <text x="40" y="68" font-size="11" fill="#333333">力量来自集结的人数——线多的一端，就是这个平台集结起来的人。</text>
+  <line x1="40" y1="76" x2="640" y2="76" stroke="#1a1a1a" stroke-width="2"/>
   </g>
 
   <!-- 图表主体（下移 150，竖版居中） -->
   <g transform="translate(0,150)">
   <!-- 列头 -->
-  <text x="70" y="96" font-size="13" font-weight="700" fill="#2e5f8b" text-anchor="middle">生产者</text>
-  <text x="255" y="96" font-size="13" font-weight="700" fill="#2e5f8b" text-anchor="middle">集结生产端</text>
-  <text x="445" y="96" font-size="13" font-weight="700" fill="#2d6a3f" text-anchor="middle">集结消费端</text>
-  <text x="610" y="96" font-size="13" font-weight="700" fill="#2d6a3f" text-anchor="middle">消费者</text>
+  <text x="70" y="96" font-size="13" font-weight="700" fill="#2b2b2b" text-anchor="middle">生产者</text>
+  <text x="255" y="96" font-size="13" font-weight="700" fill="#2b2b2b" text-anchor="middle">集结生产端</text>
+  <text x="445" y="96" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">集结消费端</text>
+  <text x="610" y="96" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">消费者</text>
 
   <!-- 生产力横轴 -->
-  <text x="350" y="118" font-size="11" font-weight="700" fill="#b08d2e" text-anchor="middle">生产力 · 互联网技术发展 →</text>
-  <line x1="150" y1="126" x2="552" y2="126" stroke="#b08d2e" stroke-width="2.5" marker-end="url(#hb)"/>
-  <text x="350" y="140" font-size="9" fill="#8a6d1c" text-anchor="middle">越往右技术越成熟，越能把分散的多数（消费者）集结起来</text>
+  <text x="350" y="118" font-size="11" font-weight="700" fill="#1a1a1a" text-anchor="middle">生产力 · 互联网技术发展 →</text>
+  <line x1="150" y1="126" x2="552" y2="126" stroke="#1a1a1a" stroke-width="2.5" marker-end="url(#hb)"/>
+  <text x="350" y="140" font-size="9" fill="#333333" text-anchor="middle">越往右技术越成熟，越能把分散的多数（消费者）集结起来</text>
 
   <!-- 细线：平台也连另一端（线少） -->
-  <g fill="none" stroke="#2e5f8b" stroke-width="1.2" opacity="0.5">
+  <g fill="none" stroke="#3a3a3a" stroke-width="1.35" opacity="0.5">
     <path d="M283 198 L604 180" marker-end="url(#hb)"/><path d="M283 198 L604 215" marker-end="url(#hb)"/>
     <path d="M283 348 L604 330" marker-end="url(#hb)"/><path d="M283 348 L604 365" marker-end="url(#hb)"/>
     <path d="M283 522 L604 474" marker-end="url(#hb)"/><path d="M283 522 L604 504" marker-end="url(#hb)"/>
   </g>
-  <g fill="none" stroke="#2d6a3f" stroke-width="1.2" opacity="0.5">
+  <g fill="none" stroke="#1a1a1a" stroke-width="1.2" opacity="0.5">
     <path d="M76 215 L417 242" marker-end="url(#hb)"/><path d="M76 250 L417 244" marker-end="url(#hb)"/>
     <path d="M76 365 L417 392" marker-end="url(#hb)"/><path d="M76 400 L417 394" marker-end="url(#hb)"/>
   </g>
 
   <!-- 粗扇形：集结生产端 ← 生产者 -->
-  <g fill="none" stroke="#2e5f8b" stroke-width="2.4">
+  <g fill="none" stroke="#2b2b2b" stroke-width="2.4">
     <path d="M76 150 L228 196" marker-end="url(#hb)"/><path d="M76 180 L228 197" marker-end="url(#hb)"/><path d="M76 215 L228 199" marker-end="url(#hb)"/><path d="M76 250 L228 200" marker-end="url(#hb)"/>
     <path d="M76 300 L228 346" marker-end="url(#hb)"/><path d="M76 330 L228 347" marker-end="url(#hb)"/><path d="M76 365 L228 349" marker-end="url(#hb)"/><path d="M76 400 L228 350" marker-end="url(#hb)"/>
     <path d="M76 474 L228 520" marker-end="url(#hb)"/><path d="M76 504 L228 521" marker-end="url(#hb)"/><path d="M76 539 L228 523" marker-end="url(#hb)"/><path d="M76 572 L228 524" marker-end="url(#hb)"/>
   </g>
   <!-- 粗扇形：集结消费端 → 消费者 -->
-  <g fill="none" stroke="#2d6a3f" stroke-width="2.4">
+  <g fill="none" stroke="#1a1a1a" stroke-width="2.4">
     <path d="M473 243 L604 150" marker-end="url(#hb)"/><path d="M473 243 L604 180" marker-end="url(#hb)"/><path d="M473 244 L604 215" marker-end="url(#hb)"/><path d="M473 245 L604 250" marker-end="url(#hb)"/>
     <path d="M473 393 L604 300" marker-end="url(#hb)"/><path d="M473 393 L604 330" marker-end="url(#hb)"/><path d="M473 394 L604 365" marker-end="url(#hb)"/><path d="M473 395 L604 400" marker-end="url(#hb)"/>
   </g>
   <!-- 软件层 ?：两端虚线（潜在） -->
-  <g fill="none" stroke="#8b1e2d" stroke-width="1.5" opacity="0.4" stroke-dasharray="4 4">
+  <g fill="none" stroke="#1a1a1a" stroke-width="1.5" opacity="0.62" stroke-dasharray="4 4">
     <path d="M76 539 L415 565" marker-end="url(#hb)"/><path d="M76 572 L415 569" marker-end="url(#hb)"/>
     <path d="M478 559 L604 474" marker-end="url(#hb)"/><path d="M478 564 L604 504" marker-end="url(#hb)"/><path d="M478 569 L604 539" marker-end="url(#hb)"/><path d="M478 574 L604 572" marker-end="url(#hb)"/>
   </g>
 
   <!-- producer dots -->
-  <g fill="#ffffff" stroke="#2e5f8b" stroke-width="1.6" opacity="0.35">
+  <g fill="#ffffff" stroke="#2b2b2b" stroke-width="1.6" opacity="0.5">
     <circle cx="70" cy="150" r="5"/><circle cx="70" cy="250" r="5"/><circle cx="70" cy="300" r="5"/><circle cx="70" cy="400" r="5"/><circle cx="70" cy="474" r="5"/><circle cx="70" cy="572" r="5"/>
   </g>
-  <g fill="#ffffff" stroke="#2e5f8b" stroke-width="2">
+  <g fill="#ffffff" stroke="#2b2b2b" stroke-width="2">
     <circle cx="70" cy="180" r="6"/><circle cx="70" cy="215" r="6"/><circle cx="70" cy="330" r="6"/><circle cx="70" cy="365" r="6"/><circle cx="70" cy="504" r="6"/><circle cx="70" cy="539" r="6"/>
   </g>
-  <g font-size="11" font-weight="700" fill="#174a85" text-anchor="end">
+  <g font-size="11" font-weight="700" fill="#1a1a1a" text-anchor="end">
     <text x="50" y="184">商家</text><text x="50" y="219">农民</text>
     <text x="50" y="334">创作者</text><text x="50" y="369">up主</text>
     <text x="50" y="508">程序员</text><text x="50" y="543">产品经理</text>
   </g>
-  <g font-size="12" font-weight="700" fill="#9bb3cb" text-anchor="end">
+  <g font-size="12" font-weight="700" fill="#808080" text-anchor="end">
     <text x="50" y="246">···</text><text x="50" y="396">···</text><text x="50" y="570">···</text>
   </g>
 
   <!-- consumer dots -->
-  <g fill="#e5efe4" stroke="#2d6a3f" stroke-width="1.6" opacity="0.35">
+  <g fill="#ededed" stroke="#1a1a1a" stroke-width="1.6" opacity="0.5">
     <circle cx="610" cy="150" r="5"/><circle cx="610" cy="250" r="5"/><circle cx="610" cy="300" r="5"/><circle cx="610" cy="400" r="5"/><circle cx="610" cy="474" r="5"/><circle cx="610" cy="572" r="5"/>
   </g>
-  <g fill="#e5efe4" stroke="#2d6a3f" stroke-width="2">
+  <g fill="#ededed" stroke="#1a1a1a" stroke-width="2">
     <circle cx="610" cy="180" r="6"/><circle cx="610" cy="215" r="6"/><circle cx="610" cy="330" r="6"/><circle cx="610" cy="365" r="6"/><circle cx="610" cy="504" r="6"/><circle cx="610" cy="539" r="6"/>
   </g>
-  <g font-size="11" font-weight="700" fill="#2d6a3f" text-anchor="start">
+  <g font-size="11" font-weight="700" fill="#1a1a1a" text-anchor="start">
     <text x="630" y="184">买家</text><text x="630" y="219">消费者</text>
     <text x="630" y="334">读者</text><text x="630" y="369">观众</text>
     <text x="630" y="508">软件用户</text><text x="630" y="543">玩家</text>
   </g>
-  <g font-size="12" font-weight="700" fill="#8fae97" text-anchor="start">
+  <g font-size="12" font-weight="700" fill="#808080" text-anchor="start">
     <text x="630" y="246">···</text><text x="630" y="396">···</text><text x="630" y="570">···</text>
   </g>
 
   <!-- 集结生产端 (blue) -->
-  <circle cx="255" cy="198" r="28" fill="#e8f0f7" stroke="#2e5f8b" stroke-width="2"/>
-  <text x="255" y="203" font-size="13" font-weight="700" fill="#174a85" text-anchor="middle">淘宝</text>
-  <circle cx="255" cy="348" r="28" fill="#e8f0f7" stroke="#2e5f8b" stroke-width="2"/>
-  <text x="255" y="353" font-size="12" font-weight="700" fill="#174a85" text-anchor="middle">公众号</text>
-  <circle cx="255" cy="522" r="28" fill="#e8f0f7" stroke="#2e5f8b" stroke-width="2"/>
-  <text x="255" y="519" font-size="11.5" font-weight="700" fill="#174a85" text-anchor="middle">互联网</text>
-  <text x="255" y="533" font-size="11.5" font-weight="700" fill="#174a85" text-anchor="middle">平台</text>
+  <circle cx="255" cy="198" r="28" fill="#ffffff" stroke="#2b2b2b" stroke-width="2"/>
+  <text x="255" y="203" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">淘宝</text>
+  <circle cx="255" cy="348" r="28" fill="#ffffff" stroke="#2b2b2b" stroke-width="2"/>
+  <text x="255" y="353" font-size="12" font-weight="700" fill="#1a1a1a" text-anchor="middle">公众号</text>
+  <circle cx="255" cy="522" r="28" fill="#ffffff" stroke="#2b2b2b" stroke-width="2"/>
+  <text x="255" y="519" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">互联网</text>
+  <text x="255" y="533" font-size="11.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">平台</text>
 
   <!-- 集结消费端 (green) -->
-  <circle cx="445" cy="243" r="28" fill="#e5efe4" stroke="#2d6a3f" stroke-width="2"/>
-  <text x="445" y="248" font-size="12" font-weight="700" fill="#1f5036" text-anchor="middle">拼多多</text>
-  <circle cx="445" cy="393" r="28" fill="#e5efe4" stroke="#2d6a3f" stroke-width="2"/>
-  <text x="445" y="398" font-size="13" font-weight="700" fill="#1f5036" text-anchor="middle">抖音</text>
+  <circle cx="445" cy="243" r="28" fill="#ededed" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="445" y="248" font-size="12" font-weight="700" fill="#1a1a1a" text-anchor="middle">拼多多</text>
+  <circle cx="445" cy="393" r="28" fill="#ededed" stroke="#1a1a1a" stroke-width="2"/>
+  <text x="445" y="398" font-size="13" font-weight="700" fill="#1a1a1a" text-anchor="middle">抖音</text>
 
-  <circle cx="445" cy="567" r="39" fill="none" stroke="#8b1e2d" stroke-width="1.5" opacity="0.3"/>
-  <circle cx="445" cy="567" r="32" fill="#8b1e2d"/>
+  <circle cx="445" cy="567" r="39" fill="none" stroke="#1a1a1a" stroke-width="1.5" opacity="0.3"/>
+  <circle cx="445" cy="567" r="32" fill="#1a1a1a"/>
   <text x="445" y="584" font-size="40" font-weight="700" fill="#ffffff" text-anchor="middle">?</text>
 
   <!-- 底座层标题（带顶居中，留出 margin） -->
-  <text x="340" y="462" font-size="10.5" font-weight="700" fill="#8b1e2d" text-anchor="middle">软件·AI 是所有层的底座——它一白菜化，"替软件用户集结"才第一次成为可能，而这一格还空着。</text>
+  <text x="340" y="462" font-size="10.5" font-weight="700" fill="#1a1a1a" text-anchor="middle">软件·AI 是所有层的底座——它一白菜化，"替软件用户集结"才第一次成为可能，而这一格还空着。</text>
   </g>
 
   <!-- 底部三栏注释 + 页脚（下移 215，落到竖版底部） -->
   <g transform="translate(0,215)">
   <line x1="40" y1="638" x2="640" y2="638" stroke="#d4d0c8" stroke-width="1"/>
 
-  <text x="40" y="656" font-size="12" font-weight="700" fill="#8b1e2d">电商层</text>
+  <text x="40" y="656" font-size="12" font-weight="700" fill="#1a1a1a">电商层</text>
   <text x="40" y="672" font-size="10" fill="#1a1a1a">淘宝先集结卖家。等移动互联</text>
   <text x="40" y="686" font-size="10" fill="#1a1a1a">网、下沉成熟，拼多多才把海</text>
   <text x="40" y="700" font-size="10" fill="#1a1a1a">量散户买家集结——变的是生产力。</text>
 
-  <text x="247" y="656" font-size="12" font-weight="700" fill="#8b1e2d">内容层</text>
+  <text x="247" y="656" font-size="12" font-weight="700" fill="#1a1a1a">内容层</text>
   <text x="247" y="672" font-size="10" fill="#1a1a1a">公众号集结创作者。等算法、</text>
   <text x="247" y="686" font-size="10" fill="#1a1a1a">短视频成熟，抖音才把亿万</text>
   <text x="247" y="700" font-size="10" fill="#1a1a1a">"看的人"集结起来。</text>
 
-  <text x="454" y="656" font-size="12" font-weight="700" fill="#8b1e2d">软件层 · 底座 · 我们这层</text>
+  <text x="454" y="656" font-size="12" font-weight="700" fill="#1a1a1a">软件层 · 底座 · 我们这层</text>
   <text x="454" y="672" font-size="10" fill="#1a1a1a">互联网平台把程序员当雇员集</text>
   <text x="454" y="686" font-size="10" fill="#1a1a1a">结。如今 AI 让"替软件用户集</text>
-  <text x="454" y="700" font-size="10" font-weight="700" fill="#8b1e2d">结"第一次成为可能——那格空着。</text>
+  <text x="454" y="700" font-size="10" font-weight="700" fill="#1a1a1a">结"第一次成为可能——那格空着。</text>
 
   <line x1="40" y1="712" x2="640" y2="712" stroke="#d4d0c8" stroke-width="1"/>
-  <text x="40" y="730" font-size="12" font-weight="700" fill="#8b1e2d">码成工<tspan font-weight="400" font-size="10.5" fill="#73706a">　一个为工友敲键盘的组织</tspan></text>
-  <text x="640" y="730" font-size="10.5" fill="#73706a" text-anchor="end">软件是一种服务，我们想把它还给人民</text>
+  <text x="40" y="730" font-size="12" font-weight="700" fill="#1a1a1a">码成工<tspan font-weight="400" font-size="10.5" fill="#444444">　一个为工友敲键盘的组织</tspan></text>
+  <text x="640" y="730" font-size="10.5" fill="#444444" text-anchor="end">软件是一种服务，我们想把它还给人民</text>
   </g>
 
 </g>
