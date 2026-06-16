@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>AI 摊位助手 · 桌面立牌（A5 竖款）</title>
+<style>
+  :root{
+    --bg:#fbfaf6; --ink:#1a1a1a; --muted:#5a5a5a; --dim:#6b6b6b;
+    --accent:#8b1e2d; --gold:#b08d2e; --border:#d4d0c8;
+  }
+  /* A5 竖款 148×210mm，自己打印：选 A5 实际大小；若用 A4 可“适合页面”后裁切 */
+  @page{ size:A5 portrait; margin:0; }
+  *{ box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  html,body{ margin:0; }
+  body{ background:#e9e6df;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+    color:var(--ink); -webkit-font-smoothing:antialiased; }
+  .card{ width:148mm; height:210mm; margin:0 auto; background:var(--bg); position:relative;
+    display:flex; flex-direction:column; align-items:center; }
+  @media print{ body{background:#fff;} .card{margin:0;} }
+  @media screen{ .card{ box-shadow:0 4px 24px rgba(0,0,0,.18); margin:18px auto; } }
+
+  .hero{ width:100%; background:var(--accent); color:#fff; padding:11mm 12mm 9mm; text-align:center; }
+  .hero .kicker{ font-size:10.5pt; letter-spacing:.28em; font-weight:700; opacity:.9; }
+  .hero h1{ font-size:33pt; font-weight:700; margin:.18em 0 0; letter-spacing:.04em; }
+  .hero .tag{ font-size:12pt; font-weight:300; opacity:.95; margin-top:.5em; }
+  .hero .tag b{ color:#f2d07c; font-weight:700; }
+
+  .cta{ font-size:14pt; font-weight:700; color:var(--accent); margin:8mm 0 4mm; letter-spacing:.02em; }
+  .qrbox{ width:66mm; height:66mm; background:#fff; border:1px solid var(--border); border-radius:8px;
+    padding:4mm; display:flex; align-items:center; justify-content:center; }
+  .qrbox img{ width:100%; height:100%; display:block; }
+  .url{ font-size:11pt; color:var(--ink); letter-spacing:.04em; margin-top:4mm; font-weight:600; }
+  .url span{ color:var(--dim); font-weight:400; }
+
+  .desc{ font-size:11.5pt; line-height:1.7; color:var(--ink); text-align:center; margin:7mm 12mm 0; }
+  .desc b{ color:var(--accent); }
+
+  .foot{ margin-top:auto; width:100%; border-top:1px solid var(--border); padding:5mm 12mm 7mm; text-align:center; }
+  .foot .brand{ font-size:12pt; font-weight:700; color:var(--accent); }
+  .foot .brand span{ color:var(--dim); font-weight:400; font-size:10pt; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="hero">
+    <div class="kicker">数据平权 · AI 下乡</div>
+    <h1>AI 摊位助手</h1>
+    <div class="tag">不知道从哪聊起？<b>先问问它</b></div>
+  </div>
+
+  <div class="cta">掏出手机，扫码开聊 ↓</div>
+  <div class="qrbox"><img src="./ai-assistant-qr.svg" alt="AI 摊位助手二维码"></div>
+  <div class="url">chat.codeforpeople.cn<span> （或直接输入）</span></div>
+
+  <p class="desc">你是哪一类工友？你那一格<br>缺什么工具、见过什么难题？<br>
+  跟它聊两句，它带你读懂桌上这张 <b>7×7 地图</b>。</p>
+
+  <div class="foot">
+    <div class="brand">码成工<span>　一个为工友敲键盘的组织</span></div>
+  </div>
+</div>
+</body>
+</html>
