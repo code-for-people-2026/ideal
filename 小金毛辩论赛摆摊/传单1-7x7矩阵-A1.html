@@ -72,9 +72,7 @@
   .legend .demo.b{ background:var(--blue-bg); border-color:var(--blue-bd); color:#174a85; }
   .legend .demo.k{ background:#2b2b2b; border-color:#2b2b2b; color:#f5f2ea; }
   .legend .demo.g{ background:rgba(176,141,46,.16); border-color:rgba(176,141,46,.55); color:#6b500f; }
-  .qrbox{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; border:1px solid var(--border-l); background:#fff; border-radius:6px; padding:10px 12px; min-width:0; text-align:center; }
-  .axismini{ display:flex; flex-direction:column; gap:7px; align-items:center; min-height:0; }
-  .qrbox svg,.qrbox img{ width:40mm; height:40mm; flex:none; }
+  .qrbox{ min-width:0; display:block; }
   .qrbox .cap{ font-size:8.5pt; line-height:1.35; color:var(--ink); }
   .qrbox .cap b{ display:block; font-size:9.5pt; margin-bottom:1px; }
   .qrbox .cap span{ color:var(--muted); font-size:7.8pt; }
@@ -229,11 +227,11 @@
 
     <!-- QR：矩阵导读（横纵轴依据合并到一页）-->
     <div class="qrbox">
-      <div class="axismini">
+      <div class="bigqr">
         <img src="./matrix-guide-qr.svg" alt="矩阵导读二维码">
-        <div class="cap">
+        <div>
           <b>矩阵导读</b>
-          <span>为什么是这七种人、这七个能力？横纵轴依据都在这页，扫码看说明。</span>
+          <p>为什么是这七种人、这七个能力？横纵轴依据都在这页，扫码看说明。</p>
         </div>
       </div>
     </div>
