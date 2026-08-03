@@ -175,6 +175,16 @@
       .draft-card { margin-top: 8px; padding: 8px 10px; border-radius: 9px; background: var(--flag-gold-soft); font-size: 12px; line-height: 1.55; }
       .draft-card b { display: block; margin-bottom: 5px; color: #7a5a08; font-size: 11px; letter-spacing: .03em; }
       .draft-card li { margin-left: 16px; line-height: 1.4; }
+      .booking-card { margin-top: 8px; overflow: hidden; border: 1px solid #ead9bb; border-radius: 12px; background: #fff; color: var(--ink); box-shadow: 0 5px 14px rgba(46,38,22,.08); }
+      .booking-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; background: var(--flag-gold-soft); }
+      .booking-head strong { font-size: 13px; }
+      .booking-status { padding: 3px 6px; border-radius: 999px; background: #fff; color: #7a5a08; font-size: 9px; font-weight: 900; }
+      .booking-body { display: grid; gap: 7px; padding: 9px 10px; }
+      .booking-row { display: grid; grid-template-columns: 48px 1fr; gap: 8px; font-size: 10px; line-height: 1.4; }
+      .booking-row span { color: var(--muted); }
+      .booking-row b { text-align: right; font-size: 11px; }
+      .booking-note { padding-top: 6px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9px; line-height: 1.4; }
+      .booking-action { width: 100%; padding: 9px; border: 0; background: var(--flag-red); color: #fff; font-size: 11px; font-weight: 900; }
       .room-composer { padding: 9px 11px 13px; border-top: 1px solid var(--line); background: #fff; }
       .recipient { display: flex; gap: 5px; margin-bottom: 7px; }
       .recipient button { padding: 6px 9px; border: 0; border-radius: 999px; background: #efeadf; color: var(--muted); font-size: 10px; }
@@ -291,11 +301,11 @@
         chat: {
           kicker: "人机协作 · 04",
           title: "AI 先问清楚，<br />真人只确认关键决定。",
-          lead: "彭师傅的 Agent 先采集位置、故障情况和现场照片，给出初步判断和材料草拟；接单、报价和维修方案由彭师傅本人确认。",
+          lead: "彭师傅的 Agent 先采集现场信息、草拟材料；彭师傅确认时间和价格后，Agent 发来一张可以直接确认的服务预约卡。",
           proofs: [
             ["采", "位置、品类、照片，Agent 先问明白"],
-            ["拟", "初步判断和材料清单，上门前就有数"],
-            ["诺", "报价和方案，仍由彭师傅本人拍板"],
+            ["拟", "预约内容和材料清单，Agent 帮忙整理"],
+            ["诺", "报价和时间，仍由彭师傅本人拍板"],
           ],
           action: "看见产品的三个特点",
         },
@@ -390,7 +400,6 @@
             <div class="tags"><span class="tag">水电维修</span><span class="tag">价格公道</span><span class="tag">上门快</span></div>
             <div class="risk">有限的本人亲历，不是平台质量担保。赵阿姨没有推荐收益。</div>
             <button class="primary" data-next>先问彭师傅两句</button>
-            <button class="secondary">看看本周有什么</button>
           </div>
         `);
       }
@@ -408,20 +417,29 @@
           </div>
           <div class="thread">
             <div class="system-note">从赵阿姨的亲历卡进入 · 带入"水管漏水、尽快上门"</div>
-            <div class="room-msg"><div class="room-avatar">TA</div><div><div class="room-name">彭师傅的 Agent <span class="role">先采集</span></div><div class="room-bubble">我先帮彭师傅问清楚三件事：漏水位置？什么时候开始的？再拍一张现场照片。</div></div></div>
-            <div class="room-msg me"><div><div class="room-name">你</div><div class="room-bubble">水槽下面那根软管，昨晚发现的。<div class="photo-msg" style="margin-top:7px">📷 照片 · 水槽下方软管接口</div></div></div><div class="room-avatar">李</div></div>
             <div class="room-msg"><div class="room-avatar">TA</div><div><div class="room-name">彭师傅的 Agent <span class="role">初步判断</span></div><div class="room-bubble">收到。初步判断是软管接口老化渗水，不是主管道问题。
-              <div class="draft-card"><b>草拟 · 建议提前备料</b>
-                <li>4 分编织软管 ×1（约 ¥15）</li>
-                <li>生料带 ×1（约 ¥3）</li>
-                <div style="margin-top:5px;color:#7a5a08">确认后上门直接换，不跑第二趟。</div>
+              <div class="draft-card"><b>已采集 · 顾客授权本房间可见</b>
+                水槽下方软管 · 昨晚开始漏水 · 现场照片 1 张<br />
+                建议备料：4 分编织软管 ×1、生料带 ×1
               </div>
             </div></div></div>
-            <div class="room-msg"><div class="room-avatar human">彭</div><div><div class="room-name">彭师傅本人 <span class="role">真人确认</span></div><div class="room-bubble">照片看了，是软管老化。材料按单子买，明天下午过去换，工时 50。</div></div></div>
+            <div class="room-msg"><div class="room-avatar human">彭</div><div><div class="room-name">彭师傅本人 <span class="role">真人确认</span></div><div class="room-bubble">照片看了，是软管老化。材料约 18，工时 50，明天下午过去换。</div></div></div>
+            <div class="room-msg"><div class="room-avatar">TA</div><div><div class="room-name">彭师傅的 Agent <span class="role">发起预约</span></div><div class="room-bubble">彭师傅已经确认，我帮你整理成服务预约：
+              <div class="booking-card">
+                <div class="booking-head"><strong>🔧 上门维修预约</strong><span class="booking-status">师傅已确认</span></div>
+                <div class="booking-body">
+                  <div class="booking-row"><span>服务</span><b>厨房水槽软管更换</b></div>
+                  <div class="booking-row"><span>时间</span><b>明天 14:00–16:00</b></div>
+                  <div class="booking-row"><span>费用</span><b>工时 ¥50 · 材料约 ¥18</b></div>
+                  <div class="booking-note">详细门牌仅在你确认后提供给彭师傅；临时变化仍由双方真人确认。</div>
+                </div>
+                <button class="booking-action" data-next>确认预约</button>
+              </div>
+            </div></div></div>
           </div>
           <div class="room-composer">
-            <div class="recipient"><button class="active">发给彭师傅本人</button><button>发给彭师傅 Agent</button></div>
-            <div class="composer-row"><input value="好，材料我先买，约明天下午！" aria-label="消息" /><button data-next>➤</button></div>
+            <div class="recipient"><button>发给彭师傅本人</button><button class="active">发给彭师傅 Agent</button></div>
+            <div class="composer-row"><input placeholder="有问题可以继续问……" aria-label="消息" /><button>➤</button></div>
           </div>
         `);
       }
@@ -478,6 +496,12 @@
             </div>
             <button data-next aria-label="下一步">→</button>
           </nav>`;
+        if (step === "chat") {
+          requestAnimationFrame(() => {
+            const thread = document.querySelector(".thread");
+            if (thread) thread.scrollTop = thread.scrollHeight;
+          });
+        }
       }
 
       document.addEventListener("click", (event) => {
