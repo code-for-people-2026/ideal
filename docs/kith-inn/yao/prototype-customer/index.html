@@ -1,0 +1,858 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>街坊味 · 客户体验原型</title>
+    <!--
+      PROTOTYPE — 不接真实数据
+      问题：第一次接触产品的人，能否在 2 分钟内看懂四个最终结果？
+      四步高光路径，不展示初始化、配置、识别和审核过程；使用 ?step= 可分享状态。
+      运行：python3 -m http.server 4173
+    -->
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1e1b16;
+        --muted: #59504a;
+        --line: #e3ddcf;
+        --paper: #fff8ed;
+        --flag-red: #b64131;
+        --flag-red-dark: #8f2d22;
+        --flag-red-soft: #fbe9e4;
+        --flag-gold: #edae32;
+        --flag-gold-soft: #fff2d5;
+        --green: #287557;
+        --green-dark: #1e5d45;
+        --green-soft: #e7f3ec;
+        --phone: #1a1712;
+        --shadow: 0 32px 90px rgba(46, 38, 22, .15);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 8% 10%, rgba(212,43,30,.08), transparent 30rem),
+          radial-gradient(circle at 92% 84%, rgba(242,185,13,.16), transparent 30rem),
+          var(--paper);
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      button, input { font: inherit; }
+      button { cursor: pointer; }
+      .page { min-height: 100vh; padding: 28px 30px 110px; }
+      .topbar {
+        width: min(1220px, 100%); margin: 0 auto; display: flex; align-items: center;
+        justify-content: space-between; gap: 18px; padding-right: 178px;
+      }
+      .brand { display: flex; align-items: center; gap: 11px; font-weight: 900; }
+      .brand-mark {
+        display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px;
+        color: #fff; background: var(--flag-red); box-shadow: 0 10px 24px rgba(212,43,30,.25);
+      }
+      .brand-logo { width: 36px; height: 36px; border-radius: 12px; object-fit: cover; box-shadow: 0 10px 24px rgba(182,65,49,.22); }
+      .proto-note { color: var(--muted); font-size: 12px; font-weight: 750; }
+      .layout {
+        width: min(1220px, 100%); margin: 34px auto 0; display: grid;
+        grid-template-columns: minmax(340px, .95fr) minmax(390px, 1.05fr); gap: 72px; align-items: center;
+      }
+      .story { padding: 20px 0; }
+      .step-kicker { color: var(--flag-red); font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+      h1 { max-width: 610px; margin: 14px 0 18px; font-size: clamp(40px, 4.8vw, 64px); line-height: 1.03; letter-spacing: -.055em; text-wrap: balance; }
+      .lead { max-width: 570px; margin: 0; color: var(--muted); font-size: clamp(17px, 2vw, 20px); line-height: 1.7; }
+      .proofs { display: grid; gap: 12px; margin-top: 34px; max-width: 560px; }
+      .proof {
+        display: grid; grid-template-columns: 38px 1fr; gap: 13px; align-items: center;
+        padding: 14px 16px; border: 1px solid var(--line); border-radius: 17px;
+        background: rgba(255,255,255,.68); font-size: 14px; font-weight: 750;
+      }
+      .proof-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: var(--flag-red-soft); color: var(--flag-red); }
+      .story-action {
+        display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 15px 20px;
+        border: 0; border-radius: 15px; background: var(--ink); color: #fff; font-weight: 850;
+        box-shadow: 0 14px 30px rgba(23,32,25,.16);
+      }
+      .story-action span { color: var(--flag-gold); font-size: 20px; }
+      .visual { position: relative; min-height: 790px; display: grid; place-items: center; }
+      .halo {
+        position: absolute; inset: 8% 4%; border-radius: 50%; filter: blur(.1px);
+        background: radial-gradient(circle, rgba(242,185,13,.32), rgba(212,43,30,.08) 45%, transparent 69%);
+      }
+      .phone {
+        position: relative; z-index: 1; width: min(390px, 92vw); height: 748px; overflow: hidden;
+        border: 7px solid var(--phone); border-radius: 42px; background: #fff; box-shadow: var(--shadow);
+      }
+      .phone::before {
+        content: ""; position: absolute; z-index: 8; top: 8px; left: 50%; transform: translateX(-50%);
+        width: 92px; height: 25px; border-radius: 14px; background: var(--phone);
+      }
+      .phone-screen { min-height: 100%; background: #fff; }
+      .statusbar {
+        position: relative; z-index: 7; height: 35px; padding: 0 20px; display: flex;
+        align-items: center; justify-content: space-between; font-size: 11px; font-weight: 800;
+      }
+      .appbar {
+        height: 58px; padding: 0 15px; display: grid; grid-template-columns: 62px 1fr 62px;
+        align-items: center; border-bottom: 1px solid rgba(0,0,0,.06); font-size: 17px; font-weight: 850;
+      }
+      .appbar strong { text-align: center; }
+      .back { padding: 0; border: 0; background: transparent; color: inherit; text-align: left; font-size: 27px; font-weight: 400; }
+      .back-placeholder { display: block; width: 42px; height: 42px; }
+      .capsule { justify-self: end; width: 60px; height: 27px; border: 1px solid rgba(0,0,0,.16); border-radius: 999px; display: grid; place-items: center; letter-spacing: 3px; font-size: 10px; }
+      .screen-body { height: 648px; overflow: hidden; }
+      .phone.has-app-tabs .screen-body { height: 590px; }
+      .app-tabs {
+        position: relative; z-index: 7; height: 58px; display: grid; grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid rgba(0,0,0,.08); background: rgba(255,255,255,.98);
+      }
+      .app-tabs button { border: 0; background: transparent; color: #8a8178; font-size: 10px; font-weight: 800; }
+      .app-tabs button.active { color: var(--green-dark); }
+      .wechat .statusbar, .wechat .appbar { background: #ededed; }
+      .wechat .screen-body { background: #ededed; padding: 15px 12px 70px; position: relative; }
+      .time { text-align: center; color: #8a8478; font-size: 11px; margin: 6px 0 17px; }
+      .msg { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 17px; }
+      .msg.me { flex-direction: row-reverse; }
+      .avatar { flex: 0 0 auto; display: grid; place-items: center; width: 39px; height: 39px; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 900; }
+      .avatar.blue { background: #5072a8; } .avatar.gold { background: var(--flag-gold); } .avatar.red { background: var(--flag-red); }
+      .sender { margin: 0 4px 4px; color: #6f6a60; font-size: 11px; }
+      .msg.me .sender { text-align: right; }
+      .bubble { max-width: 260px; padding: 11px 13px; border-radius: 4px 15px 15px; background: #fff; font-size: 14px; line-height: 1.55; }
+      .msg.me .bubble { border-radius: 15px 4px 15px 15px; background: #95ec69; }
+      .typing { display: inline-flex; gap: 4px; padding: 14px; }
+      .typing i { width: 5px; height: 5px; border-radius: 50%; background: #888; animation: bob 1s infinite alternate; }
+      .typing i:nth-child(2) { animation-delay: .18s; } .typing i:nth-child(3) { animation-delay: .36s; }
+      @keyframes bob { to { transform: translateY(-4px); opacity: .4; } }
+      .mp-card { width: 260px; overflow: hidden; border: 0; border-radius: 9px; background: #fff; text-align: left; box-shadow: 0 3px 12px rgba(0,0,0,.08); }
+      .mp-main { padding: 14px; }
+      .mp-brand { display: flex; align-items: center; gap: 7px; color: #6f6a60; font-size: 11px; }
+      .mini-logo { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; background: var(--flag-red); color: #fff; font-weight: 900; }
+      .mp-title { margin-top: 10px; font-size: 17px; font-weight: 900; line-height: 1.35; }
+      .mp-status { margin-top: 8px; color: var(--flag-red-dark); font-size: 10px; font-weight: 900; }
+      .mp-highlight { margin-top: 9px; padding: 11px; border-radius: 10px; background: var(--flag-red-soft); color: var(--flag-red-dark); font-size: 12px; line-height: 1.5; }
+      .mp-foot { padding: 8px 14px; border-top: 1px solid #eee; color: #8a8478; font-size: 11px; }
+      .chat-input { position: absolute; left: 0; right: 0; bottom: 0; height: 57px; padding: 9px 11px; display: flex; gap: 8px; background: #f7f7f7; border-top: 1px solid #ddd; }
+      .chat-field { flex: 1; border-radius: 7px; background: #fff; }
+      .round-tool { width: 36px; height: 36px; border: 1px solid #aaa; border-radius: 50%; }
+      .share-compact .screen-body { padding: 6px 10px 51px; overflow: hidden; }
+      .share-compact .time { margin: 1px 0 6px; font-size: 9px; }
+      .share-compact .msg { gap: 7px; margin-bottom: 6px; }
+      .share-compact .avatar { width: 30px; height: 30px; border-radius: 7px; font-size: 10px; }
+      .share-compact .sender { margin: 0 3px 2px; font-size: 8px; }
+      .share-compact .bubble { max-width: 272px; padding: 6px 9px; border-radius: 3px 11px 11px; font-size: 11px; line-height: 1.4; }
+      .share-compact .mp-card { width: 266px; border-radius: 7px; }
+      .share-compact .mp-main { padding: 8px 10px; }
+      .share-compact .mp-brand { gap: 5px; font-size: 8px; }
+      .share-compact .mini-logo-image { width: 16px; height: 16px; border-radius: 4px; }
+      .share-compact .mp-title { margin-top: 5px; font-size: 14px; line-height: 1.25; }
+      .share-compact .mp-status { margin-top: 4px; font-size: 8px; }
+      .share-compact .mp-highlight { margin-top: 5px; padding: 6px 8px; border-radius: 7px; font-size: 9px; line-height: 1.4; }
+      .share-compact .mp-foot { padding: 5px 10px; font-size: 8px; }
+      .share-compact .delivery-time { margin-top: 1px; }
+      .payment-card { border-top: 3px solid var(--flag-gold); }
+      .payment-card .mp-status { color: #98620c; }
+      .payment-card .mp-highlight { background: var(--flag-gold-soft); color: #765313; }
+      .payment-summary { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-top: 4px; }
+      .payment-summary span { color: #98620c; font-size: 8px; font-weight: 900; }
+      .payment-summary strong { font-size: 15px; }
+      .share-compact .chat-input { height: 51px; padding: 7px 9px; gap: 7px; }
+      .share-compact .round-tool { width: 34px; height: 34px; }
+      .mini .statusbar, .mini .appbar { background: #fff; }
+      .mini .screen-body { padding: 15px; background: #faf8f2; overflow-y: auto; }
+      .menu-aligned .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
+      .week-toolbar { display: grid; grid-template-columns: 35px 1fr 35px; align-items: center; gap: 7px; margin-bottom: 10px; }
+      .week-toolbar button { width: 35px; height: 35px; border: 1px solid var(--line); border-radius: 11px; background: #fff; color: var(--ink); font-size: 20px; }
+      .week-range { text-align: center; }
+      .week-range strong { display: block; font-size: 15px; }
+      .week-range span { color: var(--muted); font-size: 9px; }
+      .plan-state { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; padding: 10px 11px; border-radius: 12px; background: var(--green-soft); }
+      .plan-state strong { font-size: 12px; }
+      .plan-state span { padding: 5px 7px; border-radius: 999px; background: #fff; color: var(--green-dark); font-size: 9px; font-weight: 850; }
+      .week-plans { display: grid; gap: 7px; padding-bottom: 4px; }
+      .day-plan { overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+      .day-plan.open { border-color: rgba(182,65,49,.5); box-shadow: 0 6px 18px rgba(52,41,31,.06); }
+      .day-plan.locked { border-color: rgba(40,117,87,.32); }
+      .day-plan.locked .day-toggle { background: #f8fcfa; }
+      .day-toggle { width: 100%; padding: 10px 11px; border: 0; background: #fff; text-align: left; }
+      .day-head { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
+      .day-head strong { font-size: 12px; }
+      .day-head b { color: var(--green-dark); font-size: 9px; }
+      .day-summary { display: grid; gap: 2px; margin-top: 5px; color: var(--muted); font-size: 9px; line-height: 1.4; }
+      .day-summary span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .day-detail { padding: 0 10px 10px; border-top: 1px solid #f0e9df; }
+      .meal-block { padding-top: 9px; }
+      .meal-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; color: var(--muted); font-size: 9px; font-weight: 800; }
+      .meal-title span { color: var(--green-dark); }
+      .mini-dishes { display: grid; gap: 4px; }
+      .mini-dish { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 6px; min-height: 31px; padding: 5px 6px 5px 9px; border-radius: 9px; background: #f8f5ef; }
+      .mini-dish b { overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+      .mini-dish small { padding: 3px 5px; border-radius: 999px; background: var(--flag-red-soft); color: var(--flag-red-dark); font-size: 8px; font-weight: 850; }
+      .mini-dish small.veg { background: var(--green-soft); color: var(--green-dark); }
+      .mini-dish small.soup { background: var(--flag-gold-soft); color: #80580e; }
+      .locked-dish { min-width: 42px; color: var(--green-dark); font-size: 8px; font-weight: 850; text-align: center; }
+      .rotate-dish { display: inline-grid; width: 28px; height: 28px; place-items: center; padding: 0; border: 0; border-radius: 7px; background: transparent; color: var(--muted); transition: background 140ms ease, opacity 140ms ease, transform 140ms ease; }
+      .rotate-dish:hover { background: #f0ebe3; }
+      .rotate-dish:active { opacity: .8; transform: scale(.95); }
+      .rotate-dish img { width: 14px; height: 14px; }
+      .plan-action { position: sticky; z-index: 3; bottom: -15px; margin-top: 9px; padding: 8px 0 2px; background: linear-gradient(transparent, #fbf8f1 25%); }
+      .plan-action .primary { margin-top: 0; box-shadow: 0 8px 20px rgba(182,65,49,.16); }
+      .candidate-sheet { position: sticky; z-index: 8; bottom: -15px; margin: 10px -15px -15px; padding: 13px 15px 17px; border-top: 1px solid var(--line); border-radius: 18px 18px 0 0; background: #fff; box-shadow: 0 -18px 40px rgba(41,35,29,.18); }
+      .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+      .sheet-head strong { font-size: 13px; }
+      .sheet-head button { width: 32px; height: 32px; border: 0; border-radius: 10px; background: #f3eee5; color: var(--muted); font-weight: 900; }
+      .candidate-list { display: grid; gap: 5px; }
+      .candidate-list button { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); text-align: left; }
+      .candidate-list button b { font-size: 11px; }
+      .candidate-list button span { color: var(--muted); font-size: 9px; }
+      .promise {
+        position: relative; overflow: hidden; padding: 18px; border-radius: 20px; background: var(--ink); color: #fff;
+      }
+      .promise::after { content: ""; position: absolute; right: -38px; bottom: -54px; width: 150px; height: 150px; border-radius: 50%; background: rgba(242,185,13,.20); }
+      .promise-label { color: var(--flag-gold); font-size: 11px; font-weight: 900; letter-spacing: .08em; }
+      .promise h3 { position: relative; z-index: 1; margin: 8px 0 8px; font-size: 24px; line-height: 1.15; }
+      .promise p { position: relative; z-index: 1; margin: 0; opacity: .92; font-size: 13px; line-height: 1.6; }
+      .trust-card { margin-top: 12px; padding: 16px; border: 1px solid var(--line); border-radius: 20px; background: #fff; box-shadow: 0 9px 28px rgba(24,48,31,.07); }
+      .relation { display: flex; align-items: center; gap: 10px; }
+      .relation-avatar { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px; background: var(--flag-gold-soft); color: #865e14; font-weight: 900; }
+      .relation strong { display: block; font-size: 14px; }
+      .relation small { color: var(--muted); font-size: 11px; }
+      .quote { margin: 13px 0; padding: 11px 12px; border-left: 4px solid var(--flag-gold); border-radius: 0 10px 10px 0; background: var(--flag-gold-soft); font-size: 13px; line-height: 1.55; }
+      .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+      .fact { padding: 9px 7px; border-radius: 10px; background: #f3f6f3; text-align: center; }
+      .fact strong { display: block; font-size: 15px; }
+      .fact span { color: var(--muted); font-size: 10px; }
+      .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+      .tag { padding: 5px 9px; border-radius: 999px; background: var(--flag-red-soft); color: var(--flag-red-dark); font-size: 11px; font-weight: 800; }
+      .risk { margin-top: 10px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+      .primary, .secondary {
+        width: 100%; padding: 13px; border-radius: 12px; font-weight: 850; border: 0;
+      }
+      .primary { margin-top: 12px; background: var(--flag-red); color: #fff; }
+      .secondary { margin-top: 8px; border: 1px solid var(--line); background: #fff; color: var(--ink); }
+      .room .screen-body { position: relative; display: flex; flex-direction: column; background: #f8f6f0; }
+      .room-head { padding: 8px 13px; border-bottom: 1px solid var(--line); background: #fff; }
+      .people { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+      .person { text-align: center; font-size: 9px; color: var(--muted); }
+      .person i { display: grid; place-items: center; width: 24px; height: 24px; margin: 0 auto 2px; border-radius: 8px; color: #fff; font-style: normal; font-weight: 900; font-size: 10px; }
+      .person.human i { background: var(--flag-red); } .person.agent i { background: #536c9d; } .person.system i { background: #b8860b; }
+      .room-scope { margin-top: 5px; padding: 5px 8px; border-radius: 8px; background: var(--flag-red-soft); color: var(--flag-red-dark); font-size: 10px; }
+      .thread { flex: 1; padding: 11px 13px; overflow-y: auto; }
+      .system-note { margin-bottom: 7px; color: #6e6759; text-align: center; font-size: 10px; }
+      .room-msg { display: grid; grid-template-columns: 29px 1fr; gap: 8px; margin-bottom: 9px; }
+      .room-msg.me { grid-template-columns: 1fr 29px; }
+      .room-msg.me .room-name { text-align: right; }
+      .room-msg.me .room-bubble { border-radius: 12px 3px 12px 12px; background: var(--flag-red); color: #fff; }
+      .room-msg.me .room-avatar { background: var(--flag-red); }
+      .room-avatar { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 9px; background: #536c9d; color: #fff; font-size: 9px; font-weight: 900; }
+      .room-avatar.system { background: #b8860b; }
+      .room-avatar.human { background: var(--flag-red); }
+      .room-name { margin-bottom: 3px; color: var(--muted); font-size: 10px; }
+      .role { margin-left: 4px; padding: 2px 4px; border-radius: 4px; background: #e8edf6; color: #47608f; }
+      .room-bubble { padding: 9px 10px; border-radius: 3px 12px 12px; background: #fff; font-size: 13px; line-height: 1.55; box-shadow: 0 2px 6px rgba(0,0,0,.03); }
+      .photo-msg { width: 100%; height: 44px; border-radius: 8px; background: #e8e2d5; display: grid; place-items: center; color: #8a8478; font-size: 11px; line-height: 1.4; text-align: center; padding: 8px; }
+      .draft-card { margin-top: 8px; padding: 8px 10px; border-radius: 9px; background: var(--flag-gold-soft); font-size: 12px; line-height: 1.55; }
+      .draft-card b { display: block; margin-bottom: 5px; color: #7a5a08; font-size: 11px; letter-spacing: .03em; }
+      .draft-card li { margin-left: 16px; line-height: 1.4; }
+      .booking-card { margin-top: 8px; overflow: hidden; border: 1px solid #ead9bb; border-radius: 12px; background: #fff; color: var(--ink); box-shadow: 0 5px 14px rgba(46,38,22,.08); }
+      .booking-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; background: var(--flag-gold-soft); }
+      .booking-head strong { font-size: 13px; }
+      .booking-status { padding: 3px 6px; border-radius: 999px; background: #fff; color: #7a5a08; font-size: 9px; font-weight: 900; }
+      .booking-body { display: grid; gap: 7px; padding: 9px 10px; }
+      .booking-row { display: grid; grid-template-columns: 48px 1fr; gap: 8px; font-size: 10px; line-height: 1.4; }
+      .booking-row span { color: var(--muted); }
+      .booking-row b { text-align: right; font-size: 11px; }
+      .booking-note { padding-top: 6px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9px; line-height: 1.4; }
+      .booking-action { width: 100%; padding: 9px; border: 0; background: var(--flag-red); color: #fff; font-size: 11px; font-weight: 900; }
+      .room-composer { padding: 9px 11px 13px; border-top: 1px solid var(--line); background: #fff; }
+      .recipient { display: flex; gap: 5px; margin-bottom: 7px; }
+      .recipient button { padding: 6px 9px; border: 0; border-radius: 999px; background: #efeadf; color: var(--muted); font-size: 10px; }
+      .recipient button.active { background: var(--flag-red); color: #fff; }
+      .composer-row { display: flex; gap: 7px; }
+      .composer-row input { min-width: 0; flex: 1; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: #faf8f2; font-size: 12px; }
+      .composer-row button { width: 38px; border: 0; border-radius: 10px; background: var(--flag-red); color: #fff; }
+      .finish .screen-body { padding: 22px 18px; background: var(--ink); color: #fff; }
+      .finish-mark { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 19px; background: var(--flag-gold); color: var(--ink); font-size: 28px; font-weight: 900; }
+      .finish h3 { margin: 24px 0 10px; font-size: 31px; line-height: 1.08; letter-spacing: -.04em; }
+      .finish-lead { margin: 0; color: rgba(255,255,255,.84); font-size: 13px; line-height: 1.65; }
+      .value-list { display: grid; gap: 10px; margin-top: 27px; }
+      .value { display: grid; grid-template-columns: 34px 1fr; gap: 11px; align-items: center; padding: 12px; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; background: rgba(255,255,255,.07); }
+      .value b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; background: rgba(242,185,13,.18); color: var(--flag-gold); }
+      .value strong { display: block; font-size: 13px; }
+      .value small { display: block; margin-top: 2px; color: rgba(255,255,255,.78); font-size: 11px; line-height: 1.45; }
+      .new-need { margin-top: 22px; padding: 13px; border: 1px solid var(--flag-gold); border-radius: 13px; color: var(--flag-gold); text-align: center; font-size: 12px; font-weight: 850; }
+      .mini-logo-image { width: 22px; height: 22px; border-radius: 6px; object-fit: cover; }
+      .result-card { margin-top: 12px; overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
+      .result-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 13px 14px; background: var(--flag-gold-soft); }
+      .result-head strong { font-size: 14px; }
+      .result-head span { color: #7a5a08; font-size: 10px; font-weight: 900; }
+      .result-body { display: grid; gap: 8px; padding: 12px 14px; }
+      .dish-line, .meal-choice { display: grid; grid-template-columns: 58px 1fr auto; gap: 8px; align-items: center; padding-bottom: 8px; border-bottom: 1px solid #eee8dc; font-size: 11px; line-height: 1.45; }
+      .dish-line:last-child, .meal-choice:last-child { padding-bottom: 0; border-bottom: 0; }
+      .dish-line span, .meal-choice span { color: var(--muted); }
+      .dish-line b, .meal-choice b { font-size: 12px; }
+      .dish-line em, .meal-choice em { color: var(--flag-red-dark); font-size: 10px; font-style: normal; font-weight: 850; }
+      .success-strip { margin-bottom: 12px; padding: 13px; border-radius: 15px; background: #e7f3ec; color: #1e5d45; font-size: 12px; font-weight: 850; line-height: 1.5; }
+      .order-overview { padding: 15px; background: #faf8f2; overflow-y: auto; }
+      .order-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 11px; }
+      .order-head span { color: var(--muted); font-size: 11px; }
+      .order-head strong { display: block; margin-top: 3px; font-size: 21px; }
+      .order-head em { color: #1e5d45; font-size: 12px; font-style: normal; font-weight: 850; }
+      .order-diff { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 9px 0; }
+      .order-diff div { padding: 8px 5px; border-radius: 10px; background: #f3f0e8; text-align: center; }
+      .order-diff strong { display: block; font-size: 16px; }
+      .order-diff span { display: block; margin-top: 2px; color: var(--muted); font-size: 8px; line-height: 1.25; }
+      .order-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 10px 0; padding: 4px; border-radius: 12px; background: #efeae1; }
+      .order-tabs span { min-height: 30px; display: grid; place-items: center; border-radius: 9px; color: var(--muted); font-size: 9px; font-weight: 850; }
+      .order-tabs span.active { background: #fff; color: var(--ink); box-shadow: 0 3px 10px rgba(52, 41, 31, .08); }
+      .order-receipts { display: grid; gap: 7px; }
+      .order-receipt { padding: 9px 10px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+      .order-receipt-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+      .order-receipt-head b { font-size: 12px; }
+      .order-receipt-head strong { font-size: 13px; }
+      .order-receipt p { margin: 4px 0 0; color: var(--muted); font-size: 9px; line-height: 1.4; }
+      .order-state { display: inline-block; margin-top: 6px; padding: 4px 7px; border-radius: 999px; background: #e7f3ec; color: #1e5d45; font-size: 9px; font-weight: 850; }
+      .order-state.warn { background: var(--flag-gold-soft); color: #80580e; }
+      .order-state.none { background: var(--flag-red-soft); color: var(--flag-red-dark); }
+      .reconcile-summary { margin: 10px 0; padding: 11px; border-radius: 13px; background: var(--flag-gold-soft); color: #7a5a08; font-size: 10px; line-height: 1.45; }
+      .reconcile-summary b { display: block; margin-bottom: 3px; font-size: 12px; }
+      .reconcile-focus .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
+      .reconcile-progress { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 14px; border-radius: 16px; background: var(--green-dark); color: #fff; box-shadow: 0 10px 24px rgba(30,93,69,.14); }
+      .reconcile-progress span { display: block; font-size: 10px; font-weight: 800; opacity: .78; }
+      .reconcile-progress strong { display: block; margin-top: 3px; font-size: 23px; line-height: 1.1; }
+      .reconcile-progress em { font-size: 10px; font-style: normal; font-weight: 850; opacity: .82; }
+      .reconcile-caption { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 13px 1px 8px; }
+      .reconcile-caption strong { font-size: 13px; }
+      .reconcile-caption span { color: var(--muted); font-size: 9px; }
+      .reconcile-list { display: grid; gap: 8px; }
+      .reconcile-item { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 11px; border: 1px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer; transition: background .15s ease, border-color .15s ease; }
+      .reconcile-item.checked { border-color: #bad7ca; background: #f1f8f4; }
+      .reconcile-check { width: 19px; height: 19px; margin: 2px 0 0; accent-color: var(--green); cursor: pointer; }
+      .reconcile-item-main { min-width: 0; }
+      .reconcile-item-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+      .reconcile-item-head b { font-size: 12px; }
+      .reconcile-item-head strong { font-size: 14px; }
+      .reconcile-item.checked .reconcile-item-head b,
+      .reconcile-item.checked .reconcile-item-head strong { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+      .reconcile-order { margin: 4px 0 0; color: var(--muted); font-size: 9px; line-height: 1.4; }
+      .reconcile-reason, .reconcile-manual, .reconcile-wait { margin-top: 7px; padding: 7px 8px; border-radius: 9px; font-size: 9px; font-weight: 800; line-height: 1.4; }
+      .reconcile-reason { background: #dfeee7; color: #1e5d45; }
+      .reconcile-manual { background: #e9f3ed; color: #1e5d45; }
+      .reconcile-wait { background: #f4f0e8; color: #756b5f; }
+      .reconcile-note { margin: 10px 2px 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
+      .orders-focus .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
+      .order-hero { padding: 16px; border-radius: 18px; background: var(--green-dark); color: #fff; box-shadow: 0 10px 24px rgba(30,93,69,.16); }
+      .order-hero-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .order-hero-top span { font-size: 12px; font-weight: 800; opacity: .82; }
+      .order-hero-top b { padding: 5px 8px; border-radius: 999px; background: rgba(255,255,255,.15); font-size: 10px; }
+      .order-hero strong { display: block; margin-top: 8px; font-size: 28px; line-height: 1.1; }
+      .order-hero p { margin: 6px 0 0; color: rgba(255,255,255,.8); font-size: 12px; line-height: 1.45; }
+      .order-priority { margin-top: 11px; padding: 12px 13px; border: 1px solid #ecd49d; border-radius: 14px; background: var(--flag-gold-soft); }
+      .order-priority-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .order-priority-head strong { font-size: 13px; }
+      .order-priority-head span { padding: 4px 7px; border-radius: 999px; background: #fff; color: #80580e; font-size: 10px; font-weight: 850; }
+      .order-priority p { margin: 5px 0 0; color: #765313; font-size: 11px; line-height: 1.45; }
+      .order-priority button { width: 100%; min-height: 36px; margin-top: 9px; border: 1px solid #d8b96d; border-radius: 10px; background: #fff; color: #765313; font-size: 11px; font-weight: 850; }
+      .priority-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; }
+      .priority-actions button { margin: 0; }
+      .priority-actions button.approve { border-color: transparent; background: var(--green); color: #fff; }
+      .order-section-head { display: flex; align-items: center; justify-content: space-between; margin: 15px 1px 8px; }
+      .order-section-head strong { font-size: 14px; }
+      .order-section-head span { color: var(--muted); font-size: 11px; }
+      .meal-filter { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; padding: 3px; border-radius: 10px; background: #eee8dd; }
+      .meal-filter button { min-width: 43px; min-height: 28px; padding: 4px 7px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); font-size: 10px; font-weight: 850; }
+      .meal-filter button.active { background: #fff; color: var(--green-dark); box-shadow: 0 3px 9px rgba(52,41,31,.08); }
+      .compact-orders { display: grid; gap: 7px; }
+      .compact-order { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 10px; min-height: 58px; padding: 10px 11px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+      .compact-order b { display: block; font-size: 13px; }
+      .compact-order p { margin: 4px 0 0; color: var(--muted); font-size: 11px; line-height: 1.4; }
+      .compact-order-side { display: grid; justify-items: end; gap: 5px; }
+      .compact-order-side strong { font-size: 13px; }
+      .compact-state { padding: 4px 7px; border-radius: 999px; background: var(--green-soft); color: var(--green-dark); font-size: 9px; font-weight: 850; white-space: nowrap; }
+      .compact-state.warn { background: var(--flag-gold-soft); color: #80580e; }
+      .orders-focus .primary { min-height: 42px; margin-top: 11px; }
+      .floating-card {
+        position: absolute; z-index: 3; padding: 11px 14px; border: 1px solid var(--line); border-radius: 14px;
+        background: rgba(255,255,255,.9); box-shadow: 0 14px 34px rgba(24,48,31,.13); backdrop-filter: blur(12px);
+        font-size: 11px; font-weight: 800;
+      }
+      .floating-card.top { top: 10%; right: -4%; transform: rotate(3deg); }
+      .floating-card.bottom { bottom: 11%; left: -6%; transform: rotate(-3deg); }
+      .floating-card em { display: block; margin-top: 4px; color: var(--flag-red); font-size: 14px; font-style: normal; }
+      .nav {
+        position: fixed; z-index: 20; left: 50%; bottom: 22px; transform: translateX(-50%);
+        display: flex; align-items: center; gap: 5px; padding: 7px; border: 1px solid rgba(255,255,255,.5);
+        border-radius: 999px; background: rgba(23,32,25,.92); box-shadow: 0 16px 46px rgba(0,0,0,.25); backdrop-filter: blur(12px);
+      }
+      .nav button { display: grid; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 50%; background: transparent; color: #fff; font-size: 18px; }
+      .nav button:hover { background: rgba(255,255,255,.12); }
+      .nav-label { min-width: 158px; color: #fff; text-align: center; font-size: 12px; font-weight: 850; }
+      .dots { display: flex; justify-content: center; gap: 5px; margin-top: 3px; }
+      .dots i { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.25); }
+      .dots i.active { width: 13px; border-radius: 5px; background: var(--flag-gold); }
+      .audience-switch {
+        position: fixed; z-index: 20; top: 22px; right: 24px; padding: 9px 12px; border: 1px solid var(--line);
+        border-radius: 999px; background: rgba(255,255,255,.86); color: var(--muted); text-decoration: none;
+        font-size: 11px; font-weight: 800; box-shadow: 0 8px 24px rgba(24,48,31,.08); backdrop-filter: blur(10px);
+      }
+      @media (max-width: 930px) {
+        .topbar { padding-right: 0; }
+        .layout { grid-template-columns: 1fr; gap: 20px; }
+        .story { text-align: center; }
+        .lead, .proofs { margin-left: auto; margin-right: auto; }
+        .story-action { margin-left: auto; margin-right: auto; }
+        .visual { min-height: 770px; }
+        .floating-card.top { right: 5%; } .floating-card.bottom { left: 4%; }
+      }
+      @media (max-width: 560px) {
+        .page { padding: 18px 14px 105px; }
+        .proto-note { display: none; }
+        .audience-switch { position: static; display: inline-block; margin: 14px; }
+        .layout { margin-top: 14px; }
+        .story { padding-top: 0; }
+        h1 { font-size: 43px; }
+        .proofs { display: none; }
+        .visual { min-height: 720px; }
+        .phone { height: 690px; border-radius: 36px; }
+        .screen-body { height: 590px; }
+        .phone.has-app-tabs .screen-body { height: 532px; }
+        .floating-card { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="audience-switch" href="../prototype-implementation/">切到实施对照原型 →</a>
+    <div id="app"></div>
+
+    <script>
+      const steps = ["menu", "share", "orders", "reconcile"];
+      const labels = {
+        menu: "生成菜单",
+        share: "微信确认",
+        orders: "订单管理",
+        reconcile: "订单对账",
+      };
+
+      const copy = {
+        menu: {
+          kicker: "核心任务 · 01",
+          title: "整周看得见，<br />不满意当场换。",
+          lead: "生成后周一到周五都留在同一个页面。未发布日期可以在原位置换菜；卡片一旦发布，这一天就冻结为只读，避免顾客看到的菜单和桃子后来修改的不一致。",
+          proofs: [
+            ["周", "五天十餐同屏可回看，不只展示某一天"],
+            ["锁", "已发布日期仍可展开查看，但不能再换菜"],
+            ["换", "只有未发布日期保留换菜与候选列表"],
+          ],
+          action: "确认整周，再按天生成预订卡片",
+        },
+        share: {
+          kicker: "微信结果 · 02",
+          title: "开饭、下单、送达，<br />微信里都有确认。",
+          lead: "桃子确认开饭后在群里发明日卡片，顾客下单后把两笔餐次订单摘要回传；某一餐送到后，桃子只提醒这一餐付款，顾客继续通过微信转账。",
+          proofs: [
+            ["明", "卡片只对应明天的午饭和晚饭"],
+            ["回", "订单摘要可回传提醒桃子"],
+            ["付", "午饭、晚饭按各自送达时间分别提醒付款"],
+          ],
+          action: "看订单怎么汇总",
+        },
+        orders: {
+          kicker: "经营结果 · 03",
+          title: "明天做多少，<br />桃子一眼就知道。",
+          lead: "先告诉桃子明天一共做多少，再把唯一需要处理的长期申请提出来。短单、长期订单和桃子补单仍在同一张列表里，但不再让所有信息同时抢注意力。",
+          proofs: [
+            ["备", "明日短单和生效长期单自动汇总"],
+            ["审", "只有待审核申请需要桃子决定"],
+            ["查", "全部订单保留在列表，按需查看"],
+          ],
+          action: "看订单怎么对账",
+        },
+        reconcile: {
+          kicker: "经营结果 · 04",
+          title: "不接支付，<br />也能把到账记录核清。",
+          lead: "对账变成一张可以逐笔划掉的清单。系统只替桃子划掉唯一匹配，并把依据写清楚；桃子也可以自己划掉任何一笔，不需要填写理由。",
+          proofs: [
+            ["清", "每笔到账记录都是一项可勾销清单"],
+            ["理", "系统代划必须展示明确匹配依据"],
+            ["手", "桃子手动划掉，不额外追问原因"],
+          ],
+          action: "重新看一遍",
+        },
+      };
+
+      let expandedShowcaseDay = null;
+      let showcaseCandidateSheet = null;
+      let showcasePendingState = "idle";
+      let showcaseOrderMealFilter = "all";
+      const showcaseReconcileChecked = new Set([0]);
+      const showcaseReconcileSources = { 0: "system" };
+      const showcaseDishOverrides = {};
+      const publishedShowcaseDays = new Set([0]);
+      const showcaseWeeklyMenu = [
+        { day: "周一", date: "8月3日", lunch: [["土豆烧牛肉","meat"],["白切鸡","meat"],["蒜蓉菜心","veg"],["清炒西兰花","veg"],["冬瓜虾皮汤","soup"]], dinner: [["梅菜扣肉","meat"],["清蒸鲈鱼","meat"],["荷塘小炒","veg"],["手撕包菜","veg"],["玉米排骨汤","soup"]] },
+        { day: "周二", date: "8月4日", lunch: [["红烧排骨","meat"],["番茄炒蛋","meat"],["清炒油麦菜","veg"],["香菇青菜","veg"],["海带豆腐汤","soup"]], dinner: [["红烧牛腩","meat"],["清蒸鲈鱼","meat"],["蒜蓉时蔬","veg"],["手撕包菜","veg"],["番茄蛋汤","soup"]] },
+        { day: "周三", date: "8月5日", lunch: [["香菇滑鸡","meat"],["萝卜炖肉","meat"],["清炒菠菜","veg"],["酸辣土豆丝","veg"],["菌菇汤","soup"]], dinner: [["糖醋排骨","meat"],["芹菜炒肉","meat"],["蚝油生菜","veg"],["家常茄子","veg"],["紫菜蛋花汤","soup"]] },
+        { day: "周四", date: "8月6日", lunch: [["啤酒鸭","meat"],["豆角炒肉","meat"],["蒜蓉空心菜","veg"],["清炒藕片","veg"],["萝卜汤","soup"]], dinner: [["清炖狮子头","meat"],["豉汁蒸鱼","meat"],["小炒杏鲍菇","veg"],["上汤娃娃菜","veg"],["丝瓜蛋汤","soup"]] },
+        { day: "周五", date: "8月7日", lunch: [["板栗烧鸡","meat"],["木须肉","meat"],["清炒小白菜","veg"],["麻婆豆腐","veg"],["莲藕排骨汤","soup"]], dinner: [["土豆焖鸭","meat"],["红烧带鱼","meat"],["蒜蓉西兰花","veg"],["干煸四季豆","veg"],["冬瓜肉丸汤","soup"]] },
+      ];
+      const showcaseCandidatePools = {
+        meat: [["香菇滑鸡","meat"],["萝卜炖肉","meat"],["芹菜炒肉","meat"]],
+        veg: [["荷塘小炒","veg"],["香菇青菜","veg"],["清炒藕片","veg"]],
+        soup: [["菌菇汤","soup"],["冬瓜虾皮汤","soup"],["紫菜蛋花汤","soup"]],
+      };
+
+      function currentStep() {
+        const value = new URLSearchParams(location.search).get("step");
+        const aliases = { order: "orders", ledger: "reconcile" };
+        const step = aliases[value] || value;
+        return steps.includes(step) ? step : "menu";
+      }
+
+      function go(step) {
+        const url = new URL(location.href);
+        url.searchParams.set("step", step);
+        history.replaceState({}, "", url);
+        render();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function cycle(delta) {
+        const index = steps.indexOf(currentStep());
+        go(steps[(index + delta + steps.length) % steps.length]);
+      }
+
+      function phoneShell(kind, title, body, options = {}) {
+        const backControl = options.back === false
+          ? `<span class="back-placeholder" aria-hidden="true"></span>`
+          : `<button class="back" data-prev aria-label="返回上一个结果">‹</button>`;
+        const activeTab = options.activeTab || "menu";
+        const tabs = options.tabs ? `<nav class="app-tabs" aria-label="桃子端主导航">${[
+          ["home", "首页", "menu"], ["menu", "菜单", "menu"], ["orders", "订单", "orders"], ["settings", "我的", "menu"],
+        ].map(([key, label, target]) => `<button class="${activeTab === key ? "active" : ""}" data-showcase-tab="${target}" ${activeTab === key ? 'aria-current="page"' : ""}>${label}</button>`).join("")}</nav>` : "";
+        return `<div class="phone ${kind}">
+          <div class="phone-screen">
+            <div class="statusbar"><span>9:41</span><span>${options.engineerChrome ? "5G · 86%" : "▮▮▮ ⌁ ▰"}</span></div>
+            <div class="appbar">${backControl}<strong>${title}</strong><span class="capsule">•• ◉</span></div>
+            <div class="screen-body">${body}</div>
+            ${tabs}
+          </div>
+        </div>`;
+      }
+
+      function showcaseDishKey(dayIndex, meal, dishIndex) {
+        return `${dayIndex}-${meal}-${dishIndex}`;
+      }
+
+      function showcaseDishFor(dayIndex, meal, dishIndex) {
+        const key = showcaseDishKey(dayIndex, meal, dishIndex);
+        return showcaseDishOverrides[key] || showcaseWeeklyMenu[dayIndex][meal][dishIndex];
+      }
+
+      function showcaseMealNames(dayIndex, meal) {
+        return showcaseWeeklyMenu[dayIndex][meal].map((_, dishIndex) => showcaseDishFor(dayIndex, meal, dishIndex)[0]);
+      }
+
+      function showcaseMealSummary(dayIndex, meal) {
+        return `${showcaseMealNames(dayIndex, meal).slice(0, 2).join("、")}等5道`;
+      }
+
+      function showcaseDishRow(dayIndex, meal, dishIndex) {
+        const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
+        const label = kind === "meat" ? "荤" : kind === "veg" ? "素" : "汤";
+        const key = showcaseDishKey(dayIndex, meal, dishIndex);
+        const control = publishedShowcaseDays.has(dayIndex)
+          ? `<span class="locked-dish">已发布</span>`
+          : `<button class="rotate-dish" data-showcase-rotate="${key}" data-kind="${kind}" aria-label="更换${name}" title="更换菜品"><img src="../prototype-implementation/prototype-taozi/refresh-cw.svg" alt="" /></button>`;
+        return `<div class="mini-dish"><b>${name}</b><small class="${kind === "meat" ? "" : kind}">${label}</small>${control}</div>`;
+      }
+
+      function showcaseMealBlock(dayIndex, meal, label) {
+        return `<div class="meal-block"><div class="meal-title">${label}<span>2荤2素1汤</span></div><div class="mini-dishes">${showcaseWeeklyMenu[dayIndex][meal].map((_, dishIndex) => showcaseDishRow(dayIndex, meal, dishIndex)).join("")}</div></div>`;
+      }
+
+      function showcaseDayPlan(day, index) {
+        const open = expandedShowcaseDay === index;
+        const locked = publishedShowcaseDays.has(index);
+        const status = locked ? (open ? "已发布 · 收起" : "已发布 · 查看") : (open ? "收起" : "未发布 · 展开");
+        return `<div class="day-plan ${open ? "open" : ""} ${locked ? "locked" : ""}"><button class="day-toggle" data-showcase-day="${index}" aria-expanded="${open}"><div class="day-head"><strong>${day.day} · ${day.date}</strong><b>${status}</b></div><div class="day-summary"><span>午：${showcaseMealSummary(index, "lunch")}</span><span>晚：${showcaseMealSummary(index, "dinner")}</span></div></button>${open ? `<div class="day-detail">${showcaseMealBlock(index, "lunch", "午餐")}${showcaseMealBlock(index, "dinner", "晚餐")}</div>` : ""}</div>`;
+      }
+
+      function showcaseCandidateSheetView() {
+        if (!showcaseCandidateSheet) return "";
+        return `<div class="candidate-sheet"><div class="sheet-head"><strong>选择替换菜品</strong><button data-showcase-action="close-sheet" aria-label="关闭候选列表">×</button></div><div class="candidate-list">${showcaseCandidatePools[showcaseCandidateSheet.kind].map(([name], index) => `<button data-showcase-choice="${index}"><b>${name}</b><span>同类换菜候选</span></button>`).join("")}</div></div>`;
+      }
+
+      function menuPhone() {
+        return phoneShell("menu-aligned has-app-tabs", "本周菜单", `
+          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>五天十餐 · 点击某天展开</span></div><button aria-label="下一周">›</button></div>
+          <div class="plan-state"><strong>${publishedShowcaseDays.size} 天已发布锁定</strong><span>${showcaseWeeklyMenu.length - publishedShowcaseDays.size} 天可修改</span></div>
+          <div class="week-plans">${showcaseWeeklyMenu.map(showcaseDayPlan).join("")}</div>
+          <div class="plan-action"><button class="primary" data-next>确认本周菜单</button></div>
+          ${showcaseCandidateSheetView()}
+        `, { back: false, tabs: true, engineerChrome: true });
+      }
+
+      function sharePhone() {
+        return phoneShell("wechat share-compact", "街坊味街坊群（46）", `
+          <div class="time">晚上 20:12</div>
+          <div class="msg"><div class="avatar gold">桃</div><div><div class="sender">桃子</div><div class="bubble">明天正常开饭，午饭晚饭都可以订，今晚 21:30 截止。</div></div></div>
+          <div class="msg"><div class="avatar gold">桃</div><div><button class="mp-card" data-next>
+            <div class="mp-main">
+              <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · 桃子的家常饭</div>
+              <div class="mp-title">明天 8月4日开饭</div>
+              <div class="mp-highlight"><b>午饭</b> 红烧排骨、番茄炒蛋等 5 道<br /><b>晚饭</b> 红烧牛腩、清蒸鲈鱼等 5 道</div>
+            </div>
+            <div class="mp-foot">菜单已发布锁定 · 今晚 21:30 截止</div>
+          </button></div></div>
+          <div class="msg me"><div class="avatar red">周</div><div><div class="bubble">订好了：午饭 2 份，晚饭 1 份。</div></div></div>
+          <div class="msg me"><div class="avatar red">周</div><div><button class="mp-card" data-next>
+            <div class="mp-main">
+              <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味</div>
+              <div class="mp-status">2 笔餐次订单已提交</div>
+              <div class="mp-title">8月4日 · 午饭2份、晚饭1份</div>
+              <div class="mp-highlight"><b>午饭 #240804-12 · 2份</b><br /><b>晚饭 #240804-13 · 1份</b></div>
+            </div>
+            <div class="mp-foot">订单已提交给桃子 · 查看订单 →</div>
+          </button></div></div>
+          <div class="time delivery-time">中午 12:36</div>
+          <div class="msg"><div class="avatar gold">桃</div><div><div class="bubble">午饭已送到门口，这一餐可以付款啦。</div></div></div>
+          <div class="msg"><div class="avatar gold">桃</div><div><button class="mp-card payment-card" data-next>
+            <div class="mp-main">
+              <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · 桃子的家常饭</div>
+              <div class="payment-summary"><span>午饭已送达 · 待确认收款</span><strong>¥60</strong></div>
+              <div class="mp-highlight"><b>8月4日午饭 · 2份</b><br />订单 #240804-12</div>
+            </div>
+            <div class="mp-foot">请微信转账给桃子 · 付款后由桃子确认</div>
+          </button></div></div>
+          <div class="chat-input"><div class="round-tool"></div><div class="chat-field"></div><div class="round-tool"></div></div>
+        `);
+      }
+
+      function ordersPhone() {
+        const orderRows = [
+          { meal: "lunch", name: "周阿姨", detail: "午饭 · 明日短单 · 桂花苑 3 栋", quantity: "1 份", state: "待备餐", tone: "" },
+          { meal: "lunch", name: "王叔", detail: "午饭 · 长期订单 · 连续 7 天", quantity: "3 份", state: showcasePendingState === "approved" ? "待付款" : showcasePendingState === "rejected" ? "已暂不接" : "待审核", tone: showcasePendingState === "approved" ? "" : "warn" },
+          { meal: "dinner", name: "陈姐", detail: "晚饭 · 明日短单 · 望江里 18A", quantity: "2 份", state: "待确认", tone: "warn" },
+          { meal: "lunch", name: "刘阿姨", detail: "午饭 · 长期订单 · 连续 30 天 · 已付款", quantity: "3 份", state: "生效中", tone: "" },
+        ];
+        const visibleOrderRows = orderRows.filter(({ meal }) => showcaseOrderMealFilter === "all" || meal === showcaseOrderMealFilter);
+        return phoneShell("orders-focus has-app-tabs", "订单列表", `
+          <section class="order-hero">
+            <div class="order-hero-top"><span>明天 8月4日</span><b>还在接单</b></div>
+            <strong>共 12 份</strong>
+            <p>4 位顾客 · 明日短单 9 份 · 长期订单已计入</p>
+          </section>
+          <section class="order-priority">
+            <div class="order-priority-head"><strong>${showcasePendingState === "approved" ? "长期申请已同意" : showcasePendingState === "rejected" ? "长期申请已暂不接" : "1 个长期申请待审核"}</strong><span>${showcasePendingState === "approved" ? "待微信付款" : showcasePendingState === "rejected" ? "私聊说明" : "需要处理"}</span></div>
+            <p>${showcasePendingState === "approved" ? "王叔 · 桃子已同意，接下来私聊确认微信付款" : showcasePendingState === "rejected" ? "王叔 · 拒接结果只通过微信私聊说明" : "王叔 · 8月4日起连续 7 天 · 每天午饭 3 份"}</p>
+            ${showcasePendingState === "open"
+              ? `<div class="priority-actions"><button data-showcase-pending="rejected">暂不接</button><button class="approve" data-showcase-pending="approved">同意订单</button></div>`
+              : showcasePendingState === "idle" ? `<button data-showcase-pending="open">查看并处理</button>` : ""}
+          </section>
+          <div class="order-section-head"><strong>全部订单 · ${visibleOrderRows.length} 笔</strong><div class="meal-filter" aria-label="按餐次筛选">${[["all","全部"],["lunch","午饭"],["dinner","晚饭"]].map(([value,label]) => `<button class="${showcaseOrderMealFilter === value ? "active" : ""}" data-showcase-meal-filter="${value}" aria-pressed="${showcaseOrderMealFilter === value}">${label}</button>`).join("")}</div></div>
+          <div class="compact-orders">${visibleOrderRows.map((order) => `<div class="compact-order"><div><b>${order.name}</b><p>${order.detail}</p></div><div class="compact-order-side"><strong>${order.quantity}</strong><span class="compact-state ${order.tone}">${order.state}</span></div></div>`).join("")}</div>
+          <button class="primary" data-next>去订单对账</button>
+        `, { back: false, tabs: true, activeTab: "orders", engineerChrome: true });
+      }
+
+      function chatPhone() {
+        return phoneShell("room", "彭师傅 · 水电维修", `
+          <div class="room-head">
+            <div class="people">
+              <div class="person human"><i>李</i>你</div>
+              <div class="person human"><i>彭</i>彭师傅本人</div>
+              <div class="person agent"><i>TA</i>彭师傅 Agent</div>
+              <div class="person system"><i>邻</i>系统 Agent</div>
+            </div>
+            <div class="room-scope">本房间仅可见：维修需求摘要 + 照片 + 当前对话</div>
+          </div>
+          <div class="thread">
+            <div class="system-note">从赵阿姨的亲历卡进入 · 带入"水管漏水、尽快上门"</div>
+            <div class="room-msg"><div class="room-avatar">TA</div><div><div class="room-name">彭师傅的 Agent <span class="role">初步判断</span></div><div class="room-bubble">收到。初步判断是软管接口老化渗水，不是主管道问题。
+              <div class="draft-card"><b>已采集 · 顾客授权本房间可见</b>
+                水槽下方软管 · 昨晚开始漏水 · 现场照片 1 张<br />
+                建议备料：4 分编织软管 ×1、生料带 ×1
+              </div>
+            </div></div></div>
+            <div class="room-msg"><div class="room-avatar human">彭</div><div><div class="room-name">彭师傅本人 <span class="role">真人确认</span></div><div class="room-bubble">照片看了，是软管老化。材料约 18，工时 50，明天下午过去换。</div></div></div>
+            <div class="room-msg"><div class="room-avatar">TA</div><div><div class="room-name">彭师傅的 Agent <span class="role">发起预约</span></div><div class="room-bubble">彭师傅已经确认，我帮你整理成服务预约：
+              <div class="booking-card">
+                <div class="booking-head"><strong>🔧 上门维修预约</strong><span class="booking-status">师傅已确认</span></div>
+                <div class="booking-body">
+                  <div class="booking-row"><span>服务</span><b>厨房水槽软管更换</b></div>
+                  <div class="booking-row"><span>时间</span><b>明天 14:00–16:00</b></div>
+                  <div class="booking-row"><span>费用</span><b>工时 ¥50 · 材料约 ¥18</b></div>
+                  <div class="booking-note">详细门牌仅在你确认后提供给彭师傅；临时变化仍由双方真人确认。</div>
+                </div>
+                <button class="booking-action" data-next>确认预约</button>
+              </div>
+            </div></div></div>
+          </div>
+          <div class="room-composer">
+            <div class="recipient"><button>发给彭师傅本人</button><button class="active">发给彭师傅 Agent</button></div>
+            <div class="composer-row"><input placeholder="有问题可以继续问……" aria-label="消息" /><button>➤</button></div>
+          </div>
+        `);
+      }
+
+      function finishPhone() {
+        return phoneShell("finish", "近邻互助组", `
+          <div class="finish-mark">✓</div>
+          <h3>一次靠谱选择，<br />也是下一次互助的开始。</h3>
+          <p class="finish-lead">小李完成服务后，可以把自己的真实经历存进亲历卡；下次邻居求助时，他也能成为那个“亲自用过的人”。</p>
+          <div class="value-list">
+            <div class="value"><b>1</b><div><strong>亲历，而非流量排名</strong><small>推荐从真实关系和实际使用出发</small></div></div>
+            <div class="value"><b>2</b><div><strong>Agent，而非责任替身</strong><small>AI 提高效率，真人保留最终承诺</small></div></div>
+            <div class="value"><b>3</b><div><strong>月卡，而非出售数据</strong><small>用透明付费支持消费者自己的网络</small></div></div>
+          </div>
+          <button class="new-need" data-next>我还有其他需求 ＋</button>
+        `);
+      }
+
+      function reconcilePhone() {
+        const items = [
+          { name: "周阿姨 · 19:14", amount: "¥30", order: "8月4日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
+          { name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
+          { name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
+        ];
+        const checkedCount = showcaseReconcileChecked.size;
+        const systemCount = [...showcaseReconcileChecked].filter((index) => showcaseReconcileSources[index] === "system").length;
+        const manualCount = checkedCount - systemCount;
+        const rows = items.map((item, index) => {
+          const checked = showcaseReconcileChecked.has(index);
+          const source = showcaseReconcileSources[index];
+          const status = checked
+            ? source === "system"
+              ? `<div class="reconcile-reason">系统划掉 · ${item.wait}</div>`
+              : `<div class="reconcile-manual">桃子手动划掉</div>`
+            : `<div class="reconcile-wait">${item.wait}</div>`;
+          return `<label class="reconcile-item ${checked ? "checked" : ""}">
+            <input class="reconcile-check" type="checkbox" data-showcase-reconcile-check="${index}" ${checked ? "checked" : ""} aria-label="${checked ? "恢复" : "划掉"}${item.name} ${item.amount}" />
+            <span class="reconcile-item-main"><span class="reconcile-item-head"><b>${item.name}</b><strong>${item.amount}</strong></span><span class="reconcile-order">${item.order}</span>${status}</span>
+          </label>`;
+        }).join("");
+        return phoneShell("reconcile-focus", "对账清单", `
+          <section class="reconcile-progress"><div><span>已读取 3 张收款截图</span><strong>${checkedCount}/3 已划掉</strong></div><em>系统 ${systemCount} · 桃子 ${manualCount}</em></section>
+          <div class="reconcile-caption"><strong>逐笔核对</strong><span>点方框可划掉或恢复</span></div>
+          <div class="reconcile-list">${rows}</div>
+          <p class="reconcile-note">系统代划一定保留匹配依据；桃子手动划掉不需要填写理由。这里只记录清单状态，不代表平台收款。</p>
+        `);
+      }
+
+      function phoneFor(step) {
+        return { menu: menuPhone, share: sharePhone, orders: ordersPhone, reconcile: reconcilePhone }[step]();
+      }
+
+      function render() {
+        const step = currentStep();
+        const item = copy[step];
+        const stepIndex = steps.indexOf(step);
+        document.title = `${labels[step]} · 客户体验原型 · 街坊味`;
+        document.querySelector("#app").innerHTML = `
+          <main class="page">
+            <header class="topbar">
+              <div class="brand"><img class="brand-logo" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · Kith Inn</div>
+              <div class="proto-note">客户体验原型 · 不接真实数据</div>
+            </header>
+            <div class="layout">
+              <section class="story">
+                <div class="step-kicker">${item.kicker}</div>
+                <h1>${item.title}</h1>
+                <p class="lead">${item.lead}</p>
+                <div class="proofs">${item.proofs.map(([icon, text]) => `<div class="proof"><span class="proof-icon">${icon}</span>${text}</div>`).join("")}</div>
+                <button class="story-action" data-next>${item.action}<span>→</span></button>
+              </section>
+              <section class="visual" aria-label="手机交互演示">
+                <div class="halo"></div>
+                ${phoneFor(step)}
+                <div class="floating-card top">客户只需要看见<em>“事情已经变简单”</em></div>
+                <div class="floating-card bottom">结果路径<em>${stepIndex + 1} / ${steps.length} · ${labels[step]}</em></div>
+              </section>
+            </div>
+          </main>
+          <nav class="nav" aria-label="原型步骤切换">
+            <button data-prev aria-label="上一步">←</button>
+            <div class="nav-label">${stepIndex + 1} / ${steps.length} · ${labels[step]}
+              <div class="dots">${steps.map((_, i) => `<i class="${i === stepIndex ? "active" : ""}"></i>`).join("")}</div>
+            </div>
+            <button data-next aria-label="下一步">→</button>
+          </nav>`;
+      }
+
+      document.addEventListener("click", (event) => {
+        const showcaseDay = event.target.closest("[data-showcase-day]")?.dataset.showcaseDay;
+        if (showcaseDay !== undefined) {
+          const dayIndex = Number(showcaseDay);
+          expandedShowcaseDay = expandedShowcaseDay === dayIndex ? null : dayIndex;
+          showcaseCandidateSheet = null;
+          render();
+          return;
+        }
+        const showcaseRotate = event.target.closest("[data-showcase-rotate]");
+        if (showcaseRotate) {
+          const key = showcaseRotate.dataset.showcaseRotate;
+          const dayIndex = Number(key.split("-")[0]);
+          if (!publishedShowcaseDays.has(dayIndex)) {
+            showcaseCandidateSheet = { key, kind: showcaseRotate.dataset.kind };
+            render();
+          }
+          return;
+        }
+        const showcaseChoice = event.target.closest("[data-showcase-choice]")?.dataset.showcaseChoice;
+        if (showcaseChoice !== undefined && showcaseCandidateSheet) {
+          showcaseDishOverrides[showcaseCandidateSheet.key] = showcaseCandidatePools[showcaseCandidateSheet.kind][Number(showcaseChoice)];
+          showcaseCandidateSheet = null;
+          render();
+          return;
+        }
+        if (event.target.closest('[data-showcase-action="close-sheet"]')) {
+          showcaseCandidateSheet = null;
+          render();
+          return;
+        }
+        const showcaseTab = event.target.closest("[data-showcase-tab]")?.dataset.showcaseTab;
+        if (showcaseTab) {
+          if (showcaseTab === "orders") go("orders");
+          else go("menu");
+          return;
+        }
+        const pendingAction = event.target.closest("[data-showcase-pending]")?.dataset.showcasePending;
+        if (pendingAction) {
+          showcasePendingState = pendingAction;
+          render();
+          return;
+        }
+        const mealFilter = event.target.closest("[data-showcase-meal-filter]")?.dataset.showcaseMealFilter;
+        if (mealFilter) {
+          showcaseOrderMealFilter = mealFilter;
+          render();
+          return;
+        }
+        const reconcileCheck = event.target.closest("[data-showcase-reconcile-check]")?.dataset.showcaseReconcileCheck;
+        if (reconcileCheck !== undefined) {
+          const index = Number(reconcileCheck);
+          if (showcaseReconcileChecked.has(index)) {
+            showcaseReconcileChecked.delete(index);
+            delete showcaseReconcileSources[index];
+          } else {
+            showcaseReconcileChecked.add(index);
+            showcaseReconcileSources[index] = "manual";
+          }
+          render();
+          return;
+        }
+        if (event.target.closest("[data-next]")) cycle(1);
+        if (event.target.closest("[data-prev]")) cycle(-1);
+      });
+      document.addEventListener("keydown", (event) => {
+        if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
+        if (event.key === "ArrowLeft") cycle(-1);
+        if (event.key === "ArrowRight") cycle(1);
+      });
+      window.addEventListener("popstate", render);
+      render();
+    </script>
+  </body>
+</html>

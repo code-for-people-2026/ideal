@@ -1,0 +1,162 @@
+# Kith Inn 双轨原型 · Design QA
+
+## 对照对象
+
+- 客户版视觉真相：`/Users/miyin/code for people/ideal/牛马互助平台/prototype-customer/index.html`
+- 工程版结构真相：`/Users/miyin/code for people/ideal/牛马互助平台/prototype-implementation/index.html`
+- 迁移前角色原型：
+  - `/Users/miyin/code for people/cfp-mono/docs/kith-inn/prototype-taozi/index.html`
+  - `/Users/miyin/code for people/cfp-mono/docs/kith-inn/prototype-customer/index.html`
+- 产品内容真相：
+  - `/Users/miyin/code for people/ideal/docs/kith-inn/yao/product-decisions.md`
+  - `/Users/miyin/code for people/ideal/docs/kith-inn/yao/user-stories.md`
+- 实现：
+  - `http://127.0.0.1:4175/ideal/docs/kith-inn/yao/prototype-customer/?step=menu`
+  - `http://127.0.0.1:4175/ideal/docs/kith-inn/yao/prototype-implementation/`
+
+## 截图与归一化
+
+- 浏览器：Codex Desktop 内置浏览器。
+- CSS viewport：`1280 × 720`；`devicePixelRatio = 2`。
+- 客户版参考截图：`/tmp/kith-migration-source/ref-customer.jpg`，`1277 × 998 px`。
+- 客户版最终截图：`/tmp/kith-migration-source/final-customer-menu.jpg`，`1265 × 998 px`。
+- 客户版订单对账截图：`/tmp/kith-migration-source/final-customer-ledger.jpg`，`1265 × 998 px`。
+- 工程总蓝图最终截图：`/tmp/kith-migration-source/final-blueprint.jpg`，`1265 × 1604 px`。
+- 全屏并排证据：`/tmp/kith-migration-source/compare-customer-final.jpg`，`2530 × 1050 px`。
+- 手机区域并排证据：`/tmp/kith-migration-source/focus-customer-phone-final.jpg`，`1150 × 902 px`。
+- 角色原型迁移证据：`/tmp/kith-migration-source/compare-customer-migration.jpg`，`2530 × 1052 px`。
+- 归一化：参考客户截图按宽度从 `1277 px` 等比缩放到 `1265 px`，与实现顶端对齐；聚焦比较使用两张截图中等大的 `575 × 850 px` 手机区域。浏览器输出已归一为 CSS 像素级截图，未按 DPR 再放大。
+
+## 状态
+
+- 客户版：`step=menu`、`step=share`、`step=orders` 与 `step=reconcile`。
+- 工程总蓝图：默认首屏和完整页面。
+- 桃子端：`step=orders`，并打开“手动补一单”。
+- 顾客端：从 `step=entry` 进入，再切换到底部“订单”。
+
+## 全屏对照结论
+
+- 信息架构：客户版保持参考原型的“左侧价值叙事 + 右侧 iPhone 结果 + 底部讲解顺序”，但把五步过程压缩为四个最终结果，符合本次受众拆分。
+- 字体与层级：继续使用系统中文字体栈；大标题、正文、证明条目、手机内标题的字重和行高与参考一致，未发现溢出或错误换行。
+- 间距与布局：桌面双栏比例、手机大小、圆角、卡片间距和底部讲解控件保持参考节奏；四个客户页面的手机内容 `scrollHeight = clientHeight = 648`，没有隐藏主按钮。
+- 颜色与 token：沿用街坊味既有的米白、砖红、墨黑、绿色与金色；客户版继承参考原型的对比关系，工程版继承现有角色原型的同一套 token。
+- 图片质量：使用现有 `kith-inn-logo.png`，没有用 CSS 图形、占位图或自制 SVG 替代品牌资产；刷新控件继续使用原有 `refresh-cw.svg`。
+- 文案：客户版只说结果，依次聚焦生成菜单、微信双向确认、订单管理和订单对账；四页均以工程角色原型的菜单、订单与候选对账数据为准，只压缩交互过程。
+
+## 聚焦区域对照结论
+
+- `focus-customer-phone-final.jpg` 显示两边手机画框、状态栏、导航栏、深色主卡、证明数据与主按钮的密度一致。
+- Kith Inn 结果卡有意比参考价值主张页更数据化，但仍保持相同的视觉重心、圆角系统和金色强调，不属于设计漂移。
+- `compare-customer-migration.jpg` 显示顾客端角色原型在迁移前后像素结构一致；新增的“返回工程总蓝图”是有意增加的外部讲解导航，不改变 App 内部结构。
+
+## 比较历史
+
+### Pass 1
+
+- [P1 · 内容] 客户版和工程总蓝图沿用了早期“收款截图辅助对账”的表述，与最新 PRD “不记录截图，只手工维护收款状态”冲突。
+- [P2 · 导航] 迁移后的桃子端与顾客端只能互相切换，缺少回到工程总蓝图的明确入口。
+
+修复：
+
+- 客户版最终页改为订单自动汇总、按订单编号或顾客查找、桃子手工标记收款；微信群页补充顾客下单后回传的订单提醒卡片。
+- 工程总蓝图明确 P0 不接支付、不保存截图，并链接最新 User Stories。
+- 两个角色原型都增加“返回工程总蓝图”，同时保留原有角色切换和 App 底部导航。
+
+### Pass 2
+
+- 视觉证据：`compare-customer-final.jpg`、`focus-customer-phone-final.jpg`、`compare-customer-migration.jpg`。
+- 未发现剩余 P0 / P1 / P2 视觉、内容或交互问题。
+
+## 交互与控制台验证
+
+- 客户版：四个结果可通过主按钮和底部箭头依次切换；手机左上角返回可回到上一个结果；URL `?step=` 同步更新。
+- 桃子端：底部“订单”可达；“手动补一单”能打开表单；四个 App 底部入口仍在。
+- 顾客端：微信群卡片可进入预订；底部“订单”可达；两项 App 底部入口仍在。
+- 工程总蓝图：桃子端、顾客端、直接看订单、PRD、产品决策、领域词汇和 User Stories 入口均存在。
+- 客户版、工程总蓝图、桃子端、顾客端控制台错误：无。
+- 所有 HTML 内联脚本均通过 JavaScript 语法解析。
+
+## 后续 P3
+
+- 当前 QA 以会议讲解使用的桌面画布为主；小于 `560 px` 的移动外层布局有响应式规则，但未在本轮单独截图对照。手机内 App 画框仍保持固定原型尺寸。
+
+## 菜单对齐专项 · 2026-08-04
+
+- 参考源：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-implementation/prototype-taozi/index.html?step=plan`。
+- 实现：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=menu`。
+- 浏览器与状态：Codex Desktop 内置浏览器；工程师版菜单已生成、五天默认收起；展示版同状态。
+- 参考截图：`/tmp/kith-menu-align/reference-engineer-current.png`，`1292 × 884 px`。
+- 实现截图：`/tmp/kith-menu-align/after-showcase.png`，`1277 × 874 px`；比较前归一到参考截图尺寸。
+- 全屏并排证据：`/tmp/kith-menu-align/comparison.png`，`2584 × 884 px`；左侧为工程师版，右侧为展示版。
+- 对齐范围：手机标题、状态栏、周切换、日期范围、发布锁定状态、五天菜单卡、确认按钮、桃子端底部导航；外层讲解步骤编号和受众提示保留各自语境。
+- 内容核对：两版使用同一组五天十餐菜品与 `2荤2素1汤` 结构；周一已发布只读，其余四天可展开换菜。
+- 交互核对：周二可展开/收起；未发布菜品可打开同类候选并完成替换；周一展开后只有“已发布”标记，没有换菜入口。
+- 比较历史：Pass 1 发现展示版只呈现三行压缩摘要、缺少五天展开和底部导航；本轮替换为工程师版同一信息结构。Pass 2 并排比较未发现剩余 P0 / P1 / P2 内容、交互或视觉漂移。
+- JavaScript 语法检查通过；浏览器 DOM 与核心交互检查通过。
+
+## 订单管理可读性专项 · 2026-08-04
+
+- 审查对象：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=orders`。
+- 修改前截图：`/tmp/kith-orders-audit/01-before.jpg`。
+- 修改后截图：`/tmp/kith-orders-audit/02-after.jpg`。
+- 并排证据：`/tmp/kith-orders-audit/03-before-after.jpg`；左侧为修改前，右侧为修改后。
+- 主要问题：统计数字在外层讲解、手机摘要和筛选区重复；8—9px 说明文字过多；四张订单卡权重相同，待审核申请没有形成明确视觉优先级。
+- 调整结果：手机首屏改为“明日 12 份总览 → 1 个待审核长期申请 → 全部订单”；删除无必要的三段筛选；订单卡改为双行紧凑结构，并将主要正文提升到 11—13px、关键数字提升到 28px。
+- 内容保持：仍包含 9 份明日短单、2 个长期生效户、1 个长期待审核，以及周阿姨、王叔、陈姐、刘阿姨四笔订单；只改变信息层级，不改变工程语义。
+- 交互验证：待审核卡可展开“暂不接 / 同意订单”；同意后显示“待微信付款”，符合工程端长期订单流程；订单底部导航保持可达。
+- 控制台错误：无。
+
+## 微信确认首屏专项 · 2026-08-04
+
+- 审查对象：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=share`。
+- 修改前截图：`/tmp/kith-share-audit/01-before.jpg`。
+- 修改后截图：`/tmp/kith-share-audit/02-after.jpg`。
+- 并排证据：`/tmp/kith-share-audit/03-before-after.jpg`；左侧为修改前，右侧为修改后。
+- 主要问题：桃子文字、桃子开饭卡、顾客确认气泡和顾客订单卡均使用大间距时，会导致最后一张订单回执卡被手机可视区截断。
+- 调整结果：采用微信式“桃子说明 → 开饭卡片 → 顾客确认气泡 → 客观订单回执卡”消息顺序；头像缩至 34px，卡片宽度、内边距、标题和消息间距同步收紧。
+- 首屏验证：四段消息与输入栏仍可在同一手机首屏呈现；顾客自己的表达留在右侧绿色气泡，回执卡不再使用“周阿姨已经订好了”这类替顾客说话的标题。
+- 内容保持：桃子的开饭时间、午晚饭菜单、发布锁定、周阿姨午饭 2 份与晚饭 1 份、地址、订单号和反向提醒均保留。
+- 控制台错误：无。
+
+## 微信订单回执参考对齐 · 2026-08-04
+
+- Source visual truth：`/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-54c5c964-2782-4c66-bbb9-c6975ed8bcf1.png`，`1986 × 1684 px`。
+- Implementation：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=share`；浏览器截图 `/tmp/kith-reconcile-audit/04-share-card.jpg`，`1265 × 998 px`。
+- Viewport：`1280 × 720 CSS px`，`devicePixelRatio = 2`；浏览器截图输出已归一为 CSS 像素，不再按 DPR 放大。
+- State：微信群内“桃子发明日菜单 → 顾客确认午晚饭份数 → 顾客分享订单回执”。
+- Full-view comparison：`/tmp/kith-reconcile-audit/05-reference-implementation.jpg`；参考图按高度等比缩放为 `1177 × 998 px`，与实现 `1265 × 998 px` 顶端对齐。
+- Focused comparison：`/tmp/kith-reconcile-audit/06-phone-focus.jpg`；参考手机区域归一为 `388 × 748 px`，实现手机区域为 `390 × 748 px`。
+- 字体：继续使用原型既有系统中文字体栈；聊天正文、卡片状态、标题、订单号保持与参考相同的三级层级，没有异常换行或截断。
+- 间距：消息顺序、左右对齐、卡片密度和首屏占用与参考一致；当前实现已补齐参考图中的送达说明和付款提醒。
+- 色彩：保留微信灰背景、顾客绿色气泡、街坊味砖红状态和淡红信息区；与参考的语义颜色一致。
+- 图片：沿用现有 `kith-inn-logo.png`，没有新增替代品牌资产或低清占位图。
+- 文案：卡片从“周阿姨已经订好了”改为客观状态“订单已提交”，顾客主观表达只出现在本人绿色气泡中；这是为匹配产品实际的“平台不收款”边界而做的有意差异。
+- 交互：两张小程序卡片继续可点击进入后续讲解；浏览器运行错误为 0。
+- 比较历史：Pass 1 发现卡片标题替顾客说话，且缺少参考图中的“本人气泡 → 客观回执”层级；修复后 Pass 2 的全屏与手机聚焦对照未发现剩余 P0 / P1 / P2。
+
+## 对账清单专项 · 2026-08-04
+
+- 修改前：`/tmp/kith-reconcile-audit/01-before.jpg`；修改后：`/tmp/kith-reconcile-audit/02-after.jpg`。
+- 展示版与工程师版都改为三笔到账记录清单；周阿姨唯一匹配默认由系统划掉，小太阳和李家保留待处理。
+- 系统代划展示“顾客名、金额、日期与订单唯一匹配”的明确依据；桃子手动划掉只显示操作来源，不要求填写理由。
+- 交互验证：小太阳可从 `1/3 已划掉` 切换为 `2/3 已划掉`，来源统计从“系统 1 · 桃子 0”变为“系统 1 · 桃子 1”，再次点击可恢复。
+- 产品边界：清单状态不等于平台收款；歧义项和无匹配项不会被系统自动划掉。
+- JavaScript 语法检查通过；展示版、微信页和工程师版浏览器运行错误均为 0。
+
+## 送达后付款提醒专项 · 2026-08-05
+
+- Source visual truth：`/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-f7c86b77-507a-43c0-81a6-57daafeb1352.png`，`1986 × 1684 px`。
+- Implementation：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=share`；浏览器截图 `/tmp/kith-meal-reminder/01-after.jpg`，`1265 × 998 px`。
+- Viewport：`1280 × 720 CSS px`，`devicePixelRatio = 2`；浏览器截图输出已归一为 CSS 像素。
+- State：微信群内“桃子发明日菜单 → 顾客订单回执 → 桃子标记送达 → 未确认收款提醒”。
+- Full-view comparison：`/tmp/kith-meal-reminder/02-full-comparison.jpg`；参考图按高度等比缩放为 `1177 × 998 px`，与实现 `1265 × 998 px` 顶端对齐。
+- Focused comparison：`/tmp/kith-meal-reminder/03-phone-comparison.jpg`；参考手机区域归一为 `388 × 748 px`，实现手机区域为 `390 × 748 px`。
+- 字体：沿用系统中文字体栈；“已送达 · 待确认收款”、金额、餐次和订单号形成清晰层级，无异常换行或截断。
+- 间距：六段消息与底部输入栏仍在同一手机首屏；消息区 `clientHeight = scrollHeight = 648px`，最后一张付款提醒卡底部 `787.86px`，输入栏顶部 `816px`，未发生遮挡。
+- 色彩：送达气泡继续使用微信白色消息样式；付款提醒用街坊味金色描边和淡金信息区，与参考中的“待付款”状态一致。
+- 图片：继续复用 `kith-inn-logo.png`，没有新增替代图标、占位图或低清资产。
+- 文案：一次提交午饭和晚饭时，订单回执明确拆成两笔餐次订单；中午只说明“午饭已送到门口”，提醒卡仅显示午饭订单号、2 份和 ¥60，晚饭继续保持未履约状态。应付动作明确为“微信转账给桃子”，没有伪装成小程序支付。
+- 交互：付款提醒卡可进入订单管理；浏览器运行错误为 0。
+- 比较历史：Pass 1 相对参考图缺少“送达说明 → 待付款提醒”后半段流程，属于 P1 内容缺口；补齐后 Pass 2 的全屏和手机聚焦对照未发现剩余 P0 / P1 / P2。
+
+final result: passed
