@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="街坊味是牛马互助平台中的社区供餐应用，让可信推荐继续走向订餐、送达和付款。"
+    />
+    <title>街坊味 · 牛马互助平台</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1e1b16;
+        --muted: #59504a;
+        --line: #e3ddcf;
+        --paper: #f5f2ea;
+        --red: #d42b1e;
+        --red-dark: #a81e14;
+        --red-soft: #fbe5e1;
+        --gold: #f2b90d;
+        --gold-dark: #7a5a08;
+        --gold-soft: #fdf3d7;
+        --green: #95ec69;
+        --phone: #1a1712;
+        --chat: #ededed;
+        --shadow: 0 32px 90px rgba(46, 38, 22, 0.15);
+      }
+
+      * { box-sizing: border-box; }
+
+      html { min-width: 320px; }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 8% 10%, rgba(212, 43, 30, 0.08), transparent 30rem),
+          radial-gradient(circle at 92% 84%, rgba(242, 185, 13, 0.16), transparent 30rem),
+          var(--paper);
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .page {
+        min-height: 100vh;
+        padding: 28px 30px 48px;
+      }
+
+      .topbar {
+        display: flex;
+        width: min(1220px, 100%);
+        margin: 0 auto;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding-right: 220px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-weight: 900;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 36px;
+        height: 36px;
+        place-items: center;
+        border-radius: 12px;
+        color: #fff;
+        background: var(--red);
+        box-shadow: 0 10px 24px rgba(212, 43, 30, 0.25);
+      }
+
+      .page-note {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 750;
+      }
+
+      .page-switcher {
+        position: fixed; z-index: 22; top: 18px; right: 20px; display: flex; gap: 4px; padding: 5px;
+        border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.9);
+        box-shadow: 0 8px 24px rgba(24,48,31,.08); backdrop-filter: blur(10px);
+      }
+      .page-switcher a {
+        padding: 7px 10px; border-radius: 999px; color: var(--muted); text-decoration: none;
+        font-size: 10px; font-weight: 850; white-space: nowrap;
+      }
+      .page-switcher a.active { color: #fff; background: var(--ink); }
+
+      .layout {
+        display: grid;
+        width: min(1220px, 100%);
+        margin: 24px auto 0;
+        grid-template-columns: minmax(360px, 0.95fr) minmax(440px, 1.05fr);
+        gap: clamp(52px, 6vw, 82px);
+        align-items: center;
+      }
+
+      .story { padding: 20px 0; }
+
+      .kicker {
+        color: var(--red);
+        font-size: 12px;
+        font-weight: 900;
+        letter-spacing: 0.08em;
+      }
+
+      h1 {
+        max-width: 620px;
+        margin: 14px 0 18px;
+        font-size: clamp(44px, 4.8vw, 66px);
+        line-height: 1.03;
+        letter-spacing: -0.055em;
+        text-wrap: balance;
+      }
+
+      .lead {
+        max-width: 590px;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(17px, 1.7vw, 20px);
+        line-height: 1.7;
+      }
+
+      .proofs {
+        display: grid;
+        gap: 11px;
+        max-width: 570px;
+        margin-top: 30px;
+      }
+
+      .proof {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        gap: 13px;
+        align-items: center;
+        padding: 12px 15px;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .proof-icon {
+        display: grid;
+        width: 40px;
+        height: 40px;
+        place-items: center;
+        border-radius: 12px;
+        color: var(--red-dark);
+        background: var(--red-soft);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .proof:nth-child(2) .proof-icon {
+        color: var(--gold-dark);
+        background: var(--gold-soft);
+      }
+
+      .proof strong {
+        display: block;
+        margin-bottom: 2px;
+        font-size: 14px;
+      }
+
+      .proof span {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .loop {
+        display: flex;
+        max-width: 570px;
+        margin-top: 24px;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 15px 17px;
+        border-radius: 15px;
+        color: #fff;
+        background: var(--ink);
+        box-shadow: 0 14px 30px rgba(23, 32, 25, 0.16);
+        font-size: 12px;
+        font-weight: 850;
+      }
+
+      .loop i {
+        color: var(--gold);
+        font-style: normal;
+      }
+
+      .visual {
+        position: relative;
+        min-height: 790px;
+        display: grid;
+        place-items: center;
+      }
+
+      .halo {
+        position: absolute;
+        inset: 8% 4%;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(242, 185, 13, 0.32), rgba(212, 43, 30, 0.08) 45%, transparent 69%);
+      }
+
+      .phone {
+        position: relative;
+        z-index: 1;
+        width: min(390px, 92vw);
+        height: 748px;
+        overflow: hidden;
+        border: 7px solid var(--phone);
+        border-radius: 42px;
+        background: var(--chat);
+        box-shadow: var(--shadow);
+      }
+
+      .phone::before {
+        content: "";
+        position: absolute;
+        z-index: 8;
+        top: 8px;
+        left: 50%;
+        width: 92px;
+        height: 25px;
+        transform: translateX(-50%);
+        border-radius: 14px;
+        background: var(--phone);
+      }
+
+      .statusbar {
+        position: relative;
+        z-index: 7;
+        display: flex;
+        height: 35px;
+        padding: 0 20px;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--chat);
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .appbar {
+        display: grid;
+        height: 55px;
+        padding: 0 15px;
+        grid-template-columns: 48px 1fr 48px;
+        align-items: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+        background: var(--chat);
+      }
+
+      .appbar strong {
+        font-size: 16px;
+        text-align: center;
+      }
+
+      .back { font-size: 27px; }
+      .more { justify-self: end; letter-spacing: 2px; }
+
+      .chat {
+        position: absolute;
+        inset: 90px 0 58px;
+        overflow: hidden;
+        padding: 10px 11px 15px;
+        background: var(--chat);
+      }
+
+      .time {
+        width: max-content;
+        margin: 0 auto 7px;
+        padding: 2px 6px;
+        border-radius: 4px;
+        color: #8a8478;
+        background: rgba(255, 255, 255, 0.55);
+        font-size: 8px;
+      }
+
+      .message {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin-bottom: 8px;
+      }
+
+      .message.mine { flex-direction: row-reverse; }
+
+      .avatar {
+        display: grid;
+        flex: 0 0 auto;
+        width: 35px;
+        height: 35px;
+        place-items: center;
+        border-radius: 7px;
+        color: #fff;
+        background: var(--red);
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .message.mine .avatar {
+        color: var(--gold-dark);
+        background: var(--gold);
+      }
+
+      .message-body { max-width: calc(100% - 43px); }
+
+      .bubble {
+        position: relative;
+        width: fit-content;
+        max-width: 255px;
+        margin-bottom: 5px;
+        padding: 7px 10px;
+        border-radius: 4px 10px 10px;
+        background: #fff;
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
+      .message.mine .bubble {
+        margin-left: auto;
+        border-radius: 10px 4px 10px 10px;
+        background: var(--green);
+      }
+
+      .mini-card {
+        width: 270px;
+        overflow: hidden;
+        border: 0;
+        border-radius: 8px;
+        color: var(--ink);
+        background: #fff;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        text-align: left;
+      }
+
+      .message.mine .mini-card { margin-left: auto; }
+
+      .card-brand {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 7px 9px 5px;
+        color: #777168;
+        font-size: 8px;
+      }
+
+      .app-icon {
+        display: grid;
+        width: 18px;
+        height: 18px;
+        place-items: center;
+        border-radius: 5px;
+        color: #fff;
+        background: var(--red);
+        font-size: 8px;
+        font-weight: 900;
+      }
+
+      .card-body { padding: 0 9px 8px; }
+
+      .card-kicker {
+        color: var(--red-dark);
+        font-size: 8px;
+        font-weight: 900;
+        letter-spacing: 0.05em;
+      }
+
+      .card-title {
+        margin: 3px 0;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .menu-copy {
+        margin: 0;
+        color: var(--muted);
+        font-size: 8px;
+        line-height: 1.45;
+      }
+
+      .meal-row,
+      .order-row {
+        display: grid;
+        margin-top: 6px;
+        padding: 7px 8px;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        align-items: center;
+        border-radius: 9px;
+        background: var(--red-soft);
+      }
+
+      .order-row { background: #f7f4ed; }
+      .payment .order-row { background: var(--gold-soft); }
+
+      .meal-row strong,
+      .order-row strong {
+        display: block;
+        font-size: 10px;
+      }
+
+      .meal-row small,
+      .order-row small {
+        display: block;
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 8px;
+      }
+
+      .price {
+        color: var(--red-dark);
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .success {
+        display: grid;
+        width: 27px;
+        height: 27px;
+        place-items: center;
+        border-radius: 50%;
+        color: #fff;
+        background: #3e9f60;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .card-foot {
+        display: flex;
+        margin-top: 6px;
+        padding-top: 5px;
+        align-items: center;
+        justify-content: space-between;
+        border-top: 1px solid #eee;
+        color: #7e7971;
+        font-size: 8px;
+      }
+
+      .card-foot b {
+        color: var(--red-dark);
+        font-size: 9px;
+      }
+
+      .payment { border-top: 3px solid var(--gold); }
+
+      .composer {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        height: 58px;
+        padding: 9px 10px;
+        align-items: center;
+        gap: 8px;
+        border-top: 1px solid #ddd;
+        background: #f7f7f7;
+      }
+
+      .composer span:not(.field) {
+        display: grid;
+        width: 30px;
+        height: 30px;
+        place-items: center;
+        border: 1.5px solid #3b3935;
+        border-radius: 50%;
+        font-size: 13px;
+      }
+
+      .field {
+        flex: 1;
+        height: 38px;
+        border-radius: 7px;
+        background: #fff;
+      }
+
+      @media (max-width: 860px) {
+        .page { padding: 22px 20px 50px; }
+        .page-switcher { position: static; width: max-content; max-width: calc(100% - 28px); margin: 14px; overflow-x: auto; }
+        .topbar { padding-right: 0; }
+        .layout { grid-template-columns: 1fr; gap: 22px; }
+        .story { padding-top: 34px; }
+        .proofs, .loop { max-width: none; }
+        .visual { min-height: 775px; }
+      }
+
+      @media (max-width: 480px) {
+        .page { padding: 18px 14px 40px; }
+        .page-note { display: none; }
+        h1 { font-size: 44px; }
+        .proof { grid-template-columns: 38px 1fr; }
+        .loop { flex-wrap: wrap; }
+        .visual { margin: 0 -8px; min-height: 730px; }
+        .phone { height: 710px; }
+        .mini-card { width: min(270px, calc(100vw - 86px)); }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="page-switcher" aria-label="切换展示页面">
+      <a href="./prototype-customer/">客户体验</a>
+      <a href="./prototype-implementation/">实施对照</a>
+      <a class="active" href="./街坊味-一页介绍.html">街坊味</a>
+    </nav>
+    <main class="page">
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark">邻</span>近邻互助组</div>
+        <div class="page-note">牛马互助平台 · 社区供餐场景</div>
+      </header>
+
+      <div class="layout">
+        <section class="story" aria-labelledby="page-title">
+          <div class="kicker">社区供餐 · 街坊味</div>
+          <h1 id="page-title">从一张菜单卡，<br />到一顿饭送达。</h1>
+          <p class="lead">
+            牛马互助平台帮助居民找到可信的供餐邻居；街坊味继续接住菜单、订单、送达和付款，让一次邻里推荐真正完成交易。
+          </p>
+
+          <div class="proofs" aria-label="街坊味的三个直接价值">
+            <div class="proof">
+              <b class="proof-icon">菜</b>
+              <div><strong>菜单看得清</strong><span>今天吃什么、多少钱、还能不能订，不用反复询问。</span></div>
+            </div>
+            <div class="proof">
+              <b class="proof-icon">单</b>
+              <div><strong>订单确认了</strong><span>顾客完成下单后有明确记录，不再担心有没有记上。</span></div>
+            </div>
+            <div class="proof">
+              <b class="proof-icon">钱</b>
+              <div><strong>送达与付款不忘</strong><span>饭送到后，供餐邻居按这一单提醒顾客付款。</span></div>
+            </div>
+          </div>
+
+          <div class="loop" aria-label="业务闭环">
+            <span>可信推荐</span><i>→</i><span>订餐</span><i>→</i><span>送达</span><i>→</i><span>付款</span>
+          </div>
+        </section>
+
+        <section class="visual" aria-label="街坊味聊天场景">
+          <div class="halo"></div>
+          <div class="phone">
+            <div class="statusbar" aria-hidden="true"><span>9:41</span><span>● ●● 100%</span></div>
+            <header class="appbar">
+              <span class="back" aria-hidden="true">‹</span>
+              <strong>街坊味 · 邻里餐桌</strong>
+              <span class="more" aria-hidden="true">···</span>
+            </header>
+
+            <div class="chat">
+              <div class="time">上午 10:02</div>
+              <div class="message">
+                <div class="avatar">味</div>
+                <div class="message-body">
+                  <div class="bubble">今天午餐开放啦 👇</div>
+                  <div class="mini-card">
+                    <div class="card-brand"><span class="app-icon">味</span>街坊味</div>
+                    <div class="card-body">
+                      <div class="card-kicker">8月6日 · 周四</div>
+                      <div class="card-title">今天午餐</div>
+                      <p class="menu-copy">红烧肉 · 清炒时蔬 · 番茄蛋汤等 4 菜 1 汤</p>
+                      <div class="meal-row">
+                        <div><strong>还剩 7 份</strong><small>10:30 截止</small></div>
+                        <span class="price">¥30 / 份</span>
+                      </div>
+                      <div class="card-foot"><span>还可预订</span><b>去订餐 →</b></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="time">上午 10:08</div>
+              <div class="message mine">
+                <div class="avatar">邻</div>
+                <div class="message-body">
+                  <div class="bubble">订好了，两份。</div>
+                  <div class="mini-card">
+                    <div class="card-brand"><span class="app-icon">味</span>街坊味</div>
+                    <div class="card-body">
+                      <div class="card-kicker">订餐成功</div>
+                      <div class="card-title">8月6日午餐 · 2份</div>
+                      <div class="order-row">
+                        <div><strong>订单 JFW-0806</strong><small>配送至深业花园</small></div>
+                        <span class="success">✓</span>
+                      </div>
+                      <div class="card-foot"><span>订单已确认</span><b>查看订单 →</b></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="time">中午 12:36</div>
+              <div class="message">
+                <div class="avatar">味</div>
+                <div class="message-body">
+                  <div class="bubble">饭已送到门口，这单可以付款啦。</div>
+                  <div class="mini-card payment">
+                    <div class="card-brand"><span class="app-icon">味</span>街坊味</div>
+                    <div class="card-body">
+                      <div class="card-kicker">已送达</div>
+                      <div class="card-title">待付款</div>
+                      <div class="order-row">
+                        <div><strong>8月6日午餐 · 2份</strong><small>订单 JFW-0806</small></div>
+                        <span class="price">¥60</span>
+                      </div>
+                      <div class="card-foot"><span>待付款</span><b>查看订单 →</b></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <footer class="composer" aria-hidden="true">
+              <span>⌁</span><span class="field"></span><span>☺</span><span>＋</span>
+            </footer>
+          </div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
