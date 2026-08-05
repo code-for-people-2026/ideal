@@ -180,7 +180,7 @@
       .weekly-menu-day { display: grid; min-height: 26px; place-items: center; color: var(--muted); font-size: 8px; font-weight: 850; text-align: center; }
       .weekly-menu-day { align-content: center; color: var(--ink); }
       .weekly-menu-day strong { font-size: 9px; line-height: 1; }
-      .weekly-menu-day small { margin-bottom: 3px; color: var(--muted); font-size: 7px; line-height: 1; }
+      .weekly-menu-day small { margin-top: 3px; color: var(--muted); font-size: 7px; line-height: 1; }
       .weekly-dish-cell { display: grid; min-height: 38px; place-items: center; padding: 3px 2px; border: 1px solid #f1c3b8; border-radius: 7px; background: var(--flag-red-soft); color: var(--ink); font-size: 8px; font-weight: 850; line-height: 1.18; text-align: center; }
       .weekly-dish-cell.veg { border-color: #badcc9; background: var(--green-soft); }
       .weekly-dish-cell.soup { border-color: #c8d9ee; background: #edf5ff; }
@@ -433,9 +433,9 @@
         menu: {
           kicker: "修改过程 · 02",
           title: "十个餐次逐一看，<br />不满意当场换。",
-          lead: "生成结果放在同一张十餐表里，按日期依次排列午饭和晚饭：3号午饭、3号晚饭、4号午饭、4号晚饭。桃子点具体菜名，就能查看分类并换成同类候选菜。",
+          lead: "生成结果放在同一张十餐表里，按星期依次排列午饭和晚饭：周一午饭、周一晚饭、周二午饭、周二晚饭。桃子点具体菜名，就能查看分类并换成同类候选菜。",
           proofs: [
-            ["序", "每天午饭、晚饭相邻，按日期向下查看"],
+            ["序", "每天午饭、晚饭相邻，按星期向下查看"],
             ["十", "一张表完整覆盖五天十个餐次"],
             ["换", "选中一道菜后查看属性并换同类候选"],
           ],
@@ -555,17 +555,13 @@
         return `<button class="weekly-dish-cell ${kind} ${selectedShowcaseDishKey === key ? "active" : ""}" data-showcase-select-dish="${key}" type="button" aria-pressed="${selectedShowcaseDishKey === key}">${name}</button>`;
       }
 
-      function showcaseShortDate(date) {
-        return date.replace(/^.*月/, "").replace("日", "号");
-      }
-
       function showcaseWeeklyBoard() {
         const selectedParts = selectedShowcaseDishKey?.split("-") || [];
         const dayIndex = Number(selectedParts[0]);
         const meal = selectedParts[1];
         const dishIndex = Number(selectedParts[2]);
         const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
-        const rows = showcaseWeeklyMenu.flatMap((day, currentDayIndex) => [["lunch", "午饭"], ["dinner", "晚饭"]].map(([currentMeal, label]) => `<div class="weekly-menu-row"><div class="weekly-menu-day"><small>${showcaseShortDate(day.date)}</small><strong>${label}</strong></div>${day[currentMeal].map((_, currentDishIndex) => showcaseDishSelector(currentDayIndex, currentMeal, currentDishIndex)).join("")}</div>`)).join("");
+        const rows = showcaseWeeklyMenu.flatMap((day, currentDayIndex) => [["lunch", "午饭"], ["dinner", "晚饭"]].map(([currentMeal, label]) => `<div class="weekly-menu-row"><div class="weekly-menu-day"><strong>${day.day}</strong><small>${label}</small></div>${day[currentMeal].map((_, currentDishIndex) => showcaseDishSelector(currentDayIndex, currentMeal, currentDishIndex)).join("")}</div>`)).join("");
         return `<section class="weekly-menu-board">
           <div class="weekly-menu-title"><strong>下周十餐菜单</strong><span>10 餐通过</span></div>
           <div class="weekly-menu-grid" aria-label="下周十餐菜单">
