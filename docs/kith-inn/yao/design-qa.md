@@ -164,14 +164,17 @@
 
 - 工程生成页参考：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-implementation/prototype-taozi/index.html?step=plan` 的未生成状态。
 - 换菜交互参考：用户指定的 `/cfp-mono/docs/kith-inn/prototype/menu-brain.html`；本地解析到 `/Users/miyin/code for people/cfp-mono-worktrees/community-cooking-mock-ui/docs/kith-inn/prototype/menu-brain.html`。
-- Source visual truth：`/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-c5dffcae-de8e-48a2-9556-a234d6c9bcfc.png`。
-- Viewport 与归一化：Codex Desktop 内置浏览器 `1280 × 720 CSS px`；参考图为 `688 × 794 px`，实现全屏截图为 `1265 × 712 px`。聚焦比较将参考与单餐修改卡等比归一为 `600 px` 宽，最终并排证据为 `1220 × 692 px`。
+- Source visual truth：`/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-6015be0d-c41e-427a-9e30-6f8e9c245652.png`，`688 × 794 px`。
+- Viewport 与归一化：Codex Desktop 内置浏览器 `1280 × 720 CSS px`；实现全屏截图为 `1265 × 712 px`。聚焦比较将参考图和实现中的第一张周表等比归一为 `600 px` 宽，参考高度 `692 px`，实现高度 `716 px`，并排证据为 `1220 × 716 px`。
 - Implementation：`step=generate` 先展示与工程师版一致的“本周还没有菜单 → 10 餐待安排 → 生成本周菜单”；点击后进入 `step=menu` 的修改过程。
-- 结构核对：生成结果包含 5 个星期分组、10 张独立餐次卡；午饭和晚饭各一张。每张卡直接显示“荤1 / 荤2 / 素1 / 素2 / 汤”和五道彩色菜品，不需要先展开摘要卡；默认选中和属性面板数量为 0。
-- 标题层级：星期字号为 `13px`，具体日期为 `9px`，日期明确降为辅助信息；餐次卡内再展示午饭/晚饭与 `2荤2素1汤`。
-- 交互对齐：点具体菜名后，在该餐次卡内出现分类、近期重复、费工度和“换这道”；同类候选替换逻辑保持不变。页面重绘会恢复手机内容区的滚动位置，实测滚动到周四晚饭选择“丝瓜蛋汤”后仍停在 `scrollTop = 899`。
-- 视觉证据：默认修改页 `/tmp/kith-menu-generation-v2/menu-visible.png`；选中菜品后的修改页 `/tmp/kith-menu-generation-v2/menu-selected.png`；参考与单餐修改卡并排对照 `/tmp/kith-menu-generation-v2/component-comparison.png`。
-- 浏览器验证：DOM 实测 `5` 个星期分组、`10` 张餐次卡、`50` 个菜品按钮；默认属性面板为 `0`，选菜后准确出现 `1` 个；浏览器错误为 0。
-- 比较历史：Pass 1 虽然存在十张餐次卡，但 `menu-brain.html` 的五列彩色菜品和“选中 → 属性 → 换这道”被藏在餐次展开后，导致中间修改页初看不成立，属于 P1 信息架构问题。Pass 2 将五列菜品直接放进十张餐次卡，仅把属性面板设为按菜展开；并排对照确认参考的“分类表头 → 彩色菜品 → 当前选中描边 → 属性说明 → 换这道”层级已可见。未发现剩余 P0 / P1 / P2。
+- 结构核对：不再使用自创的十张纵向餐次卡；严格复用参考图的一张完整周表结构，并按餐次复制为“下周午餐菜单”和“下周晚餐菜单”两张表。每张表都是 `天 / 荤1 / 荤2 / 素1 / 素2 / 汤` 六列和周一至周五五行，合计十个餐次、五十个菜品按钮。
+- 标题层级：星期保持主标识，具体日期以更小字号放在星期下方，落实此前“日期是二级标题”的产品要求；日期是相对参考图唯一的结构性补充。
+- 字体与间距：继续使用系统中文字体；标题、徽章、列表表头、菜品名、详情与按钮的层级和相对间距按参考图缩放。单表实现高度只比等宽参考高 `24 px`，来自五个二级日期标签。
+- 色彩与资产：荤菜淡红、素菜淡绿、汤淡蓝、当前选中红色双描边、通过状态浅绿徽章均按参考图还原；参考组件没有图片资产，因此没有新增图标或装饰素材。
+- 文案与数据：视觉结构完全沿用参考，菜名继续使用工程师原型中的午晚饭数据，避免展示版与工程版内容分叉。
+- 交互对齐：默认选中午餐周一第一道菜，并在同一周表下方显示菜名、分类、近期重复、费工度和“换这道”；点击任意午餐或晚餐菜品后，选中描边与详情面板切换到对应周表，滚动位置保持不跳回顶部，同类候选替换逻辑保持不变。
+- 视觉证据：最终页面 `/tmp/kith-menu-generation-v4/menu-two-tables.png`；参考与午餐周表并排对照 `/tmp/kith-menu-generation-v4/weekly-table-comparison.png`，左侧为用户参考图，右侧为实现。
+- 浏览器验证：DOM 实测 `2` 张周表、`10` 个日期行、`50` 个菜品按钮、`1` 个默认选中状态和 `1` 个详情面板；切换到晚餐周二“蒜蓉时蔬”后选中项与详情一致；浏览器错误为 0。
+- 比较历史：Pass 1 把参考表格藏在展开层级中；Pass 2 又擅自改成十张纵向餐次卡，两次都偏离了用户给出的视觉真相，属于 P1 结构漂移。Pass 3 删除自创卡片，改为两张与参考同构的五日周表；并排对照确认表头、五行彩色菜品、选中描边、详情和“换这道”顺序一致，未发现剩余 P0 / P1 / P2。
 
 final result: passed

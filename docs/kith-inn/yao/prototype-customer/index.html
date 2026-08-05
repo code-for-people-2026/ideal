@@ -169,28 +169,25 @@
       .card-kicker { color: var(--flag-red-dark); font-size: 11px; font-weight: 900; letter-spacing: .06em; }
       .generation-ready h3 { margin: 7px 0 5px; font-size: 19px; }
       .generation-ready p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
-      .meal-day-groups { display: grid; gap: 12px; padding-bottom: 4px; }
-      .meal-day-group { display: grid; gap: 6px; }
-      .meal-day-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 0 2px; }
-      .meal-day-heading strong { font-size: 13px; }
-      .meal-day-heading span { color: var(--muted); font-size: 9px; font-weight: 750; }
-      .meal-card-stack { display: grid; gap: 6px; }
-      .meal-plan-card { overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
-      .meal-plan-card.editing { border-color: rgba(182,65,49,.5); box-shadow: 0 6px 18px rgba(52,41,31,.06); }
-      .meal-plan-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px 7px; }
-      .meal-plan-header strong { font-size: 11px; }
-      .meal-plan-header b { color: var(--green-dark); font-size: 8px; }
-      .meal-editor { padding: 0 10px 10px; }
-      .dish-grid-head,
-      .dish-grid-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
-      .dish-grid-head span { padding-bottom: 4px; color: var(--muted); font-size: 8px; font-weight: 850; text-align: center; }
-      .dish-select { display: grid; min-height: 48px; place-items: center; padding: 4px 3px; border: 1px solid #f1c3b8; border-radius: 8px; background: var(--flag-red-soft); color: var(--ink); font-size: 9px; font-weight: 850; line-height: 1.25; text-align: center; }
-      .dish-select.veg { border-color: #badcc9; background: var(--green-soft); }
-      .dish-select.soup { border-color: #c8d9ee; background: #edf5ff; }
-      .dish-select.active { outline: 2px solid var(--flag-red); outline-offset: 1px; }
-      .dish-inspector { margin-top: 9px; padding: 9px; border: 1px solid #dccfbf; border-radius: 9px; background: #fffdf8; }
-      .dish-inspector strong { display: block; font-size: 12px; }
-      .dish-inspector span { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; line-height: 1.45; }
+      .weekly-menu-boards { display: grid; gap: 12px; }
+      .weekly-menu-board { padding: 11px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+      .weekly-menu-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .weekly-menu-title strong { font-size: 15px; }
+      .weekly-menu-title span { padding: 6px 8px; border-radius: 9px; background: var(--green-soft); color: var(--green); font-size: 9px; font-weight: 900; }
+      .weekly-menu-grid { display: grid; grid-template-columns: 25px repeat(5, minmax(0, 1fr)); gap: 3px; margin-top: 9px; }
+      .weekly-menu-row { display: contents; }
+      .weekly-menu-head,
+      .weekly-menu-day { display: grid; min-height: 26px; place-items: center; color: var(--muted); font-size: 8px; font-weight: 850; text-align: center; }
+      .weekly-menu-day { align-content: center; color: var(--ink); }
+      .weekly-menu-day strong { font-size: 11px; line-height: 1; }
+      .weekly-menu-day small { margin-top: 3px; color: var(--muted); font-size: 6px; line-height: 1; }
+      .weekly-dish-cell { display: grid; min-height: 38px; place-items: center; padding: 3px 2px; border: 1px solid #f1c3b8; border-radius: 7px; background: var(--flag-red-soft); color: var(--ink); font-size: 8px; font-weight: 850; line-height: 1.18; text-align: center; }
+      .weekly-dish-cell.veg { border-color: #badcc9; background: var(--green-soft); }
+      .weekly-dish-cell.soup { border-color: #c8d9ee; background: #edf5ff; }
+      .weekly-dish-cell.active { outline: 2px solid var(--flag-red); outline-offset: 1px; }
+      .weekly-dish-detail { margin-top: 10px; padding: 9px; border: 1px solid #dccfbf; border-radius: 9px; background: #fffdf8; }
+      .weekly-dish-detail strong { display: block; font-size: 12px; }
+      .weekly-dish-detail span { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; line-height: 1.45; }
       .replace-selected { width: 100%; min-height: 35px; margin-top: 8px; border: 1px solid var(--flag-red); border-radius: 9px; background: #fff; color: var(--flag-red); font-size: 10px; font-weight: 900; }
       .plan-action { position: sticky; z-index: 3; bottom: -15px; margin-top: 9px; padding: 8px 0 2px; background: linear-gradient(transparent, #fbf8f1 25%); }
       .plan-action .primary { margin-top: 0; box-shadow: 0 8px 20px rgba(182,65,49,.16); }
@@ -436,10 +433,10 @@
         menu: {
           kicker: "修改过程 · 02",
           title: "十个餐次逐一看，<br />不满意当场换。",
-          lead: "生成结果按周一到周五分组，日期只是辅助信息；午饭和晚饭各是一张独立卡片，五道菜直接露出。桃子点具体菜名，就能查看分类并换成同类候选菜。",
+          lead: "生成结果完全按参考图呈现：午餐、晚餐各一张周表，每张表五行，每行一天的 2 荤 2 素 1 汤。桃子点具体菜名，就能查看分类并换成同类候选菜。",
           proofs: [
-            ["十", "五天 × 午晚餐，明确展示十张餐次卡"],
-            ["层", "星期是主标题，具体日期降为二级信息"],
+            ["午", "午餐周表五行，完整展示五个餐次"],
+            ["晚", "晚餐周表五行，合计覆盖十个餐次"],
             ["换", "选中一道菜后查看属性并换同类候选"],
           ],
           action: "确认十餐，再按天生成预订卡片",
@@ -479,7 +476,7 @@
         },
       };
 
-      let selectedShowcaseDishKey = null;
+      let selectedShowcaseDishKey = "0-lunch-0";
       let showcaseCandidateSheet = null;
       let showcasePendingState = "idle";
       let showcaseOrderMealFilter = "all";
@@ -555,36 +552,29 @@
       function showcaseDishSelector(dayIndex, meal, dishIndex) {
         const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
         const key = showcaseDishKey(dayIndex, meal, dishIndex);
-        return `<button class="dish-select ${kind} ${selectedShowcaseDishKey === key ? "active" : ""}" data-showcase-select-dish="${key}" type="button" aria-pressed="${selectedShowcaseDishKey === key}">${name}</button>`;
+        return `<button class="weekly-dish-cell ${kind} ${selectedShowcaseDishKey === key ? "active" : ""}" data-showcase-select-dish="${key}" type="button" aria-pressed="${selectedShowcaseDishKey === key}">${name}</button>`;
       }
 
-      function showcaseMealEditor(dayIndex, meal) {
-        const selectedKey = selectedShowcaseDishKey?.startsWith(`${dayIndex}-${meal}-`) ? selectedShowcaseDishKey : null;
-        const inspector = selectedKey ? (() => {
-          const dishIndex = Number(selectedKey.split("-").at(-1));
+      function showcaseShortDate(date) {
+        return date.replace("月", "/").replace("日", "");
+      }
+
+      function showcaseWeeklyBoard(meal, title) {
+        const selectedParts = selectedShowcaseDishKey?.split("-") || [];
+        const selectedMeal = selectedParts[1];
+        const detail = selectedMeal === meal ? (() => {
+          const dayIndex = Number(selectedParts[0]);
+          const dishIndex = Number(selectedParts[2]);
           const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
-          return `<div class="dish-inspector"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><button class="replace-selected" data-showcase-rotate="${selectedKey}" data-kind="${kind}" type="button">换这道</button></div>`;
+          return `<div class="weekly-dish-detail"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><button class="replace-selected" data-showcase-rotate="${selectedShowcaseDishKey}" data-kind="${kind}" type="button">换这道</button></div>`;
         })() : "";
-        return `<div class="meal-editor">
-          <div class="dish-grid-head"><span>荤1</span><span>荤2</span><span>素1</span><span>素2</span><span>汤</span></div>
-          <div class="dish-grid-row">${showcaseWeeklyMenu[dayIndex][meal].map((_, index) => showcaseDishSelector(dayIndex, meal, index)).join("")}</div>
-          ${inspector}
-        </div>`;
-      }
-
-      function showcaseMealCard(dayIndex, meal, label) {
-        const mealKey = `${dayIndex}-${meal}`;
-        const editing = selectedShowcaseDishKey?.startsWith(`${mealKey}-`);
-        return `<article class="meal-plan-card ${editing ? "editing" : ""}">
-          <div class="meal-plan-header"><strong>${label}</strong><b>${editing ? "正在修改" : "2荤2素1汤"}</b></div>
-          ${showcaseMealEditor(dayIndex, meal)}
-        </article>`;
-      }
-
-      function showcaseDayGroup(day, dayIndex) {
-        return `<section class="meal-day-group">
-          <div class="meal-day-heading"><strong>${day.day}</strong><span>${day.date}</span></div>
-          <div class="meal-card-stack">${showcaseMealCard(dayIndex, "lunch", "午饭")}${showcaseMealCard(dayIndex, "dinner", "晚饭")}</div>
+        return `<section class="weekly-menu-board">
+          <div class="weekly-menu-title"><strong>${title}</strong><span>5 天通过</span></div>
+          <div class="weekly-menu-grid" aria-label="${title}">
+            <div class="weekly-menu-head">天</div><div class="weekly-menu-head">荤1</div><div class="weekly-menu-head">荤2</div><div class="weekly-menu-head">素1</div><div class="weekly-menu-head">素2</div><div class="weekly-menu-head">汤</div>
+            ${showcaseWeeklyMenu.map((day, dayIndex) => `<div class="weekly-menu-row"><div class="weekly-menu-day"><strong>${day.day.slice(-1)}</strong><small>${showcaseShortDate(day.date)}</small></div>${day[meal].map((_, dishIndex) => showcaseDishSelector(dayIndex, meal, dishIndex)).join("")}</div>`).join("")}
+          </div>
+          ${detail}
         </section>`;
       }
 
@@ -598,16 +588,14 @@
           <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
           <div class="plan-state"><strong>本周还没有菜单</strong><span>10 餐待安排</span></div>
           <div class="menu-rule"><b>按桃子的默认方式排</b><br />每餐 2荤2素1汤 · 同一道菜近期尽量不重复 · 只用菜品池里的菜</div>
-          <div class="generation-ready"><div class="card-kicker">准备就绪</div><h3>一次生成五天午晚餐</h3><p>生成后十个餐次都在同一页；在任意午饭或晚饭卡中点菜名即可替换。</p></div>
+          <div class="generation-ready"><div class="card-kicker">准备就绪</div><h3>一次生成五天午晚餐</h3><p>生成后午餐和晚餐各有一张五日周表；点菜名即可替换。</p></div>
           <div class="plan-action"><button class="primary" data-showcase-generate type="button">生成本周菜单</button></div>
         `, { back: false, tabs: true, engineerChrome: true });
       }
 
       function menuPhone() {
         return phoneShell("menu-aligned has-app-tabs", "修改本周菜单", `
-          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>五天 × 午晚餐 · 共 10 个餐次</span></div><button aria-label="下一周">›</button></div>
-          <div class="plan-state"><strong>菜单已生成</strong><span>10 餐可逐一修改</span></div>
-          <div class="meal-day-groups">${showcaseWeeklyMenu.map(showcaseDayGroup).join("")}</div>
+          <div class="weekly-menu-boards">${showcaseWeeklyBoard("lunch", "下周午餐菜单")}${showcaseWeeklyBoard("dinner", "下周晚餐菜单")}</div>
           <div class="plan-action"><button class="primary" data-next>确认十餐菜单</button></div>
           ${showcaseCandidateSheetView()}
         `, { back: false, tabs: true, engineerChrome: true });
@@ -806,7 +794,7 @@
 
       document.addEventListener("click", (event) => {
         if (event.target.closest("[data-showcase-generate]")) {
-          selectedShowcaseDishKey = null;
+          selectedShowcaseDishKey = "0-lunch-0";
           showcaseCandidateSheet = null;
           go("menu");
           return;
