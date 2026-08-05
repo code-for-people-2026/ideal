@@ -188,7 +188,6 @@
       .weekly-dish-detail { margin-top: 10px; padding: 9px; border: 1px solid #dccfbf; border-radius: 9px; background: #fffdf8; }
       .weekly-dish-detail strong { display: block; font-size: 12px; }
       .weekly-dish-detail span { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; line-height: 1.45; }
-      .smart-swap-rule { margin-top: 7px; padding: 7px 8px; border-radius: 8px; background: var(--green-soft); color: var(--green-dark); font-size: 8px; font-weight: 800; line-height: 1.4; }
       .replace-selected { width: 100%; min-height: 35px; margin-top: 8px; border: 1px solid var(--flag-red); border-radius: 9px; background: #fff; color: var(--flag-red); font-size: 10px; font-weight: 900; }
       .plan-action { position: sticky; z-index: 3; bottom: -15px; margin-top: 9px; padding: 8px 0 2px; background: linear-gradient(transparent, #fbf8f1 25%); }
       .plan-action .primary { margin-top: 0; box-shadow: 0 8px 20px rgba(182,65,49,.16); }
@@ -582,12 +581,6 @@
         const meal = selectedParts[1];
         const dishIndex = Number(selectedParts[2]);
         const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
-        const smartSwapCount = showcaseDishSmartSwapHistory[selectedShowcaseDishKey]?.length || 0;
-        const smartSwapRemaining = Math.max(0, 3 - smartSwapCount);
-        const smartSwapHint = smartSwapRemaining
-          ? `${smartSwapCount ? `已智能更换 ${smartSwapCount} 次` : "先由系统挑选"} · 优先近期未出现 · 还可换 ${smartSwapRemaining} 次`
-          : "三次智能更换已用完，现在可以自己挑选";
-        const smartSwapAction = smartSwapRemaining ? `换这道 · 智能推荐 ${smartSwapRemaining}/3` : "自己挑一道";
         const rows = showcaseWeeklyMenu.flatMap((day, currentDayIndex) => [["lunch", "午饭"], ["dinner", "晚饭"]].map(([currentMeal, label]) => `<div class="weekly-menu-row"><div class="weekly-menu-day"><strong>${day.day}</strong><small>${label}</small></div>${day[currentMeal].map((_, currentDishIndex) => showcaseDishSelector(currentDayIndex, currentMeal, currentDishIndex)).join("")}</div>`)).join("");
         return `<section class="weekly-menu-board">
           <div class="weekly-menu-title"><strong>下周十餐菜单</strong><span>10 餐通过</span></div>
@@ -595,7 +588,7 @@
             <div class="weekly-menu-head">餐次</div><div class="weekly-menu-head">荤1</div><div class="weekly-menu-head">荤2</div><div class="weekly-menu-head">素1</div><div class="weekly-menu-head">素2</div><div class="weekly-menu-head">汤</div>
             ${rows}
           </div>
-          <div class="weekly-dish-detail"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><div class="smart-swap-rule">${smartSwapHint}</div><button class="replace-selected" data-showcase-rotate="${selectedShowcaseDishKey}" data-kind="${kind}" type="button">${smartSwapAction}</button></div>
+          <div class="weekly-dish-detail"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><button class="replace-selected" data-showcase-rotate="${selectedShowcaseDishKey}" data-kind="${kind}" type="button">换这道</button></div>
         </section>`;
       }
 
