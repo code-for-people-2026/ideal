@@ -174,19 +174,17 @@
       .meal-day-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 0 2px; }
       .meal-day-heading strong { font-size: 13px; }
       .meal-day-heading span { color: var(--muted); font-size: 9px; font-weight: 750; }
-      .meal-card-stack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+      .meal-card-stack { display: grid; gap: 6px; }
       .meal-plan-card { overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
-      .meal-plan-card.open { grid-column: 1 / -1; border-color: rgba(182,65,49,.5); box-shadow: 0 6px 18px rgba(52,41,31,.06); }
-      .meal-plan-toggle { width: 100%; min-height: 72px; padding: 9px 10px; border: 0; background: #fff; text-align: left; }
-      .meal-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-      .meal-card-head strong { font-size: 11px; }
-      .meal-card-head b { color: var(--green-dark); font-size: 8px; }
-      .meal-card-summary { display: -webkit-box; overflow: hidden; margin-top: 5px; color: var(--muted); font-size: 8px; line-height: 1.45; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
-      .meal-editor { padding: 9px 10px 10px; border-top: 1px solid #f0e9df; }
+      .meal-plan-card.editing { border-color: rgba(182,65,49,.5); box-shadow: 0 6px 18px rgba(52,41,31,.06); }
+      .meal-plan-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px 7px; }
+      .meal-plan-header strong { font-size: 11px; }
+      .meal-plan-header b { color: var(--green-dark); font-size: 8px; }
+      .meal-editor { padding: 0 10px 10px; }
       .dish-grid-head,
       .dish-grid-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
       .dish-grid-head span { padding-bottom: 4px; color: var(--muted); font-size: 8px; font-weight: 850; text-align: center; }
-      .dish-select { display: grid; min-height: 48px; place-items: center; padding: 4px 3px; border: 1px solid #f1c3b8; border-radius: 8px; background: var(--flag-red-soft); color: var(--ink); font-size: 8px; font-weight: 850; line-height: 1.25; text-align: center; }
+      .dish-select { display: grid; min-height: 48px; place-items: center; padding: 4px 3px; border: 1px solid #f1c3b8; border-radius: 8px; background: var(--flag-red-soft); color: var(--ink); font-size: 9px; font-weight: 850; line-height: 1.25; text-align: center; }
       .dish-select.veg { border-color: #badcc9; background: var(--green-soft); }
       .dish-select.soup { border-color: #c8d9ee; background: #edf5ff; }
       .dish-select.active { outline: 2px solid var(--flag-red); outline-offset: 1px; }
@@ -438,7 +436,7 @@
         menu: {
           kicker: "修改过程 · 02",
           title: "十个餐次逐一看，<br />不满意当场换。",
-          lead: "生成结果按周一到周五分组，日期只是辅助信息；午饭和晚饭各是一张独立卡片。桃子点开任意餐次，再点具体菜名，就能查看分类并换成同类候选菜。",
+          lead: "生成结果按周一到周五分组，日期只是辅助信息；午饭和晚饭各是一张独立卡片，五道菜直接露出。桃子点具体菜名，就能查看分类并换成同类候选菜。",
           proofs: [
             ["十", "五天 × 午晚餐，明确展示十张餐次卡"],
             ["层", "星期是主标题，具体日期降为二级信息"],
@@ -481,7 +479,6 @@
         },
       };
 
-      let expandedShowcaseMeal = null;
       let selectedShowcaseDishKey = null;
       let showcaseCandidateSheet = null;
       let showcasePendingState = "idle";
@@ -549,14 +546,6 @@
         return showcaseDishOverrides[key] || showcaseWeeklyMenu[dayIndex][meal][dishIndex];
       }
 
-      function showcaseMealNames(dayIndex, meal) {
-        return showcaseWeeklyMenu[dayIndex][meal].map((_, dishIndex) => showcaseDishFor(dayIndex, meal, dishIndex)[0]);
-      }
-
-      function showcaseMealSummary(dayIndex, meal) {
-        return `${showcaseMealNames(dayIndex, meal).slice(0, 2).join("、")}等5道`;
-      }
-
       function showcaseDishMeta(kind) {
         if (kind === "meat") return "荤菜 · 常做 · 近 5 天未用 · 费工度：中";
         if (kind === "veg") return "素菜 · 清爽 · 近期未重复 · 费工度：低";
@@ -570,26 +559,25 @@
       }
 
       function showcaseMealEditor(dayIndex, meal) {
-        const fallbackKey = showcaseDishKey(dayIndex, meal, 0);
-        const selectedKey = selectedShowcaseDishKey?.startsWith(`${dayIndex}-${meal}-`) ? selectedShowcaseDishKey : fallbackKey;
-        const dishIndex = Number(selectedKey.split("-").at(-1));
-        const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
+        const selectedKey = selectedShowcaseDishKey?.startsWith(`${dayIndex}-${meal}-`) ? selectedShowcaseDishKey : null;
+        const inspector = selectedKey ? (() => {
+          const dishIndex = Number(selectedKey.split("-").at(-1));
+          const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
+          return `<div class="dish-inspector"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><button class="replace-selected" data-showcase-rotate="${selectedKey}" data-kind="${kind}" type="button">换这道</button></div>`;
+        })() : "";
         return `<div class="meal-editor">
           <div class="dish-grid-head"><span>荤1</span><span>荤2</span><span>素1</span><span>素2</span><span>汤</span></div>
           <div class="dish-grid-row">${showcaseWeeklyMenu[dayIndex][meal].map((_, index) => showcaseDishSelector(dayIndex, meal, index)).join("")}</div>
-          <div class="dish-inspector"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><button class="replace-selected" data-showcase-rotate="${selectedKey}" data-kind="${kind}" type="button">换这道</button></div>
+          ${inspector}
         </div>`;
       }
 
       function showcaseMealCard(dayIndex, meal, label) {
         const mealKey = `${dayIndex}-${meal}`;
-        const open = expandedShowcaseMeal === mealKey;
-        return `<article class="meal-plan-card ${open ? "open" : ""}">
-          <button class="meal-plan-toggle" data-showcase-meal="${mealKey}" type="button" aria-expanded="${open}">
-            <span class="meal-card-head"><strong>${label}</strong><b>${open ? "收起" : "2荤2素1汤"}</b></span>
-            <span class="meal-card-summary">${showcaseMealNames(dayIndex, meal).join("、")}</span>
-          </button>
-          ${open ? showcaseMealEditor(dayIndex, meal) : ""}
+        const editing = selectedShowcaseDishKey?.startsWith(`${mealKey}-`);
+        return `<article class="meal-plan-card ${editing ? "editing" : ""}">
+          <div class="meal-plan-header"><strong>${label}</strong><b>${editing ? "正在修改" : "2荤2素1汤"}</b></div>
+          ${showcaseMealEditor(dayIndex, meal)}
         </article>`;
       }
 
@@ -610,7 +598,7 @@
           <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
           <div class="plan-state"><strong>本周还没有菜单</strong><span>10 餐待安排</span></div>
           <div class="menu-rule"><b>按桃子的默认方式排</b><br />每餐 2荤2素1汤 · 同一道菜近期尽量不重复 · 只用菜品池里的菜</div>
-          <div class="generation-ready"><div class="card-kicker">准备就绪</div><h3>一次生成五天午晚餐</h3><p>生成后十个餐次都在同一页；点开任意午饭或晚饭，再选择具体菜品进行替换。</p></div>
+          <div class="generation-ready"><div class="card-kicker">准备就绪</div><h3>一次生成五天午晚餐</h3><p>生成后十个餐次都在同一页；在任意午饭或晚饭卡中点菜名即可替换。</p></div>
           <div class="plan-action"><button class="primary" data-showcase-generate type="button">生成本周菜单</button></div>
         `, { back: false, tabs: true, engineerChrome: true });
       }
@@ -809,45 +797,43 @@
           </nav>`;
       }
 
+      function rerenderPhoneState() {
+        const scrollTop = document.querySelector(".screen-body")?.scrollTop || 0;
+        render();
+        const nextBody = document.querySelector(".screen-body");
+        if (nextBody) nextBody.scrollTop = scrollTop;
+      }
+
       document.addEventListener("click", (event) => {
         if (event.target.closest("[data-showcase-generate]")) {
-          expandedShowcaseMeal = null;
           selectedShowcaseDishKey = null;
           showcaseCandidateSheet = null;
           go("menu");
-          return;
-        }
-        const showcaseMeal = event.target.closest("[data-showcase-meal]")?.dataset.showcaseMeal;
-        if (showcaseMeal !== undefined) {
-          expandedShowcaseMeal = expandedShowcaseMeal === showcaseMeal ? null : showcaseMeal;
-          selectedShowcaseDishKey = expandedShowcaseMeal ? `${showcaseMeal}-0` : null;
-          showcaseCandidateSheet = null;
-          render();
           return;
         }
         const selectedDish = event.target.closest("[data-showcase-select-dish]")?.dataset.showcaseSelectDish;
         if (selectedDish) {
           selectedShowcaseDishKey = selectedDish;
           showcaseCandidateSheet = null;
-          render();
+          rerenderPhoneState();
           return;
         }
         const showcaseRotate = event.target.closest("[data-showcase-rotate]");
         if (showcaseRotate) {
           showcaseCandidateSheet = { key: showcaseRotate.dataset.showcaseRotate, kind: showcaseRotate.dataset.kind };
-          render();
+          rerenderPhoneState();
           return;
         }
         const showcaseChoice = event.target.closest("[data-showcase-choice]")?.dataset.showcaseChoice;
         if (showcaseChoice !== undefined && showcaseCandidateSheet) {
           showcaseDishOverrides[showcaseCandidateSheet.key] = showcaseCandidatePools[showcaseCandidateSheet.kind][Number(showcaseChoice)];
           showcaseCandidateSheet = null;
-          render();
+          rerenderPhoneState();
           return;
         }
         if (event.target.closest('[data-showcase-action="close-sheet"]')) {
           showcaseCandidateSheet = null;
-          render();
+          rerenderPhoneState();
           return;
         }
         const showcaseTab = event.target.closest("[data-showcase-tab]")?.dataset.showcaseTab;
@@ -859,13 +845,13 @@
         const pendingAction = event.target.closest("[data-showcase-pending]")?.dataset.showcasePending;
         if (pendingAction) {
           showcasePendingState = pendingAction;
-          render();
+          rerenderPhoneState();
           return;
         }
         const mealFilter = event.target.closest("[data-showcase-meal-filter]")?.dataset.showcaseMealFilter;
         if (mealFilter) {
           showcaseOrderMealFilter = mealFilter;
-          render();
+          rerenderPhoneState();
           return;
         }
         const reconcileCheck = event.target.closest("[data-showcase-reconcile-check]")?.dataset.showcaseReconcileCheck;
@@ -878,7 +864,7 @@
             showcaseReconcileChecked.add(index);
             showcaseReconcileSources[index] = "manual";
           }
-          render();
+          rerenderPhoneState();
           return;
         }
         if (event.target.closest("[data-next]")) cycle(1);
