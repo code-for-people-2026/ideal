@@ -11,7 +11,8 @@
   - `/Users/miyin/code for people/ideal/docs/kith-inn/yao/product-decisions.md`
   - `/Users/miyin/code for people/ideal/docs/kith-inn/yao/user-stories.md`
 - 实现：
-  - `http://127.0.0.1:4175/ideal/docs/kith-inn/yao/prototype-customer/?step=menu`
+  - `http://127.0.0.1:4174/ideal/docs/kith-inn/yao/prototype-customer/?step=generate`
+  - `http://127.0.0.1:4174/ideal/docs/kith-inn/yao/prototype-customer/?step=menu`
   - `http://127.0.0.1:4175/ideal/docs/kith-inn/yao/prototype-implementation/`
 
 ## 截图与归一化
@@ -29,19 +30,19 @@
 
 ## 状态
 
-- 客户版：`step=menu`、`step=share`、`step=orders` 与 `step=reconcile`。
+- 客户版：`step=generate`、`step=menu`、`step=share`、`step=orders` 与 `step=reconcile`。
 - 工程总蓝图：默认首屏和完整页面。
 - 桃子端：`step=orders`，并打开“手动补一单”。
 - 顾客端：从 `step=entry` 进入，再切换到底部“订单”。
 
 ## 全屏对照结论
 
-- 信息架构：客户版保持参考原型的“左侧价值叙事 + 右侧 iPhone 结果 + 底部讲解顺序”，但把五步过程压缩为四个最终结果，符合本次受众拆分。
+- 信息架构：客户版保持参考原型的“左侧价值叙事 + 右侧 iPhone 结果 + 底部讲解顺序”，用一页讲清菜单生成，再用四页呈现修改菜单、微信确认、订单管理和订单对账。
 - 字体与层级：继续使用系统中文字体栈；大标题、正文、证明条目、手机内标题的字重和行高与参考一致，未发现溢出或错误换行。
 - 间距与布局：桌面双栏比例、手机大小、圆角、卡片间距和底部讲解控件保持参考节奏；四个客户页面的手机内容 `scrollHeight = clientHeight = 648`，没有隐藏主按钮。
 - 颜色与 token：沿用街坊味既有的米白、砖红、墨黑、绿色与金色；客户版继承参考原型的对比关系，工程版继承现有角色原型的同一套 token。
 - 图片质量：使用现有 `kith-inn-logo.png`，没有用 CSS 图形、占位图或自制 SVG 替代品牌资产；刷新控件继续使用原有 `refresh-cw.svg`。
-- 文案：客户版只说结果，依次聚焦生成菜单、微信双向确认、订单管理和订单对账；四页均以工程角色原型的菜单、订单与候选对账数据为准，只压缩交互过程。
+- 文案：客户版依次聚焦生成菜单、修改菜单、微信双向确认、订单管理和订单对账；五页均以工程角色原型的菜单、订单与候选对账数据为准，只压缩非核心配置过程。
 
 ## 聚焦区域对照结论
 
@@ -69,7 +70,7 @@
 
 ## 交互与控制台验证
 
-- 客户版：四个结果可通过主按钮和底部箭头依次切换；手机左上角返回可回到上一个结果；URL `?step=` 同步更新。
+- 客户版：五个步骤可通过主按钮和底部箭头依次切换；手机左上角返回可回到上一个结果；URL `?step=` 同步更新。
 - 桃子端：底部“订单”可达；“手动补一单”能打开表单；四个 App 底部入口仍在。
 - 顾客端：微信群卡片可进入预订；底部“订单”可达；两项 App 底部入口仍在。
 - 工程总蓝图：桃子端、顾客端、直接看订单、PRD、产品决策、领域词汇和 User Stories 入口均存在。
@@ -158,5 +159,18 @@
 - 文案：一次提交午饭和晚饭时，订单回执明确拆成两笔餐次订单；中午只说明“午饭已送到门口”，提醒卡仅显示午饭订单号、2 份和 ¥60，晚饭继续保持未履约状态。应付动作明确为“微信转账给桃子”，没有伪装成小程序支付。
 - 交互：付款提醒卡可进入订单管理；浏览器运行错误为 0。
 - 比较历史：Pass 1 相对参考图缺少“送达说明 → 待付款提醒”后半段流程，属于 P1 内容缺口；补齐后 Pass 2 的全屏和手机聚焦对照未发现剩余 P0 / P1 / P2。
+
+## 菜单生成与十餐修改专项 · 2026-08-05
+
+- 工程生成页参考：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-implementation/prototype-taozi/index.html?step=plan` 的未生成状态。
+- 换菜交互参考：用户指定的 `/cfp-mono/docs/kith-inn/prototype/menu-brain.html`；本地解析到 `/Users/miyin/code for people/cfp-mono-worktrees/community-cooking-mock-ui/docs/kith-inn/prototype/menu-brain.html`。
+- Source visual truth：`/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-c5dffcae-de8e-48a2-9556-a234d6c9bcfc.png`。
+- Implementation：`step=generate` 先展示与工程师版一致的“本周还没有菜单 → 10 餐待安排 → 生成本周菜单”；点击后进入 `step=menu` 的修改过程。
+- 结构核对：生成结果包含 5 个星期分组、10 张独立餐次卡；午饭和晚饭各一张。默认展开数为 0，不再默认打开周二。
+- 标题层级：星期字号为 `13px`，具体日期为 `9px`，日期明确降为辅助信息；餐次卡内再展示午饭/晚饭与 `2荤2素1汤`。
+- 交互对齐：点击餐次后出现“荤1 / 荤2 / 素1 / 素2 / 汤”五列；点具体菜名可查看分类、近期重复和费工度，再通过“换这道”打开同类候选。实测“蒜蓉菜心”可替换为“香菇青菜”。
+- 视觉证据：生成页 `/tmp/kith-menu-generation/generate.png`；修改页 `/tmp/kith-menu-generation/menu-expanded.png`；参考与展开换菜组件并排对照 `/tmp/kith-menu-generation/component-comparison.png`。
+- 浏览器验证：从生成按钮进入 `?step=menu`；DOM 实测 `5` 个星期分组、`10` 张餐次卡；菜品选择、候选弹层和替换结果均工作；浏览器错误为 0。
+- 比较结论：实现保留参考的“分类表头 → 彩色菜品 → 当前选中描边 → 属性说明 → 换这道”层级，并按产品需要从五天午餐扩展为五天午晚餐的十张卡；未发现剩余 P0 / P1 / P2。
 
 final result: passed

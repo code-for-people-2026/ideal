@@ -6,8 +6,8 @@
     <title>街坊味 · 客户体验原型</title>
     <!--
       PROTOTYPE — 不接真实数据
-      问题：第一次接触产品的人，能否在 2 分钟内看懂四个最终结果？
-      四步高光路径，不展示初始化、配置、识别和审核过程；使用 ?step= 可分享状态。
+      问题：第一次接触产品的人，能否在 2 分钟内看懂菜单生成过程和四个最终结果？
+      五步高光路径，不展示初始化、配置、识别和审核过程；使用 ?step= 可分享状态。
       运行：python3 -m http.server 4173
     -->
     <style>
@@ -26,7 +26,7 @@
         --green-dark: #1e5d45;
         --green-soft: #e7f3ec;
         --phone: #1a1712;
-        --shadow: 0 32px 90px rgba(46, 38, 22, .15);
+        --shadow: 0 18px 50px rgba(46, 38, 22, .12);
       }
       * { box-sizing: border-box; }
       html { scroll-behavior: smooth; }
@@ -35,10 +35,7 @@
         min-width: 320px;
         min-height: 100vh;
         color: var(--ink);
-        background:
-          radial-gradient(circle at 8% 10%, rgba(212,43,30,.08), transparent 30rem),
-          radial-gradient(circle at 92% 84%, rgba(242,185,13,.16), transparent 30rem),
-          var(--paper);
+        background: var(--paper);
         font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
         -webkit-font-smoothing: antialiased;
       }
@@ -49,7 +46,7 @@
         width: min(1220px, 100%); margin: 0 auto; display: flex; align-items: center;
         justify-content: space-between; gap: 18px; padding-right: 178px;
       }
-      .brand { display: flex; align-items: center; gap: 11px; font-weight: 900; }
+      .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; }
       .brand-mark {
         display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px;
         color: #fff; background: var(--flag-red); box-shadow: 0 10px 24px rgba(212,43,30,.25);
@@ -61,27 +58,22 @@
         grid-template-columns: minmax(340px, .95fr) minmax(390px, 1.05fr); gap: 72px; align-items: center;
       }
       .story { padding: 20px 0; }
-      .step-kicker { color: var(--flag-red); font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
-      h1 { max-width: 610px; margin: 14px 0 18px; font-size: clamp(40px, 4.8vw, 64px); line-height: 1.03; letter-spacing: -.055em; text-wrap: balance; }
-      .lead { max-width: 570px; margin: 0; color: var(--muted); font-size: clamp(17px, 2vw, 20px); line-height: 1.7; }
-      .proofs { display: grid; gap: 12px; margin-top: 34px; max-width: 560px; }
+      .step-kicker { color: var(--flag-red); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+      h1 { max-width: 610px; margin: 12px 0 14px; font-size: clamp(30px, 3.4vw, 44px); line-height: 1.12; letter-spacing: -.03em; text-wrap: balance; }
+      .lead { max-width: 540px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
+      .proofs { display: grid; gap: 9px; margin-top: 24px; max-width: 520px; }
       .proof {
-        display: grid; grid-template-columns: 38px 1fr; gap: 13px; align-items: center;
-        padding: 14px 16px; border: 1px solid var(--line); border-radius: 17px;
-        background: rgba(255,255,255,.68); font-size: 14px; font-weight: 750;
+        display: grid; grid-template-columns: 26px 1fr; gap: 11px; align-items: center;
+        padding: 3px 0; font-size: 13px; font-weight: 600;
       }
-      .proof-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: var(--flag-red-soft); color: var(--flag-red); }
+      .proof-icon { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--flag-red-soft); color: var(--flag-red); font-size: 12px; font-weight: 800; }
       .story-action {
-        display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 15px 20px;
-        border: 0; border-radius: 15px; background: var(--ink); color: #fff; font-weight: 850;
-        box-shadow: 0 14px 30px rgba(23,32,25,.16);
+        display: inline-flex; align-items: center; gap: 10px; margin-top: 24px; padding: 13px 18px;
+        border: 0; border-radius: 13px; background: var(--ink); color: #fff; font-weight: 800;
+        box-shadow: 0 10px 24px rgba(23,32,25,.14);
       }
-      .story-action span { color: var(--flag-gold); font-size: 20px; }
+      .story-action span { color: var(--flag-gold); font-size: 18px; }
       .visual { position: relative; min-height: 790px; display: grid; place-items: center; }
-      .halo {
-        position: absolute; inset: 8% 4%; border-radius: 50%; filter: blur(.1px);
-        background: radial-gradient(circle, rgba(242,185,13,.32), rgba(212,43,30,.08) 45%, transparent 69%);
-      }
       .phone {
         position: relative; z-index: 1; width: min(390px, 92vw); height: 748px; overflow: hidden;
         border: 7px solid var(--phone); border-radius: 42px; background: #fff; box-shadow: var(--shadow);
@@ -162,6 +154,7 @@
       .share-compact .round-tool { width: 34px; height: 34px; }
       .mini .statusbar, .mini .appbar { background: #fff; }
       .mini .screen-body { padding: 15px; background: #faf8f2; overflow-y: auto; }
+      .generation-preview .screen-body,
       .menu-aligned .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
       .week-toolbar { display: grid; grid-template-columns: 35px 1fr 35px; align-items: center; gap: 7px; margin-bottom: 10px; }
       .week-toolbar button { width: 35px; height: 35px; border: 1px solid var(--line); border-radius: 11px; background: #fff; color: var(--ink); font-size: 20px; }
@@ -171,32 +164,36 @@
       .plan-state { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; padding: 10px 11px; border-radius: 12px; background: var(--green-soft); }
       .plan-state strong { font-size: 12px; }
       .plan-state span { padding: 5px 7px; border-radius: 999px; background: #fff; color: var(--green-dark); font-size: 9px; font-weight: 850; }
-      .week-plans { display: grid; gap: 7px; padding-bottom: 4px; }
-      .day-plan { overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
-      .day-plan.open { border-color: rgba(182,65,49,.5); box-shadow: 0 6px 18px rgba(52,41,31,.06); }
-      .day-plan.locked { border-color: rgba(40,117,87,.32); }
-      .day-plan.locked .day-toggle { background: #f8fcfa; }
-      .day-toggle { width: 100%; padding: 10px 11px; border: 0; background: #fff; text-align: left; }
-      .day-head { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
-      .day-head strong { font-size: 12px; }
-      .day-head b { color: var(--green-dark); font-size: 9px; }
-      .day-summary { display: grid; gap: 2px; margin-top: 5px; color: var(--muted); font-size: 9px; line-height: 1.4; }
-      .day-summary span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-      .day-detail { padding: 0 10px 10px; border-top: 1px solid #f0e9df; }
-      .meal-block { padding-top: 9px; }
-      .meal-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; color: var(--muted); font-size: 9px; font-weight: 800; }
-      .meal-title span { color: var(--green-dark); }
-      .mini-dishes { display: grid; gap: 4px; }
-      .mini-dish { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 6px; min-height: 31px; padding: 5px 6px 5px 9px; border-radius: 9px; background: #f8f5ef; }
-      .mini-dish b { overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
-      .mini-dish small { padding: 3px 5px; border-radius: 999px; background: var(--flag-red-soft); color: var(--flag-red-dark); font-size: 8px; font-weight: 850; }
-      .mini-dish small.veg { background: var(--green-soft); color: var(--green-dark); }
-      .mini-dish small.soup { background: var(--flag-gold-soft); color: #80580e; }
-      .locked-dish { min-width: 42px; color: var(--green-dark); font-size: 8px; font-weight: 850; text-align: center; }
-      .rotate-dish { display: inline-grid; width: 28px; height: 28px; place-items: center; padding: 0; border: 0; border-radius: 7px; background: transparent; color: var(--muted); transition: background 140ms ease, opacity 140ms ease, transform 140ms ease; }
-      .rotate-dish:hover { background: #f0ebe3; }
-      .rotate-dish:active { opacity: .8; transform: scale(.95); }
-      .rotate-dish img { width: 14px; height: 14px; }
+      .menu-rule { margin-bottom: 10px; padding: 10px 11px; border-radius: 12px; background: var(--flag-gold-soft); color: #765313; font-size: 10px; line-height: 1.5; }
+      .generation-ready { padding: 15px; border: 1px solid var(--line); border-radius: 18px; background: #fff; box-shadow: 0 8px 24px rgba(52,41,31,.07); }
+      .card-kicker { color: var(--flag-red-dark); font-size: 11px; font-weight: 900; letter-spacing: .06em; }
+      .generation-ready h3 { margin: 7px 0 5px; font-size: 19px; }
+      .generation-ready p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+      .meal-day-groups { display: grid; gap: 12px; padding-bottom: 4px; }
+      .meal-day-group { display: grid; gap: 6px; }
+      .meal-day-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 0 2px; }
+      .meal-day-heading strong { font-size: 13px; }
+      .meal-day-heading span { color: var(--muted); font-size: 9px; font-weight: 750; }
+      .meal-card-stack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+      .meal-plan-card { overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+      .meal-plan-card.open { grid-column: 1 / -1; border-color: rgba(182,65,49,.5); box-shadow: 0 6px 18px rgba(52,41,31,.06); }
+      .meal-plan-toggle { width: 100%; min-height: 72px; padding: 9px 10px; border: 0; background: #fff; text-align: left; }
+      .meal-card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+      .meal-card-head strong { font-size: 11px; }
+      .meal-card-head b { color: var(--green-dark); font-size: 8px; }
+      .meal-card-summary { display: -webkit-box; overflow: hidden; margin-top: 5px; color: var(--muted); font-size: 8px; line-height: 1.45; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+      .meal-editor { padding: 9px 10px 10px; border-top: 1px solid #f0e9df; }
+      .dish-grid-head,
+      .dish-grid-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+      .dish-grid-head span { padding-bottom: 4px; color: var(--muted); font-size: 8px; font-weight: 850; text-align: center; }
+      .dish-select { display: grid; min-height: 48px; place-items: center; padding: 4px 3px; border: 1px solid #f1c3b8; border-radius: 8px; background: var(--flag-red-soft); color: var(--ink); font-size: 8px; font-weight: 850; line-height: 1.25; text-align: center; }
+      .dish-select.veg { border-color: #badcc9; background: var(--green-soft); }
+      .dish-select.soup { border-color: #c8d9ee; background: #edf5ff; }
+      .dish-select.active { outline: 2px solid var(--flag-red); outline-offset: 1px; }
+      .dish-inspector { margin-top: 9px; padding: 9px; border: 1px solid #dccfbf; border-radius: 9px; background: #fffdf8; }
+      .dish-inspector strong { display: block; font-size: 12px; }
+      .dish-inspector span { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; line-height: 1.45; }
+      .replace-selected { width: 100%; min-height: 35px; margin-top: 8px; border: 1px solid var(--flag-red); border-radius: 9px; background: #fff; color: var(--flag-red); font-size: 10px; font-weight: 900; }
       .plan-action { position: sticky; z-index: 3; bottom: -15px; margin-top: 9px; padding: 8px 0 2px; background: linear-gradient(transparent, #fbf8f1 25%); }
       .plan-action .primary { margin-top: 0; box-shadow: 0 8px 20px rgba(182,65,49,.16); }
       .candidate-sheet { position: sticky; z-index: 8; bottom: -15px; margin: 10px -15px -15px; padding: 13px 15px 17px; border-top: 1px solid var(--line); border-radius: 18px 18px 0 0; background: #fff; box-shadow: 0 -18px 40px rgba(41,35,29,.18); }
@@ -373,14 +370,6 @@
       .compact-state { padding: 4px 7px; border-radius: 999px; background: var(--green-soft); color: var(--green-dark); font-size: 9px; font-weight: 850; white-space: nowrap; }
       .compact-state.warn { background: var(--flag-gold-soft); color: #80580e; }
       .orders-focus .primary { min-height: 42px; margin-top: 11px; }
-      .floating-card {
-        position: absolute; z-index: 3; padding: 11px 14px; border: 1px solid var(--line); border-radius: 14px;
-        background: rgba(255,255,255,.9); box-shadow: 0 14px 34px rgba(24,48,31,.13); backdrop-filter: blur(12px);
-        font-size: 11px; font-weight: 800;
-      }
-      .floating-card.top { top: 10%; right: -4%; transform: rotate(3deg); }
-      .floating-card.bottom { bottom: 11%; left: -6%; transform: rotate(-3deg); }
-      .floating-card em { display: block; margin-top: 4px; color: var(--flag-red); font-size: 14px; font-style: normal; }
       .nav {
         position: fixed; z-index: 20; left: 50%; bottom: 22px; transform: translateX(-50%);
         display: flex; align-items: center; gap: 5px; padding: 7px; border: 1px solid rgba(255,255,255,.5);
@@ -404,7 +393,6 @@
         .lead, .proofs { margin-left: auto; margin-right: auto; }
         .story-action { margin-left: auto; margin-right: auto; }
         .visual { min-height: 770px; }
-        .floating-card.top { right: 5%; } .floating-card.bottom { left: 4%; }
       }
       @media (max-width: 560px) {
         .page { padding: 18px 14px 105px; }
@@ -412,13 +400,12 @@
         .audience-switch { position: static; display: inline-block; margin: 14px; }
         .layout { margin-top: 14px; }
         .story { padding-top: 0; }
-        h1 { font-size: 43px; }
+        h1 { font-size: 32px; }
         .proofs { display: none; }
         .visual { min-height: 720px; }
         .phone { height: 690px; border-radius: 36px; }
         .screen-body { height: 590px; }
         .phone.has-app-tabs .screen-body { height: 532px; }
-        .floating-card { display: none; }
       }
     </style>
   </head>
@@ -427,28 +414,40 @@
     <div id="app"></div>
 
     <script>
-      const steps = ["menu", "share", "orders", "reconcile"];
+      const steps = ["generate", "menu", "share", "orders", "reconcile"];
       const labels = {
-        menu: "生成菜单",
+        generate: "生成菜单",
+        menu: "修改菜单",
         share: "微信确认",
         orders: "订单管理",
         reconcile: "订单对账",
       };
 
       const copy = {
-        menu: {
+        generate: {
           kicker: "核心任务 · 01",
-          title: "整周看得见，<br />不满意当场换。",
-          lead: "生成后周一到周五都留在同一个页面。未发布日期可以在原位置换菜；卡片一旦发布，这一天就冻结为只读，避免顾客看到的菜单和桃子后来修改的不一致。",
+          title: "五天十餐，<br />点一下就先排好。",
+          lead: "桃子不用每天从菜品池里重新拼菜单。系统遵守每餐 2 荤 2 素 1 汤、近期尽量不重复等规则，一次生成周一到周五的午饭和晚饭。",
           proofs: [
-            ["周", "五天十餐同屏可回看，不只展示某一天"],
-            ["锁", "已发布日期仍可展开查看，但不能再换菜"],
-            ["换", "只有未发布日期保留换菜与候选列表"],
+            ["池", "只使用桃子已经确认的菜品池"],
+            ["十", "五天午晚餐一次生成，共十个餐次"],
+            ["规", "荤素汤比例和近期重复规则自动检查"],
           ],
-          action: "确认整周，再按天生成预订卡片",
+          action: "生成五天十餐",
+        },
+        menu: {
+          kicker: "修改过程 · 02",
+          title: "十个餐次逐一看，<br />不满意当场换。",
+          lead: "生成结果按周一到周五分组，日期只是辅助信息；午饭和晚饭各是一张独立卡片。桃子点开任意餐次，再点具体菜名，就能查看分类并换成同类候选菜。",
+          proofs: [
+            ["十", "五天 × 午晚餐，明确展示十张餐次卡"],
+            ["层", "星期是主标题，具体日期降为二级信息"],
+            ["换", "选中一道菜后查看属性并换同类候选"],
+          ],
+          action: "确认十餐，再按天生成预订卡片",
         },
         share: {
-          kicker: "微信结果 · 02",
+          kicker: "微信结果 · 03",
           title: "开饭、下单、送达，<br />微信里都有确认。",
           lead: "桃子确认开饭后在群里发明日卡片，顾客下单后把两笔餐次订单摘要回传；某一餐送到后，桃子只提醒这一餐付款，顾客继续通过微信转账。",
           proofs: [
@@ -459,7 +458,7 @@
           action: "看订单怎么汇总",
         },
         orders: {
-          kicker: "经营结果 · 03",
+          kicker: "经营结果 · 04",
           title: "明天做多少，<br />桃子一眼就知道。",
           lead: "先告诉桃子明天一共做多少，再把唯一需要处理的长期申请提出来。短单、长期订单和桃子补单仍在同一张列表里，但不再让所有信息同时抢注意力。",
           proofs: [
@@ -470,7 +469,7 @@
           action: "看订单怎么对账",
         },
         reconcile: {
-          kicker: "经营结果 · 04",
+          kicker: "经营结果 · 05",
           title: "不接支付，<br />也能把到账记录核清。",
           lead: "对账变成一张可以逐笔划掉的清单。系统只替桃子划掉唯一匹配，并把依据写清楚；桃子也可以自己划掉任何一笔，不需要填写理由。",
           proofs: [
@@ -482,14 +481,14 @@
         },
       };
 
-      let expandedShowcaseDay = null;
+      let expandedShowcaseMeal = null;
+      let selectedShowcaseDishKey = null;
       let showcaseCandidateSheet = null;
       let showcasePendingState = "idle";
       let showcaseOrderMealFilter = "all";
       const showcaseReconcileChecked = new Set([0]);
       const showcaseReconcileSources = { 0: "system" };
       const showcaseDishOverrides = {};
-      const publishedShowcaseDays = new Set([0]);
       const showcaseWeeklyMenu = [
         { day: "周一", date: "8月3日", lunch: [["土豆烧牛肉","meat"],["白切鸡","meat"],["蒜蓉菜心","veg"],["清炒西兰花","veg"],["冬瓜虾皮汤","soup"]], dinner: [["梅菜扣肉","meat"],["清蒸鲈鱼","meat"],["荷塘小炒","veg"],["手撕包菜","veg"],["玉米排骨汤","soup"]] },
         { day: "周二", date: "8月4日", lunch: [["红烧排骨","meat"],["番茄炒蛋","meat"],["清炒油麦菜","veg"],["香菇青菜","veg"],["海带豆腐汤","soup"]], dinner: [["红烧牛腩","meat"],["清蒸鲈鱼","meat"],["蒜蓉时蔬","veg"],["手撕包菜","veg"],["番茄蛋汤","soup"]] },
@@ -507,7 +506,7 @@
         const value = new URLSearchParams(location.search).get("step");
         const aliases = { order: "orders", ledger: "reconcile" };
         const step = aliases[value] || value;
-        return steps.includes(step) ? step : "menu";
+        return steps.includes(step) ? step : "generate";
       }
 
       function go(step) {
@@ -558,25 +557,47 @@
         return `${showcaseMealNames(dayIndex, meal).slice(0, 2).join("、")}等5道`;
       }
 
-      function showcaseDishRow(dayIndex, meal, dishIndex) {
+      function showcaseDishMeta(kind) {
+        if (kind === "meat") return "荤菜 · 常做 · 近 5 天未用 · 费工度：中";
+        if (kind === "veg") return "素菜 · 清爽 · 近期未重复 · 费工度：低";
+        return "汤 · 每餐 1 道 · 近期未重复 · 费工度：低";
+      }
+
+      function showcaseDishSelector(dayIndex, meal, dishIndex) {
         const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
-        const label = kind === "meat" ? "荤" : kind === "veg" ? "素" : "汤";
         const key = showcaseDishKey(dayIndex, meal, dishIndex);
-        const control = publishedShowcaseDays.has(dayIndex)
-          ? `<span class="locked-dish">已发布</span>`
-          : `<button class="rotate-dish" data-showcase-rotate="${key}" data-kind="${kind}" aria-label="更换${name}" title="更换菜品"><img src="../prototype-implementation/prototype-taozi/refresh-cw.svg" alt="" /></button>`;
-        return `<div class="mini-dish"><b>${name}</b><small class="${kind === "meat" ? "" : kind}">${label}</small>${control}</div>`;
+        return `<button class="dish-select ${kind} ${selectedShowcaseDishKey === key ? "active" : ""}" data-showcase-select-dish="${key}" type="button" aria-pressed="${selectedShowcaseDishKey === key}">${name}</button>`;
       }
 
-      function showcaseMealBlock(dayIndex, meal, label) {
-        return `<div class="meal-block"><div class="meal-title">${label}<span>2荤2素1汤</span></div><div class="mini-dishes">${showcaseWeeklyMenu[dayIndex][meal].map((_, dishIndex) => showcaseDishRow(dayIndex, meal, dishIndex)).join("")}</div></div>`;
+      function showcaseMealEditor(dayIndex, meal) {
+        const fallbackKey = showcaseDishKey(dayIndex, meal, 0);
+        const selectedKey = selectedShowcaseDishKey?.startsWith(`${dayIndex}-${meal}-`) ? selectedShowcaseDishKey : fallbackKey;
+        const dishIndex = Number(selectedKey.split("-").at(-1));
+        const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
+        return `<div class="meal-editor">
+          <div class="dish-grid-head"><span>荤1</span><span>荤2</span><span>素1</span><span>素2</span><span>汤</span></div>
+          <div class="dish-grid-row">${showcaseWeeklyMenu[dayIndex][meal].map((_, index) => showcaseDishSelector(dayIndex, meal, index)).join("")}</div>
+          <div class="dish-inspector"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><button class="replace-selected" data-showcase-rotate="${selectedKey}" data-kind="${kind}" type="button">换这道</button></div>
+        </div>`;
       }
 
-      function showcaseDayPlan(day, index) {
-        const open = expandedShowcaseDay === index;
-        const locked = publishedShowcaseDays.has(index);
-        const status = locked ? (open ? "已发布 · 收起" : "已发布 · 查看") : (open ? "收起" : "未发布 · 展开");
-        return `<div class="day-plan ${open ? "open" : ""} ${locked ? "locked" : ""}"><button class="day-toggle" data-showcase-day="${index}" aria-expanded="${open}"><div class="day-head"><strong>${day.day} · ${day.date}</strong><b>${status}</b></div><div class="day-summary"><span>午：${showcaseMealSummary(index, "lunch")}</span><span>晚：${showcaseMealSummary(index, "dinner")}</span></div></button>${open ? `<div class="day-detail">${showcaseMealBlock(index, "lunch", "午餐")}${showcaseMealBlock(index, "dinner", "晚餐")}</div>` : ""}</div>`;
+      function showcaseMealCard(dayIndex, meal, label) {
+        const mealKey = `${dayIndex}-${meal}`;
+        const open = expandedShowcaseMeal === mealKey;
+        return `<article class="meal-plan-card ${open ? "open" : ""}">
+          <button class="meal-plan-toggle" data-showcase-meal="${mealKey}" type="button" aria-expanded="${open}">
+            <span class="meal-card-head"><strong>${label}</strong><b>${open ? "收起" : "2荤2素1汤"}</b></span>
+            <span class="meal-card-summary">${showcaseMealNames(dayIndex, meal).join("、")}</span>
+          </button>
+          ${open ? showcaseMealEditor(dayIndex, meal) : ""}
+        </article>`;
+      }
+
+      function showcaseDayGroup(day, dayIndex) {
+        return `<section class="meal-day-group">
+          <div class="meal-day-heading"><strong>${day.day}</strong><span>${day.date}</span></div>
+          <div class="meal-card-stack">${showcaseMealCard(dayIndex, "lunch", "午饭")}${showcaseMealCard(dayIndex, "dinner", "晚饭")}</div>
+        </section>`;
       }
 
       function showcaseCandidateSheetView() {
@@ -584,12 +605,22 @@
         return `<div class="candidate-sheet"><div class="sheet-head"><strong>选择替换菜品</strong><button data-showcase-action="close-sheet" aria-label="关闭候选列表">×</button></div><div class="candidate-list">${showcaseCandidatePools[showcaseCandidateSheet.kind].map(([name], index) => `<button data-showcase-choice="${index}"><b>${name}</b><span>同类换菜候选</span></button>`).join("")}</div></div>`;
       }
 
+      function generatePhone() {
+        return phoneShell("generation-preview has-app-tabs", "本周菜单", `
+          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
+          <div class="plan-state"><strong>本周还没有菜单</strong><span>10 餐待安排</span></div>
+          <div class="menu-rule"><b>按桃子的默认方式排</b><br />每餐 2荤2素1汤 · 同一道菜近期尽量不重复 · 只用菜品池里的菜</div>
+          <div class="generation-ready"><div class="card-kicker">准备就绪</div><h3>一次生成五天午晚餐</h3><p>生成后十个餐次都在同一页；点开任意午饭或晚饭，再选择具体菜品进行替换。</p></div>
+          <div class="plan-action"><button class="primary" data-showcase-generate type="button">生成本周菜单</button></div>
+        `, { back: false, tabs: true, engineerChrome: true });
+      }
+
       function menuPhone() {
-        return phoneShell("menu-aligned has-app-tabs", "本周菜单", `
-          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>五天十餐 · 点击某天展开</span></div><button aria-label="下一周">›</button></div>
-          <div class="plan-state"><strong>${publishedShowcaseDays.size} 天已发布锁定</strong><span>${showcaseWeeklyMenu.length - publishedShowcaseDays.size} 天可修改</span></div>
-          <div class="week-plans">${showcaseWeeklyMenu.map(showcaseDayPlan).join("")}</div>
-          <div class="plan-action"><button class="primary" data-next>确认本周菜单</button></div>
+        return phoneShell("menu-aligned has-app-tabs", "修改本周菜单", `
+          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>五天 × 午晚餐 · 共 10 个餐次</span></div><button aria-label="下一周">›</button></div>
+          <div class="plan-state"><strong>菜单已生成</strong><span>10 餐可逐一修改</span></div>
+          <div class="meal-day-groups">${showcaseWeeklyMenu.map(showcaseDayGroup).join("")}</div>
+          <div class="plan-action"><button class="primary" data-next>确认十餐菜单</button></div>
           ${showcaseCandidateSheetView()}
         `, { back: false, tabs: true, engineerChrome: true });
       }
@@ -742,7 +773,7 @@
       }
 
       function phoneFor(step) {
-        return { menu: menuPhone, share: sharePhone, orders: ordersPhone, reconcile: reconcilePhone }[step]();
+        return { generate: generatePhone, menu: menuPhone, share: sharePhone, orders: ordersPhone, reconcile: reconcilePhone }[step]();
       }
 
       function render() {
@@ -765,10 +796,7 @@
                 <button class="story-action" data-next>${item.action}<span>→</span></button>
               </section>
               <section class="visual" aria-label="手机交互演示">
-                <div class="halo"></div>
                 ${phoneFor(step)}
-                <div class="floating-card top">客户只需要看见<em>“事情已经变简单”</em></div>
-                <div class="floating-card bottom">结果路径<em>${stepIndex + 1} / ${steps.length} · ${labels[step]}</em></div>
               </section>
             </div>
           </main>
@@ -782,22 +810,32 @@
       }
 
       document.addEventListener("click", (event) => {
-        const showcaseDay = event.target.closest("[data-showcase-day]")?.dataset.showcaseDay;
-        if (showcaseDay !== undefined) {
-          const dayIndex = Number(showcaseDay);
-          expandedShowcaseDay = expandedShowcaseDay === dayIndex ? null : dayIndex;
+        if (event.target.closest("[data-showcase-generate]")) {
+          expandedShowcaseMeal = null;
+          selectedShowcaseDishKey = null;
+          showcaseCandidateSheet = null;
+          go("menu");
+          return;
+        }
+        const showcaseMeal = event.target.closest("[data-showcase-meal]")?.dataset.showcaseMeal;
+        if (showcaseMeal !== undefined) {
+          expandedShowcaseMeal = expandedShowcaseMeal === showcaseMeal ? null : showcaseMeal;
+          selectedShowcaseDishKey = expandedShowcaseMeal ? `${showcaseMeal}-0` : null;
+          showcaseCandidateSheet = null;
+          render();
+          return;
+        }
+        const selectedDish = event.target.closest("[data-showcase-select-dish]")?.dataset.showcaseSelectDish;
+        if (selectedDish) {
+          selectedShowcaseDishKey = selectedDish;
           showcaseCandidateSheet = null;
           render();
           return;
         }
         const showcaseRotate = event.target.closest("[data-showcase-rotate]");
         if (showcaseRotate) {
-          const key = showcaseRotate.dataset.showcaseRotate;
-          const dayIndex = Number(key.split("-")[0]);
-          if (!publishedShowcaseDays.has(dayIndex)) {
-            showcaseCandidateSheet = { key, kind: showcaseRotate.dataset.kind };
-            render();
-          }
+          showcaseCandidateSheet = { key: showcaseRotate.dataset.showcaseRotate, kind: showcaseRotate.dataset.kind };
+          render();
           return;
         }
         const showcaseChoice = event.target.closest("[data-showcase-choice]")?.dataset.showcaseChoice;
