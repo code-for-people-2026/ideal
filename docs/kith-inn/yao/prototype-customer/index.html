@@ -174,13 +174,13 @@
       .weekly-menu-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
       .weekly-menu-title strong { font-size: 15px; }
       .weekly-menu-title span { padding: 6px 8px; border-radius: 9px; background: var(--green-soft); color: var(--green); font-size: 9px; font-weight: 900; }
-      .weekly-menu-grid { display: grid; grid-template-columns: 25px repeat(5, minmax(0, 1fr)); gap: 3px; margin-top: 9px; }
+      .weekly-menu-grid { display: grid; grid-template-columns: 38px repeat(5, minmax(0, 1fr)); gap: 3px; margin-top: 9px; }
       .weekly-menu-row { display: contents; }
       .weekly-menu-head,
       .weekly-menu-day { display: grid; min-height: 26px; place-items: center; color: var(--muted); font-size: 8px; font-weight: 850; text-align: center; }
       .weekly-menu-day { align-content: center; color: var(--ink); }
-      .weekly-menu-day strong { font-size: 11px; line-height: 1; }
-      .weekly-menu-day small { margin-top: 3px; color: var(--muted); font-size: 6px; line-height: 1; }
+      .weekly-menu-day strong { font-size: 9px; line-height: 1; }
+      .weekly-menu-day small { margin-bottom: 3px; color: var(--muted); font-size: 7px; line-height: 1; }
       .weekly-dish-cell { display: grid; min-height: 38px; place-items: center; padding: 3px 2px; border: 1px solid #f1c3b8; border-radius: 7px; background: var(--flag-red-soft); color: var(--ink); font-size: 8px; font-weight: 850; line-height: 1.18; text-align: center; }
       .weekly-dish-cell.veg { border-color: #badcc9; background: var(--green-soft); }
       .weekly-dish-cell.soup { border-color: #c8d9ee; background: #edf5ff; }
@@ -433,10 +433,10 @@
         menu: {
           kicker: "修改过程 · 02",
           title: "十个餐次逐一看，<br />不满意当场换。",
-          lead: "生成结果完全按参考图呈现：午餐、晚餐各一张周表，每张表五行，每行一天的 2 荤 2 素 1 汤。桃子点具体菜名，就能查看分类并换成同类候选菜。",
+          lead: "生成结果放在同一张十餐表里，按日期依次排列午饭和晚饭：3号午饭、3号晚饭、4号午饭、4号晚饭。桃子点具体菜名，就能查看分类并换成同类候选菜。",
           proofs: [
-            ["午", "午餐周表五行，完整展示五个餐次"],
-            ["晚", "晚餐周表五行，合计覆盖十个餐次"],
+            ["序", "每天午饭、晚饭相邻，按日期向下查看"],
+            ["十", "一张表完整覆盖五天十个餐次"],
             ["换", "选中一道菜后查看属性并换同类候选"],
           ],
           action: "确认十餐，再按天生成预订卡片",
@@ -556,25 +556,23 @@
       }
 
       function showcaseShortDate(date) {
-        return date.replace("月", "/").replace("日", "");
+        return date.replace(/^.*月/, "").replace("日", "号");
       }
 
-      function showcaseWeeklyBoard(meal, title) {
+      function showcaseWeeklyBoard() {
         const selectedParts = selectedShowcaseDishKey?.split("-") || [];
-        const selectedMeal = selectedParts[1];
-        const detail = selectedMeal === meal ? (() => {
-          const dayIndex = Number(selectedParts[0]);
-          const dishIndex = Number(selectedParts[2]);
-          const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
-          return `<div class="weekly-dish-detail"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><button class="replace-selected" data-showcase-rotate="${selectedShowcaseDishKey}" data-kind="${kind}" type="button">换这道</button></div>`;
-        })() : "";
+        const dayIndex = Number(selectedParts[0]);
+        const meal = selectedParts[1];
+        const dishIndex = Number(selectedParts[2]);
+        const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
+        const rows = showcaseWeeklyMenu.flatMap((day, currentDayIndex) => [["lunch", "午饭"], ["dinner", "晚饭"]].map(([currentMeal, label]) => `<div class="weekly-menu-row"><div class="weekly-menu-day"><small>${showcaseShortDate(day.date)}</small><strong>${label}</strong></div>${day[currentMeal].map((_, currentDishIndex) => showcaseDishSelector(currentDayIndex, currentMeal, currentDishIndex)).join("")}</div>`)).join("");
         return `<section class="weekly-menu-board">
-          <div class="weekly-menu-title"><strong>${title}</strong><span>5 天通过</span></div>
-          <div class="weekly-menu-grid" aria-label="${title}">
-            <div class="weekly-menu-head">天</div><div class="weekly-menu-head">荤1</div><div class="weekly-menu-head">荤2</div><div class="weekly-menu-head">素1</div><div class="weekly-menu-head">素2</div><div class="weekly-menu-head">汤</div>
-            ${showcaseWeeklyMenu.map((day, dayIndex) => `<div class="weekly-menu-row"><div class="weekly-menu-day"><strong>${day.day.slice(-1)}</strong><small>${showcaseShortDate(day.date)}</small></div>${day[meal].map((_, dishIndex) => showcaseDishSelector(dayIndex, meal, dishIndex)).join("")}</div>`).join("")}
+          <div class="weekly-menu-title"><strong>下周十餐菜单</strong><span>10 餐通过</span></div>
+          <div class="weekly-menu-grid" aria-label="下周十餐菜单">
+            <div class="weekly-menu-head">餐次</div><div class="weekly-menu-head">荤1</div><div class="weekly-menu-head">荤2</div><div class="weekly-menu-head">素1</div><div class="weekly-menu-head">素2</div><div class="weekly-menu-head">汤</div>
+            ${rows}
           </div>
-          ${detail}
+          <div class="weekly-dish-detail"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><button class="replace-selected" data-showcase-rotate="${selectedShowcaseDishKey}" data-kind="${kind}" type="button">换这道</button></div>
         </section>`;
       }
 
@@ -588,14 +586,14 @@
           <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
           <div class="plan-state"><strong>本周还没有菜单</strong><span>10 餐待安排</span></div>
           <div class="menu-rule"><b>按桃子的默认方式排</b><br />每餐 2荤2素1汤 · 同一道菜近期尽量不重复 · 只用菜品池里的菜</div>
-          <div class="generation-ready"><div class="card-kicker">准备就绪</div><h3>一次生成五天午晚餐</h3><p>生成后午餐和晚餐各有一张五日周表；点菜名即可替换。</p></div>
+          <div class="generation-ready"><div class="card-kicker">准备就绪</div><h3>一次生成五天午晚餐</h3><p>生成后十个餐次按日期顺序放在同一张表里；点菜名即可替换。</p></div>
           <div class="plan-action"><button class="primary" data-showcase-generate type="button">生成本周菜单</button></div>
         `, { back: false, tabs: true, engineerChrome: true });
       }
 
       function menuPhone() {
         return phoneShell("menu-aligned has-app-tabs", "修改本周菜单", `
-          <div class="weekly-menu-boards">${showcaseWeeklyBoard("lunch", "下周午餐菜单")}${showcaseWeeklyBoard("dinner", "下周晚餐菜单")}</div>
+          <div class="weekly-menu-boards">${showcaseWeeklyBoard()}</div>
           <div class="plan-action"><button class="primary" data-next>确认十餐菜单</button></div>
           ${showcaseCandidateSheetView()}
         `, { back: false, tabs: true, engineerChrome: true });
