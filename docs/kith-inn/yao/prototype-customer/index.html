@@ -511,14 +511,18 @@
       let showcasePendingState = "idle";
       let showcaseOrderMealFilter = "lunch";
       const showcaseReconcileItems = [
-        { day: "8月4日", dayLabel: "今天 · 8月4日", name: "周阿姨 · 19:14", amount: "¥30", order: "8月4日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
-        { day: "8月4日", dayLabel: "今天 · 8月4日", name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
-        { day: "8月4日", dayLabel: "今天 · 8月4日", name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
-        { day: "8月3日", dayLabel: "昨天 · 8月3日", name: "王叔 · 21:02", amount: "¥90", order: "8月4日起长期午饭 · 每天 3 份", wait: "长期订单首款，顾客、金额与订单唯一匹配" },
-        { day: "8月3日", dayLabel: "昨天 · 8月3日", name: "陈姐 · 20:15", amount: "¥60", order: "8月3日晚饭 · 2份", wait: "" },
+        { day: "9月4日", dayLabel: "今天 · 9月4日", name: "周阿姨 · 19:14", amount: "¥30", order: "9月4日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "9月4日", dayLabel: "今天 · 9月4日", name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
+        { day: "9月4日", dayLabel: "今天 · 9月4日", name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
+        { day: "9月3日", dayLabel: "昨天 · 9月3日", name: "王叔 · 21:02", amount: "¥90", order: "9月4日起长期午饭 · 每天 3 份", wait: "长期订单首款，顾客、金额与订单唯一匹配" },
+        { day: "9月3日", dayLabel: "昨天 · 9月3日", name: "陈姐 · 20:15", amount: "¥60", order: "9月3日晚饭 · 2份", wait: "" },
+        { day: "9月2日", dayLabel: "周三 · 9月2日", name: "刘阿姨 · 19:48", amount: "¥90", order: "9月2日午饭 · 3份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "9月2日", dayLabel: "周三 · 9月2日", name: "小赵 · 20:31", amount: "¥30", order: "9月2日晚饭 · 1份", wait: "" },
+        { day: "9月1日", dayLabel: "周二 · 9月1日", name: "周阿姨 · 19:22", amount: "¥30", order: "9月1日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "9月1日", dayLabel: "周二 · 9月1日", name: "王叔 · 20:04", amount: "¥90", order: "9月1日晚饭 · 3份", wait: "顾客名、金额、日期与订单唯一匹配" },
       ];
-      const showcaseReconcileChecked = new Set([0, 3, 4]);
-      const showcaseReconcileSources = { 0: "system", 3: "system", 4: "manual" };
+      const showcaseReconcileChecked = new Set([0, 3, 4, 5, 6, 7, 8]);
+      const showcaseReconcileSources = { 0: "system", 3: "system", 4: "manual", 5: "system", 6: "manual", 7: "system", 8: "system" };
       const showcaseReconcileCollapsed = new Set(
         [...new Set(showcaseReconcileItems.map((item) => item.day))].filter((day) =>
           showcaseReconcileItems.every((item, index) => item.day !== day || showcaseReconcileChecked.has(index))
