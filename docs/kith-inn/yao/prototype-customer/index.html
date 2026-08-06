@@ -505,7 +505,7 @@
       let selectedShowcaseDishKey = "0-lunch-0";
       let showcaseCandidateSheet = null;
       let showcasePendingState = "idle";
-      let showcaseOrderMealFilter = "all";
+      let showcaseOrderMealFilter = "lunch";
       const showcaseReconcileChecked = new Set([0]);
       const showcaseReconcileSources = { 0: "system" };
       const showcaseDishOverrides = {};
@@ -709,6 +709,7 @@
           { meal: "lunch", name: "刘阿姨", detail: "午饭 · 长期订单 · 连续 30 天 · 已付款", quantity: "3 份", state: "生效中", tone: "" },
         ];
         const visibleOrderRows = orderRows.filter(({ meal }) => showcaseOrderMealFilter === "all" || meal === showcaseOrderMealFilter);
+        const orderSectionLabel = showcaseOrderMealFilter === "lunch" ? "午饭订单" : showcaseOrderMealFilter === "dinner" ? "晚饭订单" : "全部订单";
         return phoneShell("orders-focus has-app-tabs", "订单列表", `
           <section class="order-hero">
             <div class="order-hero-top"><span>明天 8月4日</span><b>还在接单</b></div>
@@ -722,7 +723,7 @@
               ? `<div class="priority-actions"><button data-showcase-pending="rejected">暂不接</button><button class="approve" data-showcase-pending="approved">同意订单</button></div>`
               : showcasePendingState === "idle" ? `<button data-showcase-pending="open">查看并处理</button>` : ""}
           </section>
-          <div class="order-section-head"><strong>全部订单 · ${visibleOrderRows.length} 笔</strong><div class="meal-filter" aria-label="按餐次筛选">${[["all","全部"],["lunch","午饭"],["dinner","晚饭"]].map(([value,label]) => `<button class="${showcaseOrderMealFilter === value ? "active" : ""}" data-showcase-meal-filter="${value}" aria-pressed="${showcaseOrderMealFilter === value}">${label}</button>`).join("")}</div></div>
+          <div class="order-section-head"><strong>${orderSectionLabel} · ${visibleOrderRows.length} 笔</strong><div class="meal-filter" aria-label="按餐次筛选">${[["all","全部"],["lunch","午饭"],["dinner","晚饭"]].map(([value,label]) => `<button class="${showcaseOrderMealFilter === value ? "active" : ""}" data-showcase-meal-filter="${value}" aria-pressed="${showcaseOrderMealFilter === value}">${label}</button>`).join("")}</div></div>
           <div class="compact-orders">${visibleOrderRows.map((order) => `<div class="compact-order"><div><b>${order.name}</b><p>${order.detail}</p></div><div class="compact-order-side"><strong>${order.quantity}</strong><span class="compact-state ${order.tone}">${order.state}</span></div></div>`).join("")}</div>
           <button class="primary" data-next>去订单对账</button>
         `, { back: false, tabs: true, activeTab: "orders", engineerChrome: true });
