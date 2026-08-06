@@ -199,6 +199,20 @@
       .candidate-list button { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); text-align: left; }
       .candidate-list button b { font-size: 11px; }
       .candidate-list button span { color: var(--muted); font-size: 9px; }
+      .confirmed-overview .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
+      .overview-status { padding: 13px 14px; border-radius: 15px; background: var(--green-dark); color: #fff; box-shadow: 0 10px 24px rgba(30,93,69,.14); }
+      .overview-status span { display: block; font-size: 9px; font-weight: 800; opacity: .78; }
+      .overview-status strong { display: block; margin-top: 4px; font-size: 20px; }
+      .overview-status p { margin: 5px 0 0; font-size: 9px; line-height: 1.45; opacity: .82; }
+      .overview-days { display: grid; gap: 8px; margin-top: 10px; }
+      .overview-day { padding: 10px 11px; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+      .overview-day-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
+      .overview-day-head strong { font-size: 12px; }
+      .overview-day-head span { color: var(--muted); font-size: 8px; }
+      .overview-meal { display: grid; grid-template-columns: 32px 1fr; gap: 7px; padding: 6px 0; border-top: 1px solid #f0ece4; }
+      .overview-meal:first-of-type { border-top: 0; }
+      .overview-meal b { color: var(--green-dark); font-size: 9px; }
+      .overview-meal p { margin: 0; color: var(--muted); font-size: 8px; line-height: 1.45; }
       .promise {
         position: relative; overflow: hidden; padding: 18px; border-radius: 20px; background: var(--ink); color: #fff;
       }
@@ -409,10 +423,11 @@
     <div id="app"></div>
 
     <script>
-      const steps = ["generate", "menu", "share", "orders", "reconcile"];
+      const steps = ["generate", "menu", "overview", "share", "orders", "reconcile"];
       const labels = {
         generate: "生成菜单",
         menu: "修改菜单",
+        overview: "菜单总览",
         share: "微信确认",
         orders: "订单管理",
         reconcile: "订单对账",
@@ -441,8 +456,19 @@
           ],
           action: "确认十餐，再按天生成预订卡片",
         },
+        overview: {
+          kicker: "确认结果 · 03",
+          title: "五天十餐确认完，<br />整周安排一眼看清。",
+          lead: "确认后不直接跳到微信群。系统先保留一张只读的本周菜单总览，把周一到周五的午饭和晚饭全部列清楚；之后再按天生成可以分享的预订卡片。",
+          proofs: [
+            ["总", "五天十餐使用同一份最终菜单数据"],
+            ["锁", "确认结果只读，不再误触换菜"],
+            ["发", "从总览继续按天生成预订卡片"],
+          ],
+          action: "去看今天午饭预订卡",
+        },
         share: {
-          kicker: "微信结果 · 03",
+          kicker: "微信结果 · 04",
           title: "一顿午饭从下单到付款，<br />群里都有确认。",
           lead: "桃子上午开放今天午饭预订，顾客在 11:00 前下单并回传一笔订单；午饭送到后，桃子再针对这一餐提醒微信付款。",
           proofs: [
@@ -453,7 +479,7 @@
           action: "看订单怎么汇总",
         },
         orders: {
-          kicker: "经营结果 · 04",
+          kicker: "经营结果 · 05",
           title: "明天做多少，<br />桃子一眼就知道。",
           lead: "先告诉桃子明天一共做多少，再把唯一需要处理的长期申请提出来。短单、长期订单和桃子补单仍在同一张列表里，但不再让所有信息同时抢注意力。",
           proofs: [
@@ -464,7 +490,7 @@
           action: "看订单怎么对账",
         },
         reconcile: {
-          kicker: "经营结果 · 05",
+          kicker: "经营结果 · 06",
           title: "不接支付，<br />也能把到账记录核清。",
           lead: "对账变成一张可以逐笔划掉的清单。系统只替桃子划掉唯一匹配，并把依据写清楚；桃子也可以自己划掉任何一笔，不需要填写理由。",
           proofs: [
@@ -592,6 +618,17 @@
         </section>`;
       }
 
+      function showcaseMealDishNames(dayIndex, meal) {
+        return showcaseWeeklyMenu[dayIndex][meal].map((_, dishIndex) => showcaseDishFor(dayIndex, meal, dishIndex)[0]);
+      }
+
+      function showcaseConfirmedOverview() {
+        return `<div class="overview-days">${showcaseWeeklyMenu.map((day, dayIndex) => `<section class="overview-day">
+          <div class="overview-day-head"><strong>${day.day}</strong><span>${day.date}</span></div>
+          ${[["lunch", "午饭"], ["dinner", "晚饭"]].map(([meal, label]) => `<div class="overview-meal"><b>${label}</b><p>${showcaseMealDishNames(dayIndex, meal).join("、")}</p></div>`).join("")}
+        </section>`).join("")}</div>`;
+      }
+
       function showcaseCandidateSheetView() {
         if (!showcaseCandidateSheet) return "";
         const [dayIndex, meal, dishIndex] = showcaseCandidateSheet.key.split("-");
@@ -613,9 +650,18 @@
       function menuPhone() {
         return phoneShell("menu-aligned has-app-tabs", "修改本周菜单", `
           <div class="weekly-menu-boards">${showcaseWeeklyBoard()}</div>
-          <div class="plan-action"><button class="primary" data-next>确认十餐菜单</button></div>
+          <div class="plan-action"><button class="primary" data-showcase-confirm-menu>确认十餐菜单</button></div>
           ${showcaseCandidateSheetView()}
         `, { back: false, tabs: true, engineerChrome: true });
+      }
+
+      function overviewPhone() {
+        return phoneShell("confirmed-overview has-app-tabs", "本周菜单总览", `
+          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
+          <section class="overview-status"><span>本周菜单已确认</span><strong>5 天 · 10 餐</strong><p>每餐 2荤2素1汤，下面是确认后的最终安排。</p></section>
+          ${showcaseConfirmedOverview()}
+          <div class="plan-action"><button class="primary" data-next>按天生成预订卡片</button></div>
+        `, { tabs: true, engineerChrome: true });
       }
 
       function sharePhone() {
@@ -767,7 +813,7 @@
       }
 
       function phoneFor(step) {
-        return { generate: generatePhone, menu: menuPhone, share: sharePhone, orders: ordersPhone, reconcile: reconcilePhone }[step]();
+        return { generate: generatePhone, menu: menuPhone, overview: overviewPhone, share: sharePhone, orders: ordersPhone, reconcile: reconcilePhone }[step]();
       }
 
       function render() {
@@ -811,6 +857,10 @@
       }
 
       document.addEventListener("click", (event) => {
+        if (event.target.closest("[data-showcase-confirm-menu]")) {
+          go("overview");
+          return;
+        }
         if (event.target.closest("[data-showcase-generate]")) {
           selectedShowcaseDishKey = "0-lunch-0";
           showcaseCandidateSheet = null;
