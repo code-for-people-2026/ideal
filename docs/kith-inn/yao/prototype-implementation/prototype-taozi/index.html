@@ -889,9 +889,9 @@
             <div class="evidence-note">退款在微信逐笔完成；平台记录应退金额和后续确认。</div>`);
         }
         return phoneShell("ops", "确认与分享", `
-          <div class="detail-head"><div><span>今晚 20:12</span><strong>明天开饭</strong></div><em>9月8日</em></div>
+          <div class="detail-head"><div><span>今晚 20:00</span><strong>明天开饭</strong></div><em>9月8日</em></div>
           <div class="menu-rule"><b>一张卡片只开放明天</b><br />顾客可选 9月8日午饭或晚饭；后天是否开饭，要等明晚桃子重新决定。</div>
-          <div class="share-card"><div class="share-card-main"><div class="share-card-brand">${logo("mini-logo")}街坊味 · 桃子的家常饭</div><h3>明天 9月8日开饭</h3><p>午饭：${mealSummary(1, "lunch")}<br />晚饭：${mealSummary(1, "dinner")}</p>${publishedMenuDetails()}</div><div class="share-card-foot"><span>${tomorrowCardShared ? "已发布 · 菜单已锁定" : "发布前可修改"}</span><span>今晚 21:30 截止</span></div></div>
+          <div class="share-card"><div class="share-card-main"><div class="share-card-brand">${logo("mini-logo")}街坊味 · 桃子的家常饭</div><h3>明天 9月8日开饭</h3><p>午饭：${mealSummary(1, "lunch")}<br />晚饭：${mealSummary(1, "dinner")}</p>${publishedMenuDetails()}</div><div class="share-card-foot"><span>${tomorrowCardShared ? "已发布 · 菜单已锁定" : "发布前可修改"}</span><span>明天上午 11:00 截止</span></div></div>
           <button class="primary" data-action="share-tomorrow-card">${tomorrowCardShared ? "已模拟分享到微信群" : "分享明日开饭卡片"}</button>
           ${tomorrowCardShared ? `<button class="stop-action" data-action="stop-tomorrow">明天有事，暂停开饭</button><button class="secondary" data-app-route="orders">查看明日订单与长期订单</button>` : ""}
           <div class="evidence-note">发布是冻结节点：发出后 9月8日菜单只读；未发布日期仍可继续换菜。</div>`);
