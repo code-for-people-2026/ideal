@@ -525,11 +525,7 @@
       ];
       const showcaseReconcileChecked = new Set([0, 3, 4, 5, 7, 8]);
       const showcaseReconcileSources = { 0: "system", 3: "system", 4: "manual", 5: "system", 7: "system", 8: "system" };
-      const showcaseReconcileCollapsed = new Set(
-        [...new Set(showcaseReconcileItems.map((item) => item.day))].filter((day) =>
-          showcaseReconcileItems.every((item, index) => item.day !== day || showcaseReconcileChecked.has(index))
-        )
-      );
+      const showcaseReconcileCollapsed = new Set(showcaseReconcileItems.map((item) => item.day));
       const showcaseDishOverrides = {};
       const showcaseDishSmartSwapHistory = {};
       const showcaseWeeklyMenu = [
