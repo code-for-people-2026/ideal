@@ -325,10 +325,7 @@
       .reconcile-summary { margin: 10px 0; padding: 11px; border-radius: 13px; background: var(--flag-gold-soft); color: #7a5a08; font-size: 10px; line-height: 1.45; }
       .reconcile-summary b { display: block; margin-bottom: 3px; font-size: 12px; }
       .reconcile-focus .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
-      .reconcile-progress { padding: 14px 16px; border-radius: 16px; background: var(--green-dark); color: #fff; box-shadow: 0 10px 24px rgba(30,93,69,.14); }
-      .reconcile-progress span { display: block; color: rgba(255,255,255,.76); font-size: 10px; font-weight: 800; }
-      .reconcile-progress strong { display: block; margin-top: 3px; font-size: 20px; line-height: 1.15; }
-      .reconcile-day { overflow: hidden; margin-top: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+      .reconcile-day { overflow: hidden; margin-bottom: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
       .reconcile-day-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 62px; padding: 10px 10px 10px 14px; border: 0; background: #fff; color: var(--ink); text-align: left; }
       .reconcile-day-head strong { font-size: 13px; }
       .reconcile-day-head span { display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: 10px; }
@@ -804,7 +801,6 @@
 
       function reconcilePhone() {
         const items = showcaseReconcileItems;
-        const checkedCount = showcaseReconcileChecked.size;
         const rowFor = (item, index) => {
           const checked = showcaseReconcileChecked.has(index);
           const source = showcaseReconcileSources[index];
@@ -834,7 +830,6 @@
           </section>`;
         }).join("");
         return phoneShell("reconcile-focus", "对账清单", `
-          <section class="reconcile-progress"><span>已读取 ${items.length} 张收款截图</span><strong>${checkedCount}/${items.length} 已划掉</strong></section>
           ${daySections}
           <p class="reconcile-note">系统代划一定保留匹配依据；桃子手动划掉不需要填写理由。这里只记录清单状态，不代表平台收款。</p>
         `);
