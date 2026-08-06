@@ -325,29 +325,36 @@
       .reconcile-summary { margin: 10px 0; padding: 11px; border-radius: 13px; background: var(--flag-gold-soft); color: #7a5a08; font-size: 10px; line-height: 1.45; }
       .reconcile-summary b { display: block; margin-bottom: 3px; font-size: 12px; }
       .reconcile-focus .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
-      .reconcile-progress { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 14px; border-radius: 16px; background: var(--green-dark); color: #fff; box-shadow: 0 10px 24px rgba(30,93,69,.14); }
-      .reconcile-progress span { display: block; font-size: 10px; font-weight: 800; opacity: .78; }
-      .reconcile-progress strong { display: block; margin-top: 3px; font-size: 23px; line-height: 1.1; }
-      .reconcile-progress em { font-size: 10px; font-style: normal; font-weight: 850; opacity: .82; }
-      .reconcile-caption { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 13px 1px 8px; }
-      .reconcile-caption strong { font-size: 13px; }
-      .reconcile-caption span { color: var(--muted); font-size: 9px; }
-      .reconcile-list { display: grid; gap: 8px; }
-      .reconcile-item { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 11px; border: 1px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer; transition: background .15s ease, border-color .15s ease; }
-      .reconcile-item.checked { border-color: #bad7ca; background: #f1f8f4; }
-      .reconcile-check { width: 19px; height: 19px; margin: 2px 0 0; accent-color: var(--green); cursor: pointer; }
+      .reconcile-progress { padding: 14px 16px; border-radius: 16px; background: var(--green-dark); color: #fff; box-shadow: 0 10px 24px rgba(30,93,69,.14); }
+      .reconcile-progress span { display: block; color: rgba(255,255,255,.76); font-size: 10px; font-weight: 800; }
+      .reconcile-progress strong { display: block; margin-top: 3px; font-size: 20px; line-height: 1.15; }
+      .reconcile-day { overflow: hidden; margin-top: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+      .reconcile-day-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 62px; padding: 10px 10px 10px 14px; border: 0; background: #fff; color: var(--ink); text-align: left; }
+      .reconcile-day-head strong { font-size: 13px; }
+      .reconcile-day-head span { display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: 10px; }
+      .reconcile-day-head em { margin-right: 3px; color: var(--ink); font-style: normal; font-weight: 700; }
+      .reconcile-sq { width: 8px; height: 8px; border-radius: 3px; background: var(--flag-red); }
+      .reconcile-sq.done { background: var(--green); }
+      .reconcile-chevron { display: grid; flex: 0 0 auto; place-items: center; width: 32px; height: 32px; margin-left: 4px; border-radius: 10px; background: var(--green-soft); color: var(--green-dark); font-size: 20px; font-style: normal; font-weight: 900; line-height: 1; transition: transform .15s ease, background .15s ease; }
+      .reconcile-chevron.open { transform: rotate(90deg); background: var(--flag-gold-soft); }
+      .reconcile-list { overflow: hidden; border-radius: 14px; background: #fff; }
+      .reconcile-day .reconcile-list { border-top: 1px solid var(--line); border-radius: 0; }
+      .reconcile-item { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--line); background: #fff; cursor: pointer; }
+      .reconcile-item:last-child { border-bottom: 0; }
+      .reconcile-check { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--green); cursor: pointer; }
       .reconcile-item-main { min-width: 0; }
       .reconcile-item-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-      .reconcile-item-head b { font-size: 12px; }
-      .reconcile-item-head strong { font-size: 14px; }
+      .reconcile-item-head b { font-size: 13px; font-weight: 700; }
+      .reconcile-item-head strong { font-size: 13px; }
+      .reconcile-item-head strong.attention { color: var(--flag-red); }
       .reconcile-item.checked .reconcile-item-head b,
-      .reconcile-item.checked .reconcile-item-head strong { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1.5px; }
-      .reconcile-order { margin: 4px 0 0; color: var(--muted); font-size: 9px; line-height: 1.4; }
-      .reconcile-reason, .reconcile-manual, .reconcile-wait { margin-top: 7px; padding: 7px 8px; border-radius: 9px; font-size: 9px; font-weight: 800; line-height: 1.4; }
-      .reconcile-reason { background: #dfeee7; color: #1e5d45; }
-      .reconcile-manual { background: #e9f3ed; color: #1e5d45; }
-      .reconcile-wait { background: #f4f0e8; color: #756b5f; }
-      .reconcile-note { margin: 10px 2px 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
+      .reconcile-item.checked .reconcile-item-head strong { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+      .reconcile-order { display: block; margin: 3px 0 0; color: var(--muted); font-size: 10px; line-height: 1.4; }
+      .reconcile-reason, .reconcile-manual, .reconcile-wait { display: block; margin-top: 4px; font-size: 10px; font-weight: 600; line-height: 1.45; }
+      .reconcile-reason { color: var(--green); }
+      .reconcile-manual { color: var(--muted); }
+      .reconcile-wait { color: var(--flag-red); }
+      .reconcile-note { margin: 12px 4px 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
       .orders-focus .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
       .order-hero { padding: 16px; border-radius: 18px; background: var(--green-dark); color: #fff; box-shadow: 0 10px 24px rgba(30,93,69,.16); }
       .order-hero-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
@@ -506,8 +513,20 @@
       let showcaseCandidateSheet = null;
       let showcasePendingState = "idle";
       let showcaseOrderMealFilter = "lunch";
-      const showcaseReconcileChecked = new Set([0]);
-      const showcaseReconcileSources = { 0: "system" };
+      const showcaseReconcileItems = [
+        { day: "8月4日", dayLabel: "今天 · 8月4日", name: "周阿姨 · 19:14", amount: "¥30", order: "8月4日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "8月4日", dayLabel: "今天 · 8月4日", name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
+        { day: "8月4日", dayLabel: "今天 · 8月4日", name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
+        { day: "8月3日", dayLabel: "昨天 · 8月3日", name: "王叔 · 21:02", amount: "¥90", order: "8月4日起长期午饭 · 每天 3 份", wait: "长期订单首款，顾客、金额与订单唯一匹配" },
+        { day: "8月3日", dayLabel: "昨天 · 8月3日", name: "陈姐 · 20:15", amount: "¥60", order: "8月3日晚饭 · 2份", wait: "" },
+      ];
+      const showcaseReconcileChecked = new Set([0, 3, 4]);
+      const showcaseReconcileSources = { 0: "system", 3: "system", 4: "manual" };
+      const showcaseReconcileCollapsed = new Set(
+        [...new Set(showcaseReconcileItems.map((item) => item.day))].filter((day) =>
+          showcaseReconcileItems.every((item, index) => item.day !== day || showcaseReconcileChecked.has(index))
+        )
+      );
       const showcaseDishOverrides = {};
       const showcaseDishSmartSwapHistory = {};
       const showcaseWeeklyMenu = [
@@ -784,15 +803,9 @@
       }
 
       function reconcilePhone() {
-        const items = [
-          { name: "周阿姨 · 19:14", amount: "¥30", order: "8月4日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
-          { name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
-          { name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
-        ];
+        const items = showcaseReconcileItems;
         const checkedCount = showcaseReconcileChecked.size;
-        const systemCount = [...showcaseReconcileChecked].filter((index) => showcaseReconcileSources[index] === "system").length;
-        const manualCount = checkedCount - systemCount;
-        const rows = items.map((item, index) => {
+        const rowFor = (item, index) => {
           const checked = showcaseReconcileChecked.has(index);
           const source = showcaseReconcileSources[index];
           const status = checked
@@ -802,13 +815,27 @@
             : `<div class="reconcile-wait">${item.wait}</div>`;
           return `<label class="reconcile-item ${checked ? "checked" : ""}">
             <input class="reconcile-check" type="checkbox" data-showcase-reconcile-check="${index}" ${checked ? "checked" : ""} aria-label="${checked ? "恢复" : "划掉"}${item.name} ${item.amount}" />
-            <span class="reconcile-item-main"><span class="reconcile-item-head"><b>${item.name}</b><strong>${item.amount}</strong></span><span class="reconcile-order">${item.order}</span>${status}</span>
+            <span class="reconcile-item-main"><span class="reconcile-item-head"><b>${item.name}</b><strong class="${checked ? "" : "attention"}">${item.amount}</strong></span><span class="reconcile-order">${item.order}</span>${status}</span>
           </label>`;
+        };
+        const days = [...new Set(items.map((item) => item.day))];
+        const daySections = days.map((day) => {
+          const dayEntries = items.map((item, index) => ({ item, index })).filter(({ item }) => item.day === day);
+          const sortedEntries = [...dayEntries].sort((a, b) => Number(showcaseReconcileChecked.has(a.index)) - Number(showcaseReconcileChecked.has(b.index)));
+          const doneCount = dayEntries.filter(({ index }) => showcaseReconcileChecked.has(index)).length;
+          const collapsed = showcaseReconcileCollapsed.has(day);
+          const squares = sortedEntries.map(({ index }) => `<i class="reconcile-sq ${showcaseReconcileChecked.has(index) ? "done" : ""}"></i>`).join("");
+          return `<section class="reconcile-day">
+            <button class="reconcile-day-head" data-showcase-reconcile-day="${day}" aria-expanded="${!collapsed}">
+              <strong>${dayEntries[0].item.dayLabel}</strong>
+              <span><em>${doneCount}/${dayEntries.length}</em>${squares}<i class="reconcile-chevron ${collapsed ? "" : "open"}">›</i></span>
+            </button>
+            ${collapsed ? "" : `<div class="reconcile-list">${sortedEntries.map(({ item, index }) => rowFor(item, index)).join("")}</div>`}
+          </section>`;
         }).join("");
         return phoneShell("reconcile-focus", "对账清单", `
-          <section class="reconcile-progress"><div><span>已读取 3 张收款截图</span><strong>${checkedCount}/3 已划掉</strong></div><em>系统 ${systemCount} · 桃子 ${manualCount}</em></section>
-          <div class="reconcile-caption"><strong>逐笔核对</strong><span>点方框可划掉或恢复</span></div>
-          <div class="reconcile-list">${rows}</div>
+          <section class="reconcile-progress"><span>已读取 ${items.length} 张收款截图</span><strong>${checkedCount}/${items.length} 已划掉</strong></section>
+          ${daySections}
           <p class="reconcile-note">系统代划一定保留匹配依据；桃子手动划掉不需要填写理由。这里只记录清单状态，不代表平台收款。</p>
         `);
       }
@@ -914,6 +941,13 @@
         const mealFilter = event.target.closest("[data-showcase-meal-filter]")?.dataset.showcaseMealFilter;
         if (mealFilter) {
           showcaseOrderMealFilter = mealFilter;
+          rerenderPhoneState();
+          return;
+        }
+        const reconcileDay = event.target.closest("[data-showcase-reconcile-day]")?.dataset.showcaseReconcileDay;
+        if (reconcileDay) {
+          if (showcaseReconcileCollapsed.has(reconcileDay)) showcaseReconcileCollapsed.delete(reconcileDay);
+          else showcaseReconcileCollapsed.add(reconcileDay);
           rerenderPhoneState();
           return;
         }
