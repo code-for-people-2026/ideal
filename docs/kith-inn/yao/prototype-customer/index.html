@@ -361,15 +361,6 @@
       .order-hero-top b { padding: 5px 8px; border-radius: 999px; background: rgba(255,255,255,.15); font-size: 10px; }
       .order-hero strong { display: block; margin-top: 8px; font-size: 28px; line-height: 1.1; }
       .order-hero p { margin: 6px 0 0; color: rgba(255,255,255,.8); font-size: 12px; line-height: 1.45; }
-      .order-priority { margin-top: 11px; padding: 12px 13px; border: 1px solid #ecd49d; border-radius: 14px; background: var(--flag-gold-soft); }
-      .order-priority-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-      .order-priority-head strong { font-size: 13px; }
-      .order-priority-head span { padding: 4px 7px; border-radius: 999px; background: #fff; color: #80580e; font-size: 10px; font-weight: 850; }
-      .order-priority p { margin: 5px 0 0; color: #765313; font-size: 11px; line-height: 1.45; }
-      .order-priority button { width: 100%; min-height: 36px; margin-top: 9px; border: 1px solid #d8b96d; border-radius: 10px; background: #fff; color: #765313; font-size: 11px; font-weight: 850; }
-      .priority-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-top: 9px; }
-      .priority-actions button { margin: 0; }
-      .priority-actions button.approve { border-color: transparent; background: var(--green); color: #fff; }
       .order-section-head { display: flex; align-items: center; justify-content: space-between; margin: 15px 1px 8px; }
       .order-section-head strong { font-size: 14px; }
       .order-section-head span { color: var(--muted); font-size: 11px; }
@@ -487,11 +478,11 @@
         orders: {
           kicker: "经营结果 · 05",
           title: "明天做多少，<br />桃子一眼就知道。",
-          lead: "先告诉桃子明天一共做多少，再把唯一需要处理的长期申请提出来。短单、长期订单和桃子补单仍在同一张列表里，但不再让所有信息同时抢注意力。",
+          lead: "先告诉桃子明天一共做多少，再按午饭、晚饭查看每笔订单。长期申请仍然保留待审核状态，但审核操作放在订单详情里，不打断这个汇总页面。",
           proofs: [
             ["备", "明日短单和生效长期单自动汇总"],
-            ["审", "只有待审核申请需要桃子决定"],
-            ["查", "全部订单保留在列表，按需查看"],
+            ["餐", "默认看午饭，也可以切换晚饭"],
+            ["审", "待审核只显示状态，不在本页处理"],
           ],
           action: "看订单怎么对账",
         },
@@ -510,18 +501,17 @@
 
       let selectedShowcaseDishKey = "0-lunch-0";
       let showcaseCandidateSheet = null;
-      let showcasePendingState = "idle";
       let showcaseOrderMealFilter = "lunch";
       const showcaseReconcileItems = [
-        { day: "9月4日", dayLabel: "周五", dateLabel: "9月4日", name: "周阿姨 · 19:14", amount: "¥30", order: "9月4日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
-        { day: "9月4日", dayLabel: "周五", dateLabel: "9月4日", name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
-        { day: "9月4日", dayLabel: "周五", dateLabel: "9月4日", name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
-        { day: "9月3日", dayLabel: "周四", dateLabel: "9月3日", name: "王叔 · 21:02", amount: "¥90", order: "9月4日起长期午饭 · 每天 3 份", wait: "长期订单首款，顾客、金额与订单唯一匹配" },
-        { day: "9月3日", dayLabel: "周四", dateLabel: "9月3日", name: "陈姐 · 20:15", amount: "¥60", order: "9月3日晚饭 · 2份", wait: "" },
-        { day: "9月2日", dayLabel: "周三", dateLabel: "9月2日", name: "刘阿姨 · 19:48", amount: "¥90", order: "9月2日午饭 · 3份", wait: "顾客名、金额、日期与订单唯一匹配" },
-        { day: "9月2日", dayLabel: "周三", dateLabel: "9月2日", name: "小赵 · 20:31", amount: "¥30", order: "待对应订单", wait: "收款截图只显示“赵”，订单里有两位赵姓顾客" },
-        { day: "9月1日", dayLabel: "周二", dateLabel: "9月1日", name: "周阿姨 · 19:22", amount: "¥30", order: "9月1日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
-        { day: "9月1日", dayLabel: "周二", dateLabel: "9月1日", name: "王叔 · 20:04", amount: "¥90", order: "9月1日晚饭 · 3份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "9月11日", dayLabel: "周五", dateLabel: "9月11日", name: "周阿姨 · 19:14", amount: "¥30", order: "9月11日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "9月11日", dayLabel: "周五", dateLabel: "9月11日", name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
+        { day: "9月11日", dayLabel: "周五", dateLabel: "9月11日", name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
+        { day: "9月10日", dayLabel: "周四", dateLabel: "9月10日", name: "王叔 · 21:02", amount: "¥90", order: "9月11日起长期午饭 · 每天 3 份", wait: "长期订单首款，顾客、金额与订单唯一匹配" },
+        { day: "9月10日", dayLabel: "周四", dateLabel: "9月10日", name: "陈姐 · 20:15", amount: "¥60", order: "9月10日晚饭 · 2份", wait: "" },
+        { day: "9月9日", dayLabel: "周三", dateLabel: "9月9日", name: "刘阿姨 · 19:48", amount: "¥90", order: "9月9日午饭 · 3份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "9月9日", dayLabel: "周三", dateLabel: "9月9日", name: "小赵 · 20:31", amount: "¥30", order: "待对应订单", wait: "收款截图只显示“赵”，订单里有两位赵姓顾客" },
+        { day: "9月8日", dayLabel: "周二", dateLabel: "9月8日", name: "周阿姨 · 19:22", amount: "¥30", order: "9月8日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "9月8日", dayLabel: "周二", dateLabel: "9月8日", name: "王叔 · 20:04", amount: "¥90", order: "9月8日晚饭 · 3份", wait: "顾客名、金额、日期与订单唯一匹配" },
       ];
       const showcaseReconcileChecked = new Set([0, 3, 4, 5, 7, 8]);
       const showcaseReconcileSources = { 0: "system", 3: "system", 4: "manual", 5: "system", 7: "system", 8: "system" };
@@ -529,11 +519,11 @@
       const showcaseDishOverrides = {};
       const showcaseDishSmartSwapHistory = {};
       const showcaseWeeklyMenu = [
-        { day: "周一", date: "8月3日", lunch: [["土豆烧牛肉","meat"],["白切鸡","meat"],["蒜蓉菜心","veg"],["清炒西兰花","veg"],["冬瓜虾皮汤","soup"]], dinner: [["梅菜扣肉","meat"],["清蒸鲈鱼","meat"],["荷塘小炒","veg"],["手撕包菜","veg"],["玉米排骨汤","soup"]] },
-        { day: "周二", date: "8月4日", lunch: [["红烧排骨","meat"],["番茄炒蛋","meat"],["清炒油麦菜","veg"],["香菇青菜","veg"],["海带豆腐汤","soup"]], dinner: [["红烧牛腩","meat"],["清蒸鲈鱼","meat"],["蒜蓉时蔬","veg"],["手撕包菜","veg"],["番茄蛋汤","soup"]] },
-        { day: "周三", date: "8月5日", lunch: [["香菇滑鸡","meat"],["萝卜炖肉","meat"],["清炒菠菜","veg"],["酸辣土豆丝","veg"],["菌菇汤","soup"]], dinner: [["糖醋排骨","meat"],["芹菜炒肉","meat"],["蚝油生菜","veg"],["家常茄子","veg"],["紫菜蛋花汤","soup"]] },
-        { day: "周四", date: "8月6日", lunch: [["啤酒鸭","meat"],["豆角炒肉","meat"],["蒜蓉空心菜","veg"],["清炒藕片","veg"],["萝卜汤","soup"]], dinner: [["清炖狮子头","meat"],["豉汁蒸鱼","meat"],["小炒杏鲍菇","veg"],["上汤娃娃菜","veg"],["丝瓜蛋汤","soup"]] },
-        { day: "周五", date: "8月7日", lunch: [["板栗烧鸡","meat"],["木须肉","meat"],["清炒小白菜","veg"],["麻婆豆腐","veg"],["莲藕排骨汤","soup"]], dinner: [["土豆焖鸭","meat"],["红烧带鱼","meat"],["蒜蓉西兰花","veg"],["干煸四季豆","veg"],["冬瓜肉丸汤","soup"]] },
+        { day: "周一", date: "9月7日", lunch: [["土豆烧牛肉","meat"],["白切鸡","meat"],["蒜蓉菜心","veg"],["清炒西兰花","veg"],["冬瓜虾皮汤","soup"]], dinner: [["梅菜扣肉","meat"],["清蒸鲈鱼","meat"],["荷塘小炒","veg"],["手撕包菜","veg"],["玉米排骨汤","soup"]] },
+        { day: "周二", date: "9月8日", lunch: [["红烧排骨","meat"],["番茄炒蛋","meat"],["清炒油麦菜","veg"],["香菇青菜","veg"],["海带豆腐汤","soup"]], dinner: [["红烧牛腩","meat"],["清蒸鲈鱼","meat"],["蒜蓉时蔬","veg"],["手撕包菜","veg"],["番茄蛋汤","soup"]] },
+        { day: "周三", date: "9月9日", lunch: [["香菇滑鸡","meat"],["萝卜炖肉","meat"],["清炒菠菜","veg"],["酸辣土豆丝","veg"],["菌菇汤","soup"]], dinner: [["糖醋排骨","meat"],["芹菜炒肉","meat"],["蚝油生菜","veg"],["家常茄子","veg"],["紫菜蛋花汤","soup"]] },
+        { day: "周四", date: "9月10日", lunch: [["啤酒鸭","meat"],["豆角炒肉","meat"],["蒜蓉空心菜","veg"],["清炒藕片","veg"],["萝卜汤","soup"]], dinner: [["清炖狮子头","meat"],["豉汁蒸鱼","meat"],["小炒杏鲍菇","veg"],["上汤娃娃菜","veg"],["丝瓜蛋汤","soup"]] },
+        { day: "周五", date: "9月11日", lunch: [["板栗烧鸡","meat"],["木须肉","meat"],["清炒小白菜","veg"],["麻婆豆腐","veg"],["莲藕排骨汤","soup"]], dinner: [["土豆焖鸭","meat"],["红烧带鱼","meat"],["蒜蓉西兰花","veg"],["干煸四季豆","veg"],["冬瓜肉丸汤","soup"]] },
       ];
       const showcaseCandidatePools = {
         meat: [["葱油鸡","meat"],["冬菇蒸肉饼","meat"],["莲藕炖排骨","meat"],["香菇滑鸡","meat"],["萝卜炖肉","meat"],["芹菜炒肉","meat"]],
@@ -657,7 +647,7 @@
 
       function generatePhone() {
         return phoneShell("generation-preview has-app-tabs", "本周菜单", `
-          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
+          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>9月7日—9月11日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
           <div class="plan-state"><strong>本周还没有菜单</strong><span>10 餐待安排</span></div>
           <div class="menu-rule"><b>按桃子的默认方式排</b><br />每餐 2荤2素1汤 · 同一道菜近期尽量不重复 · 只用菜品池里的菜</div>
           <div class="generation-ready"><div class="card-kicker">准备就绪</div><h3>一次生成五天午晚餐</h3><p>生成后十个餐次按日期顺序放在同一张表里；点菜名即可替换。</p></div>
@@ -675,7 +665,7 @@
 
       function overviewPhone() {
         return phoneShell("confirmed-overview has-app-tabs", "本周菜单总览", `
-          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
+          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>9月7日—9月11日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
           <section class="overview-status"><span>本周菜单已确认</span><strong>5 天 · 10 餐</strong><p>每餐 2荤2素1汤，下面是确认后的最终安排。</p></section>
           ${showcaseConfirmedOverview()}
           <div class="plan-action"><button class="primary" data-next>按天生成预订卡片</button></div>
@@ -689,7 +679,7 @@
           <div class="msg"><div class="avatar gold">桃</div><div><button class="mp-card" data-next>
             <div class="mp-main">
               <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · 桃子的家常饭</div>
-              <div class="mp-title">今天 8月4日午饭</div>
+              <div class="mp-title">今天 9月8日午饭</div>
               <div class="mp-highlight"><b>红烧排骨、番茄炒蛋</b><br />清炒油麦菜、香菇青菜、海带豆腐汤</div>
             </div>
             <div class="mp-foot">菜单已发布锁定 · 上午 11:00 截止</div>
@@ -700,8 +690,8 @@
             <div class="mp-main">
               <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味</div>
               <div class="mp-status">午饭订单已提交</div>
-              <div class="mp-title">8月4日午饭 · 2份</div>
-              <div class="mp-highlight"><b>订单 #240804-12</b><br />送到桂花苑 3 栋 502</div>
+              <div class="mp-title">9月8日午饭 · 2份</div>
+              <div class="mp-highlight"><b>订单 #260908-12</b><br />送到桂花苑 3 栋 502</div>
             </div>
             <div class="mp-foot">订单已提交给桃子 · 查看订单 →</div>
           </button></div></div>
@@ -711,7 +701,7 @@
             <div class="mp-main">
               <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · 桃子的家常饭</div>
               <div class="payment-summary"><span>午饭已送达 · 待确认收款</span><strong>¥60</strong></div>
-              <div class="mp-highlight"><b>8月4日午饭 · 2份</b><br />订单 #240804-12</div>
+              <div class="mp-highlight"><b>9月8日午饭 · 2份</b><br />订单 #260908-12</div>
             </div>
             <div class="mp-foot">请微信转账给桃子 · 付款后由桃子确认</div>
           </button></div></div>
@@ -722,7 +712,7 @@
       function ordersPhone() {
         const orderRows = [
           { meal: "lunch", name: "周阿姨", detail: "午饭 · 明日短单 · 桂花苑 3 栋", quantity: "1 份", state: "待备餐", tone: "" },
-          { meal: "lunch", name: "王叔", detail: "午饭 · 长期订单 · 连续 7 天", quantity: "3 份", state: showcasePendingState === "approved" ? "待付款" : showcasePendingState === "rejected" ? "已暂不接" : "待审核", tone: showcasePendingState === "approved" ? "" : "warn" },
+          { meal: "lunch", name: "王叔", detail: "午饭 · 长期订单 · 连续 7 天", quantity: "3 份", state: "待审核", tone: "warn" },
           { meal: "dinner", name: "陈姐", detail: "晚饭 · 明日短单 · 望江里 18A", quantity: "2 份", state: "待确认", tone: "warn" },
           { meal: "lunch", name: "刘阿姨", detail: "午饭 · 长期订单 · 连续 30 天 · 已付款", quantity: "3 份", state: "生效中", tone: "" },
         ];
@@ -730,16 +720,9 @@
         const orderSectionLabel = showcaseOrderMealFilter === "lunch" ? "午饭订单" : showcaseOrderMealFilter === "dinner" ? "晚饭订单" : "全部订单";
         return phoneShell("orders-focus has-app-tabs", "订单列表", `
           <section class="order-hero">
-            <div class="order-hero-top"><span>明天 8月4日</span><b>还在接单</b></div>
+            <div class="order-hero-top"><span>明天 9月9日</span><b>还在接单</b></div>
             <strong>共 12 份</strong>
             <p>4 位顾客 · 明日短单 9 份 · 长期订单已计入</p>
-          </section>
-          <section class="order-priority">
-            <div class="order-priority-head"><strong>${showcasePendingState === "approved" ? "长期申请已同意" : showcasePendingState === "rejected" ? "长期申请已暂不接" : "1 个长期申请待审核"}</strong><span>${showcasePendingState === "approved" ? "待微信付款" : showcasePendingState === "rejected" ? "私聊说明" : "需要处理"}</span></div>
-            <p>${showcasePendingState === "approved" ? "王叔 · 桃子已同意，接下来私聊确认微信付款" : showcasePendingState === "rejected" ? "王叔 · 拒接结果只通过微信私聊说明" : "王叔 · 8月4日起连续 7 天 · 每天午饭 3 份"}</p>
-            ${showcasePendingState === "open"
-              ? `<div class="priority-actions"><button data-showcase-pending="rejected">暂不接</button><button class="approve" data-showcase-pending="approved">同意订单</button></div>`
-              : showcasePendingState === "idle" ? `<button data-showcase-pending="open">查看并处理</button>` : ""}
           </section>
           <div class="order-section-head"><strong>${orderSectionLabel} · ${visibleOrderRows.length} 笔</strong><div class="meal-filter" aria-label="按餐次筛选">${[["all","全部"],["lunch","午饭"],["dinner","晚饭"]].map(([value,label]) => `<button class="${showcaseOrderMealFilter === value ? "active" : ""}" data-showcase-meal-filter="${value}" aria-pressed="${showcaseOrderMealFilter === value}">${label}</button>`).join("")}</div></div>
           <div class="compact-orders">${visibleOrderRows.map((order) => `<div class="compact-order"><div><b>${order.name}</b><p>${order.detail}</p></div><div class="compact-order-side"><strong>${order.quantity}</strong><span class="compact-state ${order.tone}">${order.state}</span></div></div>`).join("")}</div>
@@ -927,12 +910,6 @@
         if (showcaseTab) {
           if (showcaseTab === "orders") go("orders");
           else go("menu");
-          return;
-        }
-        const pendingAction = event.target.closest("[data-showcase-pending]")?.dataset.showcasePending;
-        if (pendingAction) {
-          showcasePendingState = pendingAction;
-          rerenderPhoneState();
           return;
         }
         const mealFilter = event.target.closest("[data-showcase-meal-filter]")?.dataset.showcaseMealFilter;
