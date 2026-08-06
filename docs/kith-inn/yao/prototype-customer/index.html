@@ -443,12 +443,12 @@
         },
         share: {
           kicker: "微信结果 · 03",
-          title: "开饭、下单、送达，<br />微信里都有确认。",
-          lead: "桃子确认开饭后在群里发明日卡片，顾客下单后把两笔餐次订单摘要回传；某一餐送到后，桃子只提醒这一餐付款，顾客继续通过微信转账。",
+          title: "今天午饭开不开，<br />群里一张卡就讲清。",
+          lead: "桃子上午在群里开放今天午饭预订，顾客只需要看这一餐、在 11:00 前下单；完成后再把一笔午饭订单摘要回传给桃子。",
           proofs: [
-            ["明", "卡片只对应明天的午饭和晚饭"],
-            ["回", "订单摘要可回传提醒桃子"],
-            ["付", "午饭、晚饭按各自送达时间分别提醒付款"],
+            ["午", "这张卡只开放今天午饭"],
+            ["截", "上午 11:00 前可以下单"],
+            ["回", "午饭订单摘要回传提醒桃子"],
           ],
           action: "看订单怎么汇总",
         },
@@ -620,35 +620,26 @@
 
       function sharePhone() {
         return phoneShell("wechat share-compact", "街坊味街坊群（46）", `
-          <div class="time">晚上 20:12</div>
-          <div class="msg"><div class="avatar gold">桃</div><div><div class="sender">桃子</div><div class="bubble">明天正常开饭，午饭晚饭都可以订，今晚 21:30 截止。</div></div></div>
+          <div class="time">上午 10:02</div>
+          <div class="msg"><div class="avatar gold">桃</div><div><div class="sender">桃子</div><div class="bubble">今天午饭开放预订，上午 11:00 截止。</div></div></div>
           <div class="msg"><div class="avatar gold">桃</div><div><button class="mp-card" data-next>
             <div class="mp-main">
               <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · 桃子的家常饭</div>
-              <div class="mp-title">明天 8月4日开饭</div>
-              <div class="mp-highlight"><b>午饭</b> 红烧排骨、番茄炒蛋等 5 道<br /><b>晚饭</b> 红烧牛腩、清蒸鲈鱼等 5 道</div>
+              <div class="mp-title">今天 8月4日午饭</div>
+              <div class="mp-highlight"><b>红烧排骨、番茄炒蛋</b><br />清炒油麦菜、香菇青菜、海带豆腐汤</div>
             </div>
-            <div class="mp-foot">菜单已发布锁定 · 今晚 21:30 截止</div>
+            <div class="mp-foot">菜单已发布锁定 · 上午 11:00 截止</div>
           </button></div></div>
-          <div class="msg me"><div class="avatar red">周</div><div><div class="bubble">订好了：午饭 2 份，晚饭 1 份。</div></div></div>
+          <div class="time">上午 10:08</div>
+          <div class="msg me"><div class="avatar red">周</div><div><div class="bubble">订好了，2 份。</div></div></div>
           <div class="msg me"><div class="avatar red">周</div><div><button class="mp-card" data-next>
             <div class="mp-main">
               <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味</div>
-              <div class="mp-status">2 笔餐次订单已提交</div>
-              <div class="mp-title">8月4日 · 午饭2份、晚饭1份</div>
-              <div class="mp-highlight"><b>午饭 #240804-12 · 2份</b><br /><b>晚饭 #240804-13 · 1份</b></div>
+              <div class="mp-status">午饭订单已提交</div>
+              <div class="mp-title">8月4日午饭 · 2份</div>
+              <div class="mp-highlight"><b>订单 #240804-12</b><br />送到桂花苑 3 栋 502</div>
             </div>
             <div class="mp-foot">订单已提交给桃子 · 查看订单 →</div>
-          </button></div></div>
-          <div class="time delivery-time">中午 12:36</div>
-          <div class="msg"><div class="avatar gold">桃</div><div><div class="bubble">午饭已送到门口，这一餐可以付款啦。</div></div></div>
-          <div class="msg"><div class="avatar gold">桃</div><div><button class="mp-card payment-card" data-next>
-            <div class="mp-main">
-              <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · 桃子的家常饭</div>
-              <div class="payment-summary"><span>午饭已送达 · 待确认收款</span><strong>¥60</strong></div>
-              <div class="mp-highlight"><b>8月4日午饭 · 2份</b><br />订单 #240804-12</div>
-            </div>
-            <div class="mp-foot">请微信转账给桃子 · 付款后由桃子确认</div>
           </button></div></div>
           <div class="chat-input"><div class="round-tool"></div><div class="chat-field"></div><div class="round-tool"></div></div>
         `);
