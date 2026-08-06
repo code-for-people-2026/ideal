@@ -640,11 +640,11 @@
       ];
 
       const weeklyMenu = [
-        { day: "周一", date: "8月3日", lunch: [["土豆烧牛肉","meat"],["白切鸡","meat"],["蒜蓉菜心","veg"],["清炒西兰花","veg"],["冬瓜虾皮汤","soup"]], dinner: [["梅菜扣肉","meat"],["清蒸鲈鱼","meat"],["荷塘小炒","veg"],["手撕包菜","veg"],["玉米排骨汤","soup"]] },
-        { day: "周二", date: "8月4日", lunch: [["红烧排骨","meat"],["番茄炒蛋","meat"],["清炒油麦菜","veg"],["香菇青菜","veg"],["海带豆腐汤","soup"]], dinner: [["红烧牛腩","meat"],["清蒸鲈鱼","meat"],["蒜蓉时蔬","veg"],["手撕包菜","veg"],["番茄蛋汤","soup"]] },
-        { day: "周三", date: "8月5日", lunch: [["香菇滑鸡","meat"],["萝卜炖肉","meat"],["清炒菠菜","veg"],["酸辣土豆丝","veg"],["菌菇汤","soup"]], dinner: [["糖醋排骨","meat"],["芹菜炒肉","meat"],["蚝油生菜","veg"],["家常茄子","veg"],["紫菜蛋花汤","soup"]] },
-        { day: "周四", date: "8月6日", lunch: [["啤酒鸭","meat"],["豆角炒肉","meat"],["蒜蓉空心菜","veg"],["清炒藕片","veg"],["萝卜汤","soup"]], dinner: [["清炖狮子头","meat"],["豉汁蒸鱼","meat"],["小炒杏鲍菇","veg"],["上汤娃娃菜","veg"],["丝瓜蛋汤","soup"]] },
-        { day: "周五", date: "8月7日", lunch: [["板栗烧鸡","meat"],["木须肉","meat"],["清炒小白菜","veg"],["麻婆豆腐","veg"],["莲藕排骨汤","soup"]], dinner: [["土豆焖鸭","meat"],["红烧带鱼","meat"],["蒜蓉西兰花","veg"],["干煸四季豆","veg"],["冬瓜肉丸汤","soup"]] },
+        { day: "周一", date: "9月7日", lunch: [["土豆烧牛肉","meat"],["白切鸡","meat"],["蒜蓉菜心","veg"],["清炒西兰花","veg"],["冬瓜虾皮汤","soup"]], dinner: [["梅菜扣肉","meat"],["清蒸鲈鱼","meat"],["荷塘小炒","veg"],["手撕包菜","veg"],["玉米排骨汤","soup"]] },
+        { day: "周二", date: "9月8日", lunch: [["红烧排骨","meat"],["番茄炒蛋","meat"],["清炒油麦菜","veg"],["香菇青菜","veg"],["海带豆腐汤","soup"]], dinner: [["红烧牛腩","meat"],["清蒸鲈鱼","meat"],["蒜蓉时蔬","veg"],["手撕包菜","veg"],["番茄蛋汤","soup"]] },
+        { day: "周三", date: "9月9日", lunch: [["香菇滑鸡","meat"],["萝卜炖肉","meat"],["清炒菠菜","veg"],["酸辣土豆丝","veg"],["菌菇汤","soup"]], dinner: [["糖醋排骨","meat"],["芹菜炒肉","meat"],["蚝油生菜","veg"],["家常茄子","veg"],["紫菜蛋花汤","soup"]] },
+        { day: "周四", date: "9月10日", lunch: [["啤酒鸭","meat"],["豆角炒肉","meat"],["蒜蓉空心菜","veg"],["清炒藕片","veg"],["萝卜汤","soup"]], dinner: [["清炖狮子头","meat"],["豉汁蒸鱼","meat"],["小炒杏鲍菇","veg"],["上汤娃娃菜","veg"],["丝瓜蛋汤","soup"]] },
+        { day: "周五", date: "9月11日", lunch: [["板栗烧鸡","meat"],["木须肉","meat"],["清炒小白菜","veg"],["麻婆豆腐","veg"],["莲藕排骨汤","soup"]], dinner: [["土豆焖鸭","meat"],["红烧带鱼","meat"],["蒜蓉西兰花","veg"],["干煸四季豆","veg"],["冬瓜肉丸汤","soup"]] },
       ];
       const candidatePools = {
         meat: [["香菇滑鸡","meat"],["萝卜炖肉","meat"],["芹菜炒肉","meat"]],
@@ -856,14 +856,14 @@
       function planPhone() {
         if (!menuGenerated) {
           return phoneShell("ops", "本周菜单", `
-            <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
+            <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>9月7日—9月11日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
             <div class="plan-state"><strong>本周还没有菜单</strong><span>10 餐待安排</span></div>
             <div class="menu-rule"><b>按桃子的默认方式排</b><br />每餐 2荤2素1汤 · 同一道菜近期尽量不重复 · 只用菜品池里的菜</div>
             <div class="change-card"><div class="card-kicker">准备就绪</div><h3>一次生成五天午晚餐</h3><p>生成后五天都在同一页；可以展开任意一天，在菜名旁直接换菜。</p></div>
             <div class="plan-action"><button class="primary" data-action="generate-menu">生成本周菜单</button></div>`);
         }
         return phoneShell("ops", "本周菜单", `
-          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>8月3日—8月7日</strong><span>五天十餐 · 点击某天展开</span></div><button aria-label="下一周">›</button></div>
+          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>9月7日—9月11日</strong><span>五天十餐 · 点击某天展开</span></div><button aria-label="下一周">›</button></div>
           <div class="plan-state"><strong>${publishedDayIndexes.size} 天已发布锁定</strong><span>${weeklyMenu.length - publishedDayIndexes.size} 天可修改</span></div>
           <div class="week-plans">${weeklyMenu.map(dayPlan).join("")}</div>
           <div class="plan-action">${menuConfirmed ? `<button class="primary" data-app-route="publish">已确认 · 去生成预订卡片</button>` : `<button class="primary" data-action="confirm-week">确认本周菜单</button>`}</div>
@@ -872,7 +872,7 @@
       function publishPhone() {
         if (tomorrowServiceStage === "confirm-stop") {
           return phoneShell("ops", "明日开饭", `
-            <div class="detail-head"><div><span>停餐前确认</span><strong>明天不做了？</strong></div><em>8月4日</em></div>
+            <div class="detail-head"><div><span>停餐前确认</span><strong>明天不做了？</strong></div><em>9月8日</em></div>
             <div class="change-card"><div class="card-kicker">受影响订单</div><h3>5 位顾客 · 共 15 份</h3><p>明日短单 9 份 · 生效长期订单 6 份<br />已付款订单预计需退 ¥450</p></div>
             <div class="menu-rule" style="margin-top:10px"><b>通知方式：微信群公告</b><br />确认后关闭明日短单入口、生成群公告文案和逐单退款清单；桃子需要把公告发到街坊群，不会自动私聊所有人。</div>
             <div class="copy-preview"><b>街坊味街坊群</b><br />大家晚上好，我明天家里有点事，午饭和晚饭都暂停一次。已经下单的街坊我会逐笔在微信退款，给大家添麻烦了。</div>
@@ -884,17 +884,17 @@
             <div class="success"><strong>明天已停止开饭</strong><p>午饭和晚饭短单入口已关闭，退款清单已生成。<br />请把下面的公告发到街坊微信群。</p></div>
             <div class="copy-preview"><b>微信群公告</b><br />大家晚上好，我明天家里有点事，午饭和晚饭都暂停一次。已经下单的街坊我会逐笔在微信退款，给大家添麻烦了。</div>
             <button class="secondary" data-action="copy-stop-announcement">${stopAnnouncementCopied ? "已复制 · 去微信群发送" : "复制微信群公告"}</button>
-            <div class="receipt-list"><div class="receipt"><div class="receipt-head"><b>周阿姨 · 短单 1份</b><strong>¥30</strong></div><span class="match warn">待微信退款</span><p>8月4日午饭取消</p></div><div class="receipt"><div class="receipt-head"><b>王叔 · 长期 3份</b><strong>¥90</strong></div><span class="match warn">待微信退款</span><p>只退 8月4日这一餐，长期订单继续生效</p></div><div class="receipt"><div class="receipt-head"><b>刘阿姨 · 长期 3份</b><strong>¥90</strong></div><span class="match warn">待微信退款</span><p>只退 8月4日这一餐，长期订单继续生效</p></div></div>
+            <div class="receipt-list"><div class="receipt"><div class="receipt-head"><b>周阿姨 · 短单 1份</b><strong>¥30</strong></div><span class="match warn">待微信退款</span><p>9月8日午饭取消</p></div><div class="receipt"><div class="receipt-head"><b>王叔 · 长期 3份</b><strong>¥90</strong></div><span class="match warn">待微信退款</span><p>只退 9月8日这一餐，长期订单继续生效</p></div><div class="receipt"><div class="receipt-head"><b>刘阿姨 · 长期 3份</b><strong>¥90</strong></div><span class="match warn">待微信退款</span><p>只退 9月8日这一餐，长期订单继续生效</p></div></div>
             <button class="primary" data-app-route="orders">查看全部订单</button>
             <div class="evidence-note">退款在微信逐笔完成；平台记录应退金额和后续确认。</div>`);
         }
         return phoneShell("ops", "确认与分享", `
-          <div class="detail-head"><div><span>今晚 20:12</span><strong>明天开饭</strong></div><em>8月4日</em></div>
-          <div class="menu-rule"><b>一张卡片只开放明天</b><br />顾客可选 8月4日午饭或晚饭；后天是否开饭，要等明晚桃子重新决定。</div>
-          <div class="share-card"><div class="share-card-main"><div class="share-card-brand">${logo("mini-logo")}街坊味 · 桃子的家常饭</div><h3>明天 8月4日开饭</h3><p>午饭：${mealSummary(1, "lunch")}<br />晚饭：${mealSummary(1, "dinner")}</p>${publishedMenuDetails()}</div><div class="share-card-foot"><span>${tomorrowCardShared ? "已发布 · 菜单已锁定" : "发布前可修改"}</span><span>今晚 21:30 截止</span></div></div>
+          <div class="detail-head"><div><span>今晚 20:12</span><strong>明天开饭</strong></div><em>9月8日</em></div>
+          <div class="menu-rule"><b>一张卡片只开放明天</b><br />顾客可选 9月8日午饭或晚饭；后天是否开饭，要等明晚桃子重新决定。</div>
+          <div class="share-card"><div class="share-card-main"><div class="share-card-brand">${logo("mini-logo")}街坊味 · 桃子的家常饭</div><h3>明天 9月8日开饭</h3><p>午饭：${mealSummary(1, "lunch")}<br />晚饭：${mealSummary(1, "dinner")}</p>${publishedMenuDetails()}</div><div class="share-card-foot"><span>${tomorrowCardShared ? "已发布 · 菜单已锁定" : "发布前可修改"}</span><span>今晚 21:30 截止</span></div></div>
           <button class="primary" data-action="share-tomorrow-card">${tomorrowCardShared ? "已模拟分享到微信群" : "分享明日开饭卡片"}</button>
           ${tomorrowCardShared ? `<button class="stop-action" data-action="stop-tomorrow">明天有事，暂停开饭</button><button class="secondary" data-app-route="orders">查看明日订单与长期订单</button>` : ""}
-          <div class="evidence-note">发布是冻结节点：发出后 8月4日菜单只读；未发布日期仍可继续换菜。</div>`);
+          <div class="evidence-note">发布是冻结节点：发出后 9月8日菜单只读；未发布日期仍可继续换菜。</div>`);
       }
       function longRejectionMessage() {
         return `王叔，不好意思，这次长期订单我先不接了。${longRejectionReason}之后如果时间合适，您也可以再从群里的明日开饭卡片按天订。`;
@@ -911,7 +911,7 @@
             return `<div class="receipt"><div class="receipt-head"><b>${order.name}</b><strong>${order.amount}</strong></div><span class="match warn">长期订单 · 待付款</span><p>桃子已同意 · 私聊王叔确认微信付款</p><button class="primary" data-action="activate-long">标记已收到微信付款</button></div>`;
           }
           if (longApplicationStage === "active") {
-            return `<div class="receipt"><div class="receipt-head"><b>${order.name}</b><strong>${order.amount}</strong></div><span class="match">长期订单 · 生效中</span><p>午饭 · 8月4日起连续 7 天 · 已线下付款</p></div>`;
+            return `<div class="receipt"><div class="receipt-head"><b>${order.name}</b><strong>${order.amount}</strong></div><span class="match">长期订单 · 生效中</span><p>午饭 · 9月8日起连续 7 天 · 已线下付款</p></div>`;
           }
           return `<div class="receipt"><div class="receipt-head"><b>${order.name}</b><strong>${order.amount}</strong></div><span class="match warn">长期订单 · 待审核</span><p>${order.meta}</p><div class="card-actions"><button data-action="reject-long">暂不接</button><button class="approve" data-action="approve-long">同意订单</button></div><div class="evidence-note">审核结果只私聊申请人，不在微信群公开。</div></div>`;
         }
@@ -926,7 +926,7 @@
           <div class="menu-rule"><b>只补录特殊情况</b><br />正常订单仍由顾客从明日开饭卡片提交；这里用于电话、微信私聊等例外订单。</div>
           <div class="manual-form">
             <label class="manual-field">顾客<input id="manual-customer" value="${escapeHTML(manualOrder.customer)}" aria-label="补单顾客" /></label>
-            <div class="manual-grid"><label class="manual-field">日期<input value="8月4日" aria-label="补单日期" readonly /></label><label class="manual-field">餐次<select id="manual-meal" aria-label="补单餐次"><option ${manualOrder.meal === "午饭" ? "selected" : ""}>午饭</option><option ${manualOrder.meal === "晚饭" ? "selected" : ""}>晚饭</option></select></label></div>
+            <div class="manual-grid"><label class="manual-field">日期<input value="9月8日" aria-label="补单日期" readonly /></label><label class="manual-field">餐次<select id="manual-meal" aria-label="补单餐次"><option ${manualOrder.meal === "午饭" ? "selected" : ""}>午饭</option><option ${manualOrder.meal === "晚饭" ? "selected" : ""}>晚饭</option></select></label></div>
             <div class="manual-grid"><label class="manual-field">份数<input id="manual-quantity" type="number" min="1" max="20" value="${manualOrder.quantity}" aria-label="补单份数" /></label><label class="manual-field">地址（可空）<input id="manual-address" value="${escapeHTML(manualOrder.address)}" aria-label="补单地址" /></label></div>
             <label class="manual-field">备注<input id="manual-note" value="${escapeHTML(manualOrder.note)}" aria-label="补单备注" /></label>
           </div>
@@ -937,8 +937,8 @@
       }
       function manualOrderDonePhone() {
         return phoneShell("ops", "手动补单", `
-          <div class="success"><strong>订单已补录</strong><p>${escapeHTML(manualOrder.customer)} · 8月4日${manualOrder.meal} · ${manualOrder.quantity} 份<br />已经加入明日备餐统计。</p></div>
-          <div class="receipt-list"><div class="receipt"><div class="receipt-head"><b>${escapeHTML(manualOrder.customer)}</b><strong>${manualOrder.quantity} 份</strong></div><span class="match warn">手动补单 · 待确认</span><p>明天 8月4日 · ${manualOrder.meal} · ${escapeHTML(manualOrder.address || "未填写地址")}<br />备注：${escapeHTML(manualOrder.note || "无")}</p></div></div>
+          <div class="success"><strong>订单已补录</strong><p>${escapeHTML(manualOrder.customer)} · 9月8日${manualOrder.meal} · ${manualOrder.quantity} 份<br />已经加入明日备餐统计。</p></div>
+          <div class="receipt-list"><div class="receipt"><div class="receipt-head"><b>${escapeHTML(manualOrder.customer)}</b><strong>${manualOrder.quantity} 份</strong></div><span class="match warn">手动补单 · 待确认</span><p>明天 9月8日 · ${manualOrder.meal} · ${escapeHTML(manualOrder.address || "未填写地址")}<br />备注：${escapeHTML(manualOrder.note || "无")}</p></div></div>
           <button class="primary" data-action="back-manual-orders">返回订单列表</button>
           <button class="secondary" data-action="new-manual-order">再补一单</button>`);
       }
@@ -946,17 +946,17 @@
         if (manualOrderStage === "form") return manualOrderFormPhone();
         if (manualOrderStage === "done") return manualOrderDonePhone();
         const allOrders = [
-          { type: "short", name: "周阿姨", amount: "1 份", meta: "明天 8月4日 · 午饭 · 桂花苑 3 栋", state: "待备餐" },
-          { type: "long", name: "王叔", amount: "3 份", meta: "午饭 · 申请 8月4日起连续 7 天", state: "待审核" },
-          { type: "short", name: "陈姐", amount: "2 份", meta: "明天 8月4日 · 晚饭 · 望江里 18A", state: "待确认" },
-          { type: "long", name: "刘阿姨", amount: "3 份", meta: "午饭 · 8月4日起连续 30 天 · 已线下付款", state: "生效中" },
+          { type: "short", name: "周阿姨", amount: "1 份", meta: "明天 9月8日 · 午饭 · 桂花苑 3 栋", state: "待备餐" },
+          { type: "long", name: "王叔", amount: "3 份", meta: "午饭 · 申请 9月8日起连续 7 天", state: "待审核" },
+          { type: "short", name: "陈姐", amount: "2 份", meta: "明天 9月8日 · 晚饭 · 望江里 18A", state: "待确认" },
+          { type: "long", name: "刘阿姨", amount: "3 份", meta: "午饭 · 9月8日起连续 30 天 · 已线下付款", state: "生效中" },
         ];
-        if (manualOrderAdded) allOrders.unshift({ type: "short", name: escapeHTML(manualOrder.customer), amount: `${manualOrder.quantity} 份`, meta: `手动补单 · 明天 8月4日 · ${manualOrder.meal} · ${escapeHTML(manualOrder.address || "未填写地址")}`, state: "待确认" });
+        if (manualOrderAdded) allOrders.unshift({ type: "short", name: escapeHTML(manualOrder.customer), amount: `${manualOrder.quantity} 份`, meta: `手动补单 · 明天 9月8日 · ${manualOrder.meal} · ${escapeHTML(manualOrder.address || "未填写地址")}`, state: "待确认" });
         const orders = allOrders.filter(({ type }) => merchantOrderFilter === "all" || merchantOrderFilter === type);
         const addedQuantity = manualOrderAdded ? manualOrder.quantity : 0;
         const pendingLongCount = ["pending", "reject-confirm"].includes(longApplicationStage) ? 1 : 0;
         return phoneShell("ops", "订单列表", `
-          <div class="detail-head"><div><span>明天 8月4日</span><strong>午饭订单</strong></div><em>${12 + addedQuantity} 份</em></div>
+          <div class="detail-head"><div><span>明天 9月8日</span><strong>午饭订单</strong></div><em>${12 + addedQuantity} 份</em></div>
           <div class="order-diff"><div><strong>${9 + addedQuantity}</strong><span>明日短单份数</span></div><div><strong>2</strong><span>长期生效户</span></div><div><strong>${pendingLongCount}</strong><span>长期待审核</span></div></div>
           ${tomorrowServiceStage === "cancelled" ? `<div class="menu-rule"><b>明天已停止开饭</b><br />午饭和晚饭短单入口已关闭，已付款订单进入退款清单。</div>` : ""}
           <div class="entry-tabs"><button class="${merchantOrderFilter === "all" ? "active" : ""}" data-merchant-order-filter="all">全部</button><button class="${merchantOrderFilter === "short" ? "active" : ""}" data-merchant-order-filter="short">明日短单</button><button class="${merchantOrderFilter === "long" ? "active" : ""}" data-merchant-order-filter="long">长期</button></div>
@@ -968,13 +968,13 @@
       function reconcilePhone() {
         if (!receiptsScanned) {
           return phoneShell("ops", "收款对账", `
-            <div class="detail-head"><div><span>8月4日—8月10日</span><strong>上传收款凭据</strong></div><em>0 笔已核</em></div>
+            <div class="detail-head"><div><span>9月8日—9月14日</span><strong>上传收款凭据</strong></div><em>0 笔已核</em></div>
             <button class="file-select" data-action="scan-receipts"><strong>选择微信收款截图</strong><small>支持一次选择多张 · 原图仅用于提取姓名、金额与时间</small></button>
             <div class="query-card" style="margin-top:10px"><div class="card-kicker">本周订单</div><h3>18 单 · ¥720 应收</h3><div class="query-grid"><div class="query-cell"><strong>12</strong><span>已人工确认到账</span></div><div class="query-cell"><strong>6</strong><span>待核订单</span></div></div></div>
             <div class="evidence-note">点击选择仅演示本地截图解析；本原型不上传真实文件。</div>`);
         }
         const items = [
-          { name: "周阿姨 · 19:14", amount: "¥30", order: "8月4日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
+          { name: "周阿姨 · 19:14", amount: "¥30", order: "9月8日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
           { name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
           { name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
         ];
