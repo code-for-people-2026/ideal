@@ -1,0 +1,1220 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>街坊味 · 桃子使用端原型</title>
+    <!--
+      PROTOTYPE — 不接真实数据
+      目标：展示桃子如何维护菜品池、排菜单、分享预订、看订单并辅助对账。
+      使用 ?step= 保留可分享状态。
+      视觉与交互骨架对照「近邻互助组 · 客户体验原型」。
+    -->
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #29231d;
+        --muted: #675d53;
+        --line: #e6dccd;
+        --paper: #fff8ed;
+        --red: #b64131;
+        --red-dark: #8f2d22;
+        --red-soft: #fbe9e4;
+        --green: #287557;
+        --green-dark: #1e5d45;
+        --green-soft: #e7f3ec;
+        --gold: #edae32;
+        --gold-soft: #fff2d5;
+        --phone: #211d18;
+        --shadow: 0 32px 90px rgba(82, 48, 28, 0.16);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 8% 10%, rgba(182, 65, 49, 0.1), transparent 30rem),
+          radial-gradient(circle at 92% 84%, rgba(237, 174, 50, 0.2), transparent 30rem),
+          var(--paper);
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button, input, textarea, select { font: inherit; }
+      button { cursor: pointer; }
+      .page { min-height: 100vh; padding: 28px 30px 110px; }
+      .topbar {
+        width: min(1220px, 100%);
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding-right: 178px;
+      }
+      .brand { display: flex; align-items: center; gap: 11px; font-weight: 900; }
+      .brand-logo {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        object-fit: cover;
+        box-shadow: 0 10px 24px rgba(182, 65, 49, 0.2);
+      }
+      .proto-note { color: var(--muted); font-size: 12px; font-weight: 750; }
+      .layout {
+        width: min(1220px, 100%);
+        margin: 34px auto 0;
+        display: grid;
+        grid-template-columns: minmax(340px, 0.95fr) minmax(390px, 1.05fr);
+        gap: 72px;
+        align-items: center;
+      }
+      .story { padding: 20px 0; }
+      .step-kicker { color: var(--red); font-size: 12px; font-weight: 900; letter-spacing: 0.08em; }
+      h1 {
+        max-width: 610px;
+        margin: 14px 0 18px;
+        font-size: clamp(40px, 4.8vw, 64px);
+        line-height: 1.03;
+        letter-spacing: -0.055em;
+        text-wrap: balance;
+      }
+      .lead { max-width: 570px; margin: 0; color: var(--muted); font-size: clamp(17px, 2vw, 20px); line-height: 1.7; }
+      .proofs { display: grid; gap: 12px; margin-top: 34px; max-width: 560px; }
+      .proof {
+        display: grid;
+        grid-template-columns: 38px 1fr;
+        gap: 13px;
+        align-items: center;
+        padding: 14px 16px;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        background: rgba(255, 255, 255, 0.72);
+        font-size: 14px;
+        font-weight: 750;
+      }
+      .proof-icon {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        background: var(--red-soft);
+        color: var(--red-dark);
+        font-weight: 900;
+      }
+      .story-action {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 28px;
+        padding: 15px 20px;
+        border: 0;
+        border-radius: 15px;
+        background: var(--ink);
+        color: #fff;
+        font-weight: 850;
+        box-shadow: 0 14px 30px rgba(41, 35, 29, 0.18);
+      }
+      .story-action span { color: var(--gold); font-size: 20px; }
+      .visual { position: relative; min-height: 790px; display: grid; place-items: center; }
+      .halo {
+        position: absolute;
+        inset: 8% 4%;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(237, 174, 50, 0.34), rgba(182, 65, 49, 0.08) 45%, transparent 69%);
+      }
+      .phone {
+        position: relative;
+        z-index: 1;
+        width: min(390px, 92vw);
+        height: 748px;
+        overflow: hidden;
+        border: 7px solid var(--phone);
+        border-radius: 42px;
+        background: #fff;
+        box-shadow: var(--shadow);
+      }
+      .phone::before {
+        content: "";
+        position: absolute;
+        z-index: 8;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 92px;
+        height: 25px;
+        border-radius: 14px;
+        background: var(--phone);
+      }
+      .statusbar {
+        position: relative;
+        z-index: 7;
+        height: 35px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 11px;
+        font-weight: 800;
+      }
+      .appbar {
+        height: 58px;
+        padding: 0 15px;
+        display: grid;
+        grid-template-columns: 62px 1fr 62px;
+        align-items: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        background: #fff;
+        font-size: 17px;
+        font-weight: 850;
+      }
+      .appbar strong { text-align: center; }
+      .back {
+        display: grid;
+        width: 42px;
+        height: 42px;
+        place-items: center start;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        font-size: 27px;
+        font-weight: 400;
+      }
+      .back-placeholder { display: block; width: 42px; height: 42px; }
+      .capsule {
+        justify-self: end;
+        width: 60px;
+        height: 27px;
+        border: 1px solid rgba(0, 0, 0, 0.16);
+        border-radius: 999px;
+        display: grid;
+        place-items: center;
+        letter-spacing: 3px;
+        font-size: 10px;
+      }
+      .screen-body { height: 648px; overflow: hidden; }
+      .phone.has-app-tabs .screen-body { height: 590px; }
+      .app-tabs {
+        position: relative;
+        z-index: 7;
+        height: 58px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        background: rgba(255, 255, 255, 0.98);
+      }
+      .app-tabs button {
+        border: 0;
+        background: transparent;
+        color: #8a8178;
+        font-size: 10px;
+        font-weight: 800;
+      }
+      .app-tabs button.active { color: var(--green-dark); }
+
+      .wechat .statusbar, .wechat .appbar { background: #ededed; }
+      .wechat .screen-body { position: relative; padding: 15px 12px 70px; background: #ededed; }
+      .time { margin: 6px 0 17px; color: #8a8478; text-align: center; font-size: 11px; }
+      .msg { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 17px; }
+      .msg.me { flex-direction: row-reverse; }
+      .avatar {
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        width: 39px;
+        height: 39px;
+        border-radius: 8px;
+        color: #fff;
+        font-size: 13px;
+        font-weight: 900;
+      }
+      .avatar.green { background: #4f7895; }
+      .avatar.gold { background: var(--gold); color: var(--ink); }
+      .avatar.red { background: var(--red); }
+      .sender { margin: 0 4px 4px; color: #6f6a60; font-size: 11px; }
+      .msg.me .sender { text-align: right; }
+      .bubble { max-width: 260px; padding: 11px 13px; border-radius: 4px 15px 15px; background: #fff; font-size: 14px; line-height: 1.55; }
+      .msg.me .bubble { border-radius: 15px 4px 15px 15px; background: #95ec69; }
+      .mp-card { width: 260px; overflow: hidden; border: 0; border-radius: 9px; background: #fff; text-align: left; box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08); }
+      .mp-main { padding: 14px; }
+      .mp-brand { display: flex; align-items: center; gap: 7px; color: #6f6a60; font-size: 11px; }
+      .mini-logo { width: 24px; height: 24px; border-radius: 7px; object-fit: cover; }
+      .mp-title { margin-top: 10px; font-size: 17px; font-weight: 900; line-height: 1.35; }
+      .mp-highlight { margin-top: 9px; padding: 11px; border-radius: 10px; background: var(--red-soft); color: var(--red-dark); font-size: 12px; line-height: 1.5; }
+      .mp-foot { padding: 8px 14px; border-top: 1px solid #eee; color: #8a8478; font-size: 11px; }
+      .chat-input { position: absolute; right: 0; bottom: 0; left: 0; height: 57px; padding: 9px 11px; display: flex; gap: 8px; background: #f7f7f7; border-top: 1px solid #ddd; }
+      .round-tool { width: 36px; height: 36px; border: 1px solid #aaa; border-radius: 50%; }
+      .chat-field { flex: 1; border-radius: 7px; background: #fff; }
+
+      .mini .screen-body, .ops .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
+      .agent-intro { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+      .agent-avatar { width: 38px; height: 38px; border-radius: 13px; object-fit: cover; }
+      .agent-bubble { padding: 10px 12px; border-radius: 4px 14px 14px; background: #fff; font-size: 13px; line-height: 1.55; box-shadow: 0 4px 14px rgba(52, 41, 31, 0.05); }
+      .paste { margin: 11px 0; padding: 12px; border-radius: 13px 4px 13px 13px; background: var(--green); color: #fff; font-size: 12px; line-height: 1.55; }
+      .change-card { padding: 15px; border: 1px solid var(--line); border-radius: 18px; background: #fff; box-shadow: 0 8px 24px rgba(52, 41, 31, 0.07); }
+      .card-kicker { color: var(--red-dark); font-size: 11px; font-weight: 900; letter-spacing: 0.06em; }
+      .change-card h3 { margin: 7px 0 5px; font-size: 19px; }
+      .change-card > p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+      .changes { display: grid; gap: 8px; margin-top: 12px; }
+      .change { display: grid; grid-template-columns: 50px 1fr; gap: 8px; padding: 9px; border-radius: 10px; background: #f7f4ed; font-size: 11px; line-height: 1.4; }
+      .change b { color: var(--green-dark); }
+      .change.warn b { color: #a9650b; }
+      .guardrail { margin-top: 10px; color: var(--muted); font-size: 10px; line-height: 1.45; }
+      .primary, .secondary { width: 100%; padding: 12px; border-radius: 11px; font-weight: 850; }
+      .primary { margin-top: 12px; border: 0; background: var(--red); color: #fff; }
+      .secondary { margin-top: 8px; border: 1px solid var(--line); background: #fff; color: var(--ink); }
+      .success { padding: 20px; border-radius: 20px; background: var(--green); color: #fff; }
+      .success strong { display: block; margin-bottom: 8px; font-size: 22px; }
+      .success p { margin: 0; font-size: 13px; line-height: 1.6; }
+
+      .tabbar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-bottom: 13px; padding: 4px; border-radius: 14px; background: #efe9dd; }
+      .tabbar button { padding: 9px 3px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font-size: 11px; font-weight: 800; }
+      .tabbar button.active { background: #fff; color: var(--red-dark); box-shadow: 0 4px 12px rgba(52, 41, 31, 0.06); }
+      .detail-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+      .detail-head span { color: var(--muted); font-size: 11px; }
+      .detail-head strong { display: block; margin-top: 3px; font-size: 21px; }
+      .detail-head em { color: var(--green-dark); font-size: 12px; font-style: normal; font-weight: 800; }
+      .dish-list, .order-list, .delivery-list { display: grid; gap: 8px; }
+      .dish, .order, .delivery {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: #fff;
+      }
+      .dish b, .order b, .delivery b { display: block; font-size: 13px; }
+      .dish small, .order small, .delivery small { color: var(--muted); font-size: 10px; }
+      .kind { padding: 5px 8px; border-radius: 999px; background: var(--red-soft); color: var(--red-dark); font-size: 10px; font-weight: 850; }
+      .kind.veg { background: var(--green-soft); color: var(--green-dark); }
+      .kind.soup { background: var(--gold-soft); color: #8a5b0a; }
+      .tiny-action { padding: 8px 10px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--green-dark); font-size: 10px; font-weight: 850; }
+      .query-card { padding: 15px; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
+      .query-card h3 { margin: 4px 0 12px; font-size: 19px; }
+      .query-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .query-cell { padding: 11px; border-radius: 12px; background: #f5f1e8; }
+      .query-cell strong { display: block; font-size: 20px; }
+      .query-cell span { color: var(--muted); font-size: 10px; }
+      .settings-profile { display: flex; align-items: center; gap: 11px; padding: 14px; border-radius: 17px; background: var(--green); color: #fff; }
+      .settings-profile img { width: 46px; height: 46px; border-radius: 14px; object-fit: cover; background: #fff; }
+      .settings-profile strong { display: block; font-size: 16px; }
+      .settings-profile span { display: block; margin-top: 4px; color: rgba(255, 255, 255, 0.78); font-size: 9px; }
+      .settings-group { display: grid; gap: 8px; margin-top: 12px; }
+      .settings-row { width: 100%; display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; color: var(--ink); text-align: left; }
+      .settings-row > b { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 12px; background: var(--gold-soft); color: #82590f; font-size: 11px; }
+      .settings-row:nth-child(2) > b { background: var(--green-soft); color: var(--green-dark); }
+      .settings-row:nth-child(3) > b { background: var(--red-soft); color: var(--red-dark); }
+      .settings-row strong { display: block; font-size: 12px; }
+      .settings-row small { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; line-height: 1.4; }
+      .settings-row > span { color: #a0968b; font-size: 18px; }
+
+      .week-toolbar { display: grid; grid-template-columns: 35px 1fr 35px; align-items: center; gap: 7px; margin-bottom: 10px; }
+      .week-toolbar button { width: 35px; height: 35px; border: 1px solid var(--line); border-radius: 11px; background: #fff; color: var(--ink); font-size: 20px; }
+      .week-range { text-align: center; }
+      .week-range strong { display: block; font-size: 15px; }
+      .week-range span { color: var(--muted); font-size: 9px; }
+      .plan-state { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; padding: 10px 11px; border-radius: 12px; background: var(--green-soft); }
+      .plan-state strong { font-size: 12px; }
+      .plan-state span { padding: 5px 7px; border-radius: 999px; background: #fff; color: var(--green-dark); font-size: 9px; font-weight: 850; }
+      .menu-rule { margin-bottom: 10px; padding: 10px 11px; border-radius: 12px; background: var(--gold-soft); color: #765313; font-size: 10px; line-height: 1.5; }
+      .week-plans { display: grid; gap: 7px; padding-bottom: 4px; }
+      .day-plan { overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: #fff; }
+      .day-plan.open { border-color: rgba(182, 65, 49, 0.5); box-shadow: 0 6px 18px rgba(52, 41, 31, 0.06); }
+      .day-plan.locked { border-color: rgba(40, 117, 87, 0.32); }
+      .day-plan.locked .day-toggle { background: #f8fcfa; }
+      .day-toggle { width: 100%; padding: 10px 11px; border: 0; background: #fff; text-align: left; }
+      .day-head { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
+      .day-head strong { font-size: 12px; }
+      .day-head b { color: var(--green-dark); font-size: 9px; }
+      .day-summary { display: grid; gap: 2px; margin-top: 5px; color: var(--muted); font-size: 9px; line-height: 1.4; }
+      .day-summary span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .day-detail { padding: 0 10px 10px; border-top: 1px solid #f0e9df; }
+      .meal-block { padding-top: 9px; }
+      .meal-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; color: var(--muted); font-size: 9px; font-weight: 800; }
+      .meal-title span { color: var(--green-dark); }
+      .mini-dishes { display: grid; gap: 4px; }
+      .mini-dish { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 6px; min-height: 31px; padding: 5px 6px 5px 9px; border-radius: 9px; background: #f8f5ef; }
+      .mini-dish b { overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+      .mini-dish small { padding: 3px 5px; border-radius: 999px; background: var(--red-soft); color: var(--red-dark); font-size: 8px; font-weight: 850; }
+      .mini-dish small.veg { background: var(--green-soft); color: var(--green-dark); }
+      .mini-dish small.soup { background: var(--gold-soft); color: #80580e; }
+      .locked-dish { min-width: 42px; color: var(--green-dark); font-size: 8px; font-weight: 850; text-align: center; }
+      .rotate-dish { display: inline-grid; width: 28px; height: 28px; flex: 0 0 28px; place-items: center; padding: 0; border: 0; border-radius: 7px; background: transparent; color: var(--muted); transition: background 140ms ease, opacity 140ms ease, transform 140ms ease; }
+      .rotate-dish:hover { background: #f0ebe3; }
+      .rotate-dish:active { opacity: 0.8; transform: scale(0.95); }
+      .rotate-dish img { width: 14px; height: 14px; }
+      .rotate-dish.spinning img { animation: rotate-dish-spin 0.3s ease-out; }
+      @keyframes rotate-dish-spin { to { transform: rotate(360deg); } }
+      @media (prefers-reduced-motion: reduce) { .rotate-dish { transition: none; } .rotate-dish.spinning img { animation: none; } }
+      .plan-action { position: sticky; z-index: 3; bottom: -15px; margin-top: 9px; padding: 8px 0 2px; background: linear-gradient(transparent, #fbf8f1 25%); }
+      .plan-action .primary { margin-top: 0; box-shadow: 0 8px 20px rgba(182, 65, 49, 0.16); }
+      .candidate-sheet { position: sticky; z-index: 8; bottom: -15px; margin: 10px -15px -15px; padding: 13px 15px 17px; border-top: 1px solid var(--line); border-radius: 18px 18px 0 0; background: #fff; box-shadow: 0 -18px 40px rgba(41, 35, 29, 0.18); }
+      .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+      .sheet-head strong { font-size: 13px; }
+      .sheet-head button { width: 32px; height: 32px; border: 0; border-radius: 10px; background: #f3eee5; color: var(--muted); font-weight: 900; }
+      .candidate-list { display: grid; gap: 5px; }
+      .candidate-list button { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 40px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--ink); text-align: left; }
+      .candidate-list button b { font-size: 11px; }
+      .candidate-list button span { color: var(--muted); font-size: 9px; }
+      .copy-preview { margin-top: 10px; padding: 12px; border: 1px dashed #c9a665; border-radius: 12px; background: #fffaf0; color: var(--muted); font-size: 10px; line-height: 1.6; white-space: pre-line; }
+      .input-label { display: block; margin: 9px 0 5px; color: var(--muted); font-size: 9px; font-weight: 850; }
+      .prototype-textarea { display: block; width: 100%; min-height: 128px; padding: 11px; border: 1px solid var(--line); border-radius: 12px; outline: 0; background: #fff; color: var(--ink); font-size: 11px; line-height: 1.6; resize: none; }
+      .prototype-textarea:focus { border-color: rgba(40, 117, 87, 0.65); box-shadow: 0 0 0 3px rgba(40, 117, 87, 0.1); }
+      .import-list { display: grid; gap: 5px; margin-top: 10px; }
+      .import-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; min-height: 37px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+      .import-row b { font-size: 10px; }
+      .category-switch { display: flex; align-items: center; gap: 3px; }
+      .category-switch .kind { min-width: 27px; text-align: center; }
+      .coverage-list { display: grid; gap: 7px; margin: 10px 0; }
+      .coverage-row { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 9px; min-height: 42px; padding: 8px 9px 8px 12px; border: 1px solid var(--line); border-radius: 11px; background: #fff; }
+      .coverage-row b { font-size: 11px; }
+      .coverage-row span { display: block; margin-top: 2px; color: var(--muted); font-size: 8px; }
+      .coverage-row button { min-height: 29px; padding: 6px 9px; border: 1px solid rgba(182, 65, 49, 0.25); border-radius: 8px; background: var(--red-soft); color: var(--red-dark); font-size: 8px; font-weight: 850; }
+      .coverage-add { display: grid; grid-template-columns: 1fr 86px; gap: 7px; margin-top: 9px; }
+      .coverage-add input { width: 100%; min-height: 38px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; outline: 0; background: #fff; color: var(--ink); font-size: 10px; }
+      .coverage-add input:focus { border-color: rgba(40, 117, 87, 0.65); box-shadow: 0 0 0 3px rgba(40, 117, 87, 0.1); }
+      .coverage-add button { border: 0; border-radius: 10px; background: var(--green); color: #fff; font-size: 9px; font-weight: 850; }
+      .field-error { margin: 7px 0 0; color: var(--red-dark); font-size: 9px; font-weight: 750; }
+      .entry-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin: 10px 0; padding: 4px; border-radius: 12px; background: #efeae1; }
+      .entry-tabs button { min-height: 34px; border: 0; border-radius: 9px; background: transparent; color: var(--muted); font-size: 9px; font-weight: 850; }
+      .entry-tabs button.active { background: #fff; color: var(--ink); box-shadow: 0 3px 10px rgba(52, 41, 31, 0.08); }
+      .order-diff { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 9px 0; }
+      .order-diff div { padding: 8px; border-radius: 10px; background: #f5f1e8; text-align: center; }
+      .order-diff strong { display: block; font-size: 16px; }
+      .order-diff span { color: var(--muted); font-size: 8px; }
+      .manual-form { display: grid; gap: 8px; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
+      .manual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+      .manual-field { display: grid; gap: 4px; color: var(--muted); font-size: 8px; font-weight: 800; }
+      .manual-field input, .manual-field select { width: 100%; min-height: 36px; padding: 8px 9px; border: 1px solid var(--line); border-radius: 9px; outline: 0; background: #fbf9f5; color: var(--ink); font-size: 10px; }
+      .manual-field input:focus, .manual-field select:focus { border-color: rgba(40, 117, 87, 0.65); box-shadow: 0 0 0 3px rgba(40, 117, 87, 0.1); }
+      .share-card { overflow: hidden; margin-top: 10px; border: 1px solid var(--line); border-radius: 16px; background: #fff; box-shadow: 0 8px 22px rgba(52, 41, 31, 0.07); }
+      .share-card-main { padding: 14px; }
+      .share-card-brand { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 9px; font-weight: 800; }
+      .share-card h3 { margin: 10px 0 5px; font-size: 17px; }
+      .share-card p { margin: 0; color: var(--muted); font-size: 9px; line-height: 1.55; }
+      .share-card-foot { display: flex; align-items: center; justify-content: space-between; padding: 9px 14px; border-top: 1px solid #eee8df; color: var(--green-dark); font-size: 9px; font-weight: 850; }
+      .menu-detail-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 10px; }
+      .menu-detail-button { min-height: 32px; padding: 7px 8px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--green-dark); font-size: 9px; font-weight: 850; }
+      .menu-detail-button[aria-expanded="true"] { border-color: rgba(40, 117, 87, 0.38); background: var(--green-soft); }
+      .menu-detail-list { margin-top: 8px; padding: 9px 10px; border-radius: 10px; background: #f5f1e8; }
+      .menu-detail-list strong { display: block; margin-bottom: 5px; color: var(--ink); font-size: 10px; }
+      .menu-detail-list ul { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; margin: 0; padding-left: 15px; color: var(--muted); font-size: 9px; line-height: 1.45; }
+      .file-select { width: 100%; padding: 14px; border: 1px dashed #b9aa94; border-radius: 14px; background: #fff; color: var(--ink); text-align: left; }
+      .file-select strong { display: block; font-size: 13px; }
+      .file-select small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; }
+      .receipt-list { display: grid; gap: 8px; margin-top: 10px; }
+      .receipt { padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: #fff; }
+      .receipt-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+      .receipt-head b { font-size: 12px; }
+      .receipt-head strong { font-size: 13px; }
+      .receipt p { margin: 5px 0 0; color: var(--muted); font-size: 9px; line-height: 1.45; }
+      .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 9px; }
+      .card-actions button { min-height: 34px; padding: 7px; border: 1px solid var(--line); border-radius: 9px; background: #fff; color: var(--muted); font-size: 9px; font-weight: 850; }
+      .card-actions button.approve { border-color: transparent; background: var(--green); color: #fff; }
+      .card-actions button.decline-confirm { border-color: rgba(182, 65, 49, 0.35); background: var(--red-soft); color: var(--red-dark); }
+      .stop-action { width: 100%; margin-top: 8px; padding: 11px; border: 1px solid rgba(182, 65, 49, 0.35); border-radius: 11px; background: var(--red-soft); color: var(--red-dark); font-weight: 850; }
+      .match { display: inline-block; margin-top: 7px; padding: 5px 7px; border-radius: 999px; background: var(--green-soft); color: var(--green-dark); font-size: 9px; font-weight: 850; }
+      .match.warn { background: var(--gold-soft); color: #80580e; }
+      .match.none { background: var(--red-soft); color: var(--red-dark); }
+      .evidence-note { margin-top: 9px; color: var(--muted); font-size: 9px; line-height: 1.5; }
+      .reconcile-progress { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 14px; border-radius: 16px; background: var(--green-dark); color: #fff; box-shadow: 0 10px 24px rgba(30,93,69,.14); }
+      .reconcile-progress span { display: block; font-size: 10px; font-weight: 800; opacity: .78; }
+      .reconcile-progress strong { display: block; margin-top: 3px; font-size: 23px; line-height: 1.1; }
+      .reconcile-progress em { font-size: 10px; font-style: normal; font-weight: 850; opacity: .82; }
+      .reconcile-caption { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 13px 1px 8px; }
+      .reconcile-caption strong { font-size: 13px; }
+      .reconcile-caption span { color: var(--muted); font-size: 9px; }
+      .reconcile-list { display: grid; gap: 8px; }
+      .reconcile-item { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 11px; border: 1px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer; transition: background .15s ease, border-color .15s ease; }
+      .reconcile-item.checked { border-color: #bad7ca; background: #f1f8f4; }
+      .reconcile-check { width: 19px; height: 19px; margin: 2px 0 0; accent-color: var(--green); cursor: pointer; }
+      .reconcile-item-main { min-width: 0; }
+      .reconcile-item-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+      .reconcile-item-head b { font-size: 12px; }
+      .reconcile-item-head strong { font-size: 14px; }
+      .reconcile-item.checked .reconcile-item-head b,
+      .reconcile-item.checked .reconcile-item-head strong { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+      .reconcile-order { display: block; margin: 4px 0 0; color: var(--muted); font-size: 9px; line-height: 1.4; }
+      .reconcile-reason, .reconcile-manual, .reconcile-wait { margin-top: 7px; padding: 7px 8px; border-radius: 9px; font-size: 9px; font-weight: 800; line-height: 1.4; }
+      .reconcile-reason { background: #dfeee7; color: #1e5d45; }
+      .reconcile-manual { background: #e9f3ed; color: #1e5d45; }
+      .reconcile-wait { background: #f4f0e8; color: #756b5f; }
+      .reconcile-note { margin: 10px 2px 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
+
+      .finish .screen-body { padding: 22px 18px; background: var(--ink); color: #fff; }
+      .finish-logo { width: 60px; height: 60px; border-radius: 19px; object-fit: cover; }
+      .finish h3 { margin: 24px 0 10px; font-size: 31px; line-height: 1.08; letter-spacing: -0.04em; }
+      .finish-lead { margin: 0; color: rgba(255, 255, 255, 0.84); font-size: 13px; line-height: 1.65; }
+      .value-list { display: grid; gap: 10px; margin-top: 27px; }
+      .value { display: grid; grid-template-columns: 34px 1fr; gap: 11px; align-items: center; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 14px; background: rgba(255, 255, 255, 0.07); }
+      .value b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; background: rgba(237, 174, 50, 0.2); color: var(--gold); }
+      .value strong { display: block; font-size: 13px; }
+      .value small { display: block; margin-top: 2px; color: rgba(255, 255, 255, 0.76); font-size: 11px; line-height: 1.45; }
+      .new-need { margin-top: 22px; width: 100%; padding: 13px; border: 1px solid var(--gold); border-radius: 13px; background: transparent; color: var(--gold); font-size: 12px; font-weight: 850; }
+      .home .screen-body { padding: 16px; overflow-y: auto; }
+      .home .finish-logo { width: 48px; height: 48px; border-radius: 15px; }
+      .home h3 { margin: 14px 0 8px; font-size: 25px; line-height: 1.08; }
+      .home .finish-lead { font-size: 11px; line-height: 1.5; }
+      .home .value-list { gap: 7px; margin-top: 16px; }
+      .home .value { grid-template-columns: 30px 1fr; gap: 9px; padding: 8px 10px; border-radius: 12px; }
+      .home .value b { width: 30px; height: 30px; border-radius: 9px; font-size: 12px; }
+      .home .value strong { font-size: 11px; }
+      .home .value small { font-size: 9px; line-height: 1.35; }
+      .home .new-need { margin-top: 12px; padding: 10px; }
+
+      .floating-card { position: absolute; z-index: 3; padding: 11px 14px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255, 255, 255, 0.9); box-shadow: 0 14px 34px rgba(52, 41, 31, 0.13); backdrop-filter: blur(12px); font-size: 11px; font-weight: 800; }
+      .floating-card.top { top: 10%; right: -4%; transform: rotate(3deg); }
+      .floating-card em { display: block; margin-top: 4px; color: var(--red); font-size: 14px; font-style: normal; }
+      .present-nav { position: fixed; z-index: 20; left: 50%; bottom: 22px; transform: translateX(-50%); display: flex; align-items: center; gap: 5px; padding: 7px; border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 999px; background: rgba(31, 48, 40, 0.94); box-shadow: 0 16px 46px rgba(0, 0, 0, 0.25); backdrop-filter: blur(12px); }
+      .present-nav button { display: grid; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 50%; background: transparent; color: #fff; font-size: 18px; }
+      .present-nav button:hover { background: rgba(255, 255, 255, 0.12); }
+      .present-label { min-width: 170px; color: #fff; text-align: center; font-size: 11px; font-weight: 850; }
+      .present-dots { display: flex; justify-content: center; gap: 5px; margin-top: 3px; }
+      .present-dots i { width: 4px; height: 4px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); }
+      .present-dots i.active { width: 13px; border-radius: 5px; background: var(--gold); }
+      .audience-switch { position: fixed; z-index: 20; top: 22px; right: 24px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.86); color: var(--muted); text-decoration: none; font-size: 11px; font-weight: 800; box-shadow: 0 8px 24px rgba(52, 41, 31, 0.08); backdrop-filter: blur(10px); }
+      .blueprint-switch { position: fixed; z-index: 20; top: 66px; right: 24px; padding: 8px 12px; border-radius: 999px; background: var(--green-dark); color: #fff; text-decoration: none; font-size: 11px; font-weight: 850; box-shadow: 0 8px 24px rgba(30,93,69,.16); }
+
+      @media (max-width: 930px) {
+        .topbar { padding-right: 0; }
+        .layout { grid-template-columns: 1fr; gap: 20px; }
+        .story { text-align: center; }
+        .lead, .proofs { margin-right: auto; margin-left: auto; }
+        .story-action { margin-right: auto; margin-left: auto; }
+        .visual { min-height: 770px; }
+        .floating-card.top { right: 5%; }
+      }
+      @media (max-width: 560px) {
+        .page { padding: 18px 14px 105px; }
+        .proto-note { display: none; }
+        .audience-switch, .blueprint-switch { position: static; display: inline-block; margin: 14px 4px 0 14px; }
+        .layout { margin-top: 14px; }
+        .story { padding-top: 0; }
+        h1 { font-size: 43px; }
+        .proofs { display: none; }
+        .visual { min-height: 720px; }
+        .phone { height: 690px; border-radius: 36px; }
+        .screen-body { height: 590px; }
+        .phone.has-app-tabs .screen-body { height: 532px; }
+        .floating-card { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="audience-switch" href="../prototype-customer/">切到顾客使用端 →</a>
+    <a class="blueprint-switch" href="../">返回工程总蓝图</a>
+    <div id="app"></div>
+
+    <script>
+      const steps = ["intro", "settings", "dishes", "delivery", "plan", "publish", "orders", "reconcile", "finish"];
+      const labels = {
+        intro: "价值主张",
+        dishes: "菜品池初始化",
+        delivery: "配送范围设置",
+        plan: "周菜单与换菜",
+        publish: "确认与分享",
+        orders: "订单列表",
+        reconcile: "截图对账",
+        settings: "我的设置",
+        finish: "产品全貌",
+      };
+      const copy = {
+        intro: {
+          kicker: "街坊味 · 01",
+          title: "不用每天想菜，<br />也不用月底翻聊天找账。",
+          lead: "第一次先把桃子会做的菜和能送的小区设置好；之后排好周菜单，每天晚上只发布明天。顾客只能从桃子开放的小区中选择配送地址。",
+          proofs: [["池", "菜名批量粘贴，只确认荤、素、汤分类"], ["送", "桃子自己维护可配送小区"], ["单", "顾客只能选择已开放的小区"]],
+          action: "打开我的设置",
+        },
+        dishes: {
+          kicker: "初次使用 · 03",
+          title: "先把会做的菜，<br />轻松放进来。",
+          lead: "桃子不用逐道填写配方。把微信或备忘录里的菜名整段粘贴，每行一道；街坊味先按菜名分成荤、素、汤，点菜名旁的更换图标即可循环纠正，确认后才加入菜品池。",
+          proofs: [["贴", "一次粘贴多道菜，比逐条建档更快"], ["简", "系统先判断荤、素、汤，不填复杂字段"], ["换", "沿用 weekly-menu 的更换图标，点击循环分类"]],
+          action: "菜品池准备好，再设置配送范围",
+        },
+        delivery: {
+          kicker: "基础设置 · 04",
+          title: "只送熟悉的几个小区，<br />范围由桃子定。",
+          lead: "桃子直接添加或移除小区名称，不需要画地图。确认后，顾客填写地址时只会看到这些小区，再补充楼栋和门牌。",
+          proofs: [["加", "输入小区名称即可加入配送范围"], ["删", "暂时不送的小区可以直接移除"], ["限", "顾客端不允许填写范围外的小区"]],
+          action: "基础设置完成，开始排菜单",
+        },
+        plan: {
+          kicker: "核心任务 · 05",
+          title: "整周看得见，<br />不满意当场换。",
+          lead: "生成后周一到周五都留在同一个页面。未发布日期可以在原位置换菜；卡片一旦发布，这一天就冻结为只读，避免顾客看到的菜单和桃子后来修改的不一致。",
+          proofs: [["周", "五天十餐同屏可回看，不只展示某一天"], ["锁", "已发布日期仍可展开查看，但不能再换菜"], ["换", "只有未发布日期保留换菜与候选列表"]],
+          action: "确认整周，再按天生成预订卡片",
+        },
+        publish: {
+          kicker: "确认发布 · 06",
+          title: "晚上决定明天做不做，<br />只发明天。",
+          lead: "周菜单只是桃子自己的准备蓝图。每天晚上确认明天是否开饭；发布前可调整，发到微信群后菜单立即锁定。桃子和顾客都可以展开查看这餐完整的 5 道菜。",
+          proofs: [["锁", "卡片发布后锁定菜单，不再允许换菜"], ["菜", "卡片内可展开查看午饭、晚饭全部菜品"], ["停", "明天不做由桃子在微信群统一公告"]],
+          action: "查看顾客订单如何汇总",
+        },
+        orders: {
+          kicker: "订单汇总 · 07",
+          title: "短单进明日表，<br />长期订单先审核。",
+          lead: "明日短单提交后按午饭、晚饭分别进入备餐表；长期订单由桃子决定接不接。同意后私聊付款，拒接也私聊说明原因，不在群里公开顾客订单。",
+          proofs: [["明", "短单分别汇总明天午饭和晚饭份数"], ["私", "长期订单同意或拒接都私聊申请人"], ["付", "线下付款后由桃子标记订单生效"]],
+          action: "订单有了，再用截图辅助对账",
+        },
+        reconcile: {
+          kicker: "收款对账 · 08",
+          title: "不接支付，<br />也能把到账记录核清。",
+          lead: "桃子从微信保存收款截图，街坊味提取姓名、金额和时间，再和订单做候选匹配。唯一匹配由系统在清单中划掉并展示依据；歧义和无匹配留给桃子手动划掉，不需要填写理由。",
+          proofs: [["清", "每张收款截图对应一项可勾销清单"], ["理", "系统代划必须保留明确的匹配依据"], ["手", "桃子手动划掉不额外追问原因"]],
+          action: "看清这版产品边界",
+        },
+        settings: {
+          kicker: "基础导航 · 02",
+          title: "菜品和配送范围，<br />都放在我的。",
+          lead: "首页、菜单、订单是每天会用的一级入口；菜品池、配送范围和产品说明收进“我的”，这样桃子随时知道该去哪里改基础资料。",
+          proofs: [["菜", "菜品池负责批量导入、分类和后续维护"], ["送", "配送范围决定顾客下单时能选哪些小区"], ["层", "设置页是入口，编辑页用顶部返回键回到这里"]],
+          action: "先打开菜品池",
+        },
+        finish: {
+          kicker: "产品全貌 · 09",
+          title: "从会做什么，<br />一直走到账目清楚。",
+          lead: "街坊味不是复杂餐饮 ERP，也不替桃子收钱。它把菜品池、周菜单、群里的开饭与停餐通知、短单与长期私聊审核、临时停餐退款和截图辅助对账串起来。",
+          proofs: [["基", "菜品池只维护菜名和荤、素、汤分类"], ["营", "每晚决定明天开饭，短单与长期订单自动汇总"], ["核", "付款与退款仍在微信，平台只留记录"]],
+          action: "重新体验",
+        },
+      };
+
+      let dishImportStage = "input";
+      let dishImportError = "";
+      let spinningCategoryIndex = null;
+      let deliveryStage = "edit";
+      let deliveryError = "";
+      const deliveryStorageKey = "kith-inn-delivery-communities";
+      function storedDeliveryCommunities() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(deliveryStorageKey));
+          if (Array.isArray(stored) && stored.length && stored.every((community) => typeof community === "string" && community.trim())) return stored;
+        } catch {}
+        return ["桂花苑", "梧桐里", "春和家园"];
+      }
+      function saveDeliveryCommunities() {
+        localStorage.setItem(deliveryStorageKey, JSON.stringify(deliveryCommunities));
+      }
+      let deliveryCommunities = storedDeliveryCommunities();
+      let menuGenerated = false;
+      let expandedDay = null;
+      let menuConfirmed = false;
+      let tomorrowCardShared = false;
+      let expandedPublishedMeal = null;
+      const publishedDayIndexes = new Set([0]);
+      let tomorrowServiceStage = "open";
+      let dishOverrides = {};
+      let rotationCounts = {};
+      let spinningDishKey = null;
+      let candidateSheet = null;
+      let merchantOrderFilter = "all";
+      let longApplicationStage = "pending";
+      let longRejectionReason = "这段时间家里有事，连续几天的饭暂时安排不过来。";
+      let longRejectionError = "";
+      let longRejectionCopied = false;
+      let stopAnnouncementCopied = false;
+      let manualOrderStage = "list";
+      let manualOrderError = "";
+      let manualOrderAdded = false;
+      let manualOrder = { customer: "李姐", meal: "晚饭", quantity: 1, address: "熟客地址自动带出", note: "加一道番茄炒蛋" };
+      let receiptsScanned = false;
+      const reconciliationChecked = new Set([0]);
+      const reconciliationSources = { 0: "system" };
+
+      let importedDishes = [
+        ["红烧排骨", "meat"], ["番茄炒蛋", "veg"], ["香菇滑鸡", "meat"], ["清蒸鲈鱼", "meat"],
+        ["蒜蓉时蔬", "veg"], ["手撕包菜", "veg"], ["海带豆腐汤", "soup"], ["冬瓜肉丸汤", "soup"],
+      ];
+
+      const weeklyMenu = [
+        { day: "周一", date: "9月7日", lunch: [["土豆烧牛肉","meat"],["白切鸡","meat"],["蒜蓉菜心","veg"],["清炒西兰花","veg"],["冬瓜虾皮汤","soup"]], dinner: [["梅菜扣肉","meat"],["清蒸鲈鱼","meat"],["荷塘小炒","veg"],["手撕包菜","veg"],["玉米排骨汤","soup"]] },
+        { day: "周二", date: "9月8日", lunch: [["红烧排骨","meat"],["番茄炒蛋","meat"],["清炒油麦菜","veg"],["香菇青菜","veg"],["海带豆腐汤","soup"]], dinner: [["红烧牛腩","meat"],["清蒸鲈鱼","meat"],["蒜蓉时蔬","veg"],["手撕包菜","veg"],["番茄蛋汤","soup"]] },
+        { day: "周三", date: "9月9日", lunch: [["香菇滑鸡","meat"],["萝卜炖肉","meat"],["清炒菠菜","veg"],["酸辣土豆丝","veg"],["菌菇汤","soup"]], dinner: [["糖醋排骨","meat"],["芹菜炒肉","meat"],["蚝油生菜","veg"],["家常茄子","veg"],["紫菜蛋花汤","soup"]] },
+        { day: "周四", date: "9月10日", lunch: [["啤酒鸭","meat"],["豆角炒肉","meat"],["蒜蓉空心菜","veg"],["清炒藕片","veg"],["萝卜汤","soup"]], dinner: [["清炖狮子头","meat"],["豉汁蒸鱼","meat"],["小炒杏鲍菇","veg"],["上汤娃娃菜","veg"],["丝瓜蛋汤","soup"]] },
+        { day: "周五", date: "9月11日", lunch: [["板栗烧鸡","meat"],["木须肉","meat"],["清炒小白菜","veg"],["麻婆豆腐","veg"],["莲藕排骨汤","soup"]], dinner: [["土豆焖鸭","meat"],["红烧带鱼","meat"],["蒜蓉西兰花","veg"],["干煸四季豆","veg"],["冬瓜肉丸汤","soup"]] },
+      ];
+      const candidatePools = {
+        meat: [["香菇滑鸡","meat"],["萝卜炖肉","meat"],["芹菜炒肉","meat"]],
+        veg: [["荷塘小炒","veg"],["香菇青菜","veg"],["清炒藕片","veg"]],
+        soup: [["菌菇汤","soup"],["冬瓜虾皮汤","soup"],["紫菜蛋花汤","soup"]],
+      };
+
+      function currentStep() {
+        const value = new URLSearchParams(location.search).get("step");
+        const aliases = { generate: "plan", adjust: "publish" };
+        return steps.includes(value) ? value : aliases[value] || "intro";
+      }
+      function go(step) {
+        const url = new URL(location.href);
+        url.searchParams.set("step", step);
+        history.replaceState({}, "", url);
+        render();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      function cyclePresentation(delta) {
+        const index = steps.indexOf(currentStep());
+        go(steps[(index + delta + steps.length) % steps.length]);
+      }
+      function logo(className = "mini-logo") {
+        return `<img class="${className}" src="../kith-inn-logo.png" alt="街坊味" />`;
+      }
+      const taoziTabSteps = ["intro", "plan", "orders", "settings"];
+      function taoziBackVisible(step) {
+        if (["dishes", "delivery", "publish", "reconcile", "finish"].includes(step)) return true;
+        return step === "orders" && (manualOrderStage !== "list" || longApplicationStage !== "pending");
+      }
+      function appBackControl(step) {
+        return taoziBackVisible(step)
+          ? `<button class="back" data-app-back aria-label="返回上一页">‹</button>`
+          : `<span class="back-placeholder" aria-hidden="true"></span>`;
+      }
+      function taoziTabBar(step) {
+        const tabs = [["intro", "首页"], ["plan", "菜单"], ["orders", "订单"], ["settings", "我的"]];
+        return `<nav class="app-tabs" aria-label="桃子端主导航">${tabs.map(([target, label]) => `<button class="${step === target ? "active" : ""}" data-app-tab="${target}" ${step === target ? 'aria-current="page"' : ""}>${label}</button>`).join("")}</nav>`;
+      }
+      function handleAppBack() {
+        const step = currentStep();
+        if (step === "dishes") {
+          if (dishImportStage === "done") dishImportStage = "preview";
+          else if (dishImportStage === "preview") dishImportStage = "input";
+          else go("settings");
+          if (currentStep() === "dishes") render();
+          return;
+        }
+        if (step === "delivery") {
+          if (deliveryStage === "done") { deliveryStage = "edit"; render(); }
+          else go("settings");
+          return;
+        }
+        if (step === "publish") {
+          if (tomorrowServiceStage === "confirm-stop") { tomorrowServiceStage = "open"; render(); }
+          else if (expandedPublishedMeal) { expandedPublishedMeal = null; render(); }
+          else go("plan");
+          return;
+        }
+        if (step === "orders") {
+          manualOrderStage = "list";
+          longApplicationStage = "pending";
+          manualOrderError = "";
+          longRejectionError = "";
+          render();
+          return;
+        }
+        if (step === "reconcile") {
+          if (receiptsScanned) { receiptsScanned = false; render(); }
+          else go("orders");
+          return;
+        }
+        if (step === "finish") go("settings");
+      }
+      function phoneShell(kind, title, body) {
+        const step = currentStep();
+        const showTabs = taoziTabSteps.includes(step);
+        return `<div class="phone ${kind} ${showTabs ? "has-app-tabs" : ""}"><div class="phone-screen">
+          <div class="statusbar"><span>9:41</span><span>5G · 86%</span></div>
+          <div class="appbar">${appBackControl(step)}<strong>${title}</strong><span class="capsule">•• ◉</span></div>
+          <div class="screen-body">${body}</div>
+          ${showTabs ? taoziTabBar(step) : ""}
+        </div></div>`;
+      }
+      function introPhone() {
+        return phoneShell("finish home", "街坊味", `
+          ${logo("finish-logo")}
+          <h3>菜先放好，<br />菜单、订单、账都接上。</h3>
+          <p class="finish-lead">顾客继续在微信里接龙和转账。街坊味只帮桃子录事实、排菜单、核记录，不接管交易。</p>
+          <div class="value-list">
+            <div class="value"><b>菜</b><div><strong>建立自己的菜品池</strong><small>批量粘贴菜名，只确认荤、素、汤</small></div></div>
+            <div class="value"><b>送</b><div><strong>限定配送小区</strong><small>桃子维护范围，顾客只能从中选择</small></div></div>
+            <div class="value"><b>排</b><div><strong>生成一周菜单</strong><small>换一道不推翻整周，按天分享预订卡片</small></div></div>
+            <div class="value"><b>单</b><div><strong>顾客订单自动汇总</strong><small>短单和长期订单都回到桃子的列表</small></div></div>
+            <div class="value"><b>核</b><div><strong>截图辅助对账</strong><small>系统给候选，桃子做最终确认</small></div></div>
+          </div>
+          <button class="new-need" data-app-route="settings">打开我的设置 →</button>`);
+      }
+      function inferDishCategory(name) {
+        if (/[汤羹]/.test(name)) return "soup";
+        if (/[肉排骨牛羊鸡鸭鹅鱼虾蟹丸腊肠]/.test(name)) return "meat";
+        return "veg";
+      }
+      function importedDishRows() {
+        const categoryMeta = { meat: ["荤", ""], veg: ["素", "veg"], soup: ["汤", "soup"] };
+        return importedDishes.map(([name, category], dishIndex) => {
+          const [label, className] = categoryMeta[category];
+          return `<div class="import-row"><b>${name}</b><div class="category-switch"><span class="kind ${className}">${label}</span><button class="rotate-dish ${spinningCategoryIndex === dishIndex ? "spinning" : ""}" data-cycle-category="${dishIndex}" aria-label="更改${name}的分类，当前为${label}" title="更改分类"><img src="./refresh-cw.svg" alt="" /></button></div></div>`;
+        }).join("");
+      }
+      function dishesPhone() {
+        if (dishImportStage === "done") {
+          return phoneShell("ops", "菜品池初始化", `
+            <div class="success"><strong>${importedDishes.length} 道菜已加入菜品池</strong><p>菜名和荤、素、汤分类已经保存。以后想到新菜，可以随时从“我的”继续添加。</p></div>
+            <div class="query-card"><div class="card-kicker">菜品准备完成</div><h3>再设置可配送小区</h3><div class="query-grid"><div class="query-cell"><strong>${importedDishes.length}</strong><span>已启用菜品</span></div><div class="query-cell"><strong>3</strong><span>荤、素、汤三类</span></div></div></div>
+            <button class="primary" data-app-route="settings">返回我的设置</button>
+            <div class="evidence-note">本轮只保存菜名和分类，不要求主料、配方、口味、忌口或采购信息。</div>`);
+        }
+        if (dishImportStage === "preview") {
+          return phoneShell("ops", "菜品池初始化", `
+            <div class="detail-head"><div><span>从菜名自动判断</span><strong>${importedDishes.length} 道菜待加入</strong></div><em>未写入</em></div>
+            <div class="menu-rule"><b>请确认荤、素、汤分类</b><br />系统先判断；分类不对就点右侧更换图标，按“荤 → 素 → 汤”循环。</div>
+            <div class="import-list">${importedDishRows()}</div>
+            <button class="primary" data-action="confirm-dishes">确认加入菜品池</button>
+            <button class="secondary" data-action="edit-dishes">返回修改菜名</button>
+            <div class="evidence-note">沿用 weekly-menu 的 RefreshCw 更换控件；系统先判断，最终以桃子确认的分类为准。</div>`);
+        }
+        return phoneShell("ops", "菜品池初始化", `
+          <div class="detail-head"><div><span>首次使用 · 约 2 分钟</span><strong>建立我的菜品池</strong></div><em>0 道</em></div>
+          <div class="menu-rule"><b>每行一道菜，整段粘贴</b><br />可以从微信、备忘录或旧菜单复制；不用填写复杂配方。</div>
+          <label class="input-label" for="dish-source">菜名清单</label>
+          <textarea class="prototype-textarea" id="dish-source" aria-label="菜名清单">红烧排骨
+番茄炒蛋
+香菇滑鸡
+清蒸鲈鱼
+蒜蓉时蔬
+手撕包菜
+海带豆腐汤
+冬瓜肉丸汤</textarea>
+          ${dishImportError ? `<p class="field-error">${dishImportError}</p>` : ""}
+          <button class="primary" data-action="parse-dishes">自动分成荤 / 素 / 汤</button>
+          <div class="evidence-note">原型按菜名关键词给出分类候选；日后仍可逐道新增、停用或改分类。</div>`);
+      }
+      function deliveryRows() {
+        return deliveryCommunities.map((community, index) => `<div class="coverage-row"><div><b>${escapeHTML(community)}</b><span>顾客端可选</span></div><button data-remove-community="${index}" aria-label="移除${escapeHTML(community)}">移除</button></div>`).join("");
+      }
+      function deliveryPhone() {
+        if (deliveryStage === "done") {
+          return phoneShell("ops", "配送范围", `
+            <div class="success"><strong>配送范围已保存</strong><p>${deliveryCommunities.length} 个小区已经同步到顾客地址选项。范围外的小区不能提交订单。</p></div>
+            <div class="query-card" style="margin-top:10px"><div class="card-kicker">当前可配送</div><h3>${deliveryCommunities.map(escapeHTML).join("、")}</h3><p class="note">以后范围有变化，可以回来添加或移除。</p></div>
+            <button class="primary" data-app-route="settings">返回我的设置</button>
+            <button class="secondary" data-action="edit-delivery">修改配送范围</button>`);
+        }
+        return phoneShell("ops", "配送范围", `
+          <div class="detail-head"><div><span>基础设置 · 随时可改</span><strong>我送哪些小区</strong></div><em>${deliveryCommunities.length} 个</em></div>
+          <div class="menu-rule"><b>按小区限制，不画配送地图</b><br />顾客只能从下面的小区中选择，再填写楼栋和门牌；范围外地址不能下单。</div>
+          <div class="coverage-list">${deliveryRows()}</div>
+          <label class="input-label" for="delivery-community">添加一个小区</label>
+          <div class="coverage-add"><input id="delivery-community" placeholder="例如：锦绣花园" autocomplete="off" /><button data-action="add-community">添加小区</button></div>
+          ${deliveryError ? `<p class="field-error">${deliveryError}</p>` : ""}
+          <button class="primary" data-action="confirm-delivery">确认配送范围</button>
+          <div class="evidence-note">原型用小区名单控制范围；不做地图半径或自动定位。</div>`);
+      }
+      function dishKey(dayIndex, meal, dishIndex) {
+        return `${dayIndex}-${meal}-${dishIndex}`;
+      }
+      function dishFor(dayIndex, meal, dishIndex) {
+        const key = dishKey(dayIndex, meal, dishIndex);
+        return dishOverrides[key] || weeklyMenu[dayIndex][meal][dishIndex];
+      }
+      function mealSummary(dayIndex, meal) {
+        const dishes = mealDishNames(dayIndex, meal);
+        return `${dishes.slice(0, 2).join("、")}等5道`;
+      }
+      function mealDishNames(dayIndex, meal) {
+        return weeklyMenu[dayIndex][meal].map((_, index) => dishFor(dayIndex, meal, index)[0]);
+      }
+      function menuDetailList(dayIndex, meal, label) {
+        return `<div class="menu-detail-list"><strong>${label} · 5 道菜</strong><ul>${mealDishNames(dayIndex, meal).map((dish) => `<li>${dish}</li>`).join("")}</ul></div>`;
+      }
+      function dishRow(dayIndex, meal, dishIndex) {
+        const [name, kind] = dishFor(dayIndex, meal, dishIndex);
+        const label = kind === "meat" ? "荤" : kind === "veg" ? "素" : "汤";
+        const key = dishKey(dayIndex, meal, dishIndex);
+        const control = publishedDayIndexes.has(dayIndex)
+          ? `<span class="locked-dish">已发布</span>`
+          : `<button class="rotate-dish ${spinningDishKey === key ? "spinning" : ""}" data-rotate="${key}" data-kind="${kind}" aria-label="随机换菜：${name}" title="随机换菜"><img src="./refresh-cw.svg" alt="" /></button>`;
+        return `<div class="mini-dish"><b>${name}</b><small class="${kind === "meat" ? "" : kind}">${label}</small>${control}</div>`;
+      }
+      function mealBlock(dayIndex, meal, label) {
+        return `<div class="meal-block"><div class="meal-title">${label}<span>2荤2素1汤</span></div><div class="mini-dishes">${weeklyMenu[dayIndex][meal].map((_, index) => dishRow(dayIndex, meal, index)).join("")}</div></div>`;
+      }
+      function dayPlan(day, index) {
+        const open = expandedDay === index;
+        const locked = publishedDayIndexes.has(index);
+        const status = locked ? (open ? "已发布 · 收起" : "已发布 · 查看") : (open ? "收起" : "未发布 · 展开");
+        return `<div class="day-plan ${open ? "open" : ""} ${locked ? "locked" : ""}" data-day-card="${index}"><button class="day-toggle" data-day="${index}" aria-expanded="${open}"><div class="day-head"><strong>${day.day} · ${day.date}</strong><b>${status}</b></div><div class="day-summary"><span>午：${mealSummary(index, "lunch")}</span><span>晚：${mealSummary(index, "dinner")}</span></div></button>${open ? `<div class="day-detail">${mealBlock(index, "lunch", "午餐")}${mealBlock(index, "dinner", "晚餐")}</div>` : ""}</div>`;
+      }
+      function publishedMenuDetails() {
+        const label = expandedPublishedMeal === "lunch" ? "午饭" : "晚饭";
+        return `<div class="menu-detail-actions"><button class="menu-detail-button" data-published-menu="lunch" aria-expanded="${expandedPublishedMeal === "lunch"}">${expandedPublishedMeal === "lunch" ? "收起午饭" : "查看午饭 5 道菜"}</button><button class="menu-detail-button" data-published-menu="dinner" aria-expanded="${expandedPublishedMeal === "dinner"}">${expandedPublishedMeal === "dinner" ? "收起晚饭" : "查看晚饭 5 道菜"}</button></div>${expandedPublishedMeal ? menuDetailList(1, expandedPublishedMeal, label) : ""}`;
+      }
+      function candidateSheetView() {
+        if (!candidateSheet) return "";
+        return `<div class="candidate-sheet"><div class="sheet-head"><strong>选择替换菜品</strong><button data-action="close-sheet" aria-label="关闭候选列表">×</button></div><div class="candidate-list">${candidatePools[candidateSheet.kind].map(([name], index) => `<button data-choice="${index}"><b>${name}</b><span>同类换菜候选</span></button>`).join("")}</div></div>`;
+      }
+      function planPhone() {
+        if (!menuGenerated) {
+          return phoneShell("ops", "本周菜单", `
+            <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>9月7日—9月11日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
+            <div class="plan-state"><strong>本周还没有菜单</strong><span>10 餐待安排</span></div>
+            <div class="menu-rule"><b>按桃子的默认方式排</b><br />每餐 2荤2素1汤 · 同一道菜近期尽量不重复 · 只用菜品池里的菜</div>
+            <div class="change-card"><div class="card-kicker">准备就绪</div><h3>一次生成五天午晚餐</h3><p>生成后五天都在同一页；可以展开任意一天，在菜名旁直接换菜。</p></div>
+            <div class="plan-action"><button class="primary" data-action="generate-menu">生成本周菜单</button></div>`);
+        }
+        return phoneShell("ops", "本周菜单", `
+          <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>9月7日—9月11日</strong><span>五天十餐 · 点击某天展开</span></div><button aria-label="下一周">›</button></div>
+          <div class="plan-state"><strong>${publishedDayIndexes.size} 天已发布锁定</strong><span>${weeklyMenu.length - publishedDayIndexes.size} 天可修改</span></div>
+          <div class="week-plans">${weeklyMenu.map(dayPlan).join("")}</div>
+          <div class="plan-action">${menuConfirmed ? `<button class="primary" data-app-route="publish">已确认 · 去生成预订卡片</button>` : `<button class="primary" data-action="confirm-week">确认本周菜单</button>`}</div>
+          ${candidateSheetView()}`);
+      }
+      function publishPhone() {
+        if (tomorrowServiceStage === "confirm-stop") {
+          return phoneShell("ops", "明日开饭", `
+            <div class="detail-head"><div><span>停餐前确认</span><strong>明天不做了？</strong></div><em>9月8日</em></div>
+            <div class="change-card"><div class="card-kicker">受影响订单</div><h3>5 位顾客 · 共 15 份</h3><p>明日短单 9 份 · 生效长期订单 6 份<br />已付款订单预计需退 ¥450</p></div>
+            <div class="menu-rule" style="margin-top:10px"><b>通知方式：微信群公告</b><br />确认后关闭明日短单入口、生成群公告文案和逐单退款清单；桃子需要把公告发到街坊群，不会自动私聊所有人。</div>
+            <div class="copy-preview"><b>街坊味街坊群</b><br />大家晚上好，我明天家里有点事，午饭和晚饭都暂停一次。已经下单的街坊我会逐笔在微信退款，给大家添麻烦了。</div>
+            <button class="stop-action" data-action="confirm-stop-tomorrow">确认停餐并生成群公告</button>
+            <button class="secondary" data-action="keep-tomorrow-open">我明天照常做</button>`);
+        }
+        if (tomorrowServiceStage === "cancelled") {
+          return phoneShell("ops", "明日开饭", `
+            <div class="success"><strong>明天已停止开饭</strong><p>午饭和晚饭短单入口已关闭，退款清单已生成。<br />请把下面的公告发到街坊微信群。</p></div>
+            <div class="copy-preview"><b>微信群公告</b><br />大家晚上好，我明天家里有点事，午饭和晚饭都暂停一次。已经下单的街坊我会逐笔在微信退款，给大家添麻烦了。</div>
+            <button class="secondary" data-action="copy-stop-announcement">${stopAnnouncementCopied ? "已复制 · 去微信群发送" : "复制微信群公告"}</button>
+            <div class="receipt-list"><div class="receipt"><div class="receipt-head"><b>周阿姨 · 短单 1份</b><strong>¥30</strong></div><span class="match warn">待微信退款</span><p>9月8日午饭取消</p></div><div class="receipt"><div class="receipt-head"><b>王叔 · 长期 3份</b><strong>¥90</strong></div><span class="match warn">待微信退款</span><p>只退 9月8日这一餐，长期订单继续生效</p></div><div class="receipt"><div class="receipt-head"><b>刘阿姨 · 长期 3份</b><strong>¥90</strong></div><span class="match warn">待微信退款</span><p>只退 9月8日这一餐，长期订单继续生效</p></div></div>
+            <button class="primary" data-app-route="orders">查看全部订单</button>
+            <div class="evidence-note">退款在微信逐笔完成；平台记录应退金额和后续确认。</div>`);
+        }
+        return phoneShell("ops", "确认与分享", `
+          <div class="detail-head"><div><span>今晚 20:00</span><strong>明天开饭</strong></div><em>9月8日</em></div>
+          <div class="menu-rule"><b>一张卡片只开放明天</b><br />顾客可选 9月8日午饭或晚饭；后天是否开饭，要等明晚桃子重新决定。</div>
+          <div class="share-card"><div class="share-card-main"><div class="share-card-brand">${logo("mini-logo")}街坊味 · 桃子的家常饭</div><h3>明天 9月8日开饭</h3><p>午饭：${mealSummary(1, "lunch")}<br />晚饭：${mealSummary(1, "dinner")}</p>${publishedMenuDetails()}</div><div class="share-card-foot"><span>${tomorrowCardShared ? "已发布 · 菜单已锁定" : "发布前可修改"}</span><span>明天上午 11:00 截止</span></div></div>
+          <button class="primary" data-action="share-tomorrow-card">${tomorrowCardShared ? "已模拟分享到微信群" : "分享明日开饭卡片"}</button>
+          ${tomorrowCardShared ? `<button class="stop-action" data-action="stop-tomorrow">明天有事，暂停开饭</button><button class="secondary" data-app-route="orders">查看明日订单与长期订单</button>` : ""}
+          <div class="evidence-note">发布是冻结节点：发出后 9月8日菜单只读；未发布日期仍可继续换菜。</div>`);
+      }
+      function longRejectionMessage() {
+        return `王叔，不好意思，这次长期订单我先不接了。${longRejectionReason}之后如果时间合适，您也可以再从群里的明日开饭卡片按天订。`;
+      }
+      function merchantOrderCard(order) {
+        if (order.type === "long" && order.state === "待审核") {
+          if (longApplicationStage === "reject-confirm") {
+            return `<div class="receipt"><div class="receipt-head"><b>${order.name}</b><strong>${order.amount}</strong></div><span class="match none">准备拒接 · 私聊说明</span><p>${order.meta}</p><label class="input-label" for="long-rejection-reason">给王叔的说明</label><textarea id="long-rejection-reason" class="prototype-textarea" style="min-height:76px">${escapeHTML(longRejectionReason)}</textarea>${longRejectionError ? `<p class="field-error">${longRejectionError}</p>` : ""}<div class="card-actions"><button data-action="cancel-reject-long">再想想</button><button class="decline-confirm" data-action="confirm-reject-long">确认拒接</button></div><div class="evidence-note">拒接原因只生成私聊文案，不会发到微信群。</div></div>`;
+          }
+          if (longApplicationStage === "rejected") {
+            return `<div class="receipt"><div class="receipt-head"><b>${order.name}</b><strong>${order.amount}</strong></div><span class="match none">长期订单 · 已拒接</span><p>${order.meta}</p><div class="copy-preview"><b>私聊王叔</b><br />${escapeHTML(longRejectionMessage())}</div><button class="secondary" data-action="copy-reject-message">${longRejectionCopied ? "已复制 · 去微信私聊王叔" : "复制私聊文案"}</button><div class="evidence-note">这是桃子和王叔的一对一消息，群里不公开订单或拒接原因。</div></div>`;
+          }
+          if (longApplicationStage === "approved") {
+            return `<div class="receipt"><div class="receipt-head"><b>${order.name}</b><strong>${order.amount}</strong></div><span class="match warn">长期订单 · 待付款</span><p>桃子已同意 · 私聊王叔确认微信付款</p><button class="primary" data-action="activate-long">标记已收到微信付款</button></div>`;
+          }
+          if (longApplicationStage === "active") {
+            return `<div class="receipt"><div class="receipt-head"><b>${order.name}</b><strong>${order.amount}</strong></div><span class="match">长期订单 · 生效中</span><p>午饭 · 9月8日起连续 7 天 · 已线下付款</p></div>`;
+          }
+          return `<div class="receipt"><div class="receipt-head"><b>${order.name}</b><strong>${order.amount}</strong></div><span class="match warn">长期订单 · 待审核</span><p>${order.meta}</p><div class="card-actions"><button data-action="reject-long">暂不接</button><button class="approve" data-action="approve-long">同意订单</button></div><div class="evidence-note">审核结果只私聊申请人，不在微信群公开。</div></div>`;
+        }
+        return `<div class="receipt"><div class="receipt-head"><b>${order.name}</b><strong>${order.amount}</strong></div><span class="match ${order.state === "待确认" ? "warn" : ""}">${order.type === "short" ? "明日短单" : "长期订单"} · ${order.state}</span><p>${order.meta}</p></div>`;
+      }
+      function escapeHTML(value) {
+        return String(value).replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[character]));
+      }
+      function manualOrderFormPhone() {
+        return phoneShell("ops", "手动补单", `
+          <div class="detail-head"><div><span>线下收到的临时需求</span><strong>手动补一单</strong></div><em>待填写</em></div>
+          <div class="menu-rule"><b>只补录特殊情况</b><br />正常订单仍由顾客从明日开饭卡片提交；这里用于电话、微信私聊等例外订单。</div>
+          <div class="manual-form">
+            <label class="manual-field">顾客<input id="manual-customer" value="${escapeHTML(manualOrder.customer)}" aria-label="补单顾客" /></label>
+            <div class="manual-grid"><label class="manual-field">日期<input value="9月8日" aria-label="补单日期" readonly /></label><label class="manual-field">餐次<select id="manual-meal" aria-label="补单餐次"><option ${manualOrder.meal === "午饭" ? "selected" : ""}>午饭</option><option ${manualOrder.meal === "晚饭" ? "selected" : ""}>晚饭</option></select></label></div>
+            <div class="manual-grid"><label class="manual-field">份数<input id="manual-quantity" type="number" min="1" max="20" value="${manualOrder.quantity}" aria-label="补单份数" /></label><label class="manual-field">地址（可空）<input id="manual-address" value="${escapeHTML(manualOrder.address)}" aria-label="补单地址" /></label></div>
+            <label class="manual-field">备注<input id="manual-note" value="${escapeHTML(manualOrder.note)}" aria-label="补单备注" /></label>
+          </div>
+          ${manualOrderError ? `<p class="field-error">${manualOrderError}</p>` : ""}
+          <button class="primary" data-action="save-manual-order">确认加入明日订单</button>
+          <button class="secondary" data-action="cancel-manual-order">返回订单列表</button>
+          <div class="evidence-note">手动补单只写入订单与备餐统计，不代表顾客已经付款。</div>`);
+      }
+      function manualOrderDonePhone() {
+        return phoneShell("ops", "手动补单", `
+          <div class="success"><strong>订单已补录</strong><p>${escapeHTML(manualOrder.customer)} · 9月8日${manualOrder.meal} · ${manualOrder.quantity} 份<br />已经加入明日备餐统计。</p></div>
+          <div class="receipt-list"><div class="receipt"><div class="receipt-head"><b>${escapeHTML(manualOrder.customer)}</b><strong>${manualOrder.quantity} 份</strong></div><span class="match warn">手动补单 · 待确认</span><p>明天 9月8日 · ${manualOrder.meal} · ${escapeHTML(manualOrder.address || "未填写地址")}<br />备注：${escapeHTML(manualOrder.note || "无")}</p></div></div>
+          <button class="primary" data-action="back-manual-orders">返回订单列表</button>
+          <button class="secondary" data-action="new-manual-order">再补一单</button>`);
+      }
+      function ordersPhone() {
+        if (manualOrderStage === "form") return manualOrderFormPhone();
+        if (manualOrderStage === "done") return manualOrderDonePhone();
+        const allOrders = [
+          { type: "short", name: "周阿姨", amount: "1 份", meta: "明天 9月8日 · 午饭 · 桂花苑 3 栋", state: "待备餐" },
+          { type: "long", name: "王叔", amount: "3 份", meta: "午饭 · 申请 9月8日起连续 7 天", state: "待审核" },
+          { type: "short", name: "陈姐", amount: "2 份", meta: "明天 9月8日 · 晚饭 · 望江里 18A", state: "待确认" },
+          { type: "long", name: "刘阿姨", amount: "3 份", meta: "午饭 · 9月8日起连续 30 天 · 已线下付款", state: "生效中" },
+        ];
+        if (manualOrderAdded) allOrders.unshift({ type: "short", name: escapeHTML(manualOrder.customer), amount: `${manualOrder.quantity} 份`, meta: `手动补单 · 明天 9月8日 · ${manualOrder.meal} · ${escapeHTML(manualOrder.address || "未填写地址")}`, state: "待确认" });
+        const orders = allOrders.filter(({ type }) => merchantOrderFilter === "all" || merchantOrderFilter === type);
+        const addedQuantity = manualOrderAdded ? manualOrder.quantity : 0;
+        const pendingLongCount = ["pending", "reject-confirm"].includes(longApplicationStage) ? 1 : 0;
+        return phoneShell("ops", "订单列表", `
+          <div class="detail-head"><div><span>明天 9月8日</span><strong>午饭订单</strong></div><em>${12 + addedQuantity} 份</em></div>
+          <div class="order-diff"><div><strong>${9 + addedQuantity}</strong><span>明日短单份数</span></div><div><strong>2</strong><span>长期生效户</span></div><div><strong>${pendingLongCount}</strong><span>长期待审核</span></div></div>
+          ${tomorrowServiceStage === "cancelled" ? `<div class="menu-rule"><b>明天已停止开饭</b><br />午饭和晚饭短单入口已关闭，已付款订单进入退款清单。</div>` : ""}
+          <div class="entry-tabs"><button class="${merchantOrderFilter === "all" ? "active" : ""}" data-merchant-order-filter="all">全部</button><button class="${merchantOrderFilter === "short" ? "active" : ""}" data-merchant-order-filter="short">明日短单</button><button class="${merchantOrderFilter === "long" ? "active" : ""}" data-merchant-order-filter="long">长期</button></div>
+          <div class="receipt-list">${orders.map(merchantOrderCard).join("")}</div>
+          <button class="secondary" data-action="open-manual-order">手动补一单</button>
+          <button class="primary" data-app-route="reconcile">去截图辅助对账</button>
+          <div class="evidence-note">长期订单必须经过“桃子同意 → 微信付款 → 桃子标记生效”；提交订单不等于成交。</div>`);
+      }
+      function reconcilePhone() {
+        if (!receiptsScanned) {
+          return phoneShell("ops", "收款对账", `
+            <div class="detail-head"><div><span>9月8日—9月14日</span><strong>上传收款凭据</strong></div><em>0 笔已核</em></div>
+            <button class="file-select" data-action="scan-receipts"><strong>选择微信收款截图</strong><small>支持一次选择多张 · 原图仅用于提取姓名、金额与时间</small></button>
+            <div class="query-card" style="margin-top:10px"><div class="card-kicker">本周订单</div><h3>18 单 · ¥720 应收</h3><div class="query-grid"><div class="query-cell"><strong>12</strong><span>已人工确认到账</span></div><div class="query-cell"><strong>6</strong><span>待核订单</span></div></div></div>
+            <div class="evidence-note">点击选择仅演示本地截图解析；本原型不上传真实文件。</div>`);
+        }
+        const items = [
+          { name: "周阿姨 · 19:14", amount: "¥30", order: "9月8日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
+          { name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
+          { name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
+        ];
+        const checkedCount = reconciliationChecked.size;
+        const systemCount = [...reconciliationChecked].filter((index) => reconciliationSources[index] === "system").length;
+        const manualCount = checkedCount - systemCount;
+        const rows = items.map((item, index) => {
+          const checked = reconciliationChecked.has(index);
+          const source = reconciliationSources[index];
+          const status = checked
+            ? source === "system"
+              ? `<div class="reconcile-reason">系统划掉 · ${item.wait}</div>`
+              : `<div class="reconcile-manual">桃子手动划掉</div>`
+            : `<div class="reconcile-wait">${item.wait}</div>`;
+          return `<label class="reconcile-item ${checked ? "checked" : ""}">
+            <input class="reconcile-check" type="checkbox" data-reconcile-check="${index}" ${checked ? "checked" : ""} aria-label="${checked ? "恢复" : "划掉"}${item.name} ${item.amount}" />
+            <span class="reconcile-item-main"><span class="reconcile-item-head"><b>${item.name}</b><strong>${item.amount}</strong></span><span class="reconcile-order">${item.order}</span>${status}</span>
+          </label>`;
+        }).join("");
+        return phoneShell("ops", "对账清单", `
+          <section class="reconcile-progress"><div><span>已读取 3 张收款截图</span><strong>${checkedCount}/3 已划掉</strong></div><em>系统 ${systemCount} · 桃子 ${manualCount}</em></section>
+          <div class="reconcile-caption"><strong>逐笔核对</strong><span>点方框可划掉或恢复</span></div>
+          <div class="reconcile-list">${rows}</div>
+          <p class="reconcile-note">系统代划一定保留匹配依据；桃子手动划掉不需要填写理由。这里只记录清单状态，不代表平台收款。</p>`);
+      }
+      function finishPhone() {
+        return phoneShell("finish", "街坊味", `
+          ${logo("finish-logo")}
+          <h3>四步闭环，<br />一个清楚的边界。</h3>
+          <p class="finish-lead">菜品池提供基础，周菜单帮助提前准备；桃子每晚只发布明天，顾客可选午饭或晚饭，连续 4 天以上走长期审核，临时停餐逐餐退款；收付款仍留在微信。</p>
+          <div class="value-list">
+            <div class="value"><b>1</b><div><strong>菜品池初始化</strong><small>批量录入菜名，确认荤、素、汤分类</small></div></div>
+            <div class="value"><b>2</b><div><strong>群里的开饭与停餐</strong><small>开饭发明日卡片，停餐由桃子在微信群公告</small></div></div>
+            <div class="value"><b>3</b><div><strong>私聊长期订单结果</strong><small>同意后私聊付款，拒接则私聊说明原因</small></div></div>
+            <div class="value"><b>4</b><div><strong>截图辅助对账</strong><small>提取、候选匹配、人工确认收款与退款</small></div></div>
+          </div>
+          <button class="new-need" data-app-route="settings">返回我的设置</button>`);
+      }
+      function settingsPhone() {
+        return phoneShell("ops", "我的", `
+          <div class="settings-profile">${logo("agent-avatar")}<div><strong>桃子</strong><span>街坊味主理人 · 基础资料由我维护</span></div></div>
+          <div class="settings-group">
+            <button class="settings-row" data-app-route="dishes"><b>菜</b><span><strong>菜品池</strong><small>${importedDishes.length} 道已启用 · 维护荤、素、汤分类</small></span><span>›</span></button>
+            <button class="settings-row" data-app-route="delivery"><b>送</b><span><strong>配送范围</strong><small>${deliveryCommunities.length} 个小区已开放 · 顾客只能从中选择</small></span><span>›</span></button>
+            <button class="settings-row" data-app-route="finish"><b>界</b><span><strong>关于街坊味</strong><small>查看产品边界、通知和线下收付款规则</small></span><span>›</span></button>
+          </div>
+          <div class="menu-rule" style="margin-top:12px"><b>日常操作在底部栏</b><br />排菜去“菜单”，接单和对账去“订单”；不常改的基础资料统一放在“我的”。</div>`);
+      }
+      function phoneFor(step) {
+        return { intro: introPhone, plan: planPhone, publish: publishPhone, orders: ordersPhone, reconcile: reconcilePhone, settings: settingsPhone, dishes: dishesPhone, delivery: deliveryPhone, finish: finishPhone }[step]();
+      }
+      function render() {
+        const step = currentStep();
+        const item = copy[step];
+        const stepIndex = steps.indexOf(step);
+        document.title = `${labels[step]} · 桃子使用端原型 · 街坊味`;
+        document.querySelector("#app").innerHTML = `<main class="page">
+          <header class="topbar"><div class="brand">${logo("brand-logo")}街坊味 · Kith Inn</div><div class="proto-note">桃子使用端原型 · 不接真实数据</div></header>
+          <div class="layout"><section class="story"><div class="step-kicker">${item.kicker}</div><h1>${item.title}</h1><p class="lead">${item.lead}</p>
+            <div class="proofs">${item.proofs.map(([icon, text]) => `<div class="proof"><span class="proof-icon">${icon}</span>${text}</div>`).join("")}</div>
+            <button class="story-action" data-present-next>${item.action}<span>→</span></button></section>
+            <section class="visual" aria-label="手机交互演示"><div class="halo"></div>${phoneFor(step)}
+              <div class="floating-card top">桃子只需要知道<em>“今天该做什么”</em></div>
+            </section></div></main>
+          <nav class="present-nav" aria-label="桃子端原型讲解顺序"><button data-present-prev aria-label="上一个讲解页面">←</button><div class="present-label">讲解 ${stepIndex + 1} / ${steps.length} · ${labels[step]}<div class="present-dots">${steps.map((_, index) => `<i class="${index === stepIndex ? "active" : ""}"></i>`).join("")}</div></div><button data-present-next aria-label="下一个讲解页面">→</button></nav>`;
+      }
+      document.addEventListener("click", (event) => {
+        if (event.target.closest("[data-present-next]")) { cyclePresentation(1); return; }
+        if (event.target.closest("[data-present-prev]")) { cyclePresentation(-1); return; }
+        const routeControl = event.target.closest("[data-app-tab], [data-app-route]");
+        const appTarget = routeControl?.dataset.appTab || routeControl?.dataset.appRoute;
+        if (appTarget) { go(appTarget); return; }
+        if (event.target.closest("[data-app-back]")) { handleAppBack(); return; }
+        const action = event.target.closest("[data-action]")?.dataset.action;
+        const reconciliationCheck = event.target.closest("[data-reconcile-check]")?.dataset.reconcileCheck;
+        if (reconciliationCheck !== undefined) {
+          const index = Number(reconciliationCheck);
+          if (reconciliationChecked.has(index)) {
+            reconciliationChecked.delete(index);
+            delete reconciliationSources[index];
+          } else {
+            reconciliationChecked.add(index);
+            reconciliationSources[index] = "manual";
+          }
+          render();
+          return;
+        }
+        if (action === "parse-dishes") {
+          const names = document.querySelector("#dish-source")?.value.split(/\n/).map((name) => name.trim()).filter(Boolean) || [];
+          if (!names.length) {
+            dishImportError = "请至少输入一道菜。";
+          } else {
+            importedDishes = names.map((name) => [name, inferDishCategory(name)]);
+            dishImportError = "";
+            dishImportStage = "preview";
+          }
+          render();
+        }
+        if (action === "confirm-dishes") { dishImportStage = "done"; render(); }
+        if (action === "edit-dishes") { dishImportStage = "input"; render(); }
+        if (action === "add-community") {
+          const community = document.querySelector("#delivery-community")?.value.trim() || "";
+          if (!community) deliveryError = "请输入小区名称。";
+          else if (deliveryCommunities.includes(community)) deliveryError = "这个小区已经在配送范围里。";
+          else { deliveryCommunities.push(community); deliveryError = ""; }
+          render();
+        }
+        if (action === "confirm-delivery") {
+          if (!deliveryCommunities.length) deliveryError = "至少保留一个可配送小区。";
+          else { deliveryError = ""; saveDeliveryCommunities(); deliveryStage = "done"; }
+          render();
+        }
+        if (action === "edit-delivery") { deliveryStage = "edit"; render(); }
+        if (action === "generate-menu") { menuGenerated = true; expandedDay = null; render(); }
+        if (action === "confirm-week") { menuConfirmed = true; render(); }
+        if (action === "share-tomorrow-card") {
+          tomorrowCardShared = true;
+          publishedDayIndexes.add(1);
+          candidateSheet = null;
+          render();
+        }
+        if (action === "stop-tomorrow") { tomorrowServiceStage = "confirm-stop"; stopAnnouncementCopied = false; render(); }
+        if (action === "keep-tomorrow-open") { tomorrowServiceStage = "open"; stopAnnouncementCopied = false; render(); }
+        if (action === "confirm-stop-tomorrow") { tomorrowServiceStage = "cancelled"; stopAnnouncementCopied = false; render(); }
+        if (action === "copy-stop-announcement") { stopAnnouncementCopied = true; render(); }
+        if (action === "approve-long") { longApplicationStage = "approved"; render(); }
+        if (action === "activate-long") { longApplicationStage = "active"; render(); }
+        if (action === "reject-long") { longApplicationStage = "reject-confirm"; longRejectionError = ""; longRejectionCopied = false; render(); }
+        if (action === "cancel-reject-long") { longApplicationStage = "pending"; longRejectionError = ""; render(); }
+        if (action === "confirm-reject-long") {
+          const reason = document.querySelector("#long-rejection-reason")?.value.trim() || "";
+          if (!reason) longRejectionError = "请简单说明为什么暂时接不了。";
+          else { longRejectionReason = reason; longRejectionError = ""; longRejectionCopied = false; longApplicationStage = "rejected"; }
+          render();
+        }
+        if (action === "copy-reject-message") { longRejectionCopied = true; render(); }
+        if (action === "open-manual-order") { manualOrderStage = "form"; manualOrderError = ""; render(); }
+        if (action === "cancel-manual-order" || action === "back-manual-orders") { manualOrderStage = "list"; manualOrderError = ""; render(); }
+        if (action === "new-manual-order") { manualOrderStage = "form"; manualOrderError = ""; render(); }
+        if (action === "save-manual-order") {
+          const customer = document.querySelector("#manual-customer")?.value.trim() || "";
+          const quantity = Number(document.querySelector("#manual-quantity")?.value);
+          manualOrder = {
+            customer,
+            meal: document.querySelector("#manual-meal")?.value || "午饭",
+            quantity: Number.isInteger(quantity) ? quantity : 0,
+            address: document.querySelector("#manual-address")?.value.trim() || "",
+            note: document.querySelector("#manual-note")?.value.trim() || "",
+          };
+          if (!customer) manualOrderError = "请填写顾客称呼。";
+          else if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) manualOrderError = "份数请输入 1—20 的整数。";
+          else { manualOrderError = ""; manualOrderAdded = true; manualOrderStage = "done"; }
+          render();
+        }
+        if (action === "close-sheet") { candidateSheet = null; render(); }
+        if (action === "scan-receipts") { receiptsScanned = true; render(); }
+        const categoryButton = event.target.closest("[data-cycle-category]");
+        if (categoryButton) {
+          const dishIndex = Number(categoryButton.dataset.cycleCategory);
+          const categories = ["meat", "veg", "soup"];
+          const currentIndex = categories.indexOf(importedDishes[dishIndex][1]);
+          importedDishes[dishIndex][1] = categories[(currentIndex + 1) % categories.length];
+          spinningCategoryIndex = dishIndex;
+          render();
+          setTimeout(() => {
+            if (spinningCategoryIndex === dishIndex) {
+              spinningCategoryIndex = null;
+              render();
+            }
+          }, 300);
+        }
+        const removeCommunity = event.target.closest("[data-remove-community]")?.dataset.removeCommunity;
+        if (removeCommunity !== undefined) {
+          if (deliveryCommunities.length === 1) deliveryError = "至少保留一个可配送小区。";
+          else { deliveryCommunities.splice(Number(removeCommunity), 1); deliveryError = ""; }
+          render();
+        }
+        const nextMerchantOrderFilter = event.target.closest("[data-merchant-order-filter]")?.dataset.merchantOrderFilter;
+        if (nextMerchantOrderFilter) {
+          merchantOrderFilter = nextMerchantOrderFilter;
+          render();
+        }
+        const day = event.target.closest("[data-day]")?.dataset.day;
+        if (day !== undefined) {
+          const dayIndex = Number(day);
+          expandedDay = expandedDay === dayIndex ? null : dayIndex;
+          candidateSheet = null;
+          render();
+        }
+        const publishedMeal = event.target.closest("[data-published-menu]")?.dataset.publishedMenu;
+        if (publishedMeal) {
+          expandedPublishedMeal = expandedPublishedMeal === publishedMeal ? null : publishedMeal;
+          render();
+        }
+        const rotateButton = event.target.closest("[data-rotate]");
+        if (rotateButton) {
+          const key = rotateButton.dataset.rotate;
+          const dayIndex = Number(key.split("-")[0]);
+          if (publishedDayIndexes.has(dayIndex)) return;
+          const kind = rotateButton.dataset.kind;
+          spinningDishKey = key;
+          const count = (rotationCounts[key] || 0) + 1;
+          if (count >= 3) {
+            rotationCounts[key] = 0;
+            candidateSheet = { key, kind };
+          } else {
+            rotationCounts[key] = count;
+            const candidates = candidatePools[kind];
+            const currentName = dishOverrides[key]?.[0];
+            const currentIndex = Math.max(-1, candidates.findIndex(([name]) => name === currentName));
+            dishOverrides[key] = candidates[(currentIndex + 1) % candidates.length];
+          }
+          render();
+          setTimeout(() => {
+            if (spinningDishKey === key) {
+              spinningDishKey = null;
+              render();
+            }
+          }, 300);
+        }
+        const choice = event.target.closest("[data-choice]")?.dataset.choice;
+        if (choice !== undefined && candidateSheet) {
+          const dayIndex = Number(candidateSheet.key.split("-")[0]);
+          if (publishedDayIndexes.has(dayIndex)) {
+            candidateSheet = null;
+            render();
+            return;
+          }
+          dishOverrides[candidateSheet.key] = candidatePools[candidateSheet.kind][Number(choice)];
+          candidateSheet = null;
+          render();
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        if (["INPUT", "TEXTAREA", "SELECT"].includes(document.activeElement?.tagName)) return;
+        if (event.key === "ArrowLeft") cyclePresentation(-1);
+        if (event.key === "ArrowRight") cyclePresentation(1);
+      });
+      window.addEventListener("popstate", render);
+      render();
+    </script>
+  </body>
+</html>
