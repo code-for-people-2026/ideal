@@ -1374,6 +1374,166 @@
         .floor-number { min-height: 64px; font-size: 32px; }
       }
 
+      /* ============================================================
+         师傅端 · 真实电梯轿厢视觉
+         拉丝不锈钢面板、黑面银框楼层按钮、琥珀色背光 = 待处理，
+         楼层信息以 LED 数码管风格显示。
+         ============================================================ */
+      :root {
+        --steel-hi: #edeef0;
+        --steel: #c7cacd;
+        --steel-lo: #a2a6aa;
+        --etch: #3f4448;
+        --etch-soft: #5b6165;
+        --bezel-hi: #f7f8f9;
+        --bezel-lo: #767b81;
+        --btn-face: #191b1e;
+        --btn-face-hi: #303336;
+        --lit-hi: #ffd873;
+        --lit: #ffae1f;
+        --lit-lo: #ef8c00;
+        --lit-text: #452800;
+        --led-amber: #ffb02e;
+        --door-green: #1fa265;
+      }
+
+      .collector-scroll {
+        background:
+          linear-gradient(100deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 20%, rgba(0, 0, 0, 0.06) 50%, rgba(255, 255, 255, 0.26) 76%, rgba(0, 0, 0, 0.1) 100%),
+          repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.07) 0 1px, transparent 1px 3px, rgba(0, 0, 0, 0.045) 3px 4px),
+          linear-gradient(180deg, var(--steel-hi) 0%, var(--steel) 45%, var(--steel-lo) 100%);
+      }
+
+      /* —— 顶栏：操纵盘金属板 —— */
+      .app-header {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.32);
+        background:
+          linear-gradient(100deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 30%, rgba(0, 0, 0, 0.08) 70%, rgba(255, 255, 255, 0.3)),
+          linear-gradient(180deg, #d9dbdd, #b4b8bc);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 2px 6px rgba(0, 0, 0, 0.22);
+      }
+      .app-brand { color: var(--etch); text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6); letter-spacing: 0.04em; }
+      .app-logo {
+        border-radius: 9px;
+        background: linear-gradient(var(--btn-face-hi), var(--btn-face));
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 1px 3px rgba(0, 0, 0, 0.45);
+      }
+      .mini-menu {
+        border-color: rgba(0, 0, 0, 0.2);
+        color: var(--etch);
+        background: rgba(255, 255, 255, 0.32);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+      }
+
+      /* —— 楼层面板区 —— */
+      .building-home { background: transparent; }
+      .building-title h2 { color: var(--etch); text-shadow: 0 1px 0 rgba(255, 255, 255, 0.65); }
+      .building-title p { color: var(--etch-soft); text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); }
+      .building-count {
+        border: 1px solid #565b60;
+        border-radius: 7px;
+        color: var(--led-amber);
+        background: linear-gradient(#111214, #060707);
+        box-shadow: inset 0 2px 7px rgba(0, 0, 0, 0.95), 0 1px 0 rgba(255, 255, 255, 0.5);
+        letter-spacing: 0.05em;
+        text-shadow: 0 0 8px rgba(255, 170, 40, 0.85);
+      }
+      .legend { color: var(--etch-soft); text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5); }
+      .legend i { border-color: #565b60; background: linear-gradient(var(--btn-face-hi), var(--btn-face)); }
+      .legend span:first-child i {
+        border-color: #8a5a00;
+        background: radial-gradient(circle at 50% 40%, var(--lit-hi), var(--lit-lo));
+        box-shadow: 0 0 7px rgba(255, 158, 20, 0.8);
+      }
+      .floor-grid {
+        gap: 11px;
+        padding: 15px;
+        border-radius: 16px;
+        background: rgba(0, 0, 0, 0.14);
+        box-shadow: inset 0 2px 9px rgba(0, 0, 0, 0.32), 0 1px 0 rgba(255, 255, 255, 0.5);
+      }
+      .floor-cell {
+        min-height: 68px;
+        padding: 8px 6px;
+        border: 3px solid transparent;
+        border-radius: 11px;
+        color: #eef0f2;
+        background:
+          linear-gradient(var(--btn-face-hi), var(--btn-face)) padding-box,
+          linear-gradient(160deg, var(--bezel-hi), var(--bezel-lo) 55%, #dcdee0) border-box;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.22);
+        text-align: center;
+      }
+      .floor-cell strong { font-size: 22px; letter-spacing: 0.03em; }
+      .floor-cell span { margin-top: 4px; color: #9aa0a6; font-size: 10px; letter-spacing: 0.04em; }
+      .floor-cell.pending {
+        border: 3px solid transparent;
+        color: var(--lit-text);
+        background:
+          radial-gradient(circle at 50% 34%, var(--lit-hi), var(--lit) 58%, var(--lit-lo)) padding-box,
+          linear-gradient(160deg, var(--bezel-hi), var(--bezel-lo) 55%, #dcdee0) border-box;
+        box-shadow: 0 0 16px 3px rgba(255, 158, 20, 0.6), 0 2px 5px rgba(0, 0, 0, 0.4);
+        text-shadow: 0 0 7px rgba(255, 224, 150, 0.95);
+      }
+      .floor-cell.pending span { color: #6b3f00; }
+      .floor-cell.pending::after { display: none; }
+      .floor-cell.selected { outline: 3px solid rgba(31, 162, 101, 0.9); outline-offset: 2px; }
+
+      /* —— 选中楼层的操作板：金属板 + 金属按钮 —— */
+      .selection-sheet {
+        border: 1px solid rgba(0, 0, 0, 0.32);
+        background:
+          linear-gradient(105deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 35%, rgba(0, 0, 0, 0.07)),
+          linear-gradient(180deg, #d8dbde, #b7bbc0);
+        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+      }
+      .selection-row strong { color: var(--etch); }
+      .selection-row span { color: var(--etch-soft); }
+      .selection-task {
+        background: rgba(0, 0, 0, 0.1);
+        box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2), 0 1px 0 rgba(255, 255, 255, 0.45);
+      }
+      .selection-task-copy strong { color: var(--etch); }
+      .selection-task-copy span { color: #0d6b41; }
+      .complete-button {
+        border: 1px solid rgba(0, 0, 0, 0.35);
+        color: #2c3338;
+        background: linear-gradient(180deg, #f4f5f6, #c6c9cd 55%, #a6aaaf);
+        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+        letter-spacing: 0.05em;
+      }
+      .complete-button:active {
+        transform: translateY(1px);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35), inset 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      /* —— 空状态 —— */
+      .empty-icon {
+        border: 4px solid transparent;
+        border-radius: 18px;
+        color: var(--door-green);
+        background:
+          linear-gradient(var(--btn-face-hi), var(--btn-face)) padding-box,
+          linear-gradient(160deg, var(--bezel-hi), var(--bezel-lo) 55%, #dcdee0) border-box;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+        text-shadow: 0 0 10px rgba(31, 178, 106, 0.8);
+      }
+      .empty-state h2 { color: var(--etch); text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6); }
+      .empty-state p { color: var(--etch-soft); }
+
+      /* —— 撤销条：黑面板 + 点亮按钮 —— */
+      .toast {
+        border: 1px solid #45494e;
+        background: linear-gradient(#22252a, #121417);
+      }
+      .toast button {
+        color: var(--lit-text);
+        background: radial-gradient(circle at 50% 35%, var(--lit-hi), var(--lit) 60%, var(--lit-lo));
+        box-shadow: 0 0 12px rgba(255, 158, 20, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+        text-shadow: 0 0 6px rgba(255, 224, 150, 0.9);
+      }
+
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {
           scroll-behavior: auto !important;
