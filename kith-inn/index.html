@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="街坊味帮助社区供餐者规划菜单、开放餐次、汇总订单、完成配送并记录线下收款。" />
+    <title>街坊味 · 社区供餐原型入口</title>
+    <link rel="stylesheet" href="../prototype-nav.css" />
+    <!--
+      PROTOTYPE — 不接真实数据
+      两种原型只共享产品事实，不共享叙事密度：
+      1. 客户体验原型：验证价值是否一眼可懂、主流程是否顺滑。
+      2. 工程实现原型：验证 User Story、状态、数据与验收边界是否完整。
+      运行：python3 -m http.server 4173
+    -->
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #18211b;
+        --muted: #66706a;
+        --line: #dce4de;
+        --paper: #f3f6f2;
+        --green: #b64131;
+        --green-soft: #fbe9e4;
+        --blue: #287557;
+        --blue-soft: #e7f3ec;
+        --shadow: 0 24px 70px rgba(29, 45, 34, 0.12);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 8% 5%, rgba(8,127,79,.13), transparent 28rem),
+          radial-gradient(circle at 92% 90%, rgba(49,93,168,.12), transparent 30rem),
+          var(--paper);
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+      main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0 90px; }
+      .eyebrow {
+        display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px;
+        border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.72);
+        color: var(--muted); font-size: 12px; font-weight: 800; letter-spacing: .04em;
+      }
+      .eyebrow img { width: 24px; height: 24px; border-radius: 8px; object-fit: cover; }
+      h1 { max-width: 760px; margin: 22px 0 14px; font-size: clamp(38px, 6vw, 72px); line-height: .98; letter-spacing: -.055em; }
+      .lead { max-width: 720px; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.75; }
+      .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 48px; }
+      .choice {
+        position: relative; overflow: hidden; min-height: 430px; padding: 30px;
+        border: 1px solid var(--line); border-radius: 28px; background: rgba(255,255,255,.86);
+        color: inherit; text-decoration: none; box-shadow: var(--shadow);
+        transition: transform .2s ease, box-shadow .2s ease;
+      }
+      .choice:hover { transform: translateY(-5px); box-shadow: 0 30px 90px rgba(29,45,34,.16); }
+      .choice::after {
+        content: ""; position: absolute; right: -80px; bottom: -120px; width: 320px; height: 320px;
+        border-radius: 50%; background: var(--accent-soft); opacity: .85;
+      }
+      .choice.customer { --accent: var(--green); --accent-soft: var(--green-soft); }
+      .choice.engineer { --accent: var(--blue); --accent-soft: var(--blue-soft); }
+      .choice-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
+      .audience { color: var(--accent); font-size: 12px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+      .arrow { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 22px; }
+      h2 { position: relative; z-index: 1; margin: 40px 0 10px; max-width: 430px; font-size: clamp(28px, 4vw, 44px); line-height: 1.08; letter-spacing: -.04em; }
+      .desc { position: relative; z-index: 1; max-width: 440px; margin: 0; color: var(--muted); line-height: 1.7; }
+      .checks { position: relative; z-index: 1; display: grid; gap: 10px; margin-top: 32px; }
+      .check { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; }
+      .check span { display: grid; place-items: center; width: 23px; height: 23px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); }
+      .boundary {
+        display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: start;
+        margin-top: 28px; padding: 18px 20px; border: 1px dashed #bdc9c0; border-radius: 18px;
+        background: rgba(255,255,255,.56); color: var(--muted); font-size: 14px; line-height: 1.65;
+      }
+      .boundary strong { color: var(--ink); white-space: nowrap; }
+      @media (max-width: 760px) {
+        main { padding-top: 40px; }
+        .choice-grid { grid-template-columns: 1fr; }
+        .choice { min-height: 390px; }
+        .boundary { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="prototype-home-link" href="../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
+    <main>
+      <div class="eyebrow"><img src="./prototype-implementation/kith-inn-logo.png" alt="街坊味" />社区供餐 · Kith Inn</div>
+      <h1>一周的家常饭，<br />排得明白，也送得明白。</h1>
+      <p class="lead">街坊味服务社区里的小规模供餐者和邻里顾客。桃子把会做的菜排成每周午餐与晚餐，按餐次开放预订；邻居从微信卡片查看菜单并下单，桃子再按统一订单完成备餐、配送和线下收款记录。</p>
+
+      <section class="choice-grid" aria-label="选择街坊味原型">
+        <a class="choice customer" href="./prototype-customer/">
+          <div class="choice-top">
+            <div class="audience">客户体验原型</div>
+            <div class="arrow">↗</div>
+          </div>
+          <h2>从排菜单，到一餐送达</h2>
+          <p class="desc">跟着桃子排好一周菜单、发布明日开饭卡，看顾客如何下单，以及订单、送达和付款提醒怎样回到同一条流程。</p>
+          <div class="checks">
+            <div class="check"><span>✓</span>周菜单与餐次发布</div>
+            <div class="check"><span>✓</span>顾客预订与订单回流</div>
+            <div class="check"><span>✓</span>配送、付款提醒与收款记录</div>
+          </div>
+        </a>
+
+        <a class="choice engineer" href="./prototype-implementation/">
+          <div class="choice-top">
+            <div class="audience">实施对照原型</div>
+            <div class="arrow">↗</div>
+          </div>
+          <h2>看清街坊味怎样运转</h2>
+          <p class="desc">分别进入桃子端和顾客端，看菜品池、餐次、订单、配送和线下收款怎样衔接，并对照关键 User Story。</p>
+          <div class="checks">
+            <div class="check"><span>✓</span>桃子维护菜品、菜单与履约</div>
+            <div class="check"><span>✓</span>顾客受邀进入、下单与查单</div>
+            <div class="check"><span>✓</span>付款留在微信，系统只记录状态</div>
+          </div>
+        </a>
+      </section>
+
+      <div class="boundary">
+        <strong>产品边界</strong>
+        <span>街坊味不是外卖平台，也不是复杂的餐饮 ERP。它把原本散落在微信群、私聊和个人记忆里的菜单、订单、配送与收款记录整理到一起；付款和退款仍由桃子与顾客在微信完成。</span>
+      </div>
+    </main>
+  </body>
+</html>
