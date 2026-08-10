@@ -174,13 +174,14 @@
       .weekly-menu-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
       .weekly-menu-title strong { font-size: 15px; }
       .weekly-menu-title span { padding: 6px 8px; border-radius: 9px; background: var(--green-soft); color: var(--green); font-size: 9px; font-weight: 900; }
-      .weekly-menu-grid { display: grid; grid-template-columns: 38px repeat(5, minmax(0, 1fr)); gap: 3px; margin-top: 9px; }
-      .weekly-menu-row { display: contents; }
-      .weekly-menu-head,
-      .weekly-menu-day { display: grid; min-height: 26px; place-items: center; color: var(--muted); font-size: 8px; font-weight: 850; text-align: center; }
-      .weekly-menu-day { align-content: center; color: var(--ink); }
-      .weekly-menu-day strong { font-size: 9px; line-height: 1; }
-      .weekly-menu-day small { margin-top: 3px; color: var(--muted); font-size: 7px; line-height: 1; }
+      .weekly-menu-carousel { display: grid; grid-auto-flow: column; grid-auto-columns: 27%; gap: 6px; overflow-x: auto; overscroll-behavior-inline: contain; padding: 10px 4px 6px 1px; scroll-snap-type: inline proximity; scrollbar-width: none; cursor: grab; touch-action: pan-y; user-select: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 36px), transparent 100%); mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 36px), transparent 100%); }
+      .weekly-menu-carousel.dragging { cursor: grabbing; scroll-snap-type: none; }
+      .weekly-menu-carousel::-webkit-scrollbar { display: none; }
+      .weekly-meal-card { min-width: 0; padding: 6px; border: 1px solid var(--line); border-radius: 10px; background: #fffdf8; scroll-snap-align: start; }
+      .weekly-meal-card-head { display: grid; min-height: 31px; place-items: center; text-align: center; }
+      .weekly-meal-card-head strong { color: var(--ink); font-size: 10px; line-height: 1; }
+      .weekly-meal-card-head small { margin-top: 3px; color: var(--muted); font-size: 8px; font-weight: 850; line-height: 1; }
+      .weekly-meal-dishes { display: grid; gap: 3px; }
       .weekly-dish-cell { display: grid; min-height: 38px; place-items: center; padding: 3px 2px; border: 1px solid #f1c3b8; border-radius: 7px; background: var(--flag-red-soft); color: var(--ink); font-size: 8px; font-weight: 850; line-height: 1.18; text-align: center; }
       .weekly-dish-cell.veg { border-color: #badcc9; background: var(--green-soft); }
       .weekly-dish-cell.soup { border-color: #c8d9ee; background: #edf5ff; }
@@ -329,7 +330,6 @@
       .reconcile-day-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 62px; padding: 10px 10px 10px 14px; border: 0; background: #fff; color: var(--ink); text-align: left; }
       .reconcile-day-title { display: block; }
       .reconcile-day-title strong { display: block; font-size: 14px; line-height: 1.1; }
-      .reconcile-day-title small { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; line-height: 1; }
       .reconcile-day-head > span:not(.reconcile-day-title) { display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: 10px; }
       .reconcile-day-head em { margin-right: 3px; color: var(--ink); font-style: normal; font-weight: 700; }
       .reconcile-sq { width: 8px; height: 8px; border-radius: 3px; background: var(--flag-red); }
@@ -445,10 +445,10 @@
         menu: {
           kicker: "修改过程 · 02",
           title: "十个餐次逐一看，<br />不满意当场换。",
-          lead: "生成结果放在同一张十餐表里，按星期依次排列午饭和晚饭：周一午饭、周一晚饭、周二午饭、周二晚饭。桃子点具体菜名，就能查看分类并换成同类候选菜。",
+          lead: "十个餐次横向排成卡片，每张卡从上到下放 2 荤、2 素、1 汤。一屏露出三张半，桃子自然知道可以左右滑动；点具体菜名仍能查看分类并换成同类候选菜。",
           proofs: [
-            ["序", "每天午饭、晚饭相邻，按星期向下查看"],
-            ["十", "一张表完整覆盖五天十个餐次"],
+            ["横", "十个餐次按星期向右排列"],
+            ["滑", "一屏露出三张半，提示左右滑动"],
             ["换", "先智能推荐三次，仍不满意再自己挑选"],
           ],
           action: "确认十餐，再按餐次生成预订卡片",
@@ -467,11 +467,11 @@
         share: {
           kicker: "微信私聊 · 04",
           title: "照旧发一句微信，<br />订单和付款都有记录。",
-          lead: "顾客仍按原来的习惯私聊桃子，说一声明天中午要几份。桃子代录后回一张订单卡，并告诉顾客下次可以直接从卡片下单；隔天午饭送达，再发卡片提醒付款。",
+          lead: "顾客仍按原来的习惯私聊桃子，说一声明天中午要几份。桃子代录后回一张订单卡，并告诉顾客下次可以直接从卡片下单；送餐后的第二天发现顾客忘了付款，再发一张欠款提醒卡。",
           proofs: [
             ["聊", "顾客直接说“明天中午订两份”"],
             ["录", "桃子代录后回传订单卡"],
-            ["付", "隔天送达后再发付款提醒卡"],
+            ["付", "送餐次日发现未付款，再发提醒卡"],
           ],
           action: "看订单怎么汇总",
         },
@@ -489,7 +489,7 @@
         reconcile: {
           kicker: "经营结果 · 06",
           title: "不接支付，<br />也能把到账记录核清。",
-          lead: "对账变成一张可以逐笔划掉的清单。系统只替桃子划掉唯一匹配，并把依据写清楚；桃子也可以自己划掉任何一笔，不需要填写理由。",
+          lead: "对账变成一张可以逐笔划掉的清单，只按今天、昨天、前天和旧账归档。系统只替桃子划掉唯一匹配，并把依据写清楚；桃子也可以自己划掉任何一笔，不需要填写理由。",
           proofs: [
             ["清", "每笔到账记录都是一项可勾销清单"],
             ["理", "系统代划必须展示明确匹配依据"],
@@ -502,16 +502,18 @@
       let selectedShowcaseDishKey = "0-lunch-0";
       let showcaseCandidateSheet = null;
       let showcaseOrderMealFilter = "lunch";
+      let showcaseMenuCarouselDrag = null;
+      let showcaseMenuCarouselSuppressClickUntil = 0;
       const showcaseReconcileItems = [
-        { day: "9月11日", dayLabel: "周五", dateLabel: "9月11日", name: "周阿姨 · 19:14", amount: "¥30", order: "9月11日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
-        { day: "9月11日", dayLabel: "周五", dateLabel: "9月11日", name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
-        { day: "9月11日", dayLabel: "周五", dateLabel: "9月11日", name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
-        { day: "9月10日", dayLabel: "周四", dateLabel: "9月10日", name: "王叔 · 21:02", amount: "¥90", order: "9月11日起长期午饭 · 每天 3 份", wait: "长期订单首款，顾客、金额与订单唯一匹配" },
-        { day: "9月10日", dayLabel: "周四", dateLabel: "9月10日", name: "陈姐 · 20:15", amount: "¥60", order: "9月10日晚饭 · 2份", wait: "" },
-        { day: "9月9日", dayLabel: "周三", dateLabel: "9月9日", name: "刘阿姨 · 19:48", amount: "¥90", order: "9月9日午饭 · 3份", wait: "顾客名、金额、日期与订单唯一匹配" },
-        { day: "9月9日", dayLabel: "周三", dateLabel: "9月9日", name: "小赵 · 20:31", amount: "¥30", order: "待对应订单", wait: "收款截图只显示“赵”，订单里有两位赵姓顾客" },
-        { day: "9月8日", dayLabel: "周二", dateLabel: "9月8日", name: "周阿姨 · 19:22", amount: "¥30", order: "9月8日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
-        { day: "9月8日", dayLabel: "周二", dateLabel: "9月8日", name: "王叔 · 20:04", amount: "¥90", order: "9月8日晚饭 · 3份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "today", dayLabel: "今天", name: "周阿姨 · 19:14", amount: "¥30", order: "9月11日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "today", dayLabel: "今天", name: "小太阳 · 20:03", amount: "¥60", order: "待对应订单", wait: "2 个同金额候选，系统无法判断对应王叔还是陈姐" },
+        { day: "today", dayLabel: "今天", name: "李家 · 20:16", amount: "¥40", order: "待对应订单", wait: "订单列表中找不到同顾客、同金额记录" },
+        { day: "yesterday", dayLabel: "昨天", name: "王叔 · 21:02", amount: "¥90", order: "9月11日起长期午饭 · 每天 3 份", wait: "长期订单首款，顾客、金额与订单唯一匹配" },
+        { day: "yesterday", dayLabel: "昨天", name: "陈姐 · 20:15", amount: "¥60", order: "9月10日晚饭 · 2份", wait: "" },
+        { day: "before", dayLabel: "前天", name: "刘阿姨 · 19:48", amount: "¥90", order: "9月9日午饭 · 3份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "before", dayLabel: "前天", name: "小赵 · 20:31", amount: "¥30", order: "待对应订单", wait: "收款截图只显示“赵”，订单里有两位赵姓顾客" },
+        { day: "old", dayLabel: "旧账", name: "周阿姨 · 19:22", amount: "¥30", order: "9月8日午饭 · 1份", wait: "顾客名、金额、日期与订单唯一匹配" },
+        { day: "old", dayLabel: "旧账", name: "王叔 · 20:04", amount: "¥90", order: "9月6日晚饭 · 3份", wait: "顾客名、金额、日期与订单唯一匹配" },
       ];
       const showcaseReconcileChecked = new Set([0, 3, 4, 5, 7, 8]);
       const showcaseReconcileSources = { 0: "system", 3: "system", 4: "manual", 5: "system", 7: "system", 8: "system" };
@@ -615,13 +617,10 @@
         const meal = selectedParts[1];
         const dishIndex = Number(selectedParts[2]);
         const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
-        const rows = showcaseWeeklyMenu.flatMap((day, currentDayIndex) => [["lunch", "午饭"], ["dinner", "晚饭"]].map(([currentMeal, label]) => `<div class="weekly-menu-row"><div class="weekly-menu-day"><strong>${day.day}</strong><small>${label}</small></div>${day[currentMeal].map((_, currentDishIndex) => showcaseDishSelector(currentDayIndex, currentMeal, currentDishIndex)).join("")}</div>`)).join("");
+        const mealCards = showcaseWeeklyMenu.flatMap((day, currentDayIndex) => [["lunch", "午饭"], ["dinner", "晚饭"]].map(([currentMeal, label]) => `<article class="weekly-meal-card"><div class="weekly-meal-card-head"><strong>${day.day}</strong><small>${label}</small></div><div class="weekly-meal-dishes">${day[currentMeal].map((_, currentDishIndex) => showcaseDishSelector(currentDayIndex, currentMeal, currentDishIndex)).join("")}</div></article>`)).join("");
         return `<section class="weekly-menu-board">
-          <div class="weekly-menu-title"><strong>下周十餐菜单</strong><span>10 餐通过</span></div>
-          <div class="weekly-menu-grid" aria-label="下周十餐菜单">
-            <div class="weekly-menu-head">餐次</div><div class="weekly-menu-head">荤1</div><div class="weekly-menu-head">荤2</div><div class="weekly-menu-head">素1</div><div class="weekly-menu-head">素2</div><div class="weekly-menu-head">汤</div>
-            ${rows}
-          </div>
+          <div class="weekly-menu-title"><strong>下周十餐菜单</strong><span>左右滑动 · 共 10 餐</span></div>
+          <div class="weekly-menu-carousel" aria-label="下周十餐菜单，左右滑动查看更多餐次">${mealCards}</div>
           <div class="weekly-dish-detail"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><button class="replace-selected" data-showcase-rotate="${selectedShowcaseDishKey}" data-kind="${kind}" type="button">换这道</button></div>
         </section>`;
       }
@@ -688,14 +687,14 @@
             </div>
             <div class="mp-foot">打开卡片 · 下次直接下单 →</div>
           </button></div></div>
-          <div class="time delivery-time">9月9日 12:36</div>
+          <div class="time delivery-time">9月10日 10:20</div>
           <div class="msg"><div class="avatar gold">桃</div><div><button class="mp-card payment-card" data-next>
             <div class="mp-main">
               <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · 桃子的家常饭</div>
-              <div class="payment-summary"><span>午饭已送达 · 请付款</span><strong>¥60</strong></div>
-              <div class="mp-highlight"><b>9月9日午饭 · 2份</b><br />订单 #260909-12</div>
+              <div class="payment-summary"><span>昨天午饭 · 尚未付款</span><strong>¥60</strong></div>
+              <div class="mp-highlight"><b>9月9日午饭 · 2份</b><br />昨天已送达，尚未收到付款</div>
             </div>
-            <div class="mp-foot">请微信转账给桃子 · 付款后由桃子确认</div>
+            <div class="mp-foot">请补付 ¥60 · 微信转账给桃子</div>
           </button></div></div>
           <div class="chat-input"><div class="round-tool"></div><div class="chat-field"></div><div class="round-tool"></div></div>
         `);
@@ -800,7 +799,7 @@
           const squares = sortedEntries.map(({ index }) => `<i class="reconcile-sq ${showcaseReconcileChecked.has(index) ? "done" : ""}"></i>`).join("");
           return `<section class="reconcile-day">
             <button class="reconcile-day-head" data-showcase-reconcile-day="${day}" aria-expanded="${!collapsed}">
-              <span class="reconcile-day-title"><strong>${dayEntries[0].item.dayLabel}</strong><small>${dayEntries[0].item.dateLabel}</small></span>
+              <span class="reconcile-day-title"><strong>${dayEntries[0].item.dayLabel}</strong></span>
               <span><em>${doneCount}/${dayEntries.length}</em>${squares}<i class="reconcile-chevron ${collapsed ? "" : "open"}">›</i></span>
             </button>
             ${collapsed ? "" : `<div class="reconcile-list">${sortedEntries.map(({ item, index }) => rowFor(item, index)).join("")}</div>`}
@@ -851,12 +850,55 @@
 
       function rerenderPhoneState() {
         const scrollTop = document.querySelector(".screen-body")?.scrollTop || 0;
+        const carouselScrollLeft = document.querySelector(".weekly-menu-carousel")?.scrollLeft || 0;
         render();
         const nextBody = document.querySelector(".screen-body");
         if (nextBody) nextBody.scrollTop = scrollTop;
+        const nextCarousel = document.querySelector(".weekly-menu-carousel");
+        if (nextCarousel) nextCarousel.scrollLeft = carouselScrollLeft;
       }
 
+      document.addEventListener("pointerdown", (event) => {
+        const carousel = event.target.closest(".weekly-menu-carousel");
+        if (!carousel || (event.pointerType === "mouse" && event.button !== 0)) return;
+        showcaseMenuCarouselDrag = {
+          carousel,
+          pointerId: event.pointerId,
+          startX: event.clientX,
+          startScrollLeft: carousel.scrollLeft,
+          moved: false,
+        };
+        carousel.classList.add("dragging");
+        carousel.setPointerCapture?.(event.pointerId);
+      });
+
+      document.addEventListener("pointermove", (event) => {
+        const drag = showcaseMenuCarouselDrag;
+        if (!drag || drag.pointerId !== event.pointerId) return;
+        const deltaX = event.clientX - drag.startX;
+        if (Math.abs(deltaX) > 4) drag.moved = true;
+        if (!drag.moved) return;
+        drag.carousel.scrollLeft = drag.startScrollLeft - deltaX;
+        if (event.cancelable) event.preventDefault();
+      });
+
+      function finishShowcaseMenuCarouselDrag(event) {
+        const drag = showcaseMenuCarouselDrag;
+        if (!drag || drag.pointerId !== event.pointerId) return;
+        drag.carousel.classList.remove("dragging");
+        if (drag.moved) showcaseMenuCarouselSuppressClickUntil = Date.now() + 200;
+        try { drag.carousel.releasePointerCapture?.(event.pointerId); } catch (_) {}
+        showcaseMenuCarouselDrag = null;
+      }
+
+      document.addEventListener("pointerup", finishShowcaseMenuCarouselDrag);
+      document.addEventListener("pointercancel", finishShowcaseMenuCarouselDrag);
+
       document.addEventListener("click", (event) => {
+        if (Date.now() < showcaseMenuCarouselSuppressClickUntil && event.target.closest(".weekly-menu-carousel")) {
+          event.preventDefault();
+          return;
+        }
         if (event.target.closest("[data-showcase-confirm-menu]")) {
           go("overview");
           return;
