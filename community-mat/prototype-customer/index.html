@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>近邻互助组 · 客户体验原型</title>
+    <link rel="stylesheet" href="../../prototype-nav.css" />
+    <!--
+      PROTOTYPE — 不接真实数据
+      问题：第一次接触产品的人，能否在 2–3 分钟内看懂价值并顺滑走完高光路径？
+      五步高光路径，使用 ?step= 可分享状态。
+      运行：python3 -m http.server 4173
+    -->
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #1e1b16;
+        --muted: #59504a;
+        --line: #e3ddcf;
+        --paper: #f5f2ea;
+        --flag-red: #d42b1e;
+        --flag-red-dark: #a81e14;
+        --flag-red-soft: #fbe5e1;
+        --flag-gold: #f2b90d;
+        --flag-gold-soft: #fdf3d7;
+        --phone: #1a1712;
+        --shadow: 0 32px 90px rgba(46, 38, 22, .15);
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        min-width: 320px;
+        min-height: 100vh;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 8% 10%, rgba(212,43,30,.08), transparent 30rem),
+          radial-gradient(circle at 92% 84%, rgba(242,185,13,.16), transparent 30rem),
+          var(--paper);
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      button, input { font: inherit; }
+      button { cursor: pointer; }
+      .page { min-height: 100vh; padding: 28px 30px 110px; }
+      .topbar {
+        width: min(1220px, 100%); margin: 0 auto; display: flex; align-items: center;
+        justify-content: space-between; gap: 18px; padding-right: 178px;
+      }
+      .brand { display: flex; align-items: center; gap: 11px; font-weight: 900; }
+      .brand-mark {
+        display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px;
+        color: #fff; background: var(--flag-red); box-shadow: 0 10px 24px rgba(212,43,30,.25);
+      }
+      .proto-note { color: var(--muted); font-size: 12px; font-weight: 750; }
+      .layout {
+        width: min(1220px, 100%); margin: 34px auto 0; display: grid;
+        grid-template-columns: minmax(340px, .95fr) minmax(390px, 1.05fr); gap: 72px; align-items: center;
+      }
+      .story { padding: 20px 0; }
+      .step-kicker { color: var(--flag-red); font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+      h1 { max-width: 610px; margin: 14px 0 18px; font-size: clamp(40px, 4.8vw, 64px); line-height: 1.03; letter-spacing: -.055em; text-wrap: balance; }
+      .lead { max-width: 570px; margin: 0; color: var(--muted); font-size: clamp(17px, 2vw, 20px); line-height: 1.7; }
+      .proofs { display: grid; gap: 12px; margin-top: 34px; max-width: 560px; }
+      .proof {
+        display: grid; grid-template-columns: 38px 1fr; gap: 13px; align-items: center;
+        padding: 14px 16px; border: 1px solid var(--line); border-radius: 17px;
+        background: rgba(255,255,255,.68); font-size: 14px; font-weight: 750;
+      }
+      .proof-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: var(--flag-red-soft); color: var(--flag-red); }
+      .story-action {
+        display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 15px 20px;
+        border: 0; border-radius: 15px; background: var(--ink); color: #fff; font-weight: 850;
+        box-shadow: 0 14px 30px rgba(23,32,25,.16);
+      }
+      .story-action span { color: var(--flag-gold); font-size: 20px; }
+      .visual { position: relative; min-height: 790px; display: grid; place-items: center; }
+      .halo {
+        position: absolute; inset: 8% 4%; border-radius: 50%; filter: blur(.1px);
+        background: radial-gradient(circle, rgba(242,185,13,.32), rgba(212,43,30,.08) 45%, transparent 69%);
+      }
+      .phone {
+        position: relative; z-index: 1; width: min(390px, 92vw); height: 748px; overflow: hidden;
+        border: 7px solid var(--phone); border-radius: 42px; background: #fff; box-shadow: var(--shadow);
+      }
+      .phone::before {
+        content: ""; position: absolute; z-index: 8; top: 8px; left: 50%; transform: translateX(-50%);
+        width: 92px; height: 25px; border-radius: 14px; background: var(--phone);
+      }
+      .phone-screen { min-height: 100%; background: #fff; }
+      .statusbar {
+        position: relative; z-index: 7; height: 35px; padding: 0 20px; display: flex;
+        align-items: center; justify-content: space-between; font-size: 11px; font-weight: 800;
+      }
+      .appbar {
+        height: 58px; padding: 0 15px; display: grid; grid-template-columns: 62px 1fr 62px;
+        align-items: center; border-bottom: 1px solid rgba(0,0,0,.06); font-size: 17px; font-weight: 850;
+      }
+      .appbar strong { text-align: center; }
+      .back { font-size: 27px; font-weight: 400; }
+      .capsule { justify-self: end; width: 60px; height: 27px; border: 1px solid rgba(0,0,0,.16); border-radius: 999px; display: grid; place-items: center; letter-spacing: 3px; font-size: 10px; }
+      .screen-body { height: 648px; overflow: hidden; }
+      .wechat .statusbar, .wechat .appbar { background: #ededed; }
+      .wechat .screen-body { background: #ededed; padding: 15px 12px 70px; position: relative; }
+      .time { text-align: center; color: #8a8478; font-size: 11px; margin: 6px 0 17px; }
+      .msg { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 17px; }
+      .msg.me { flex-direction: row-reverse; }
+      .avatar { flex: 0 0 auto; display: grid; place-items: center; width: 39px; height: 39px; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 900; }
+      .avatar.blue { background: #5072a8; } .avatar.gold { background: var(--flag-gold); } .avatar.red { background: var(--flag-red); }
+      .sender { margin: 0 4px 4px; color: #6f6a60; font-size: 11px; }
+      .msg.me .sender { text-align: right; }
+      .bubble { max-width: 260px; padding: 11px 13px; border-radius: 4px 15px 15px; background: #fff; font-size: 14px; line-height: 1.55; }
+      .msg.me .bubble { border-radius: 15px 4px 15px 15px; background: #95ec69; }
+      .typing { display: inline-flex; gap: 4px; padding: 14px; }
+      .typing i { width: 5px; height: 5px; border-radius: 50%; background: #888; animation: bob 1s infinite alternate; }
+      .typing i:nth-child(2) { animation-delay: .18s; } .typing i:nth-child(3) { animation-delay: .36s; }
+      @keyframes bob { to { transform: translateY(-4px); opacity: .4; } }
+      .mp-card { width: 260px; overflow: hidden; border: 0; border-radius: 9px; background: #fff; text-align: left; box-shadow: 0 3px 12px rgba(0,0,0,.08); }
+      .mp-main { padding: 14px; }
+      .mp-brand { display: flex; align-items: center; gap: 7px; color: #6f6a60; font-size: 11px; }
+      .mini-logo { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; background: var(--flag-red); color: #fff; font-weight: 900; }
+      .mp-title { margin-top: 10px; font-size: 17px; font-weight: 900; line-height: 1.35; }
+      .mp-highlight { margin-top: 9px; padding: 11px; border-radius: 10px; background: var(--flag-red-soft); color: var(--flag-red-dark); font-size: 12px; line-height: 1.5; }
+      .mp-foot { padding: 8px 14px; border-top: 1px solid #eee; color: #8a8478; font-size: 11px; }
+      .chat-input { position: absolute; left: 0; right: 0; bottom: 0; height: 57px; padding: 9px 11px; display: flex; gap: 8px; background: #f7f7f7; border-top: 1px solid #ddd; }
+      .chat-field { flex: 1; border-radius: 7px; background: #fff; }
+      .round-tool { width: 36px; height: 36px; border: 1px solid #aaa; border-radius: 50%; }
+      .mini .statusbar, .mini .appbar { background: #fff; }
+      .mini .screen-body { padding: 15px; background: #faf8f2; overflow-y: auto; }
+      .promise {
+        position: relative; overflow: hidden; padding: 18px; border-radius: 20px; background: var(--ink); color: #fff;
+      }
+      .promise::after { content: ""; position: absolute; right: -38px; bottom: -54px; width: 150px; height: 150px; border-radius: 50%; background: rgba(242,185,13,.20); }
+      .promise-label { color: var(--flag-gold); font-size: 11px; font-weight: 900; letter-spacing: .08em; }
+      .promise h3 { position: relative; z-index: 1; margin: 8px 0 8px; font-size: 24px; line-height: 1.15; }
+      .promise p { position: relative; z-index: 1; margin: 0; opacity: .92; font-size: 13px; line-height: 1.6; }
+      .trust-card { margin-top: 12px; padding: 16px; border: 1px solid var(--line); border-radius: 20px; background: #fff; box-shadow: 0 9px 28px rgba(24,48,31,.07); }
+      .relation { display: flex; align-items: center; gap: 10px; }
+      .relation-avatar { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px; background: var(--flag-gold-soft); color: #865e14; font-weight: 900; }
+      .relation strong { display: block; font-size: 14px; }
+      .relation small { color: var(--muted); font-size: 11px; }
+      .quote { margin: 13px 0; padding: 11px 12px; border-left: 4px solid var(--flag-gold); border-radius: 0 10px 10px 0; background: var(--flag-gold-soft); font-size: 13px; line-height: 1.55; }
+      .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+      .fact { padding: 9px 7px; border-radius: 10px; background: #f3f6f3; text-align: center; }
+      .fact strong { display: block; font-size: 15px; }
+      .fact span { color: var(--muted); font-size: 10px; }
+      .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+      .tag { padding: 5px 9px; border-radius: 999px; background: var(--flag-red-soft); color: var(--flag-red-dark); font-size: 11px; font-weight: 800; }
+      .risk { margin-top: 10px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+      .primary, .secondary {
+        width: 100%; padding: 13px; border-radius: 12px; font-weight: 850; border: 0;
+      }
+      .primary { margin-top: 12px; background: var(--flag-red); color: #fff; }
+      .secondary { margin-top: 8px; border: 1px solid var(--line); background: #fff; color: var(--ink); }
+      .room .screen-body { position: relative; display: flex; flex-direction: column; background: #f8f6f0; }
+      .room-head { padding: 8px 13px; border-bottom: 1px solid var(--line); background: #fff; }
+      .people { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+      .person { text-align: center; font-size: 9px; color: var(--muted); }
+      .person i { display: grid; place-items: center; width: 24px; height: 24px; margin: 0 auto 2px; border-radius: 8px; color: #fff; font-style: normal; font-weight: 900; font-size: 10px; }
+      .person.human i { background: var(--flag-red); } .person.agent i { background: #536c9d; } .person.system i { background: #b8860b; }
+      .room-scope { margin-top: 5px; padding: 5px 8px; border-radius: 8px; background: var(--flag-red-soft); color: var(--flag-red-dark); font-size: 10px; }
+      .thread { flex: 1; padding: 11px 13px; overflow-y: auto; }
+      .system-note { margin-bottom: 7px; color: #6e6759; text-align: center; font-size: 10px; }
+      .room-msg { display: grid; grid-template-columns: 29px 1fr; gap: 8px; margin-bottom: 9px; }
+      .room-msg.me { grid-template-columns: 1fr 29px; }
+      .room-msg.me .room-name { text-align: right; }
+      .room-msg.me .room-bubble { border-radius: 12px 3px 12px 12px; background: var(--flag-red); color: #fff; }
+      .room-msg.me .room-avatar { background: var(--flag-red); }
+      .room-avatar { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 9px; background: #536c9d; color: #fff; font-size: 9px; font-weight: 900; }
+      .room-avatar.system { background: #b8860b; }
+      .room-avatar.human { background: var(--flag-red); }
+      .room-name { margin-bottom: 3px; color: var(--muted); font-size: 10px; }
+      .role { margin-left: 4px; padding: 2px 4px; border-radius: 4px; background: #e8edf6; color: #47608f; }
+      .room-bubble { padding: 9px 10px; border-radius: 3px 12px 12px; background: #fff; font-size: 13px; line-height: 1.55; box-shadow: 0 2px 6px rgba(0,0,0,.03); }
+      .photo-msg { width: 100%; height: 44px; border-radius: 8px; background: #e8e2d5; display: grid; place-items: center; color: #8a8478; font-size: 11px; line-height: 1.4; text-align: center; padding: 8px; }
+      .draft-card { margin-top: 8px; padding: 8px 10px; border-radius: 9px; background: var(--flag-gold-soft); font-size: 12px; line-height: 1.55; }
+      .draft-card b { display: block; margin-bottom: 5px; color: #7a5a08; font-size: 11px; letter-spacing: .03em; }
+      .draft-card li { margin-left: 16px; line-height: 1.4; }
+      .booking-card { margin-top: 8px; overflow: hidden; border: 1px solid #ead9bb; border-radius: 12px; background: #fff; color: var(--ink); box-shadow: 0 5px 14px rgba(46,38,22,.08); }
+      .booking-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px; background: var(--flag-gold-soft); }
+      .booking-head strong { font-size: 13px; }
+      .booking-status { padding: 3px 6px; border-radius: 999px; background: #fff; color: #7a5a08; font-size: 9px; font-weight: 900; }
+      .booking-body { display: grid; gap: 7px; padding: 9px 10px; }
+      .booking-row { display: grid; grid-template-columns: 48px 1fr; gap: 8px; font-size: 10px; line-height: 1.4; }
+      .booking-row span { color: var(--muted); }
+      .booking-row b { text-align: right; font-size: 11px; }
+      .booking-note { padding-top: 6px; border-top: 1px solid var(--line); color: var(--muted); font-size: 9px; line-height: 1.4; }
+      .booking-action { width: 100%; padding: 9px; border: 0; background: var(--flag-red); color: #fff; font-size: 11px; font-weight: 900; }
+      .room-composer { padding: 9px 11px 13px; border-top: 1px solid var(--line); background: #fff; }
+      .recipient { display: flex; gap: 5px; margin-bottom: 7px; }
+      .recipient button { padding: 6px 9px; border: 0; border-radius: 999px; background: #efeadf; color: var(--muted); font-size: 10px; }
+      .recipient button.active { background: var(--flag-red); color: #fff; }
+      .composer-row { display: flex; gap: 7px; }
+      .composer-row input { min-width: 0; flex: 1; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: #faf8f2; font-size: 12px; }
+      .composer-row button { width: 38px; border: 0; border-radius: 10px; background: var(--flag-red); color: #fff; }
+      .finish .screen-body { padding: 22px 18px; background: var(--ink); color: #fff; }
+      .finish-mark { display: grid; place-items: center; width: 58px; height: 58px; border-radius: 19px; background: var(--flag-gold); color: var(--ink); font-size: 28px; font-weight: 900; }
+      .finish h3 { margin: 24px 0 10px; font-size: 31px; line-height: 1.08; letter-spacing: -.04em; }
+      .finish-lead { margin: 0; color: rgba(255,255,255,.84); font-size: 13px; line-height: 1.65; }
+      .value-list { display: grid; gap: 10px; margin-top: 27px; }
+      .value { display: grid; grid-template-columns: 34px 1fr; gap: 11px; align-items: center; padding: 12px; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; background: rgba(255,255,255,.07); }
+      .value b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; background: rgba(242,185,13,.18); color: var(--flag-gold); }
+      .value strong { display: block; font-size: 13px; }
+      .value small { display: block; margin-top: 2px; color: rgba(255,255,255,.78); font-size: 11px; line-height: 1.45; }
+      .new-need { margin-top: 22px; padding: 13px; border: 1px solid var(--flag-gold); border-radius: 13px; color: var(--flag-gold); text-align: center; font-size: 12px; font-weight: 850; }
+      .floating-card {
+        position: absolute; z-index: 3; padding: 11px 14px; border: 1px solid var(--line); border-radius: 14px;
+        background: rgba(255,255,255,.9); box-shadow: 0 14px 34px rgba(24,48,31,.13); backdrop-filter: blur(12px);
+        font-size: 11px; font-weight: 800;
+      }
+      .floating-card.top { top: 10%; right: -4%; transform: rotate(3deg); }
+      .floating-card.bottom { bottom: 11%; left: -6%; transform: rotate(-3deg); }
+      .floating-card em { display: block; margin-top: 4px; color: var(--flag-red); font-size: 14px; font-style: normal; }
+      .nav {
+        position: fixed; z-index: 20; left: 50%; bottom: 22px; transform: translateX(-50%);
+        display: flex; align-items: center; gap: 5px; padding: 7px; border: 1px solid rgba(255,255,255,.5);
+        border-radius: 999px; background: rgba(23,32,25,.92); box-shadow: 0 16px 46px rgba(0,0,0,.25); backdrop-filter: blur(12px);
+      }
+      .nav button { display: grid; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 50%; background: transparent; color: #fff; font-size: 18px; }
+      .nav button:hover { background: rgba(255,255,255,.12); }
+      .nav-label { min-width: 158px; color: #fff; text-align: center; font-size: 12px; font-weight: 850; }
+      .dots { display: flex; justify-content: center; gap: 5px; margin-top: 3px; }
+      .dots i { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.25); }
+      .dots i.active { width: 13px; border-radius: 5px; background: var(--flag-gold); }
+      .audience-switch {
+        position: fixed; z-index: 20; top: 22px; right: 24px; padding: 9px 12px; border: 1px solid var(--line);
+        border-radius: 999px; background: rgba(255,255,255,.86); color: var(--muted); text-decoration: none;
+        font-size: 11px; font-weight: 800; box-shadow: 0 8px 24px rgba(24,48,31,.08); backdrop-filter: blur(10px);
+      }
+      @media (max-width: 930px) {
+        .topbar { padding-right: 0; }
+        .layout { grid-template-columns: 1fr; gap: 20px; }
+        .story { text-align: center; }
+        .lead, .proofs { margin-left: auto; margin-right: auto; }
+        .story-action { margin-left: auto; margin-right: auto; }
+        .visual { min-height: 770px; }
+        .floating-card.top { right: 5%; } .floating-card.bottom { left: 4%; }
+      }
+      @media (max-width: 560px) {
+        .page { padding: 18px 14px 105px; }
+        .proto-note { display: none; }
+        .audience-switch { position: static; display: inline-block; margin: 14px; }
+        .layout { margin-top: 14px; }
+        .story { padding-top: 0; }
+        h1 { font-size: 43px; }
+        .proofs { display: none; }
+        .visual { min-height: 720px; }
+        .phone { height: 690px; border-radius: 36px; }
+        .screen-body { height: 590px; }
+        .floating-card { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="prototype-home-link" href="../../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
+    <a class="audience-switch" href="../prototype-implementation/">切到实施对照原型 →</a>
+    <div id="app"></div>
+
+    <script>
+      const steps = ["intro", "need", "trust", "chat", "finish"];
+      const labels = {
+        intro: "价值主张",
+        need: "真实求助",
+        trust: "亲历证据",
+        chat: "人机协作",
+        finish: "产品全貌",
+      };
+
+      const copy = {
+        intro: {
+          kicker: "近邻互助组 · 01",
+          title: "找靠谱的人，<br />先问亲自用过的人。",
+          lead: "不是广告榜，也不是陌生人的星级。让真实消费经历在邻里之间流动，帮你少踩一次坑。",
+          proofs: [
+            ["人", "每条推荐都能看见是谁的亲历"],
+            ["证", "次数、时间与确认状态一目了然"],
+            ["权", "AI 帮忙整理，但真人负责承诺"],
+          ],
+          action: "看看它怎么发生",
+        },
+        need: {
+          kicker: "真实场景 · 02",
+          title: "求助不用搬家，<br />仍然发生在微信群。",
+          lead: "小李只说一句真实需要。用过的人把自己的经历带回来，平台不制造需求，也不抢走原来的关系场。",
+          proofs: [
+            ["轻", "不要求求助者先注册再发帖"],
+            ["真", "由亲自消费过的邻居主动回应"],
+            ["快", "一张小程序卡片回到原对话"],
+          ],
+          action: "打开赵阿姨的亲历",
+        },
+        trust: {
+          kicker: "可信判断 · 03",
+          title: "不是一句“靠谱”，<br />而是足够你判断的证据。",
+          lead: "你会知道谁推荐、用过几次、最近一次是什么时候，以及哪些事实正好匹配这次需要。",
+          proofs: [
+            ["3", "真实使用 3 次，不是转发广告"],
+            ["近", "最近一次就在上周"],
+            ["零", "推荐人没有佣金和排名收益"],
+          ],
+          action: "先问服务者两句",
+        },
+        chat: {
+          kicker: "人机协作 · 04",
+          title: "AI 先问清楚，<br />真人只确认关键决定。",
+          lead: "彭师傅的 Agent 先采集现场信息、草拟材料；彭师傅确认时间和价格后，Agent 发来一张可以直接确认的服务预约卡。",
+          proofs: [
+            ["采", "位置、品类、照片，Agent 先问明白"],
+            ["拟", "预约内容和材料清单，Agent 帮忙整理"],
+            ["诺", "报价和时间，仍由彭师傅本人拍板"],
+          ],
+          action: "看见产品的三个特点",
+        },
+        finish: {
+          kicker: "产品全貌 · 05",
+          title: "把消费亲历，<br />变成每个人都能带走的力量。",
+          lead: "从一次邻居求助开始，逐步长出不靠广告排序、不靠出售数据的消费者互助网络。",
+          proofs: [
+            ["找", "继续提出新需求，寻找其他服务者"],
+            ["存", "保存自己的亲历，随时帮助别人"],
+            ["享", "亲历由本人授权分享，可导出和删除"],
+          ],
+          action: "重新体验",
+        },
+      };
+
+      function currentStep() {
+        const value = new URLSearchParams(location.search).get("step");
+        return steps.includes(value) ? value : "intro";
+      }
+
+      function go(step) {
+        const url = new URL(location.href);
+        url.searchParams.set("step", step);
+        history.replaceState({}, "", url);
+        render();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function cycle(delta) {
+        const index = steps.indexOf(currentStep());
+        go(steps[(index + delta + steps.length) % steps.length]);
+      }
+
+      function phoneShell(kind, title, body) {
+        return `<div class="phone ${kind}">
+          <div class="phone-screen">
+            <div class="statusbar"><span>9:41</span><span>▮▮▮ ⌁ ▰</span></div>
+            <div class="appbar"><span class="back">‹</span><strong>${title}</strong><span class="capsule">•• ◉</span></div>
+            <div class="screen-body">${body}</div>
+          </div>
+        </div>`;
+      }
+
+      function introPhone() {
+        return phoneShell("finish", "近邻互助组", `
+          <div class="finish-mark">邻</div>
+          <h3>亲自用过的人，<br />帮你找到靠谱的人。</h3>
+          <p class="finish-lead">消费者共享真实经历。AI 负责整理与连接，信任和承诺始终属于人。</p>
+          <div class="value-list">
+            <div class="value"><b>人</b><div><strong>真人亲历，不是广告推荐</strong><small>看见推荐关系、时间与使用次数</small></div></div>
+            <div class="value"><b>AI</b><div><strong>Agent 帮忙，不冒充真人</strong><small>能回答到哪里、何时要真人确认，都说清楚</small></div></div>
+            <div class="value"><b>数</b><div><strong>不靠出售你的数据运行</strong><small>授权可见、可导出、可删除</small></div></div>
+          </div>
+          <button class="new-need" data-next>开始看一个真实例子 →</button>
+        `);
+      }
+
+      function needPhone() {
+        return phoneShell("wechat", "阳光花园邻居群（128）", `
+          <div class="time">晚上 18:26</div>
+          <div class="msg"><div class="avatar blue">王</div><div><div class="sender">王哥 · 3号楼</div><div class="bubble">今天电梯口有快递，大家记得拿。</div></div></div>
+          <div class="msg me"><div class="avatar red">李</div><div><div class="sender">小李 · 7号楼</div><div class="bubble">家里厨房水管漏水了，想找个靠谱的维修师傅，最好这两天就能上门。邻居们有亲自用过的吗？</div></div></div>
+          <div class="msg"><div class="avatar gold">赵</div><div><div class="sender">赵阿姨 · 5号楼</div><div class="bubble">我找彭师傅修过，人很实在。我把自己的记录发你看看。</div></div></div>
+          <div class="msg"><div class="avatar gold">赵</div><div><div class="mp-card" data-next>
+            <div class="mp-main">
+              <div class="mp-brand"><span class="mini-logo">邻</span>近邻互助组</div>
+              <div class="mp-title">赵阿姨有一段亲历，可能正好帮到你</div>
+              <div class="mp-highlight"><b>彭师傅 · 水电维修</b><br />价格公道 · 上周刚上门修过</div>
+            </div>
+            <div class="mp-foot">小程序 · 点击查看亲历依据</div>
+          </div></div></div>
+          <div class="chat-input"><div class="round-tool"></div><div class="chat-field"></div><div class="round-tool"></div></div>
+        `);
+      }
+
+      function trustPhone() {
+        return phoneShell("mini", "近邻互助组", `
+          <div class="promise">
+            <div class="promise-label">先说清楚</div>
+            <h3>你的数据，<br />不拿去卖。</h3>
+            <p>亲历和联系方式默认不公开。你决定谁能看，也可以导出和删除。</p>
+          </div>
+          <div class="trust-card">
+            <div class="relation"><div class="relation-avatar">赵</div><div><strong>赵阿姨的亲历</strong><small>阳光花园邻居群 · 主动分享给你</small></div></div>
+            <div class="quote">“彭师傅帮我修过三次。上次厨房水管漏水，他晚上八点多也来修好了，没多收钱。”</div>
+            <div class="facts">
+              <div class="fact"><strong>3 次</strong><span>本人使用</span></div>
+              <div class="fact"><strong>上周</strong><span>最近一次</span></div>
+              <div class="fact"><strong>已确认</strong><span>履约事实</span></div>
+            </div>
+            <div class="tags"><span class="tag">水电维修</span><span class="tag">价格公道</span><span class="tag">上门快</span></div>
+            <div class="risk">有限的本人亲历，不是平台质量担保。赵阿姨没有推荐收益。</div>
+            <button class="primary" data-next>先问彭师傅两句</button>
+          </div>
+        `);
+      }
+
+      function chatPhone() {
+        return phoneShell("room", "彭师傅 · 水电维修", `
+          <div class="room-head">
+            <div class="people">
+              <div class="person human"><i>李</i>你</div>
+              <div class="person human"><i>彭</i>彭师傅本人</div>
+              <div class="person agent"><i>TA</i>彭师傅 Agent</div>
+              <div class="person system"><i>邻</i>系统 Agent</div>
+            </div>
+            <div class="room-scope">本房间仅可见：维修需求摘要 + 照片 + 当前对话</div>
+          </div>
+          <div class="thread">
+            <div class="system-note">从赵阿姨的亲历卡进入 · 带入"水管漏水、尽快上门"</div>
+            <div class="room-msg"><div class="room-avatar">TA</div><div><div class="room-name">彭师傅的 Agent <span class="role">初步判断</span></div><div class="room-bubble">收到。初步判断是软管接口老化渗水，不是主管道问题。
+              <div class="draft-card"><b>已采集 · 顾客授权本房间可见</b>
+                水槽下方软管 · 昨晚开始漏水 · 现场照片 1 张<br />
+                建议备料：4 分编织软管 ×1、生料带 ×1
+              </div>
+            </div></div></div>
+            <div class="room-msg"><div class="room-avatar human">彭</div><div><div class="room-name">彭师傅本人 <span class="role">真人确认</span></div><div class="room-bubble">照片看了，是软管老化。材料约 18，工时 50，明天下午过去换。</div></div></div>
+            <div class="room-msg"><div class="room-avatar">TA</div><div><div class="room-name">彭师傅的 Agent <span class="role">发起预约</span></div><div class="room-bubble">彭师傅已经确认，我帮你整理成服务预约：
+              <div class="booking-card">
+                <div class="booking-head"><strong>🔧 上门维修预约</strong><span class="booking-status">师傅已确认</span></div>
+                <div class="booking-body">
+                  <div class="booking-row"><span>服务</span><b>厨房水槽软管更换</b></div>
+                  <div class="booking-row"><span>时间</span><b>明天 14:00–16:00</b></div>
+                  <div class="booking-row"><span>费用</span><b>工时 ¥50 · 材料约 ¥18</b></div>
+                  <div class="booking-note">详细门牌仅在你确认后提供给彭师傅；临时变化仍由双方真人确认。</div>
+                </div>
+                <button class="booking-action" data-next>确认预约</button>
+              </div>
+            </div></div></div>
+          </div>
+          <div class="room-composer">
+            <div class="recipient"><button>发给彭师傅本人</button><button class="active">发给彭师傅 Agent</button></div>
+            <div class="composer-row"><input placeholder="有问题可以继续问……" aria-label="消息" /><button>➤</button></div>
+          </div>
+        `);
+      }
+
+      function finishPhone() {
+        return phoneShell("finish", "近邻互助组", `
+          <div class="finish-mark">✓</div>
+          <h3>一次靠谱选择，<br />也是下一次互助的开始。</h3>
+          <p class="finish-lead">小李完成服务后，可以把自己的真实经历存进亲历卡；下次邻居求助时，他也能成为那个“亲自用过的人”。</p>
+          <div class="value-list">
+            <div class="value"><b>1</b><div><strong>亲历，而非流量排名</strong><small>推荐从真实关系和实际使用出发</small></div></div>
+            <div class="value"><b>2</b><div><strong>Agent，而非责任替身</strong><small>AI 提高效率，真人保留最终承诺</small></div></div>
+            <div class="value"><b>3</b><div><strong>月卡，而非出售数据</strong><small>用透明付费支持消费者自己的网络</small></div></div>
+          </div>
+          <button class="new-need" data-next>我还有其他需求 ＋</button>
+        `);
+      }
+
+      function phoneFor(step) {
+        return { intro: introPhone, need: needPhone, trust: trustPhone, chat: chatPhone, finish: finishPhone }[step]();
+      }
+
+      function render() {
+        const step = currentStep();
+        const item = copy[step];
+        const stepIndex = steps.indexOf(step);
+        document.title = `${labels[step]} · 客户体验原型 · 近邻互助组`;
+        document.querySelector("#app").innerHTML = `
+          <main class="page">
+            <header class="topbar">
+              <div class="brand"><span class="brand-mark">邻</span>近邻互助组</div>
+              <div class="proto-note">客户体验原型 · 不接真实数据</div>
+            </header>
+            <div class="layout">
+              <section class="story">
+                <div class="step-kicker">${item.kicker}</div>
+                <h1>${item.title}</h1>
+                <p class="lead">${item.lead}</p>
+                <div class="proofs">${item.proofs.map(([icon, text]) => `<div class="proof"><span class="proof-icon">${icon}</span>${text}</div>`).join("")}</div>
+                <button class="story-action" data-next>${item.action}<span>→</span></button>
+              </section>
+              <section class="visual" aria-label="手机交互演示">
+                <div class="halo"></div>
+                ${phoneFor(step)}
+                <div class="floating-card top">客户只需要知道<em>“这对我有什么用”</em></div>
+                <div class="floating-card bottom">高光路径<em>${stepIndex + 1} / ${steps.length} · ${labels[step]}</em></div>
+              </section>
+            </div>
+          </main>
+          <nav class="nav" aria-label="原型步骤切换">
+            <button data-prev aria-label="上一步">←</button>
+            <div class="nav-label">${stepIndex + 1} / ${steps.length} · ${labels[step]}
+              <div class="dots">${steps.map((_, i) => `<i class="${i === stepIndex ? "active" : ""}"></i>`).join("")}</div>
+            </div>
+            <button data-next aria-label="下一步">→</button>
+          </nav>`;
+        if (step === "chat") {
+          requestAnimationFrame(() => {
+            const thread = document.querySelector(".thread");
+            if (thread) thread.scrollTop = thread.scrollHeight;
+          });
+        }
+      }
+
+      document.addEventListener("click", (event) => {
+        if (event.target.closest("[data-next]")) cycle(1);
+        if (event.target.closest("[data-prev]")) cycle(-1);
+        const recipient = event.target.closest(".recipient button");
+        if (recipient) {
+          recipient.parentElement.querySelectorAll("button").forEach(button => button.classList.remove("active"));
+          recipient.classList.add("active");
+        }
+      });
+      document.addEventListener("keydown", (event) => {
+        if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
+        if (event.key === "ArrowLeft") cycle(-1);
+        if (event.key === "ArrowRight") cycle(1);
+      });
+      window.addEventListener("popstate", render);
+      render();
+    </script>
+  </body>
+</html>
