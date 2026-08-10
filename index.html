@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="近邻互助组原型地图：集中访问亲历推荐、街坊味与楼道收一收等客户原型。"
+      content="近邻互助组原型地图：访问亲历卡片推荐应用，以及基于共同底座展开的街坊味和楼道收一收。"
     />
     <title>近邻互助组 · 原型地图</title>
     <style>
@@ -207,6 +207,36 @@
         line-height: 1.65;
       }
 
+      .hub-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 20px;
+      }
+
+      .hub-link {
+        display: inline-flex;
+        min-height: 40px;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px;
+        border: 1px solid rgba(23, 96, 68, 0.18);
+        border-radius: 12px;
+        color: var(--green);
+        background: rgba(255, 255, 255, 0.68);
+        font-size: 11px;
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .hub-link--primary {
+        gap: 7px;
+        border-color: var(--green);
+        color: #fff;
+        background: var(--green);
+        box-shadow: 0 10px 22px rgba(23, 96, 68, 0.2);
+      }
+
       .hub-symbol {
         display: grid;
         width: 88px;
@@ -223,7 +253,7 @@
       .prototype-grid {
         position: relative;
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 22px;
       }
 
@@ -232,8 +262,8 @@
         position: absolute;
         z-index: 0;
         top: -1px;
-        left: calc(16.666% + 11px);
-        right: calc(16.666% + 11px);
+        left: 25%;
+        right: 25%;
         height: 1px;
         background: var(--line);
       }
@@ -275,7 +305,6 @@
         opacity: 0.9;
       }
 
-      .community { --accent: var(--green); --accent-soft: var(--green-soft); }
       .kith { --accent: var(--red); --accent-soft: var(--red-soft); }
       .recycle { --accent: var(--orange); --accent-soft: var(--orange-soft); }
 
@@ -472,7 +501,7 @@
           <span class="brand-mark" aria-hidden="true">邻</span>
           <span>近邻互助组 · 原型地图</span>
         </div>
-        <div class="status">3 组原型可访问</div>
+        <div class="status">1 个共同底座 · 2 个具体应用</div>
       </header>
 
       <main>
@@ -480,43 +509,29 @@
           <div class="eyebrow">COMMUNITY MUTUAL AID</div>
           <h1 id="page-title">从邻里互助出发，长出一组能用的工具。</h1>
           <p class="lead">
-            这些不是彼此分散的小应用。它们共享近邻互助组这一共同底座：从真实关系中建立信任，围绕具体问题组织协作，再把能力交还给社区里的人。
+            近邻互助组本身就是亲历卡片推荐应用，也是街坊味与楼道收一收共同使用的底座：从真实关系中建立信任，再围绕具体问题组织协作。
           </p>
         </section>
 
-        <section class="map" aria-label="近邻互助组及其客户原型">
+        <section class="map" aria-label="近邻互助组及两个具体应用">
           <article class="hub">
             <div>
-              <div class="hub-kicker">共同底座 · Community layer</div>
+              <div class="hub-kicker">亲历卡片推荐应用 · 共同底座</div>
               <h2>近邻互助组</h2>
-              <p>不替居民作决定，也不把关系变成流量。平台只帮助邻里保存可信经验、看见真实需求，并完成一次可追溯的共同协作。</p>
+              <p>居民把亲身经历整理成可转发的推荐卡片，帮助邻居找到可信服务者。街坊味和楼道收一收都从这套邻里信任与协作关系继续展开。</p>
+              <div class="hub-actions">
+                <a class="hub-link hub-link--primary" href="./community-mat/">打开近邻互助组原型 <span aria-hidden="true">→</span></a>
+                <a class="hub-link" href="./community-mat/prototype-customer/">客户体验</a>
+                <a class="hub-link" href="./community-mat/prototype-implementation/">实施对照</a>
+              </div>
             </div>
             <div class="hub-symbol" aria-hidden="true">互</div>
           </article>
 
           <div class="prototype-grid">
-            <article class="prototype-card community">
-              <div class="card-head">
-                <div class="card-type">信任与服务互助 · 核心原型</div>
-                <div class="card-icon" aria-hidden="true">邻</div>
-              </div>
-              <h3>亲历推荐</h3>
-              <p class="card-copy">居民分享自己的亲历经验，帮助邻居找到可信服务者；不做排行榜，也不把有限推荐包装成平台担保。</p>
-              <div class="tags" aria-label="原型关键词">
-                <span class="tag">亲历推荐</span>
-                <span class="tag">邻里信任</span>
-                <span class="tag">服务协作</span>
-              </div>
-              <div class="actions">
-                <a class="primary-link" href="./community-mat/">打开原型入口 <span aria-hidden="true">→</span></a>
-                <a class="secondary-link" href="./community-mat/prototype-customer/">客户体验</a>
-                <a class="secondary-link" href="./community-mat/prototype-implementation/">实施对照</a>
-              </div>
-            </article>
-
             <article class="prototype-card kith">
               <div class="card-head">
-                <div class="card-type">社区供餐 · 场景原型</div>
+                <div class="card-type">具体应用 · 社区供餐</div>
                 <div class="card-icon" aria-hidden="true">味</div>
               </div>
               <h3>街坊味<br />Kith Inn</h3>
@@ -533,7 +548,7 @@
 
             <article class="prototype-card recycle">
               <div class="card-head">
-                <div class="card-type">楼道协作 · 场景原型</div>
+                <div class="card-type">具体应用 · 楼道协作</div>
                 <div class="card-icon" aria-hidden="true">收</div>
               </div>
               <h3>楼道<br />收一收</h3>
@@ -551,7 +566,7 @@
 
           <aside class="shared-rule">
             <div class="rule-mark" aria-hidden="true">同</div>
-            <div><strong>同一个方向，不同的社区问题。</strong><br />原型会继续增加，但共同边界不变：从居民真实关系与需求出发，让软件辅助互助，而不是替代互助。</div>
+            <div><strong>两个具体应用，共用近邻互助组底座。</strong><br />街坊味处理社区供餐，楼道收一收处理楼道协作；两者都从居民真实关系与需求出发，让软件辅助互助，而不是替代互助。</div>
           </aside>
         </section>
       </main>
