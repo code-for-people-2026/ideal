@@ -451,27 +451,27 @@
             ["十", "一张表完整覆盖五天十个餐次"],
             ["换", "先智能推荐三次，仍不满意再自己挑选"],
           ],
-          action: "确认十餐，再按天生成预订卡片",
+          action: "确认十餐，再按餐次生成预订卡片",
         },
         overview: {
           kicker: "确认结果 · 03",
           title: "五天十餐确认完，<br />整周安排一眼看清。",
-          lead: "确认后不直接跳到微信群。系统先保留一张只读的本周菜单总览，把周一到周五的午饭和晚饭全部列清楚；之后再按天生成可以分享的预订卡片。",
+          lead: "确认后不直接跳到微信。系统先保留一张只读的本周菜单总览，把周一到周五的午饭和晚饭拆成十张餐次卡；之后再按餐次生成可以分享的预订卡片。",
           proofs: [
             ["总", "五天十餐使用同一份最终菜单数据"],
             ["锁", "确认结果只读，不再误触换菜"],
-            ["发", "从总览继续按天生成预订卡片"],
+            ["发", "从总览继续按餐次生成预订卡片"],
           ],
           action: "去看明天午饭预订卡",
         },
         share: {
-          kicker: "微信结果 · 04",
-          title: "一顿午饭从下单到付款，<br />群里都有确认。",
-          lead: "桃子晚上 8:00 开放明天午饭预订，顾客在第二天上午 11:00 前下单并回传一笔订单；午饭送到后，桃子再针对这一餐提醒微信付款。",
+          kicker: "微信私聊 · 04",
+          title: "照旧发一句微信，<br />订单和付款都有记录。",
+          lead: "顾客仍按原来的习惯私聊桃子，说一声明天中午要几份。桃子代录后回一张订单卡，并告诉顾客下次可以直接从卡片下单；隔天午饭送达，再发卡片提醒付款。",
           proofs: [
-            ["午", "这张卡只开放明天午饭"],
-            ["截", "第二天上午 11:00 前可以下单"],
-            ["付", "午饭送达后再提醒微信付款"],
+            ["聊", "顾客直接说“明天中午订两份”"],
+            ["录", "桃子代录后回传订单卡"],
+            ["付", "隔天送达后再发付款提醒卡"],
           ],
           action: "看订单怎么汇总",
         },
@@ -631,10 +631,11 @@
       }
 
       function showcaseConfirmedOverview() {
-        return `<div class="overview-days">${showcaseWeeklyMenu.map((day, dayIndex) => `<section class="overview-day">
-          <div class="overview-day-head"><strong>${day.day}</strong><span>${day.date}</span></div>
-          ${[["lunch", "午饭"], ["dinner", "晚饭"]].map(([meal, label]) => `<div class="overview-meal"><b>${label}</b><p>${showcaseMealDishNames(dayIndex, meal).join("、")}</p></div>`).join("")}
-        </section>`).join("")}</div>`;
+        const mealCards = showcaseWeeklyMenu.flatMap((day, dayIndex) => [["lunch", "午饭"], ["dinner", "晚饭"]].map(([meal, label]) => `<section class="overview-day">
+          <div class="overview-day-head"><strong>${day.day} · ${label}</strong><span>${day.date}</span></div>
+          <div class="overview-meal"><b>5 道菜</b><p>${showcaseMealDishNames(dayIndex, meal).join("、")}</p></div>
+        </section>`));
+        return `<div class="overview-days">${mealCards.join("")}</div>`;
       }
 
       function showcaseCandidateSheetView() {
@@ -668,39 +669,30 @@
           <div class="week-toolbar"><button aria-label="上一周">‹</button><div class="week-range"><strong>9月7日—9月11日</strong><span>周一至周五 · 午餐和晚餐</span></div><button aria-label="下一周">›</button></div>
           <section class="overview-status"><span>本周菜单已确认</span><strong>5 天 · 10 餐</strong><p>每餐 2荤2素1汤，下面是确认后的最终安排。</p></section>
           ${showcaseConfirmedOverview()}
-          <div class="plan-action"><button class="primary" data-next>按天生成预订卡片</button></div>
+          <div class="plan-action"><button class="primary" data-next>按餐次生成预订卡片</button></div>
         `, { tabs: true, engineerChrome: true });
       }
 
       function sharePhone() {
-        return phoneShell("wechat share-compact", "街坊味街坊群（46）", `
-          <div class="time">晚上 8:00</div>
-          <div class="msg"><div class="avatar gold">桃</div><div><div class="sender">桃子</div><div class="bubble">明天午饭开放预订，明天上午 11:00 截止。</div></div></div>
+        return phoneShell("wechat share-compact", "桃子", `
+          <div class="time">9月8日 晚上 8:00</div>
+          <div class="msg me"><div class="avatar red">周</div><div><div class="bubble">明天中午订两份。</div></div></div>
+          <div class="time">晚上 8:03</div>
+          <div class="msg"><div class="avatar gold">桃</div><div><div class="bubble">好的，已经帮你订好了。下次你也可以直接通过这张卡片向我下订单。</div></div></div>
           <div class="msg"><div class="avatar gold">桃</div><div><button class="mp-card" data-next>
             <div class="mp-main">
               <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · 桃子的家常饭</div>
-              <div class="mp-title">9月9日午饭</div>
-              <div class="mp-highlight"><b>红烧排骨、番茄炒蛋</b><br />清炒油麦菜、香菇青菜、海带豆腐汤</div>
-            </div>
-            <div class="mp-foot">菜单已发布锁定 · 明天上午 11:00 截止</div>
-          </button></div></div>
-          <div class="time">晚上 8:08</div>
-          <div class="msg me"><div class="avatar red">周</div><div><div class="bubble">订好了，2 份。</div></div></div>
-          <div class="msg me"><div class="avatar red">周</div><div><button class="mp-card" data-next>
-            <div class="mp-main">
-              <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味</div>
-              <div class="mp-status">午饭订单已提交</div>
+              <div class="mp-status">桃子已代录</div>
               <div class="mp-title">9月9日午饭 · 2份</div>
               <div class="mp-highlight"><b>订单 #260909-12</b><br />送到桂花苑 3 栋 502</div>
             </div>
-            <div class="mp-foot">订单已提交给桃子 · 查看订单 →</div>
+            <div class="mp-foot">打开卡片 · 下次直接下单 →</div>
           </button></div></div>
-          <div class="time delivery-time">12:36</div>
-          <div class="msg"><div class="avatar gold">桃</div><div><div class="bubble">午饭已送到门口，这一餐可以付款啦。</div></div></div>
+          <div class="time delivery-time">9月9日 12:36</div>
           <div class="msg"><div class="avatar gold">桃</div><div><button class="mp-card payment-card" data-next>
             <div class="mp-main">
               <div class="mp-brand"><img class="mini-logo-image" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · 桃子的家常饭</div>
-              <div class="payment-summary"><span>午饭已送达 · 待确认收款</span><strong>¥60</strong></div>
+              <div class="payment-summary"><span>午饭已送达 · 请付款</span><strong>¥60</strong></div>
               <div class="mp-highlight"><b>9月9日午饭 · 2份</b><br />订单 #260909-12</div>
             </div>
             <div class="mp-foot">请微信转账给桃子 · 付款后由桃子确认</div>
