@@ -302,4 +302,52 @@
 - 静态验证：`5` 个 HTML 文件、`3` 段内联脚本全部解析通过；检查 `43` 个本地链接，缺失链接为 `0`；`git diff --check` 通过。
 - 比较结论：菜单右缘继续明确提示横向内容，菜名更大但卡片更紧凑；普通点选与横向拖动不再争抢指针；对账原因从默认视图下沉到按需详情。未发现剩余 P0 / P1 / P2 视觉或核心交互问题。
 
+## 菜单层级降噪专项 · 2026-08-11
+
+- Source visual truth：修改前页面截图 `/tmp/kith-menu-audit-2026-08-11/01-menu-current.png`；Implementation：`kith-inn/prototype-customer/index.html?step=menu`，修改后截图 `/tmp/kith-menu-refine-2026-08-11/11-after-final.png`。
+- 视口与比较：Codex Desktop 浏览器为 `1280 × 720 CSS px`，页面截图分别为 `1265 × 720 px` 与 `1265 × 712 px`；手机框实测约 `390 × 748 CSS px`。同一菜单初始状态的手机区域前后对比为 `/tmp/kith-menu-refine-2026-08-11/14-phone-comparison-final.png`，左右各 `386 × 541 px`。
+- P2 发现：五张日期列各自带边框，叠加外层白卡形成不必要的第三层容器；五十道菜重复显示“午 / 晚”角标；“荤菜 / 素菜 / 汤”使用胶囊外观但职责是定位而非筛选。三项共同增加了表格噪声。
+- 视觉修复：保留外层白卡和五类菜品左侧色条，移除日期列边框和全部午晚角标；在每种菜品分组内用共享的“午饭 / 晚饭”小标题分段。标题区改成“快速定位 + 文字按钮”，不再伪装成筛选胶囊。
+- 定位反馈：页面高度导致“素菜”和“汤”都可能滚到相同的最大 `scrollTop`。点击定位后，对应类型的五列菜品会短暂高亮 `1400ms`，明确反馈当前定位目标；证据为 `/tmp/kith-menu-refine-2026-08-11/10-veg-location-feedback.png`。
+- 字体、间距与颜色：菜名继续使用 `13px`，共享餐次标签为 `9px`，快速定位文字为 `10px`；菜品格高度仍为 `40px`。沿用品牌暖白、深绿、红色与荤素汤类别色，没有新增字体、图片或视觉资产。
+- 可访问性与点选：页面有 `5` 个日期列、`50` 个菜品按钮、`30` 个共享餐次标签、`0` 个午晚角标；每个菜品按钮的 `aria-label` 都包含星期、餐次、类别槽位和菜名。真实指针点击“白切鸡”后 `aria-pressed=true`，详情同步为“当前选择 · 周一午饭 · 荤2 / 白切鸡”。
+- 定位验证：点击“素菜”后高亮类别为 `5`、高亮定位按钮为 `1`，超时后都恢复为 `0`；默认加载无残留高亮。HTML 内联脚本解析通过，检查 `43` 个本地链接无缺失，`git diff --check` 通过；浏览器交互过程中未出现可见运行时错误。
+- Post-fix result：前后比较确认三层容器降为两层，五十个重复角标被共享标题替代，信息结构和选中态保持清楚；未发现剩余 P0 / P1 / P2。P3：极小屏上共享标题较密，可在真实小程序设备测试时继续观察。
+
+## 菜单筛选与对账详情并排专项 · 2026-08-11
+
+- Source visual truth：订单详情目标 `/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-74615807-c03f-4594-8120-fd74eea8b4be.png`，`260 × 126 px`；菜单字号与密度目标 `/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-e0077a9d-9a65-4a0e-b899-aacaf7107759.png`，`830 × 1334 px`。
+- Implementation：`kith-inn/prototype-customer/index.html?step=menu` 与 `?step=reconcile`；浏览器全屏证据 `/tmp/kith-menu-filter-2026-08-11/menu-all.jpg`、`/tmp/kith-menu-filter-2026-08-11/menu-veg-filter.jpg`、`/tmp/kith-menu-filter-2026-08-11/reconcile-inline-detail.jpg`，均为 `1265 × 712 px`。
+- Viewport：Codex Desktop 浏览器为 `1280 × 720 CSS px`，手机框实测 `390 × 748 CSS px`，`deviceScaleFactor = 1`。菜单聚焦区域按相同 `386 × 541 px` 归一化后比较，证据 `/tmp/kith-menu-filter-2026-08-11/menu-density-comparison.jpg`；对账行聚焦比较为 `/tmp/kith-menu-filter-2026-08-11/reconcile-inline-comparison.jpg`。
+- P2 发现与修复：对账项把收款时间放在顾客名旁边，订单详情另占一行；菜单共享餐次标题、分类段落和外卡内边距叠加后纵向留白仍偏多；顶部“快速定位”已经变成了实际内容筛选，却没有正确的名称与开关状态。
+- 对账结果：九笔模拟记录全部移除时间；“订单详情 ›”替换原时间并与顾客名同行，金额继续固定在右侧。点击后只展开该笔订单的匹配说明，默认清单不直接暴露原因。
+- 菜单结果：菜名字号保持参考图对应的 `13px`，星期 `13px`、日期和餐次 `10px`；菜品格保持 `40px` 高，内边距收至 `2px`，外卡内边距从 `12px` 收至 `8px`，类别间距和餐次间距同步压缩。正文 `clientHeight = 590px`、全部菜品状态 `scrollHeight = 768px`。
+- 筛选交互：顶部改为“筛选”，荤菜、素菜、汤使用单选式分段按钮和 `aria-pressed`。默认显示 `50` 道菜；点“素菜”后只显示 `20` 道、共享餐次标签从 `30` 降为 `10`，并自动把详情选中切到“周一午饭素1：蒜蓉菜心”；再次点“素菜”恢复 `50` 道及未选中状态。
+- 字体、颜色与资产：继续使用系统中文字体、品牌暖白/深绿/红色、既有荤素汤左侧色条；筛选选中态只复用现有白色和深绿，没有新增图片、图标、渐变资产或外部依赖。文案同步从“快速定位”改为“筛选”，讲解页补充“再点一次取消筛选”。
+- 可访问性与运行验证：三个筛选按钮均有可读名称和准确 `aria-pressed`；订单详情按钮保留 `aria-expanded`，展开小太阳后唯一详情面板显示“待对应订单”和同金额候选原因。浏览器交互调用未返回运行时异常；`5` 个 HTML、`3` 段内联脚本解析通过，检查 `39` 个本地链接无缺失，`git diff --check` 通过。
+- Post-fix result：聚焦比较确认菜单字号接近参考图，同时减少无效边缘和组间留白；对账详情成功替换时间并进入姓名同行。未发现剩余 P0 / P1 / P2；P3：筛选后页面明显变短属于真实过滤结果，后续可在小程序真机确认用户是否需要额外的“已筛选”文字提示。
+
+## 菜名字号 15px 专项 · 2026-08-11
+
+- Source visual truth：调整前同一菜单初始状态 `/tmp/kith-menu-filter-2026-08-11/menu-all.jpg`，`1265 × 712 px`，菜名 `13px`；Implementation：调整后 `/tmp/kith-menu-filter-2026-08-11/menu-font-15.jpg`，`1265 × 712 px`。
+- Viewport 与比较：Codex Desktop 浏览器 `1280 × 720 CSS px`、手机框约 `390 × 748 CSS px`、`deviceScaleFactor = 1`；相同 `386 × 541 px` 手机区域的前后聚焦比较为 `/tmp/kith-menu-filter-2026-08-11/menu-font-13-to-15-comparison.jpg`，左侧 `13px`、右侧 `15px`。
+- 调整范围：仅把 `.weekly-dish-cell` 及菜单结果页覆盖规则从 `13px` 提升至 `15px`；星期、日期、餐次、筛选、卡片 `40px` 高度、间距、颜色、文案、图片与资产全部保持不变。
+- 溢出验证：默认 `50` 个菜品格均无水平或垂直溢出；现有菜名在三日并排宽度内保持完整，仍允许更长菜名自然换行。汤筛选继续显示 `10` 个菜品，`aria-pressed=true`，没有因字号变化破坏筛选。
+- Post-fix result：同状态比较确认菜名阅读性提升且信息密度、三日对比和类型筛选均保持稳定；未发现 P0 / P1 / P2，图片和品牌资产没有变化。
+
+## 菜名字号 17px 与格高 44px 专项 · 2026-08-11
+
+- 选择规则：按用户要求先试 `17px`，仅在真实页面出现换行时退回 `16px`；菜品格最小高度由 `40px` 提升至 `44px`。
+- 浏览器证据：`/tmp/kith-menu-filter-2026-08-11/menu-font-17-height-44.jpg`，Codex Desktop `1280 × 720 CSS px`、手机框约 `390 × 748 CSS px`、`deviceScaleFactor = 1`。
+- 结果：默认 `50` 个菜名在 `17px / 1.12` 行高下均保持单行，水平与垂直溢出为 `0`，因此无需退回 `16px`；素菜筛选仍显示 `20` 项、`aria-pressed=true` 且无溢出。
+- 影响范围：只调整菜名字号和菜品格高度，星期、日期、餐次、筛选、颜色、文案和图片资产保持不变；未发现 P0 / P1 / P2。
+
+## 默认荤菜与左侧餐次专项 · 2026-08-11
+
+- Implementation：`kith-inn/prototype-customer/index.html?step=menu`；默认状态证据 `/tmp/kith-menu-filter-2026-08-11/menu-default-meat-label-left-final.jpg`，Codex Desktop `1280 × 720 CSS px`、手机框约 `390 × 748 CSS px`、`deviceScaleFactor = 1`。
+- 默认状态：`showcaseMenuKindFilter = "meat"`，进入页面即显示 `20` 道荤菜，荤菜按钮 `aria-pressed=true`；再次点击荤菜恢复全部 `50` 道，再选择汤显示 `10` 道且状态正确。
+- 餐次布局：午饭和晚饭从菜品上方移到每组左侧；窄列显示“午 / 晚”，分别保留 `aria-label="午饭"` 与 `aria-label="晚饭"`，三天并排结构不变。
+- 字号选择：左侧餐次占用宽度后，`17px` 实测使“土豆烧牛肉”“清炖狮子头”换行，因此按用户规则退回 `16px`；缩短左侧标签后默认荤菜 `20` 个菜名均保持单行、溢出为 `0`，菜品格高度仍为 `44px`。
+- 影响范围：筛选取消逻辑、菜品选择、详情、颜色和图片资产保持不变；未发现 P0 / P1 / P2。
+
 final result: passed
