@@ -1600,6 +1600,28 @@
         font-size: 14px;
       }
 
+      .success-check {
+        display: grid;
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 14px;
+        place-items: center;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--green);
+        box-shadow: 0 8px 20px rgba(18, 126, 91, 0.18);
+      }
+
+      .success-check svg {
+        width: 27px;
+        height: 27px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
       .resident-section,
       .progress-card {
         margin-top: 14px;
@@ -2348,6 +2370,9 @@
         const report = residentRequestLabels[state.residentRequestType] || residentRequestLabels.recycle;
         return `
           <div class="resident-hero">
+            <span class="success-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m6.5 12.5 3.4 3.4 7.6-8" /></svg>
+            </span>
             <h2>上报成功</h2>
             <p>师傅会收到 6 楼的${report.short}提醒。</p>
             <div class="identified-floor">幸福苑 2 栋 · 6 楼</div>
