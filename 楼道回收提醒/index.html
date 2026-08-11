@@ -1600,26 +1600,6 @@
         font-size: 14px;
       }
 
-      .success-assurance {
-        display: flex;
-        margin-top: 14px;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        color: var(--green-dark);
-        font-size: 13px;
-        font-weight: 850;
-      }
-
-      .success-assurance::before {
-        content: "已完成";
-        padding: 4px 7px;
-        border-radius: 7px;
-        color: #fff;
-        background: var(--green);
-        font-size: 10px;
-      }
-
       .resident-section,
       .progress-card {
         margin-top: 14px;
@@ -2368,11 +2348,9 @@
         const report = residentRequestLabels[state.residentRequestType] || residentRequestLabels.recycle;
         return `
           <div class="resident-hero">
-            <div class="scan-visual" aria-hidden="true">已</div>
-            <h2>已告诉师傅</h2>
-            <p>${report.title}已经上报。</p>
+            <h2>上报成功</h2>
+            <p>师傅会收到 6 楼的${report.short}提醒。</p>
             <div class="identified-floor">幸福苑 2 栋 · 6 楼</div>
-            <div class="success-assurance">不补充也已经提醒成功</div>
           </div>
           <section class="resident-section" aria-labelledby="optional-heading-a">
             <div class="section-heading"><strong id="optional-heading-a">现场不好找？</strong><span class="optional-tag">可选</span></div>
