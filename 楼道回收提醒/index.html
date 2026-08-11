@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据，不是生产代码。
-      本轮问题：扫码立即成功后，可选照片和留言应直接展开、放入底部面板，还是围绕处理轨迹呈现？
+      本轮问题：住户每次扫码直接上报时，成功回执应保留哪些必要信息？
       三种住户方案通过 ?view=resident&variant=A / B / C 切换；底部工具条仅用于评估原型。
       师傅端保留 main 中已选定的电梯楼层面板，不在本轮重新选型。
       运行：python3 -m http.server 4173
@@ -1250,10 +1250,10 @@
         border: 4px solid transparent;
         border-top-color: var(--green);
         border-radius: 50%;
-        animation: spin 0.8s linear infinite;
+        animation: scan-spin 0.8s linear infinite;
       }
 
-      @keyframes spin { to { transform: rotate(360deg); } }
+      @keyframes scan-spin { to { transform: rotate(360deg); } }
 
       .resident-result h2 {
         margin: 0;
@@ -1724,54 +1724,45 @@
         box-shadow: 0 10px 22px rgba(22, 116, 81, 0.18);
       }
 
-      .variant-b .resident-hero { padding: 18px; text-align: left; }
-      .hero-status-row { display: grid; grid-template-columns: 58px 1fr; gap: 13px; align-items: center; }
-      .variant-b .resident-hero .scan-visual { width: 58px; height: 58px; margin: 0; border-radius: 18px; font-size: 21px; }
-      .variant-b .resident-hero .identified-floor { margin-top: 13px; }
-      .variant-b .success-assurance { justify-content: flex-start; }
-      .variant-b .success-assurance::before { content: "说明"; }
+      .variant-b .resident-hero { padding: 23px 20px; text-align: left; }
 
-      .round-context-note {
+      .report-summary {
         display: grid;
-        margin-top: 14px;
-        padding: 14px 15px;
-        gap: 4px;
-        border: 1px solid #d9e5dd;
-        border-radius: 16px;
-        background: #eef6f1;
+        margin-top: 20px;
+        border-top: 1px solid #e6ebe7;
       }
 
-      .round-context-note strong {
-        color: var(--green-dark);
-        font-size: 14px;
+      .report-row {
+        display: grid;
+        padding: 13px 0;
+        grid-template-columns: 54px 1fr;
+        gap: 12px;
+        border-bottom: 1px solid #e6ebe7;
+        align-items: baseline;
       }
 
-      .round-context-note span {
+      .report-row span {
         color: var(--muted);
-        font-size: 12px;
-        line-height: 1.5;
+        font-size: 13px;
+        font-weight: 800;
       }
 
-      .round-add-button {
-        width: 100%;
-        min-height: 54px;
-        margin-top: 12px;
-        border: 2px solid #ef8b61;
-        border-radius: 14px;
-        cursor: pointer;
-        color: #91421f;
-        background: #fff4ed;
+      .report-row strong {
         font-size: 15px;
-        font-weight: 950;
+        line-height: 1.4;
       }
 
-      .round-action-note {
-        margin: 7px 4px 0;
-        color: var(--muted);
-        font-size: 11px;
-        line-height: 1.45;
-        text-align: center;
+      .report-loader {
+        width: 36px;
+        height: 36px;
+        margin: 2px 0 18px;
+        border: 4px solid #dceae2;
+        border-top-color: var(--green);
+        border-radius: 50%;
+        animation: report-spin 0.8s linear infinite;
       }
+
+      @keyframes report-spin { to { transform: rotate(360deg); } }
 
       .progress-card > strong { display: block; margin-bottom: 11px; font-size: 16px; }
       .progress-step {
@@ -1889,7 +1880,7 @@
         <section class="story" aria-labelledby="page-title">
           <div class="eyebrow">楼道协作 · 楼道收一收</div>
           <h1 id="page-title">扫一下，<br />师傅就知道。</h1>
-          <p class="lead">住户扫码进入本层当前的回收轮次：没有进行中的轮次才自动创建；已经在等待时只显示进展，不会重复提醒。</p>
+          <p class="lead">住户每次扫码都直接上报。住户端只确认位置和事项；师傅在待办里处理，完成后勾掉。</p>
 
           <div class="flow" aria-label="产品主流程">
             <div class="flow-item">
@@ -1903,26 +1894,24 @@
             <div class="flow-item">
               <div class="flow-number">2</div>
               <div class="flow-copy">
-                <strong>按当前轮次分流</strong>
-                <span>首次创建，重新打开或再扫只看进展</span>
+                <strong>直接上报成功</strong>
+                <span>不填表，也不需要查看处理进度</span>
               </div>
               <span class="flow-arrow" aria-hidden="true">→</span>
             </div>
             <div class="flow-item">
               <div class="flow-number">3</div>
               <div class="flow-copy">
-                <strong>明确新增才计一次</strong>
-                <span>只有又放了可回收物，才增加本轮待收确认</span>
+                <strong>师傅完成待办</strong>
+                <span>处理完一键完成，后续上报生成新待办</span>
               </div>
               <span class="flow-arrow" aria-hidden="true">✓</span>
             </div>
           </div>
 
           <div class="demo-actions" aria-label="原型演示操作">
-            <button class="demo-button primary" type="button" data-action="first-scan">演示首次扫码</button>
-            <button class="demo-button secondary" type="button" data-action="reopen-round">演示重新打开</button>
-            <button class="demo-button secondary" type="button" data-action="collector">打开师傅端</button>
-            <button class="demo-button secondary" type="button" data-action="collected">演示已经收好</button>
+            <button class="demo-button primary" type="button" data-action="scan">体验扫码上报</button>
+            <button class="demo-button secondary" type="button" data-action="collector">打开师傅待办</button>
             <button class="demo-button ghost" type="button" data-action="reset">恢复演示数据</button>
           </div>
 
@@ -1978,7 +1967,7 @@
 
       const residentVariants = {
         A: { label: "A — 成功页轻补充" },
-        B: { label: "B — 底部面板补充" },
+        B: { label: "B — 极简上报回执" },
         C: { label: "C — 进度回执页" },
       };
 
@@ -1988,7 +1977,7 @@
         variant: getVariantFromUrl(),
         scanPhase: getViewFromUrl() === "resident" ? "success" : "idle",
         residentStatus: "waiting",
-        residentEntry: getViewFromUrl() === "resident" ? "reopened" : "none",
+        residentEntry: getViewFromUrl() === "resident" ? "reported" : "none",
         completedRoundCount: 0,
         residentPhoto: false,
         residentMessage: "",
@@ -2112,7 +2101,7 @@
               return `
                 <div class="floor-control-row">
                   <div class="floor-control-copy">
-                    <span class="floor-control-meta">${task.floor} 楼 · 本轮 ${task.count} 次待收确认</span>
+                    <span class="floor-control-meta">${task.floor} 楼 · 待处理 · ${task.count} 次上报</span>
                     <strong>${request.taskTitle}${task.hasPhoto ? ' <span class="floor-control-note">· 附照片</span>' : ""}</strong>
                   </div>
                   <button class="floor-control-button" type="button" data-clear-task="${task.id}">${request.completion}</button>
@@ -2157,7 +2146,7 @@
                   if (!floorTasks.length) return `<div class="floor-cell"><strong>${floor} 楼</strong><span>无事</span></div>`;
                   const selectedClass = state.selectedFloor === floor ? " selected" : "";
                   const summary = floorTasks.length === 1
-                    ? `${requestFor(floorTasks[0]).short} · ${floorTasks[0].latest}${floorTasks[0].count > 1 ? ` · ${floorTasks[0].count} 次` : ""}`
+                    ? `${requestFor(floorTasks[0]).short} · ${floorTasks[0].latest}${floorTasks[0].count > 1 ? ` · ${floorTasks[0].count} 次上报` : ""}`
                     : `${floorTasks.length} 项待处理`;
                   return `<button class="floor-cell pending${selectedClass}" type="button" data-select-floor="${floor}"><strong>${floor} 楼</strong><span>${summary}</span></button>`;
                 }).join("")}
@@ -2310,7 +2299,7 @@
 
       function renderSupplementPreview() {
         if (!state.residentPhoto && !state.residentMessage) return "";
-        return `<div class="supplement-preview" aria-label="本轮已补充的信息">${renderPhotoPreview()}${renderMessagePreview()}</div>`;
+        return `<div class="supplement-preview" aria-label="本次上报的补充信息">${renderPhotoPreview()}${renderMessagePreview()}</div>`;
       }
 
       function renderMessageEditor() {
@@ -2360,53 +2349,18 @@
       }
 
       function renderResidentVariantB() {
-        const task = residentTask();
-        const roundCount = task?.count || 1;
-        const entryCopy = {
-          created: {
-            symbol: "已",
-            title: "已告诉师傅",
-            description: "已为 6 楼创建这一轮待收。",
-            assurance: "现在可以离开",
-          },
-          reopened: {
-            symbol: "进",
-            title: "6 楼正在等待收取",
-            description: "你看到的是同一轮回收进展，没有重复提醒。",
-            assurance: "重新打开或再扫都不会增加次数",
-          },
-          added: {
-            symbol: "+1",
-            title: "已记入这一轮",
-            description: `本轮现在有 ${roundCount} 次待收确认。`,
-            assurance: "师傅仍然只看到 6 楼这一轮",
-          },
-        }[state.residentEntry] || {
-          symbol: "进",
-          title: "6 楼正在等待收取",
-          description: "你看到的是同一轮回收进展，没有重复提醒。",
-          assurance: "重新打开或再扫都不会增加次数",
-        };
-
         return `
           <div class="resident-hero">
-            <div class="hero-status-row">
-              <div class="scan-visual" aria-hidden="true">${entryCopy.symbol}</div>
-              <div><h2>${entryCopy.title}</h2><p>${entryCopy.description}</p></div>
+            <h2>上报成功</h2>
+            <p>师傅会收到 6 楼的待回收提醒。</p>
+            <div class="report-summary" aria-label="本次上报内容">
+              <div class="report-row"><span>位置</span><strong>幸福苑 2 栋 · 6 楼</strong></div>
+              <div class="report-row"><span>事项</span><strong>有可回收物待收</strong></div>
             </div>
-            <div class="identified-floor">幸福苑 2 栋 · 6 楼</div>
-            <div class="success-assurance">${entryCopy.assurance}</div>
           </div>
-          ${renderResidentProgress(false)}
-          <div class="round-context-note">
-            <strong>本轮已有 ${roundCount} 次待收确认</strong>
-            <span>重新打开应用或再次扫码，只查看进展，不会增加次数。</span>
-          </div>
-          <button class="round-add-button" type="button" data-action="add-more">这里又多了可回收物</button>
-          <p class="round-action-note">只有确实又放了东西时才点，内容会并入这一轮。</p>
           ${renderSupplementPreview()}
-          <button class="open-sheet-button" type="button" data-action="open-sheet">${state.residentPhoto || state.residentMessage ? "查看或修改现场补充" : "补充现场信息（可选）"}</button>
-          ${state.residentEntry === "created" ? `<div class="withdraw-wrap"><button class="withdraw-button" type="button" data-action="withdraw">扫错了，撤回这次提醒</button></div>` : ""}`;
+          <button class="open-sheet-button" type="button" data-action="open-sheet">${state.residentPhoto || state.residentMessage ? "查看或修改补充" : "补充照片或留言（可选）"}</button>
+          <div class="withdraw-wrap"><button class="withdraw-button" type="button" data-action="withdraw">上报错了，撤回</button></div>`;
       }
 
       function renderResidentVariantC() {
@@ -2435,7 +2389,7 @@
           <div class="resident-sheet-backdrop">
             <section class="resident-sheet" aria-labelledby="sheet-title">
               <div class="sheet-heading">
-                <div><h3 id="sheet-title">补充现场信息</h3><p>完全可选，不影响已经发出的提醒。</p></div>
+                <div><h3 id="sheet-title">补充现场信息</h3><p>上报已经成功，补充完全可选。</p></div>
                 <button class="sheet-close" type="button" data-action="close-sheet">关闭</button>
               </div>
               <div class="sheet-field">
@@ -2478,15 +2432,14 @@
         if (isSending || isWithdrawn) {
           content = `
             <div class="resident-hero">
-              <div class="scan-visual${isSending ? " sending" : ""}" aria-hidden="true">${isSending ? "传" : "撤"}</div>
-              <h2>${isSending ? "正在告诉师傅…" : "已撤回这次提醒"}</h2>
-              <p>${isSending ? "不用填写任何东西，也不用选楼层。" : "6 楼不会因为这次扫码新增待收提醒。"}</p>
-              <div class="identified-floor">幸福苑 2 栋 · 6 楼</div>
+              ${isSending ? `<div class="report-loader" aria-hidden="true"></div>` : ""}
+              <h2>${isSending ? "正在上报…" : "已撤回"}</h2>
+              <p>${isSending ? "幸福苑 2 栋 · 6 楼" : "这次上报不会出现在师傅的待办里。"}</p>
             </div>`;
-        } else if (state.residentStatus === "collected") {
-          content = renderResidentCollected();
         } else if (state.variant === "B") {
           content = renderResidentVariantB();
+        } else if (state.residentStatus === "collected") {
+          content = renderResidentCollected();
         } else if (state.variant === "C") {
           content = renderResidentVariantC();
         } else {
@@ -2633,14 +2586,13 @@
       }
 
       /* #39 住户端状态操作：覆盖 main 版的选事项表单流程。 */
-      function startFirstScan() {
+      function startScanReport() {
         clearTimeout(state.scanTimer);
-        state.tasks = state.tasks.filter(item => item.id !== "6-recycle");
         state.beforeScan = structuredClone(state.tasks);
         state.view = "resident";
         state.scanPhase = "sending";
         state.residentStatus = "waiting";
-        state.residentEntry = "created";
+        state.residentEntry = "reported";
         state.completedRoundCount = 0;
         state.residentPhoto = false;
         state.residentMessage = "";
@@ -2652,42 +2604,10 @@
         render();
 
         state.scanTimer = setTimeout(() => {
-          ensureResidentTask(false);
+          ensureResidentTask(true);
           state.scanPhase = "success";
           render();
         }, 850);
-      }
-
-      function reopenRound() {
-        clearTimeout(state.scanTimer);
-        state.view = "resident";
-        state.residentEditor = null;
-        state.residentSheetOpen = false;
-        state.lastCleared = null;
-
-        if (state.residentStatus !== "collected" && !residentTask()) {
-          startFirstScan();
-          return;
-        }
-
-        state.scanPhase = "success";
-        state.residentEntry = "reopened";
-        syncViewToUrl();
-        render();
-      }
-
-      function addMoreToRound() {
-        if (state.residentStatus === "collected" || !residentTask()) {
-          startFirstScan();
-          return;
-        }
-        ensureResidentTask(true);
-        state.residentEntry = "added";
-        render();
-      }
-
-      function startNewRound() {
-        startFirstScan();
       }
 
       function withdrawScan() {
@@ -2762,9 +2682,7 @@
         const actionButton = event.target.closest("[data-action]");
         if (!actionButton) return;
         const action = actionButton.dataset.action;
-        if (action === "scan" || action === "first-scan") startFirstScan();
-        if (action === "reopen-round") reopenRound();
-        if (action === "add-more") addMoreToRound();
+        if (action === "scan") startScanReport();
         if (action === "collector") {
           clearTimeout(state.scanTimer);
           clearTimeout(state.submitTimer);
@@ -2778,8 +2696,7 @@
         if (action === "withdraw") withdrawScan();
         if (action === "undo") undoClear();
         if (action === "reset") resetDemo();
-        if (action === "collected") showCollectedFeedback();
-        if (action === "new-round") startNewRound();
+        if (action === "new-round") startScanReport();
         if (action === "toggle-photo") {
           state.residentPhoto = !state.residentPhoto;
           syncResidentSupplement();
