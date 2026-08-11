@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="楼道收一收是近邻互助组中的楼道回收提醒应用：住户扫码即通知师傅，成功后可选补充现场照片或留言。"
+      content="楼道收一收是近邻互助组中的楼道提醒应用：住户扫码后选择回收或打扫需求，随即上报给师傅。"
     />
     <title>楼道收一收 · 近邻互助组</title>
     <link rel="stylesheet" href="../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据，不是生产代码。
-      本轮问题：住户每次扫码直接上报时，成功回执应保留哪些必要信息？
+      本轮问题：扫码识别楼层后，如何用一次选择区分回收和打扫需求？
       三种住户方案通过 ?view=resident&variant=A / B / C 切换；底部工具条仅用于评估原型。
       师傅端保留 main 中已选定的电梯楼层面板，不在本轮重新选型。
       运行：python3 -m http.server 4173
@@ -1032,6 +1032,29 @@
         font-size: 24px;
       }
 
+      .resident-report-choice {
+        min-height: 104px;
+        grid-template-columns: 1fr 24px;
+      }
+
+      .report-choice-heading {
+        padding: 8px 2px 0;
+      }
+
+      .report-choice-heading h2 {
+        margin: 18px 0 0;
+        font-size: 29px;
+        line-height: 1.2;
+        letter-spacing: -0.045em;
+      }
+
+      .report-choice-heading p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.55;
+      }
+
       .request-summary {
         display: grid;
         margin-top: 18px;
@@ -1524,7 +1547,7 @@
 
       /* ============================================================
          ISSUE #39 · 三种住户成功后补充方案
-         只改变住户信息层级，不改变扫码即成功和楼层聚合状态。
+         住户先选择回收或打扫，再立即上报；师傅端保持原楼层面板。
          ============================================================ */
       .resident-screen {
         position: relative;
@@ -1880,7 +1903,7 @@
         <section class="story" aria-labelledby="page-title">
           <div class="eyebrow">楼道协作 · 楼道收一收</div>
           <h1 id="page-title">扫一下，<br />师傅就知道。</h1>
-          <p class="lead">住户每次扫码都直接上报。住户端只确认位置和事项；师傅在待办里处理，完成后勾掉。</p>
+          <p class="lead">住户扫码自动识别楼层，只需选择“回收”或“打扫”，随即上报给师傅。</p>
 
           <div class="flow" aria-label="产品主流程">
             <div class="flow-item">
@@ -1894,23 +1917,23 @@
             <div class="flow-item">
               <div class="flow-number">2</div>
               <div class="flow-copy">
-                <strong>直接上报成功</strong>
-                <span>不填表，也不需要查看处理进度</span>
+                <strong>选择要处理的事</strong>
+                <span>回收或打扫，只点一次</span>
               </div>
               <span class="flow-arrow" aria-hidden="true">→</span>
             </div>
             <div class="flow-item">
               <div class="flow-number">3</div>
               <div class="flow-copy">
-                <strong>师傅完成待办</strong>
-                <span>处理完一键完成，后续上报生成新待办</span>
+                <strong>自动上报成功</strong>
+                <span>不填表，也不需要查看处理进度</span>
               </div>
               <span class="flow-arrow" aria-hidden="true">✓</span>
             </div>
           </div>
 
           <div class="demo-actions" aria-label="原型演示操作">
-            <button class="demo-button primary" type="button" data-action="scan">体验扫码上报</button>
+            <button class="demo-button primary" type="button" data-action="scan">体验住户扫码</button>
             <button class="demo-button secondary" type="button" data-action="collector">打开师傅待办</button>
             <button class="demo-button ghost" type="button" data-action="reset">恢复演示数据</button>
           </div>
@@ -1965,6 +1988,19 @@
         },
       };
 
+      const residentRequestLabels = {
+        recycle: {
+          short: "回收",
+          title: "有垃圾要收走",
+          description: "纸箱、瓶子等已经放好",
+        },
+        clean: {
+          short: "打扫",
+          title: "楼道需要打扫",
+          description: "地面或公共区域需要清理",
+        },
+      };
+
       const residentVariants = {
         A: { label: "A — 成功页轻补充" },
         B: { label: "B — 极简上报回执" },
@@ -1975,9 +2011,10 @@
         tasks: structuredClone(initialTasks),
         view: getViewFromUrl(),
         variant: getVariantFromUrl(),
-        scanPhase: getViewFromUrl() === "resident" ? "success" : "idle",
+        scanPhase: getViewFromUrl() === "resident" ? "choice" : "idle",
         residentStatus: "waiting",
-        residentEntry: getViewFromUrl() === "resident" ? "reported" : "none",
+        residentEntry: "none",
+        residentRequestType: null,
         completedRoundCount: 0,
         residentPhoto: false,
         residentMessage: "",
@@ -2011,12 +2048,14 @@
         history.replaceState({}, "", url);
       }
 
-      function residentTask() {
-        return state.tasks.find(item => item.id === "6-recycle");
+      function residentTask(type = state.residentRequestType) {
+        if (!type) return null;
+        return state.tasks.find(item => item.id === `6-${type}`);
       }
 
-      function ensureResidentTask(increment = false) {
-        const existing = residentTask();
+      function ensureResidentTask(increment = false, type = state.residentRequestType) {
+        if (!requestTypes[type]) return null;
+        const existing = residentTask(type);
         if (existing) {
           if (increment) existing.count += 1;
           existing.latest = "刚刚";
@@ -2026,9 +2065,9 @@
         }
 
         const task = {
-          id: "6-recycle",
+          id: `6-${type}`,
           floor: 6,
-          type: "recycle",
+          type,
           latest: "刚刚",
           first: "刚刚",
           count: 1,
@@ -2048,7 +2087,6 @@
 
       if (state.view === "resident") {
         state.beforeScan = structuredClone(state.tasks);
-        ensureResidentTask();
       }
 
       function sortedTasks() {
@@ -2327,11 +2365,12 @@
       }
 
       function renderResidentVariantA() {
+        const report = residentRequestLabels[state.residentRequestType] || residentRequestLabels.recycle;
         return `
           <div class="resident-hero">
             <div class="scan-visual" aria-hidden="true">已</div>
             <h2>已告诉师傅</h2>
-            <p>可回收物放好就可以放心走了。</p>
+            <p>${report.title}已经上报。</p>
             <div class="identified-floor">幸福苑 2 栋 · 6 楼</div>
             <div class="success-assurance">不补充也已经提醒成功</div>
           </div>
@@ -2348,14 +2387,31 @@
           <div class="withdraw-wrap"><button class="withdraw-button" type="button" data-action="withdraw">扫错了，撤回这次提醒</button></div>`;
       }
 
+      function renderResidentReportChoice() {
+        return `
+          <div class="report-choice-heading">
+            <div class="resident-location">已识别：幸福苑 2 栋 · 6 楼</div>
+            <h2>现在需要什么？</h2>
+            <p>选一项，就会直接上报给师傅。</p>
+          </div>
+          <div class="request-choice-list" aria-label="选择上报类型">
+            ${Object.entries(residentRequestLabels).map(([type, report]) => `
+              <button class="request-choice resident-report-choice ${type}" type="button" data-report-type="${type}">
+                <span class="choice-copy"><strong>${report.title}</strong><span>${report.description}</span></span>
+                <span class="choice-arrow" aria-hidden="true">›</span>
+              </button>`).join("")}
+          </div>`;
+      }
+
       function renderResidentVariantB() {
+        const report = residentRequestLabels[state.residentRequestType] || residentRequestLabels.recycle;
         return `
           <div class="resident-hero">
             <h2>上报成功</h2>
-            <p>师傅会收到 6 楼的待回收提醒。</p>
+            <p>师傅会收到 6 楼的${report.short}提醒。</p>
             <div class="report-summary" aria-label="本次上报内容">
               <div class="report-row"><span>位置</span><strong>幸福苑 2 栋 · 6 楼</strong></div>
-              <div class="report-row"><span>事项</span><strong>有可回收物待收</strong></div>
+              <div class="report-row"><span>事项</span><strong>${report.title}</strong></div>
             </div>
           </div>
           ${renderSupplementPreview()}
@@ -2425,16 +2481,20 @@
       }
 
       function renderResident() {
+        const isChoosing = state.scanPhase === "choice";
         const isSending = state.scanPhase === "sending";
         const isWithdrawn = state.scanPhase === "withdrawn";
+        const report = residentRequestLabels[state.residentRequestType];
         let content;
 
-        if (isSending || isWithdrawn) {
+        if (isChoosing) {
+          content = renderResidentReportChoice();
+        } else if (isSending || isWithdrawn) {
           content = `
             <div class="resident-hero">
               ${isSending ? `<div class="report-loader" aria-hidden="true"></div>` : ""}
               <h2>${isSending ? "正在上报…" : "已撤回"}</h2>
-              <p>${isSending ? "幸福苑 2 栋 · 6 楼" : "这次上报不会出现在师傅的待办里。"}</p>
+              <p>${isSending ? `${report?.title || "楼道事项"} · 幸福苑 2 栋 · 6 楼` : "这次上报不会出现在师傅的待办里。"}</p>
             </div>`;
         } else if (state.variant === "B") {
           content = renderResidentVariantB();
@@ -2454,7 +2514,7 @@
               <span></span>
             </header>
             <div class="resident-scroll"><div class="resident-content">${content}</div></div>
-            ${state.variant === "B" && !isSending && !isWithdrawn && state.residentStatus !== "collected" ? renderResidentSheet() : ""}
+            ${state.variant === "B" && state.scanPhase === "success" && state.residentStatus !== "collected" ? renderResidentSheet() : ""}
           </div>`;
       }
 
@@ -2471,7 +2531,7 @@
       function clearTask(taskId) {
         const task = state.tasks.find(item => item.id === taskId);
         if (!task) return;
-        if (taskId === "6-recycle") {
+        if (task.floor === 6) {
           state.completedRoundCount = task.count;
           state.residentStatus = "collected";
           state.residentEntry = "reopened";
@@ -2487,7 +2547,7 @@
         if (!state.tasks.some(item => item.id === state.lastCleared.id)) {
           state.tasks.push(state.lastCleared);
         }
-        if (state.lastCleared.id === "6-recycle") {
+        if (state.lastCleared.floor === 6) {
           state.residentStatus = "waiting";
           state.completedRoundCount = 0;
           state.residentEntry = "reopened";
@@ -2586,13 +2646,14 @@
       }
 
       /* #39 住户端状态操作：覆盖 main 版的选事项表单流程。 */
-      function startScanReport() {
+      function startResidentChoice() {
         clearTimeout(state.scanTimer);
         state.beforeScan = structuredClone(state.tasks);
         state.view = "resident";
-        state.scanPhase = "sending";
+        state.scanPhase = "choice";
         state.residentStatus = "waiting";
-        state.residentEntry = "reported";
+        state.residentEntry = "none";
+        state.residentRequestType = null;
         state.completedRoundCount = 0;
         state.residentPhoto = false;
         state.residentMessage = "";
@@ -2602,9 +2663,18 @@
         state.lastCleared = null;
         syncViewToUrl();
         render();
+      }
 
+      function submitResidentReport(type) {
+        if (!residentRequestLabels[type]) return;
+        clearTimeout(state.scanTimer);
+        state.residentRequestType = type;
+        state.scanPhase = "sending";
+        state.residentStatus = "waiting";
+        state.residentEntry = "reported";
+        render();
         state.scanTimer = setTimeout(() => {
-          ensureResidentTask(true);
+          ensureResidentTask(true, type);
           state.scanPhase = "success";
           render();
         }, 850);
@@ -2651,6 +2721,7 @@
         state.scanPhase = "idle";
         state.residentStatus = "waiting";
         state.residentEntry = "none";
+        state.residentRequestType = null;
         state.completedRoundCount = 0;
         state.residentPhoto = false;
         state.residentMessage = "";
@@ -2679,10 +2750,16 @@
           return;
         }
 
+        const reportTypeButton = event.target.closest("[data-report-type]");
+        if (reportTypeButton) {
+          submitResidentReport(reportTypeButton.dataset.reportType);
+          return;
+        }
+
         const actionButton = event.target.closest("[data-action]");
         if (!actionButton) return;
         const action = actionButton.dataset.action;
-        if (action === "scan") startScanReport();
+        if (action === "scan") startResidentChoice();
         if (action === "collector") {
           clearTimeout(state.scanTimer);
           clearTimeout(state.submitTimer);
@@ -2696,7 +2773,7 @@
         if (action === "withdraw") withdrawScan();
         if (action === "undo") undoClear();
         if (action === "reset") resetDemo();
-        if (action === "new-round") startScanReport();
+        if (action === "new-round") startResidentChoice();
         if (action === "toggle-photo") {
           state.residentPhoto = !state.residentPhoto;
           syncResidentSupplement();
@@ -2766,12 +2843,11 @@
         state.residentEditor = null;
         state.residentSheetOpen = false;
         if (state.view === "resident") {
-          state.scanPhase = "success";
-          if (state.residentStatus !== "collected") {
-            state.residentStatus = "waiting";
-            ensureResidentTask();
-          }
-          state.residentEntry = "reopened";
+          state.scanPhase = "choice";
+          state.residentStatus = "waiting";
+          state.residentEntry = "none";
+          state.residentRequestType = null;
+          state.beforeScan = structuredClone(state.tasks);
         }
         render();
       });
