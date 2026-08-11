@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>近邻互助组 · 实施对照原型</title>
+    <link rel="stylesheet" href="../../prototype-nav.css" />
     <!--
       近邻互助组 · 面向工程师的实施对照原型（IRP / PROTOTYPE）
       问题：工程师能否逐条对照 User Story，理解角色、状态、权限、数据与验收边界？
@@ -49,7 +50,7 @@
       .shell.pioneer, .shell.confirm, .shell.mycards, .shell.discover, .shell.provide, .shell.home { background: #f8f5eb; }
       .shell.requester { background: #f9f1f1; }
 
-      .hero { max-width: 1120px; margin: 0 auto 20px; padding-right: 220px; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+      .hero { max-width: 1120px; margin: 0 auto 20px; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
       .hero-main h1 { margin: 0; font-size: clamp(28px, 4vw, 40px); line-height: 1.1; letter-spacing: -0.03em; }
       .hero-main p { margin: 12px 0 0; color: var(--muted); font-size: 16px; line-height: 1.6; max-width: 640px; }
       .badge { flex: 0 0 auto; padding: 8px 14px; border: 1px solid #ddd6c8; border-radius: 999px; background: rgba(255,255,255,0.7); color: #7a6b4e; font-size: 12px; font-weight: 700; }
@@ -366,27 +367,21 @@
       .switcher { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1d211e; color: #fff; border-radius: 999px; padding: 8px; display: flex; align-items: center; gap: 10px; box-shadow: 0 12px 32px rgba(0,0,0,0.25); z-index: 20; }
       .switcher button { width: 38px; height: 38px; border: 0; border-radius: 50%; background: rgba(255,255,255,0.12); color: #fff; font-size: 18px; }
       .switcher-label { min-width: 200px; text-align: center; font-size: 13px; font-weight: 800; }
-      .page-switcher { position: fixed; z-index: 21; top: 18px; right: 20px; display: flex; gap: 4px; padding: 5px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.9); box-shadow: 0 8px 22px rgba(0,0,0,0.08); backdrop-filter: blur(10px); }
-      .page-switcher a { padding: 7px 10px; border-radius: 999px; color: var(--muted); text-decoration: none; font-size: 10px; font-weight: 850; white-space: nowrap; }
-      .page-switcher a.active { color: #fff; background: var(--ink); }
+      .audience-switch { position: fixed; z-index: 21; top: 18px; right: 20px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.9); color: var(--muted); text-decoration: none; font-size: 11px; font-weight: 850; box-shadow: 0 8px 22px rgba(0,0,0,0.08); backdrop-filter: blur(10px); }
 
       @media (max-width: 960px) {
-        .hero { padding-right: 0; }
         .stage { grid-template-columns: 1fr; }
         .status-panel { position: static; }
         .journey.flow-4, .journey.flow-5, .journey.flow-6 { grid-template-columns: repeat(2, 1fr); }
         .scenario-switch { flex-direction: column; }
         .phone-stage { min-height: auto; padding: 20px; }
-        .page-switcher { position: static; width: max-content; max-width: calc(100% - 36px); margin: 14px 18px 0; overflow-x: auto; }
+        .audience-switch { position: static; display: inline-block; margin: 14px 18px 0; }
       }
     </style>
   </head>
   <body>
-    <nav class="page-switcher" aria-label="切换展示页面">
-      <a href="../prototype-customer/">客户体验</a>
-      <a class="active" href="./">实施对照</a>
-      <a href="../街坊味-一页介绍.html">街坊味</a>
-    </nav>
+    <a class="prototype-home-link" href="../../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
+    <a class="audience-switch" href="../prototype-customer/">切到客户体验原型 →</a>
     <div id="app"></div>
     <script>
       const scenarios = {

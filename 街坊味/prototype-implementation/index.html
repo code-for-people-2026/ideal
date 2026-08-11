@@ -67,14 +67,14 @@
       .section-kicker { color: var(--red); font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
       .section-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin: 12px 0 22px; }
       .section-head h2 { margin: 0; font-size: clamp(32px, 5vw, 52px); }
-      .section-head a { color: var(--green); font-size: 13px; font-weight: 850; }
+      .section-source { color: var(--green); font-size: 13px; font-weight: 850; }
       .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
       .flow-card { min-height: 180px; padding: 18px; border: 1px solid var(--line); border-radius: 20px; background: rgba(255,255,255,.78); }
       .flow-number { color: var(--red); font-size: 11px; font-weight: 900; letter-spacing: .06em; }
       .flow-card h3 { margin: 12px 0 7px; font-size: 19px; }
       .flow-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.6; }
       .stories { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 15px; }
-      .stories a { padding: 5px 8px; border-radius: 999px; background: var(--green-soft); color: var(--green); text-decoration: none; font-size: 10px; font-weight: 900; }
+      .stories span { padding: 5px 8px; border-radius: 999px; background: var(--green-soft); color: var(--green); font-size: 10px; font-weight: 900; }
       .docs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 22px; }
       .doc { padding: 16px 18px; border: 1px dashed #cdbfac; border-radius: 18px; background: rgba(255,255,255,.5); text-decoration: none; }
       .doc strong { display: block; }
@@ -121,19 +121,19 @@
 
       <section class="blueprint">
         <div class="section-kicker">System journey</div>
-        <div class="section-head"><h2>从准备到对账的六段闭环</h2><a href="../user-stories.md">打开完整 User Stories</a></div>
+        <div class="section-head"><h2>从准备到对账的六段闭环</h2><span class="section-source">需求来源：完整 User Stories</span></div>
         <div class="flow">
-          <article class="flow-card"><div class="flow-number">01 · 准备</div><h3>菜品与经营边界</h3><p>桃子录入菜品池，确认荤、素、汤分类，并维护配送小区。</p><div class="stories"><a href="../user-stories.md">US-A01—A04</a></div></article>
-          <article class="flow-card"><div class="flow-number">02 · 排菜</div><h3>周菜单生成与微调</h3><p>从启用菜品随机生成餐次；软规则可放宽，换一道只影响目标菜。</p><div class="stories"><a href="../user-stories.md">US-B01—B04</a></div></article>
-          <article class="flow-card"><div class="flow-number">03 · 开放</div><h3>餐次开放与分享</h3><p>开放前确认菜单、价格、截止与容量；分享卡片携带正确餐次上下文。</p><div class="stories"><a href="../user-stories.md">US-C01—C05</a></div></article>
-          <article class="flow-card"><div class="flow-number">04 · 下单</div><h3>顾客关系与订单</h3><p>首单申请与正式订单分开；已确认顾客可自助下单，桃子也可代下单。</p><div class="stories"><a href="../user-stories.md">US-D01—D06</a><a href="../user-stories.md">US-E01—E06</a></div></article>
-          <article class="flow-card"><div class="flow-number">05 · 履约</div><h3>制作份数与配送</h3><p>餐次订单汇总成制作份数，再按小区与地址组织配送清单。</p><div class="stories"><a href="../user-stories.md">US-F01—F04</a></div></article>
-          <article class="flow-card"><div class="flow-number">06 · 收款</div><h3>线下付款与人工确认</h3><p>平台不接支付、不保存收款截图；桃子按订单编号或顾客查找并手工标记。</p><div class="stories"><a href="../user-stories.md">US-G01—G04</a><a href="../user-stories.md">US-H01—H02</a></div></article>
+          <article class="flow-card"><div class="flow-number">01 · 准备</div><h3>菜品与经营边界</h3><p>桃子录入菜品池，确认荤、素、汤分类，并维护配送小区。</p><div class="stories"><span>US-A01—A04</span></div></article>
+          <article class="flow-card"><div class="flow-number">02 · 排菜</div><h3>周菜单生成与微调</h3><p>从启用菜品随机生成餐次；软规则可放宽，换一道只影响目标菜。</p><div class="stories"><span>US-B01—B04</span></div></article>
+          <article class="flow-card"><div class="flow-number">03 · 开放</div><h3>餐次开放与分享</h3><p>开放前确认菜单、价格、截止与容量；分享卡片携带正确餐次上下文。</p><div class="stories"><span>US-C01—C05</span></div></article>
+          <article class="flow-card"><div class="flow-number">04 · 下单</div><h3>顾客关系与订单</h3><p>首单申请与正式订单分开；已确认顾客可自助下单，桃子也可代下单。</p><div class="stories"><span>US-D01—D06</span><span>US-E01—E06</span></div></article>
+          <article class="flow-card"><div class="flow-number">05 · 履约</div><h3>制作份数与配送</h3><p>餐次订单汇总成制作份数，再按小区与地址组织配送清单。</p><div class="stories"><span>US-F01—F04</span></div></article>
+          <article class="flow-card"><div class="flow-number">06 · 收款</div><h3>线下付款与人工确认</h3><p>平台不接支付、不保存收款截图；桃子按订单编号或顾客查找并手工标记。</p><div class="stories"><span>US-G01—G04</span><span>US-H01—H02</span></div></article>
         </div>
         <div class="docs">
-          <a class="doc" href="../prd.md"><strong>PRD</strong><span>目标、范围、角色与核心规则</span></a>
-          <a class="doc" href="../product-decisions.md"><strong>产品决策</strong><span>已确认边界、研究依据与待讨论项</span></a>
-          <a class="doc" href="../CONTEXT.md"><strong>领域词汇</strong><span>统一“餐次、订单、订餐约定”等名称</span></a>
+          <span class="doc"><strong>PRD</strong><span>目标、范围、角色与核心规则</span></span>
+          <span class="doc"><strong>产品决策</strong><span>已确认边界、研究依据与待讨论项</span></span>
+          <span class="doc"><strong>领域词汇</strong><span>统一“餐次、订单、订餐约定”等名称</span></span>
         </div>
       </section>
     </main>
