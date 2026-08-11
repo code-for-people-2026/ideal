@@ -5,16 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="楼道收一收是近邻互助组中的楼道协作应用：住户扫码选择回收或打扫，可选添加现场照片；师傅查看待处理楼层并反馈完成。"
+      content="楼道收一收是近邻互助组中的楼道提醒应用：住户扫码后选择回收或打扫需求，随即上报给师傅。"
     />
     <title>楼道收一收 · 近邻互助组</title>
     <link rel="stylesheet" href="../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据，不是生产代码。
-      问题一：住户能否在扫码后快速分清“有垃圾要回收”和“楼层需要打扫”，并理解照片不是提交必填项？
-      问题二：电梯楼层面板能否让收取师傅快速看懂待处理楼层并完成反馈？
-      本轮交互问题：完成与撤销能否共用一块固定操作区，不遮挡任何楼层按钮？
-      已选定整栋楼层按钮面板，移除其他师傅端方案及评估切换器。
+      本轮问题：扫码识别楼层后，如何用一次选择区分回收和打扫需求？
+      三种住户方案通过 ?view=resident&variant=A / B / C 切换；底部工具条仅用于评估原型。
+      师傅端保留 main 中已选定的电梯楼层面板，不在本轮重新选型。
       运行：python3 -m http.server 4173
     -->
     <style>
@@ -1033,6 +1032,29 @@
         font-size: 24px;
       }
 
+      .resident-report-choice {
+        min-height: 104px;
+        grid-template-columns: 1fr 24px;
+      }
+
+      .report-choice-heading {
+        padding: 8px 2px 0;
+      }
+
+      .report-choice-heading h2 {
+        margin: 18px 0 0;
+        font-size: 29px;
+        line-height: 1.2;
+        letter-spacing: -0.045em;
+      }
+
+      .report-choice-heading p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.55;
+      }
+
       .request-summary {
         display: grid;
         margin-top: 18px;
@@ -1251,10 +1273,10 @@
         border: 4px solid transparent;
         border-top-color: var(--green);
         border-radius: 50%;
-        animation: spin 0.8s linear infinite;
+        animation: scan-spin 0.8s linear infinite;
       }
 
-      @keyframes spin { to { transform: rotate(360deg); } }
+      @keyframes scan-spin { to { transform: rotate(360deg); } }
 
       .resident-result h2 {
         margin: 0;
@@ -1523,6 +1545,341 @@
         text-shadow: 0 0 6px rgba(255, 224, 150, 0.9);
       }
 
+      /* ============================================================
+         ISSUE #39 · 三种住户成功后补充方案
+         住户先选择回收或打扫，再立即上报；师傅端保持原楼层面板。
+         ============================================================ */
+      .resident-screen {
+        position: relative;
+        overflow: hidden;
+        background: #f5f7f5;
+      }
+
+      .resident-content {
+        min-height: 100%;
+        padding: 20px 18px 38px;
+      }
+
+      .resident-hero {
+        padding: 24px 20px 20px;
+        border: 1px solid #e0e7e2;
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: 0 9px 25px rgba(27, 47, 33, 0.06);
+        text-align: center;
+      }
+
+      .resident-hero .scan-visual,
+      .completion-card .scan-visual {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 16px;
+        border-radius: 23px;
+        font-size: 25px;
+        font-weight: 1000;
+      }
+
+      .resident-hero h2,
+      .completion-card h2 {
+        margin: 0;
+        font-size: 27px;
+        line-height: 1.18;
+        letter-spacing: -0.045em;
+      }
+
+      .resident-hero p,
+      .completion-card p {
+        margin: 9px auto 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.55;
+      }
+
+      .resident-hero .identified-floor {
+        margin-top: 15px;
+        font-size: 14px;
+      }
+
+      .success-check {
+        display: grid;
+        width: 52px;
+        height: 52px;
+        margin: 0 auto 14px;
+        place-items: center;
+        border-radius: 50%;
+        color: #fff;
+        background: var(--green);
+        box-shadow: 0 8px 20px rgba(18, 126, 91, 0.18);
+      }
+
+      .success-check svg {
+        width: 27px;
+        height: 27px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.8;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .resident-section,
+      .progress-card {
+        margin-top: 14px;
+        padding: 16px;
+        border: 1px solid #e0e7e2;
+        border-radius: 19px;
+        background: #fff;
+      }
+
+      .section-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .section-heading strong { font-size: 17px; line-height: 1.3; }
+      .section-copy { margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+      .supplement-actions {
+        display: grid;
+        margin-top: 13px;
+        grid-template-columns: 1fr 1fr;
+        gap: 9px;
+      }
+
+      .supplement-button,
+      .open-sheet-button,
+      .save-button,
+      .new-round-button {
+        min-height: 52px;
+        border: 0;
+        border-radius: 13px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 900;
+      }
+
+      .supplement-button {
+        padding: 10px;
+        color: var(--ink-2);
+        border: 1px solid #dce4de;
+        background: #f7f9f7;
+      }
+
+      .supplement-button.active {
+        color: var(--green-dark);
+        border-color: #a8cdbb;
+        background: var(--green-soft);
+      }
+
+      .supplement-preview { display: grid; margin-top: 12px; gap: 9px; }
+
+      .photo-preview {
+        display: grid;
+        padding: 8px;
+        grid-template-columns: 84px 1fr;
+        gap: 11px;
+        align-items: center;
+        border-radius: 14px;
+        background: #f2f5f3;
+      }
+
+      .photo-preview img { width: 84px; height: 68px; object-fit: cover; border-radius: 10px; }
+      .photo-preview strong,
+      .message-preview strong { display: block; font-size: 13px; }
+      .photo-preview span,
+      .message-preview span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+      .message-preview { padding: 12px; border-radius: 13px; background: var(--yellow-soft); }
+
+      .resident-editor {
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 14px;
+        background: #f3f6f4;
+      }
+
+      .resident-textarea {
+        width: 100%;
+        min-height: 92px;
+        padding: 12px;
+        resize: none;
+        border: 1px solid #cfd9d2;
+        border-radius: 11px;
+        color: var(--ink);
+        background: #fff;
+        font: inherit;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .resident-textarea:focus { border-color: var(--green); outline: 3px solid rgba(22, 116, 81, 0.14); }
+
+      .editor-actions {
+        display: flex;
+        margin-top: 9px;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .text-button,
+      .resident-screen .withdraw-button {
+        min-height: 44px;
+        padding: 0 12px;
+        border: 1px solid #dfe5e1;
+        border-radius: 11px;
+        cursor: pointer;
+        color: var(--muted);
+        background: #fff;
+        font-size: 13px;
+        font-weight: 850;
+      }
+
+      .save-button { min-width: 108px; padding: 0 16px; color: #fff; background: var(--green); }
+      .withdraw-wrap { margin-top: 15px; text-align: center; }
+      .resident-screen .withdraw-button { border: 0; background: transparent; text-decoration: underline; text-underline-offset: 3px; }
+
+      .open-sheet-button,
+      .new-round-button {
+        width: 100%;
+        margin-top: 14px;
+        color: #fff;
+        background: var(--green);
+        box-shadow: 0 10px 22px rgba(22, 116, 81, 0.18);
+      }
+
+      .variant-b .resident-hero { padding: 23px 20px; text-align: left; }
+
+      .report-summary {
+        display: grid;
+        margin-top: 20px;
+        border-top: 1px solid #e6ebe7;
+      }
+
+      .report-row {
+        display: grid;
+        padding: 13px 0;
+        grid-template-columns: 54px 1fr;
+        gap: 12px;
+        border-bottom: 1px solid #e6ebe7;
+        align-items: baseline;
+      }
+
+      .report-row span {
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+      }
+
+      .report-row strong {
+        font-size: 15px;
+        line-height: 1.4;
+      }
+
+      .report-loader {
+        width: 36px;
+        height: 36px;
+        margin: 2px 0 18px;
+        border: 4px solid #dceae2;
+        border-top-color: var(--green);
+        border-radius: 50%;
+        animation: report-spin 0.8s linear infinite;
+      }
+
+      @keyframes report-spin { to { transform: rotate(360deg); } }
+
+      .progress-card > strong { display: block; margin-bottom: 11px; font-size: 16px; }
+      .progress-step {
+        display: grid;
+        grid-template-columns: 62px 1fr;
+        gap: 10px;
+        padding: 7px 0;
+        border-top: 1px solid #edf0ee;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      .progress-step:first-of-type { border-top: 0; }
+      .progress-step time { color: #78847c; font-weight: 800; }
+      .progress-step strong { color: var(--ink); }
+
+      .resident-sheet-backdrop {
+        position: absolute;
+        z-index: 22;
+        inset: 58px 0 0;
+        display: flex;
+        align-items: flex-end;
+        background: rgba(17, 26, 20, 0.34);
+      }
+
+      .resident-sheet {
+        width: 100%;
+        max-height: 88%;
+        padding: 17px 18px max(22px, env(safe-area-inset-bottom));
+        overflow-y: auto;
+        border-radius: 24px 24px 0 0;
+        background: #fff;
+        box-shadow: 0 -18px 42px rgba(20, 35, 25, 0.2);
+      }
+
+      .sheet-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+      .sheet-heading h3 { margin: 0; font-size: 21px; letter-spacing: -0.03em; }
+      .sheet-heading p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+      .sheet-close { min-width: 52px; min-height: 44px; border: 0; border-radius: 11px; cursor: pointer; color: var(--muted); background: #eff2f0; font-weight: 900; }
+      .sheet-field { margin-top: 15px; }
+      .sheet-field > strong { display: block; margin-bottom: 8px; font-size: 14px; }
+
+      .variant-c .resident-content { padding-top: 15px; }
+      .receipt-heading {
+        display: flex;
+        padding: 17px 16px;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-radius: 18px;
+        color: #fff;
+        background: var(--green-dark);
+      }
+      .receipt-heading span { display: block; color: #c9e4d8; font-size: 12px; font-weight: 850; }
+      .receipt-heading strong { display: block; margin-top: 4px; font-size: 21px; }
+      .receipt-location { flex: 0 0 auto; padding: 9px 10px; border-radius: 10px; color: var(--green-dark); background: #fff; font-size: 13px; font-weight: 950; }
+
+      .completion-card {
+        padding: 30px 21px;
+        border: 1px solid #cfe2d7;
+        border-radius: 23px;
+        background: #fff;
+        box-shadow: 0 10px 28px rgba(22, 116, 81, 0.1);
+        text-align: center;
+      }
+      .completion-time { display: inline-flex; margin-top: 14px; padding: 7px 10px; border-radius: 9px; color: var(--green-dark); background: var(--green-soft); font-size: 12px; font-weight: 900; }
+
+      .prototype-switcher {
+        position: fixed;
+        z-index: 80;
+        bottom: max(18px, env(safe-area-inset-bottom));
+        left: 50%;
+        display: grid;
+        min-width: min(470px, calc(100vw - 24px));
+        padding: 7px;
+        transform: translateX(-50%);
+        grid-template-columns: 52px 1fr 52px;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 20px;
+        color: #fff;
+        background: rgba(20, 28, 23, 0.94);
+        box-shadow: 0 18px 45px rgba(12, 23, 16, 0.3);
+        backdrop-filter: blur(16px);
+      }
+
+      .prototype-switcher[hidden] { display: none; }
+      .switcher-arrow { display: grid; width: 46px; height: 46px; place-items: center; border: 0; border-radius: 14px; cursor: pointer; color: #fff; background: rgba(255, 255, 255, 0.1); font-size: 22px; }
+      .switcher-copy { padding: 0 12px; text-align: center; }
+      .switcher-copy strong { display: block; font-size: 13px; }
+      .switcher-copy span { display: block; margin-top: 2px; color: #b8c3bc; font-size: 9px; font-weight: 700; }
+
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {
           scroll-behavior: auto !important;
@@ -1547,8 +1904,8 @@
       <main class="layout">
         <section class="story" aria-labelledby="page-title">
           <div class="eyebrow">楼道协作 · 楼道收一收</div>
-          <h1 id="page-title">扫一下，<br />说清这层需要什么。</h1>
-          <p class="lead">住户扫本层二维码，选择“有垃圾要回收”或“楼层需要打扫”。现场照片只用来补充情况，不添加也可以发出提醒；师傅只看真正需要处理的楼层。</p>
+          <h1 id="page-title">扫一下，<br />师傅就知道。</h1>
+          <p class="lead">住户扫码自动识别楼层，只需选择“回收”或“打扫”，随即上报给师傅。</p>
 
           <div class="flow" aria-label="产品主流程">
             <div class="flow-item">
@@ -1562,24 +1919,24 @@
             <div class="flow-item">
               <div class="flow-number">2</div>
               <div class="flow-copy">
-                <strong>选择事项，可选照片</strong>
-                <span>回收和打扫分开；没有照片也能直接提交</span>
+                <strong>选择要处理的事</strong>
+                <span>回收或打扫，只点一次</span>
               </div>
               <span class="flow-arrow" aria-hidden="true">→</span>
             </div>
             <div class="flow-item">
               <div class="flow-number">3</div>
               <div class="flow-copy">
-                <strong>师傅按事项处理</strong>
-                <span>任务保留楼层、事项和照片状态，完成后及时反馈</span>
+                <strong>自动上报成功</strong>
+                <span>不填表，也不需要查看处理进度</span>
               </div>
               <span class="flow-arrow" aria-hidden="true">✓</span>
             </div>
           </div>
 
           <div class="demo-actions" aria-label="原型演示操作">
-            <button class="demo-button primary" type="button" data-action="scan">体验住户端</button>
-            <button class="demo-button secondary" type="button" data-action="collector">打开师傅端</button>
+            <button class="demo-button primary" type="button" data-action="scan">体验住户扫码</button>
+            <button class="demo-button secondary" type="button" data-action="collector">打开师傅待办</button>
             <button class="demo-button ghost" type="button" data-action="reset">恢复演示数据</button>
           </div>
 
@@ -1593,6 +1950,15 @@
         </section>
       </main>
     </div>
+
+    <nav class="prototype-switcher" id="prototype-switcher" aria-label="住户原型方案切换" hidden>
+      <button class="switcher-arrow" type="button" data-action="previous-variant" aria-label="上一个方案">←</button>
+      <div class="switcher-copy">
+        <strong id="switcher-label">A — 成功页轻补充</strong>
+        <span>不影响主流程的原型评估工具</span>
+      </div>
+      <button class="switcher-arrow" type="button" data-action="next-variant" aria-label="下一个方案">→</button>
+    </nav>
 
     <script>
       const initialTasks = [
@@ -1624,20 +1990,106 @@
         },
       };
 
+      const residentRequestLabels = {
+        recycle: {
+          short: "回收",
+          title: "有垃圾要收走",
+          description: "纸箱、瓶子等已经放好",
+        },
+        clean: {
+          short: "打扫",
+          title: "楼道需要打扫",
+          description: "地面或公共区域需要清理",
+        },
+      };
+
+      const residentVariants = {
+        A: { label: "A — 成功页轻补充" },
+        B: { label: "B — 极简上报回执" },
+        C: { label: "C — 进度回执页" },
+      };
+
       const state = {
         tasks: structuredClone(initialTasks),
-        view: "collector",
-        residentStep: "choice",
-        requestType: null,
-        photoAttached: false,
-        submittedRequest: null,
+        view: getViewFromUrl(),
+        variant: getVariantFromUrl(),
+        scanPhase: getViewFromUrl() === "resident" ? "choice" : "idle",
+        residentStatus: "waiting",
+        residentEntry: "none",
+        residentRequestType: null,
+        completedRoundCount: 0,
+        residentPhoto: false,
+        residentMessage: "",
+        residentDraft: "",
+        residentEditor: null,
+        residentSheetOpen: false,
         selectedFloor: 12,
         lastCleared: null,
-        beforeSubmit: null,
-        submitTimer: null,
+        beforeScan: null,
+        scanTimer: null,
       };
 
       const phoneScreen = document.querySelector("#phone-screen");
+      const prototypeSwitcher = document.querySelector("#prototype-switcher");
+      const switcherLabel = document.querySelector("#switcher-label");
+
+      function getVariantFromUrl() {
+        const value = new URLSearchParams(location.search).get("variant");
+        return ["A", "B", "C"].includes(value) ? value : "A";
+      }
+
+      function getViewFromUrl() {
+        return new URLSearchParams(location.search).get("view") === "resident" ? "resident" : "collector";
+      }
+
+      function syncViewToUrl() {
+        const url = new URL(location.href);
+        url.searchParams.set("variant", state.variant);
+        if (state.view === "resident") url.searchParams.set("view", "resident");
+        else url.searchParams.delete("view");
+        history.replaceState({}, "", url);
+      }
+
+      function residentTask(type = state.residentRequestType) {
+        if (!type) return null;
+        return state.tasks.find(item => item.id === `6-${type}`);
+      }
+
+      function ensureResidentTask(increment = false, type = state.residentRequestType) {
+        if (!requestTypes[type]) return null;
+        const existing = residentTask(type);
+        if (existing) {
+          if (increment) existing.count += 1;
+          existing.latest = "刚刚";
+          existing.hasPhoto = existing.hasPhoto || state.residentPhoto;
+          existing.message = state.residentMessage;
+          return existing;
+        }
+
+        const task = {
+          id: `6-${type}`,
+          floor: 6,
+          type,
+          latest: "刚刚",
+          first: "刚刚",
+          count: 1,
+          hasPhoto: state.residentPhoto,
+          message: state.residentMessage,
+        };
+        state.tasks.push(task);
+        return task;
+      }
+
+      function syncResidentSupplement() {
+        const task = residentTask();
+        if (!task) return;
+        task.hasPhoto = state.residentPhoto;
+        task.message = state.residentMessage;
+      }
+
+      if (state.view === "resident") {
+        state.beforeScan = structuredClone(state.tasks);
+      }
 
       function sortedTasks() {
         return [...state.tasks].sort((a, b) => b.floor - a.floor || a.type.localeCompare(b.type));
@@ -1689,7 +2141,7 @@
               return `
                 <div class="floor-control-row">
                   <div class="floor-control-copy">
-                    <span class="floor-control-meta">${task.floor} 楼 · ${selectedTasks.length} 项待处理</span>
+                    <span class="floor-control-meta">${task.floor} 楼 · 待处理 · ${task.count} 次上报</span>
                     <strong>${request.taskTitle}${task.hasPhoto ? ' <span class="floor-control-note">· 附照片</span>' : ""}</strong>
                   </div>
                   <button class="floor-control-button" type="button" data-clear-task="${task.id}">${request.completion}</button>
@@ -1733,7 +2185,9 @@
                   const floorTasks = tasksByFloor.get(floor) || [];
                   if (!floorTasks.length) return `<div class="floor-cell"><strong>${floor} 楼</strong><span>无事</span></div>`;
                   const selectedClass = state.selectedFloor === floor ? " selected" : "";
-                  const summary = floorTasks.length === 1 ? `${requestFor(floorTasks[0]).short} · ${floorTasks[0].latest}` : `${floorTasks.length} 项待处理`;
+                  const summary = floorTasks.length === 1
+                    ? `${requestFor(floorTasks[0]).short} · ${floorTasks[0].latest}${floorTasks[0].count > 1 ? ` · ${floorTasks[0].count} 次上报` : ""}`
+                    : `${floorTasks.length} 项待处理`;
                   return `<button class="floor-cell pending${selectedClass}" type="button" data-select-floor="${floor}"><strong>${floor} 楼</strong><span>${summary}</span></button>`;
                 }).join("")}
               </div>
@@ -1859,7 +2313,217 @@
         return `<div class="resident-screen">${residentHeader()}${content}</div>`;
       }
 
+      /* #39 住户端变体：后声明的 renderResident 覆盖上方 main 版表单流程。 */
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function renderPhotoPreview() {
+        if (!state.residentPhoto) return "";
+        return `
+          <div class="photo-preview">
+            <img src="assets/stairwell-recyclables.png" alt="楼道约定位置摆放整齐的纸箱和塑料瓶" />
+            <div><strong>现场照片已补充</strong><span>师傅可以据此确认放置位置。</span></div>
+          </div>`;
+      }
+
+      function renderMessagePreview() {
+        if (!state.residentMessage) return "";
+        return `<div class="message-preview"><strong>给师傅的话</strong><span>${escapeHtml(state.residentMessage)}</span></div>`;
+      }
+
+      function renderSupplementPreview() {
+        if (!state.residentPhoto && !state.residentMessage) return "";
+        return `<div class="supplement-preview" aria-label="本次上报的补充信息">${renderPhotoPreview()}${renderMessagePreview()}</div>`;
+      }
+
+      function renderMessageEditor() {
+        return `
+          <div class="resident-editor">
+            <textarea class="resident-textarea" data-resident-message maxlength="80" placeholder="例如：纸箱放在消防门旁边，没有挡路。">${escapeHtml(state.residentDraft)}</textarea>
+            <div class="editor-actions">
+              <button class="text-button" type="button" data-action="cancel-message">先不写</button>
+              <button class="save-button" type="button" data-action="save-message">保存留言</button>
+            </div>
+          </div>`;
+      }
+
+      function renderResidentProgress(includeSupplement = true) {
+        const task = residentTask();
+        const roundCount = task?.count || state.completedRoundCount || 1;
+        return `
+          <div class="progress-card">
+            <strong>这轮回收进展</strong>
+            <div class="progress-step"><time>本轮</time><span><strong>已登记待收</strong><br />幸福苑 2 栋 · 6 楼 · 已有 ${roundCount} 次待收确认</span></div>
+            ${includeSupplement && (state.residentPhoto || state.residentMessage) ? `
+              <div class="progress-step"><time>刚刚</time><span><strong>已补充现场信息</strong><br />${state.residentPhoto && state.residentMessage ? "照片和留言" : state.residentPhoto ? "现场照片" : "一句留言"}</span></div>` : ""}
+            <div class="progress-step"><time>接下来</time><span><strong>等师傅来收</strong><br />收好后这里会更新</span></div>
+          </div>`;
+      }
+
+      function renderResidentVariantA() {
+        const report = residentRequestLabels[state.residentRequestType] || residentRequestLabels.recycle;
+        return `
+          <div class="resident-hero">
+            <span class="success-check" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="m6.5 12.5 3.4 3.4 7.6-8" /></svg>
+            </span>
+            <h2>上报成功</h2>
+            <p>师傅会收到 6 楼的${report.short}提醒。</p>
+            <div class="identified-floor">幸福苑 2 栋 · 6 楼</div>
+          </div>
+          <section class="resident-section" aria-labelledby="optional-heading-a">
+            <div class="section-heading"><strong id="optional-heading-a">现场不好找？</strong><span class="optional-tag">可选</span></div>
+            <p class="section-copy">需要时再补一张照片或一句话，师傅会和这轮 6 楼提醒一起看到。</p>
+            <div class="supplement-actions">
+              <button class="supplement-button${state.residentPhoto ? " active" : ""}" type="button" data-action="toggle-photo">${state.residentPhoto ? "照片已添加" : "补充现场照片"}</button>
+              <button class="supplement-button${state.residentMessage ? " active" : ""}" type="button" data-action="open-message">${state.residentMessage ? "修改留言" : "给师傅留句话"}</button>
+            </div>
+            ${state.residentEditor === "message" ? renderMessageEditor() : ""}
+            ${renderSupplementPreview()}
+          </section>
+          <div class="withdraw-wrap"><button class="withdraw-button" type="button" data-action="withdraw">扫错了，撤回这次提醒</button></div>`;
+      }
+
+      function renderResidentReportChoice() {
+        return `
+          <div class="report-choice-heading">
+            <div class="resident-location">已识别：幸福苑 2 栋 · 6 楼</div>
+            <h2>现在需要什么？</h2>
+            <p>选一项，就会直接上报给师傅。</p>
+          </div>
+          <div class="request-choice-list" aria-label="选择上报类型">
+            ${Object.entries(residentRequestLabels).map(([type, report]) => `
+              <button class="request-choice resident-report-choice ${type}" type="button" data-report-type="${type}">
+                <span class="choice-copy"><strong>${report.title}</strong><span>${report.description}</span></span>
+                <span class="choice-arrow" aria-hidden="true">›</span>
+              </button>`).join("")}
+          </div>`;
+      }
+
+      function renderResidentVariantB() {
+        const report = residentRequestLabels[state.residentRequestType] || residentRequestLabels.recycle;
+        return `
+          <div class="resident-hero">
+            <h2>上报成功</h2>
+            <p>师傅会收到 6 楼的${report.short}提醒。</p>
+            <div class="report-summary" aria-label="本次上报内容">
+              <div class="report-row"><span>位置</span><strong>幸福苑 2 栋 · 6 楼</strong></div>
+              <div class="report-row"><span>事项</span><strong>${report.title}</strong></div>
+            </div>
+          </div>
+          ${renderSupplementPreview()}
+          <button class="open-sheet-button" type="button" data-action="open-sheet">${state.residentPhoto || state.residentMessage ? "查看或修改补充" : "补充照片或留言（可选）"}</button>
+          <div class="withdraw-wrap"><button class="withdraw-button" type="button" data-action="withdraw">上报错了，撤回</button></div>`;
+      }
+
+      function renderResidentVariantC() {
+        return `
+          <div class="receipt-heading">
+            <div><span>本轮回收提醒</span><strong>已提醒，等师傅来收</strong></div>
+            <div class="receipt-location">6 楼</div>
+          </div>
+          ${renderResidentProgress()}
+          <section class="resident-section" aria-labelledby="optional-heading-c">
+            <div class="section-heading"><strong id="optional-heading-c">补充现场信息</strong><span class="optional-tag">可选</span></div>
+            <p class="section-copy">提醒已经成功。只有放置点难找时，才需要补充。</p>
+            <div class="supplement-actions">
+              <button class="supplement-button${state.residentPhoto ? " active" : ""}" type="button" data-action="toggle-photo">${state.residentPhoto ? "移除照片" : "添加现场照片"}</button>
+              <button class="supplement-button${state.residentMessage ? " active" : ""}" type="button" data-action="open-message">${state.residentMessage ? "修改留言" : "添加一句留言"}</button>
+            </div>
+            ${state.residentEditor === "message" ? renderMessageEditor() : ""}
+            ${renderSupplementPreview()}
+          </section>
+          <div class="withdraw-wrap"><button class="withdraw-button" type="button" data-action="withdraw">扫错了，撤回这次提醒</button></div>`;
+      }
+
+      function renderResidentSheet() {
+        if (!state.residentSheetOpen) return "";
+        return `
+          <div class="resident-sheet-backdrop">
+            <section class="resident-sheet" aria-labelledby="sheet-title">
+              <div class="sheet-heading">
+                <div><h3 id="sheet-title">补充现场信息</h3><p>上报已经成功，补充完全可选。</p></div>
+                <button class="sheet-close" type="button" data-action="close-sheet">关闭</button>
+              </div>
+              <div class="sheet-field">
+                <strong>现场照片</strong>
+                <button class="supplement-button${state.residentPhoto ? " active" : ""}" type="button" data-action="toggle-photo">${state.residentPhoto ? "照片已添加，点此移除" : "添加一张示例照片"}</button>
+                ${state.residentPhoto ? `<div class="supplement-preview">${renderPhotoPreview()}</div>` : ""}
+              </div>
+              <div class="sheet-field">
+                <strong>给师傅的话</strong>
+                <textarea class="resident-textarea" data-resident-message maxlength="80" placeholder="例如：纸箱放在消防门旁边，没有挡路。">${escapeHtml(state.residentDraft)}</textarea>
+              </div>
+              <button class="open-sheet-button" type="button" data-action="save-sheet">保存补充</button>
+            </section>
+          </div>`;
+      }
+
+      function renderResidentCollected() {
+        const roundCount = state.completedRoundCount || 1;
+        return `
+          <div class="completion-card">
+            <div class="scan-visual" aria-hidden="true">好</div>
+            <h2>6 楼这轮已经收好</h2>
+            <p>师傅刚刚完成了这层的回收。</p>
+            <span class="completion-time">今天 10:18 收好</span>
+          </div>
+          <div class="progress-card">
+            <strong>这轮回收记录</strong>
+            <div class="progress-step"><time>9:41</time><span><strong>本轮登记待收</strong><br />幸福苑 2 栋 · 6 楼 · 共 ${roundCount} 次待收确认</span></div>
+            ${state.residentPhoto || state.residentMessage ? `<div class="progress-step"><time>9:42</time><span><strong>住户补充了现场信息</strong></span></div>` : ""}
+            <div class="progress-step"><time>10:18</time><span><strong>师傅标记为已收好</strong></span></div>
+          </div>
+          <button class="new-round-button" type="button" data-action="new-round">这里又有新的可回收物</button>`;
+      }
+
+      function renderResident() {
+        const isChoosing = state.scanPhase === "choice";
+        const isSending = state.scanPhase === "sending";
+        const isWithdrawn = state.scanPhase === "withdrawn";
+        const report = residentRequestLabels[state.residentRequestType];
+        let content;
+
+        if (isChoosing) {
+          content = renderResidentReportChoice();
+        } else if (isSending || isWithdrawn) {
+          content = `
+            <div class="resident-hero">
+              ${isSending ? `<div class="report-loader" aria-hidden="true"></div>` : ""}
+              <h2>${isSending ? "正在上报…" : "已撤回"}</h2>
+              <p>${isSending ? `${report?.title || "楼道事项"} · 幸福苑 2 栋 · 6 楼` : "这次上报不会出现在师傅的待办里。"}</p>
+            </div>`;
+        } else if (state.variant === "B") {
+          content = renderResidentVariantB();
+        } else if (state.residentStatus === "collected") {
+          content = renderResidentCollected();
+        } else if (state.variant === "C") {
+          content = renderResidentVariantC();
+        } else {
+          content = renderResidentVariantA();
+        }
+
+        return `
+          <div class="resident-screen variant-${state.variant.toLowerCase()}">
+            <header class="resident-header">
+              <button class="back-button" type="button" data-action="collector" aria-label="返回">‹</button>
+              <strong>楼道收一收</strong>
+              <span></span>
+            </header>
+            <div class="resident-scroll"><div class="resident-content">${content}</div></div>
+            ${state.variant === "B" && state.scanPhase === "success" && state.residentStatus !== "collected" ? renderResidentSheet() : ""}
+          </div>`;
+      }
+
       function render() {
+        prototypeSwitcher.hidden = state.view !== "resident";
+        switcherLabel.textContent = residentVariants[state.variant].label;
         if (state.view === "resident") {
           phoneScreen.innerHTML = renderResident();
         } else {
@@ -1870,6 +2534,11 @@
       function clearTask(taskId) {
         const task = state.tasks.find(item => item.id === taskId);
         if (!task) return;
+        if (task.floor === 6) {
+          state.completedRoundCount = task.count;
+          state.residentStatus = "collected";
+          state.residentEntry = "reopened";
+        }
         state.tasks = state.tasks.filter(item => item.id !== taskId);
         state.lastCleared = task;
         render();
@@ -1880,6 +2549,11 @@
         const restoredFloor = state.lastCleared.floor;
         if (!state.tasks.some(item => item.id === state.lastCleared.id)) {
           state.tasks.push(state.lastCleared);
+        }
+        if (state.lastCleared.floor === 6) {
+          state.residentStatus = "waiting";
+          state.completedRoundCount = 0;
+          state.residentEntry = "reopened";
         }
         state.lastCleared = null;
         state.selectedFloor = restoredFloor;
@@ -1974,16 +2648,100 @@
         render();
       }
 
+      /* #39 住户端状态操作：覆盖 main 版的选事项表单流程。 */
+      function startResidentChoice() {
+        clearTimeout(state.scanTimer);
+        state.beforeScan = structuredClone(state.tasks);
+        state.view = "resident";
+        state.scanPhase = "choice";
+        state.residentStatus = "waiting";
+        state.residentEntry = "none";
+        state.residentRequestType = null;
+        state.completedRoundCount = 0;
+        state.residentPhoto = false;
+        state.residentMessage = "";
+        state.residentDraft = "";
+        state.residentEditor = null;
+        state.residentSheetOpen = false;
+        state.lastCleared = null;
+        syncViewToUrl();
+        render();
+      }
+
+      function submitResidentReport(type) {
+        if (!residentRequestLabels[type]) return;
+        clearTimeout(state.scanTimer);
+        state.residentRequestType = type;
+        state.scanPhase = "sending";
+        state.residentStatus = "waiting";
+        state.residentEntry = "reported";
+        render();
+        state.scanTimer = setTimeout(() => {
+          ensureResidentTask(true, type);
+          state.scanPhase = "success";
+          render();
+        }, 850);
+      }
+
+      function withdrawScan() {
+        if (state.beforeScan) state.tasks = structuredClone(state.beforeScan);
+        state.scanPhase = "withdrawn";
+        state.residentSheetOpen = false;
+        state.residentEditor = null;
+        render();
+      }
+
+      function changeVariant(direction) {
+        const keys = Object.keys(residentVariants);
+        const current = keys.indexOf(state.variant);
+        state.variant = keys[(current + direction + keys.length) % keys.length];
+        state.residentEditor = null;
+        state.residentSheetOpen = false;
+        syncViewToUrl();
+        render();
+      }
+
+      function showCollectedFeedback() {
+        clearTimeout(state.scanTimer);
+        const completedTask = residentTask();
+        state.completedRoundCount = completedTask?.count || state.completedRoundCount || 1;
+        state.tasks = state.tasks.filter(item => item.id !== "6-recycle");
+        state.view = "resident";
+        state.scanPhase = "success";
+        state.residentStatus = "collected";
+        state.residentEntry = "reopened";
+        state.residentEditor = null;
+        state.residentSheetOpen = false;
+        syncViewToUrl();
+        render();
+      }
+
+      function resetDemo() {
+        clearTimeout(state.scanTimer);
+        clearTimeout(state.submitTimer);
+        state.tasks = structuredClone(initialTasks);
+        state.view = "collector";
+        state.scanPhase = "idle";
+        state.residentStatus = "waiting";
+        state.residentEntry = "none";
+        state.residentRequestType = null;
+        state.completedRoundCount = 0;
+        state.residentPhoto = false;
+        state.residentMessage = "";
+        state.residentDraft = "";
+        state.residentEditor = null;
+        state.residentSheetOpen = false;
+        state.lastCleared = null;
+        state.beforeScan = null;
+        state.selectedFloor = 12;
+        syncViewToUrl();
+        render();
+      }
+
       document.addEventListener("click", event => {
         const clearButton = event.target.closest("[data-clear-task]");
         if (clearButton) {
           clearTask(clearButton.dataset.clearTask);
-          return;
-        }
-
-        const requestButton = event.target.closest("[data-request-type]");
-        if (requestButton) {
-          selectRequest(requestButton.dataset.requestType);
           return;
         }
 
@@ -1995,35 +2753,106 @@
           return;
         }
 
+        const reportTypeButton = event.target.closest("[data-report-type]");
+        if (reportTypeButton) {
+          submitResidentReport(reportTypeButton.dataset.reportType);
+          return;
+        }
+
         const actionButton = event.target.closest("[data-action]");
         if (!actionButton) return;
         const action = actionButton.dataset.action;
-        if (action === "scan") startScan();
+        if (action === "scan") startResidentChoice();
         if (action === "collector") {
+          clearTimeout(state.scanTimer);
           clearTimeout(state.submitTimer);
           state.view = "collector";
           state.lastCleared = null;
+          state.residentEditor = null;
+          state.residentSheetOpen = false;
+          syncViewToUrl();
           render();
         }
-        if (action === "resident-back") {
-          state.residentStep = "choice";
-          state.requestType = null;
-          state.photoAttached = false;
-          render();
-        }
-        if (action === "add-photo") {
-          state.photoAttached = true;
-          render();
-        }
-        if (action === "remove-photo") {
-          state.photoAttached = false;
-          render();
-        }
-        if (action === "submit-request") submitRequest();
-        if (action === "withdraw") withdrawRequest();
-        if (action === "resident-again") restartResident();
+        if (action === "withdraw") withdrawScan();
         if (action === "undo") undoClear();
         if (action === "reset") resetDemo();
+        if (action === "new-round") startResidentChoice();
+        if (action === "toggle-photo") {
+          state.residentPhoto = !state.residentPhoto;
+          syncResidentSupplement();
+          render();
+        }
+        if (action === "open-message") {
+          state.residentDraft = state.residentMessage;
+          state.residentEditor = "message";
+          render();
+        }
+        if (action === "cancel-message") {
+          state.residentDraft = state.residentMessage;
+          state.residentEditor = null;
+          render();
+        }
+        if (action === "save-message") {
+          state.residentMessage = state.residentDraft.trim();
+          state.residentEditor = null;
+          syncResidentSupplement();
+          render();
+        }
+        if (action === "open-sheet") {
+          state.residentDraft = state.residentMessage;
+          state.residentSheetOpen = true;
+          render();
+        }
+        if (action === "close-sheet") {
+          state.residentDraft = state.residentMessage;
+          state.residentSheetOpen = false;
+          render();
+        }
+        if (action === "save-sheet") {
+          state.residentMessage = state.residentDraft.trim();
+          state.residentSheetOpen = false;
+          syncResidentSupplement();
+          render();
+        }
+        if (action === "previous-variant") changeVariant(-1);
+        if (action === "next-variant") changeVariant(1);
+      });
+
+      document.addEventListener("click", event => {
+        if (event.target.matches(".resident-sheet-backdrop")) {
+          state.residentDraft = state.residentMessage;
+          state.residentSheetOpen = false;
+          render();
+        }
+      });
+
+      document.addEventListener("input", event => {
+        if (event.target.matches("[data-resident-message]")) {
+          state.residentDraft = event.target.value;
+        }
+      });
+
+      window.addEventListener("keydown", event => {
+        const active = document.activeElement;
+        if (["INPUT", "TEXTAREA"].includes(active?.tagName) || active?.isContentEditable) return;
+        if (state.view !== "resident") return;
+        if (event.key === "ArrowLeft") changeVariant(-1);
+        if (event.key === "ArrowRight") changeVariant(1);
+      });
+
+      window.addEventListener("popstate", () => {
+        state.variant = getVariantFromUrl();
+        state.view = getViewFromUrl();
+        state.residentEditor = null;
+        state.residentSheetOpen = false;
+        if (state.view === "resident") {
+          state.scanPhase = "choice";
+          state.residentStatus = "waiting";
+          state.residentEntry = "none";
+          state.residentRequestType = null;
+          state.beforeScan = structuredClone(state.tasks);
+        }
+        render();
       });
 
       render();
