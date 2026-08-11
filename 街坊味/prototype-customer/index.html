@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>街坊味 · 客户体验原型</title>
+    <link rel="stylesheet" href="../../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据
       问题：第一次接触产品的人，能否在 2 分钟内看懂菜单生成过程和四个最终结果？
@@ -173,25 +174,48 @@
       .weekly-menu-board { padding: 11px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
       .weekly-menu-title { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
       .weekly-menu-title strong { font-size: 15px; }
-      .weekly-menu-title span { padding: 6px 8px; border-radius: 9px; background: var(--green-soft); color: var(--green); font-size: 9px; font-weight: 900; }
-      .weekly-menu-carousel { display: grid; grid-auto-flow: column; grid-auto-columns: 27%; gap: 6px; overflow-x: auto; overscroll-behavior-inline: contain; padding: 10px 4px 6px 1px; scroll-snap-type: inline proximity; scrollbar-width: none; cursor: grab; touch-action: pan-y; user-select: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 36px), transparent 100%); mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 36px), transparent 100%); }
+      .weekly-menu-jumps { display: flex; gap: 4px; }
+      .weekly-menu-jumps button { min-height: 29px; padding: 0 9px; border: 1px solid var(--line); border-radius: 9px; background: #f6f2eb; color: var(--muted); font-size: 9px; font-weight: 850; }
+      .weekly-menu-jumps button:focus-visible { outline: 2px solid var(--green-dark); outline-offset: 1px; }
+      .weekly-menu-carousel { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 12px) / 3); align-items: start; gap: 6px; overflow-x: auto; overscroll-behavior-inline: contain; padding: 8px 1px 5px; scroll-snap-type: inline proximity; scrollbar-width: none; cursor: grab; touch-action: pan-y; user-select: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%); mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%); }
       .weekly-menu-carousel.dragging { cursor: grabbing; scroll-snap-type: none; }
       .weekly-menu-carousel::-webkit-scrollbar { display: none; }
-      .weekly-meal-card { min-width: 0; padding: 6px; border: 1px solid var(--line); border-radius: 10px; background: #fffdf8; scroll-snap-align: start; }
-      .weekly-meal-card-head { display: grid; min-height: 31px; place-items: center; text-align: center; }
-      .weekly-meal-card-head strong { color: var(--ink); font-size: 10px; line-height: 1; }
-      .weekly-meal-card-head small { margin-top: 3px; color: var(--muted); font-size: 8px; font-weight: 850; line-height: 1; }
-      .weekly-meal-dishes { display: grid; gap: 3px; }
-      .weekly-dish-cell { display: grid; min-height: 38px; place-items: center; padding: 3px 2px; border: 1px solid #f1c3b8; border-radius: 7px; background: var(--flag-red-soft); color: var(--ink); font-size: 8px; font-weight: 850; line-height: 1.18; text-align: center; }
-      .weekly-dish-cell.veg { border-color: #badcc9; background: var(--green-soft); }
-      .weekly-dish-cell.soup { border-color: #c8d9ee; background: #edf5ff; }
-      .weekly-dish-cell.active { outline: 2px solid var(--flag-red); outline-offset: 1px; }
-      .weekly-dish-detail { margin-top: 10px; padding: 9px; border: 1px solid #dccfbf; border-radius: 9px; background: #fffdf8; }
+      .weekly-day-card { min-width: 0; padding: 4px; border: 1px solid var(--line); border-radius: 9px; background: #fffdf8; scroll-snap-align: start; }
+      .weekly-day-card-head { display: block; padding: 1px 1px 5px; border-bottom: 1px solid #eee6da; text-align: center; }
+      .weekly-day-card-head strong { display: block; font-size: 12px; }
+      .weekly-day-card-head small { display: block; margin-top: 3px; color: var(--muted); font-size: 9px; font-weight: 750; }
+      .weekly-day-dishes { margin-top: 4px; }
+      .weekly-menu-category { display: grid; gap: 3px; scroll-margin-top: 58px; }
+      .weekly-menu-category + .weekly-menu-category { margin-top: 5px; padding-top: 5px; border-top: 1px solid #eee6da; }
+      .weekly-dish-cell { position: relative; display: grid; min-height: 40px; place-items: center; padding: 2px 7px 2px 2px; overflow: hidden; border: 1px solid var(--line); border-left: 3px solid #d88374; border-radius: 6px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 850; line-height: 1.12; text-align: center; white-space: normal; overflow-wrap: anywhere; }
+      .weekly-dish-cell.veg { border-left-color: #70a98b; }
+      .weekly-dish-cell.soup { border-left-color: #7fa7cf; }
+      .weekly-dish-cell.active { border-color: var(--green-dark); border-left-color: var(--green-dark); background: #eef7f2; box-shadow: 0 0 0 1px var(--green-dark), 0 3px 8px rgba(30,93,69,.12); }
+      .weekly-dish-name { position: relative; z-index: 1; }
+      .meal-corner { position: absolute; z-index: 2; top: 0; right: 0; display: flex; width: 21px; height: 21px; align-items: flex-start; justify-content: flex-end; padding: 2px 2px 0 0; clip-path: polygon(0 0, 100% 0, 100% 100%); background: var(--flag-gold); color: #fff; font-size: 7px; font-weight: 900; line-height: 1; }
+      .meal-corner.dinner { background: var(--green-dark); }
+      .weekly-dish-detail { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 9px; margin-top: 10px; padding: 9px 9px 9px 10px; border: 1px solid #d4dfd8; border-left: 3px solid var(--green-dark); border-radius: 9px; background: #fff; }
+      .weekly-dish-detail-copy { min-width: 0; }
+      .weekly-dish-detail small { display: block; margin-bottom: 3px; color: var(--green-dark); font-size: 8px; font-weight: 850; }
       .weekly-dish-detail strong { display: block; font-size: 12px; }
       .weekly-dish-detail span { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; line-height: 1.45; }
-      .replace-selected { width: 100%; min-height: 35px; margin-top: 8px; border: 1px solid var(--flag-red); border-radius: 9px; background: #fff; color: var(--flag-red); font-size: 10px; font-weight: 900; }
+      .replace-selected { min-height: 32px; padding: 0 11px; border: 1px solid var(--line); border-radius: 9px; background: #f4efe7; color: var(--ink); font-size: 9px; font-weight: 900; white-space: nowrap; }
       .plan-action { position: sticky; z-index: 3; bottom: -15px; margin-top: 9px; padding: 8px 0 2px; background: linear-gradient(transparent, #fbf8f1 25%); }
       .plan-action .primary { margin-top: 0; box-shadow: 0 8px 20px rgba(182,65,49,.16); }
+      .menu-aligned .screen-body { display: block; padding: 12px; overflow-y: auto; scroll-behavior: smooth; }
+      .menu-aligned .weekly-menu-boards { display: block; }
+      .menu-aligned .weekly-menu-board { height: auto; padding: 12px; }
+      .menu-aligned .weekly-menu-title { position: sticky; z-index: 4; top: -12px; margin: -12px -12px 0; padding: 12px 12px 8px; border-bottom: 1px solid #eee6da; background: rgba(255,255,255,.97); }
+      .menu-aligned .weekly-menu-title strong { font-size: 16px; }
+      .menu-aligned .weekly-menu-carousel { grid-auto-columns: calc((100% - 12px) / 3); gap: 6px; }
+      .menu-aligned .weekly-dish-cell { min-height: 40px; font-size: 13px; }
+      .menu-aligned .weekly-dish-detail { flex: 0 0 auto; min-height: 72px; padding: 10px 9px 10px 11px; }
+      .menu-aligned .weekly-dish-detail small { font-size: 9px; }
+      .menu-aligned .weekly-dish-detail strong { font-size: 13px; }
+      .menu-aligned .weekly-dish-detail span { font-size: 10px; }
+      .menu-aligned .replace-selected { min-height: 36px; padding: 0 13px; font-size: 10px; }
+      .menu-aligned .plan-action { position: static; flex: 0 0 auto; bottom: auto; margin-top: 8px; padding: 0; background: none; }
+      .menu-aligned .plan-action .primary { min-height: 48px; font-size: 14px; }
       .candidate-sheet { position: sticky; z-index: 8; bottom: -15px; margin: 10px -15px -15px; padding: 13px 15px 17px; border-top: 1px solid var(--line); border-radius: 18px 18px 0 0; background: #fff; box-shadow: 0 -18px 40px rgba(41,35,29,.18); }
       .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
       .sheet-head strong { font-size: 13px; }
@@ -325,35 +349,40 @@
       .order-state.none { background: var(--flag-red-soft); color: var(--flag-red-dark); }
       .reconcile-summary { margin: 10px 0; padding: 11px; border-radius: 13px; background: var(--flag-gold-soft); color: #7a5a08; font-size: 10px; line-height: 1.45; }
       .reconcile-summary b { display: block; margin-bottom: 3px; font-size: 12px; }
-      .reconcile-focus .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
-      .reconcile-day { overflow: hidden; margin-bottom: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
-      .reconcile-day-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 62px; padding: 10px 10px 10px 14px; border: 0; background: #fff; color: var(--ink); text-align: left; }
+      .reconcile-focus .screen-body { padding: 12px; overflow-y: auto; background: #fbf8f1; }
+      .reconcile-sheet { overflow: hidden; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+      .reconcile-day { overflow: hidden; margin: 0; border: 0; border-radius: 0; background: #fff; }
+      .reconcile-day + .reconcile-day { border-top: 1px solid var(--line); }
+      .reconcile-day-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 50px; padding: 9px 9px 9px 12px; border: 0; background: #fff; color: var(--ink); text-align: left; }
+      .reconcile-day.open .reconcile-day-head { background: #fbfcfa; }
       .reconcile-day-title { display: block; }
-      .reconcile-day-title strong { display: block; font-size: 14px; line-height: 1.1; }
+      .reconcile-day-title strong { display: block; font-size: 13px; line-height: 1.1; }
       .reconcile-day-head > span:not(.reconcile-day-title) { display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: 10px; }
-      .reconcile-day-head em { margin-right: 3px; color: var(--ink); font-style: normal; font-weight: 700; }
-      .reconcile-sq { width: 8px; height: 8px; border-radius: 3px; background: var(--flag-red); }
-      .reconcile-sq.done { background: var(--green); }
-      .reconcile-chevron { display: grid; flex: 0 0 auto; place-items: center; width: 32px; height: 32px; margin-left: 4px; border-radius: 10px; background: var(--green-soft); color: var(--green-dark); font-size: 20px; font-style: normal; font-weight: 900; line-height: 1; transition: transform .15s ease, background .15s ease; }
-      .reconcile-chevron.open { transform: rotate(90deg); background: var(--flag-gold-soft); }
-      .reconcile-list { overflow: hidden; border-radius: 14px; background: #fff; }
-      .reconcile-day .reconcile-list { border-top: 1px solid var(--line); border-radius: 0; }
-      .reconcile-item { display: grid; grid-template-columns: 22px 1fr; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--line); background: #fff; cursor: pointer; }
+      .reconcile-day-head em { color: var(--muted); font-style: normal; font-weight: 700; }
+      .reconcile-chevron { display: grid; flex: 0 0 auto; place-items: center; width: 28px; height: 28px; color: var(--muted); font-size: 18px; font-style: normal; font-weight: 900; line-height: 1; transition: transform .15s ease; }
+      .reconcile-chevron.open { transform: rotate(90deg); color: var(--green-dark); }
+      .reconcile-list { overflow: hidden; border-top: 1px solid var(--line); background: #fff; }
+      .reconcile-item { display: grid; grid-template-columns: 21px 1fr; gap: 9px; padding: 11px 12px; border-bottom: 1px solid #eeeae3; background: #fff; cursor: pointer; }
       .reconcile-item:last-child { border-bottom: 0; }
-      .reconcile-check { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--green); cursor: pointer; }
+      .reconcile-check { width: 17px; height: 17px; margin: 2px 0 0; accent-color: var(--green); cursor: pointer; }
       .reconcile-item-main { min-width: 0; }
       .reconcile-item-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-      .reconcile-item-head b { font-size: 13px; font-weight: 700; }
-      .reconcile-item-head strong { font-size: 13px; }
+      .reconcile-item-head b { font-size: 12px; font-weight: 700; }
+      .reconcile-item-head strong { font-size: 12px; }
       .reconcile-item-head strong.attention { color: var(--flag-red); }
       .reconcile-item.checked .reconcile-item-head b,
       .reconcile-item.checked .reconcile-item-head strong { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
-      .reconcile-order { display: block; margin: 3px 0 0; color: var(--muted); font-size: 10px; line-height: 1.4; }
-      .reconcile-reason, .reconcile-manual, .reconcile-wait { display: block; margin-top: 4px; font-size: 10px; font-weight: 600; line-height: 1.45; }
+      .reconcile-order { display: block; margin: 3px 0 0; color: var(--muted); font-size: 9px; line-height: 1.4; }
+      .reconcile-reason, .reconcile-manual, .reconcile-wait { display: block; margin-top: 3px; font-size: 9px; font-weight: 600; line-height: 1.4; }
       .reconcile-reason { color: var(--green); }
       .reconcile-manual { color: var(--muted); }
       .reconcile-wait { color: var(--flag-red); }
-      .reconcile-note { margin: 12px 4px 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
+      .reconcile-detail-toggle { display: flex; align-items: center; gap: 4px; min-height: 25px; margin-top: 2px; padding: 2px 0 0; border: 0; background: transparent; color: var(--green-dark); font-size: 9px; font-weight: 800; }
+      .reconcile-detail-toggle i { font-style: normal; transition: transform .15s ease; }
+      .reconcile-detail-toggle[aria-expanded="true"] i { transform: rotate(90deg); }
+      .reconcile-detail-panel { margin-top: 4px; padding: 7px 8px; border-radius: 8px; background: #f7f4ee; }
+      .reconcile-detail-panel .reconcile-order { margin-top: 0; }
+      .reconcile-note { margin: 10px 3px 0; color: var(--muted); font-size: 9px; line-height: 1.5; }
       .orders-focus .screen-body { padding: 15px; overflow-y: auto; background: #fbf8f1; }
       .order-hero { padding: 16px; border-radius: 18px; background: var(--green-dark); color: #fff; box-shadow: 0 10px 24px rgba(30,93,69,.16); }
       .order-hero-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
@@ -416,6 +445,7 @@
     </style>
   </head>
   <body>
+    <a class="prototype-home-link" href="../../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
     <a class="audience-switch" href="../prototype-implementation/">切到实施对照原型 →</a>
     <div id="app"></div>
 
@@ -445,10 +475,10 @@
         menu: {
           kicker: "修改过程 · 02",
           title: "十个餐次逐一看，<br />不满意当场换。",
-          lead: "十个餐次横向排成卡片，每张卡从上到下放 2 荤、2 素、1 汤。一屏露出三张半，桃子自然知道可以左右滑动；点具体菜名仍能查看分类并换成同类候选菜。",
+          lead: "一天的午饭和晚饭合成一列，每道菜用右上角的“午 / 晚”区分；首屏同时比较三天，向下看完整菜品，点荤菜、素菜或汤可以直接定位。",
           proofs: [
-            ["横", "十个餐次按星期向右排列"],
-            ["滑", "一屏露出三张半，提示左右滑动"],
+            ["三", "首屏横向对比三天菜单"],
+            ["午", "午晚餐合成一列，用角标区分"],
             ["换", "先智能推荐三次，仍不满意再自己挑选"],
           ],
           action: "确认十餐，再按餐次生成预订卡片",
@@ -489,7 +519,7 @@
         reconcile: {
           kicker: "经营结果 · 06",
           title: "不接支付，<br />也能把到账记录核清。",
-          lead: "对账变成一张可以逐笔划掉的清单，只按今天、昨天、前天和旧账归档。系统只替桃子划掉唯一匹配，并把依据写清楚；桃子也可以自己划掉任何一笔，不需要填写理由。",
+          lead: "对账像一张日常待办清单：今天默认展开，昨天、前天和旧账收成轻量分组。系统只替桃子划掉唯一匹配并保留依据；桃子也可以直接手动划掉。",
           proofs: [
             ["清", "每笔到账记录都是一项可勾销清单"],
             ["理", "系统代划必须展示明确匹配依据"],
@@ -517,7 +547,8 @@
       ];
       const showcaseReconcileChecked = new Set([0, 3, 4, 5, 7, 8]);
       const showcaseReconcileSources = { 0: "system", 3: "system", 4: "manual", 5: "system", 7: "system", 8: "system" };
-      const showcaseReconcileCollapsed = new Set(showcaseReconcileItems.map((item) => item.day));
+      const showcaseReconcileCollapsed = new Set(showcaseReconcileItems.map((item) => item.day).filter((day) => day !== "today"));
+      const showcaseReconcileDetailOpen = new Set();
       const showcaseDishOverrides = {};
       const showcaseDishSmartSwapHistory = {};
       const showcaseWeeklyMenu = [
@@ -589,7 +620,8 @@
       function showcaseDishSelector(dayIndex, meal, dishIndex) {
         const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
         const key = showcaseDishKey(dayIndex, meal, dishIndex);
-        return `<button class="weekly-dish-cell ${kind} ${selectedShowcaseDishKey === key ? "active" : ""}" data-showcase-select-dish="${key}" type="button" aria-pressed="${selectedShowcaseDishKey === key}">${name}</button>`;
+        const mealShort = meal === "dinner" ? "晚" : "午";
+        return `<button class="weekly-dish-cell ${kind} ${selectedShowcaseDishKey === key ? "active" : ""}" data-showcase-select-dish="${key}" type="button" aria-pressed="${selectedShowcaseDishKey === key}"><span class="weekly-dish-name">${name}</span><span class="meal-corner ${meal}" aria-hidden="true">${mealShort}</span></button>`;
       }
 
       function showcaseUsedDishNames(exceptKey) {
@@ -617,11 +649,26 @@
         const meal = selectedParts[1];
         const dishIndex = Number(selectedParts[2]);
         const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
-        const mealCards = showcaseWeeklyMenu.flatMap((day, currentDayIndex) => [["lunch", "午饭"], ["dinner", "晚饭"]].map(([currentMeal, label]) => `<article class="weekly-meal-card"><div class="weekly-meal-card-head"><strong>${day.day}</strong><small>${label}</small></div><div class="weekly-meal-dishes">${day[currentMeal].map((_, currentDishIndex) => showcaseDishSelector(currentDayIndex, currentMeal, currentDishIndex)).join("")}</div></article>`)).join("");
+        const selectedDay = showcaseWeeklyMenu[dayIndex];
+        const mealLabel = meal === "dinner" ? "晚饭" : "午饭";
+        const dishSlotLabel = ["荤1", "荤2", "素1", "素2", "汤"][dishIndex];
+        const categorySpecs = [
+          { kind: "meat", indexes: [0, 1] },
+          { kind: "veg", indexes: [2, 3] },
+          { kind: "soup", indexes: [4] },
+        ];
+        const dayCards = showcaseWeeklyMenu.map((day, currentDayIndex) => {
+          const categories = categorySpecs.map(({ kind: currentKind, indexes }) => {
+            const anchor = currentDayIndex === 0 ? ` data-menu-kind-anchor="${currentKind}"` : "";
+            const dishes = [["lunch", "午"], ["dinner", "晚"]].flatMap(([currentMeal]) => indexes.map((currentDishIndex) => showcaseDishSelector(currentDayIndex, currentMeal, currentDishIndex))).join("");
+            return `<div class="weekly-menu-category" data-menu-kind="${currentKind}"${anchor}>${dishes}</div>`;
+          }).join("");
+          return `<section class="weekly-day-card"><div class="weekly-day-card-head"><strong>${day.day}</strong><small>${day.date}</small></div><div class="weekly-day-dishes">${categories}</div></section>`;
+        }).join("");
         return `<section class="weekly-menu-board">
-          <div class="weekly-menu-title"><strong>下周十餐菜单</strong><span>左右滑动 · 共 10 餐</span></div>
-          <div class="weekly-menu-carousel" aria-label="下周十餐菜单，左右滑动查看更多餐次">${mealCards}</div>
-          <div class="weekly-dish-detail"><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span><button class="replace-selected" data-showcase-rotate="${selectedShowcaseDishKey}" data-kind="${kind}" type="button">换这道</button></div>
+          <div class="weekly-menu-title"><strong>9月7日—11日菜单</strong><nav class="weekly-menu-jumps" aria-label="按菜品类型定位"><button type="button" data-showcase-kind-jump="meat">荤菜</button><button type="button" data-showcase-kind-jump="veg">素菜</button><button type="button" data-showcase-kind-jump="soup">汤</button></nav></div>
+          <div class="weekly-menu-carousel" aria-label="9月7日至11日菜单，左右滑动查看更多日期">${dayCards}</div>
+          <div class="weekly-dish-detail"><div class="weekly-dish-detail-copy"><small>当前选择 · ${selectedDay.day}${mealLabel} · ${dishSlotLabel}</small><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span></div><button class="replace-selected" data-showcase-rotate="${selectedShowcaseDishKey}" data-kind="${kind}" type="button">换这道</button></div>
         </section>`;
       }
 
@@ -656,7 +703,7 @@
       }
 
       function menuPhone() {
-        return phoneShell("menu-aligned has-app-tabs", "修改本周菜单", `
+        return phoneShell("menu-aligned has-app-tabs", "修改菜单", `
           <div class="weekly-menu-boards">${showcaseWeeklyBoard()}</div>
           <div class="plan-action"><button class="primary" data-showcase-confirm-menu>确认十餐菜单</button></div>
           ${showcaseCandidateSheetView()}
@@ -780,15 +827,16 @@
         const rowFor = (item, index) => {
           const checked = showcaseReconcileChecked.has(index);
           const source = showcaseReconcileSources[index];
+          const detailOpen = showcaseReconcileDetailOpen.has(index);
           const status = checked
             ? source === "system"
-              ? `<div class="reconcile-reason">系统划掉 · ${item.wait}</div>`
+              ? `<div class="reconcile-reason">系统匹配 · ${item.wait}</div>`
               : `<div class="reconcile-manual">桃子手动划掉</div>`
             : `<div class="reconcile-wait">${item.wait}</div>`;
-          return `<label class="reconcile-item ${checked ? "checked" : ""}">
+          return `<div class="reconcile-item ${checked ? "checked" : ""}">
             <input class="reconcile-check" type="checkbox" data-showcase-reconcile-check="${index}" ${checked ? "checked" : ""} aria-label="${checked ? "恢复" : "划掉"}${item.name} ${item.amount}" />
-            <span class="reconcile-item-main"><span class="reconcile-item-head"><b>${item.name}</b><strong class="${checked ? "" : "attention"}">${item.amount}</strong></span><span class="reconcile-order">${item.order}</span>${status}</span>
-          </label>`;
+            <div class="reconcile-item-main"><span class="reconcile-item-head"><b>${item.name}</b><strong class="${checked ? "" : "attention"}">${item.amount}</strong></span><button class="reconcile-detail-toggle" type="button" data-showcase-reconcile-detail="${index}" aria-expanded="${detailOpen}">订单详情 <i>›</i></button>${detailOpen ? `<div class="reconcile-detail-panel"><span class="reconcile-order">${item.order}</span>${status}</div>` : ""}</div>
+          </div>`;
         };
         const days = [...new Set(items.map((item) => item.day))];
         const daySections = days.map((day) => {
@@ -796,17 +844,16 @@
           const sortedEntries = [...dayEntries].sort((a, b) => Number(showcaseReconcileChecked.has(a.index)) - Number(showcaseReconcileChecked.has(b.index)));
           const doneCount = dayEntries.filter(({ index }) => showcaseReconcileChecked.has(index)).length;
           const collapsed = showcaseReconcileCollapsed.has(day);
-          const squares = sortedEntries.map(({ index }) => `<i class="reconcile-sq ${showcaseReconcileChecked.has(index) ? "done" : ""}"></i>`).join("");
-          return `<section class="reconcile-day">
+          return `<section class="reconcile-day ${collapsed ? "" : "open"}">
             <button class="reconcile-day-head" data-showcase-reconcile-day="${day}" aria-expanded="${!collapsed}">
               <span class="reconcile-day-title"><strong>${dayEntries[0].item.dayLabel}</strong></span>
-              <span><em>${doneCount}/${dayEntries.length}</em>${squares}<i class="reconcile-chevron ${collapsed ? "" : "open"}">›</i></span>
+              <span><em>${doneCount}/${dayEntries.length} 已清</em><i class="reconcile-chevron ${collapsed ? "" : "open"}">›</i></span>
             </button>
             ${collapsed ? "" : `<div class="reconcile-list">${sortedEntries.map(({ item, index }) => rowFor(item, index)).join("")}</div>`}
           </section>`;
         }).join("");
         return phoneShell("reconcile-focus", "对账清单", `
-          ${daySections}
+          <div class="reconcile-sheet">${daySections}</div>
           <p class="reconcile-note">系统代划一定保留匹配依据；桃子手动划掉不需要填写理由。这里只记录清单状态，不代表平台收款。</p>
         `);
       }
@@ -867,16 +914,20 @@
           startX: event.clientX,
           startScrollLeft: carousel.scrollLeft,
           moved: false,
+          captured: false,
         };
-        carousel.classList.add("dragging");
-        carousel.setPointerCapture?.(event.pointerId);
       });
 
       document.addEventListener("pointermove", (event) => {
         const drag = showcaseMenuCarouselDrag;
         if (!drag || drag.pointerId !== event.pointerId) return;
         const deltaX = event.clientX - drag.startX;
-        if (Math.abs(deltaX) > 4) drag.moved = true;
+        if (!drag.moved && Math.abs(deltaX) > 10) {
+          drag.moved = true;
+          drag.carousel.classList.add("dragging");
+          drag.carousel.setPointerCapture?.(event.pointerId);
+          drag.captured = true;
+        }
         if (!drag.moved) return;
         drag.carousel.scrollLeft = drag.startScrollLeft - deltaX;
         if (event.cancelable) event.preventDefault();
@@ -885,9 +936,9 @@
       function finishShowcaseMenuCarouselDrag(event) {
         const drag = showcaseMenuCarouselDrag;
         if (!drag || drag.pointerId !== event.pointerId) return;
-        drag.carousel.classList.remove("dragging");
+        if (drag.moved) drag.carousel.classList.remove("dragging");
         if (drag.moved) showcaseMenuCarouselSuppressClickUntil = Date.now() + 200;
-        try { drag.carousel.releasePointerCapture?.(event.pointerId); } catch (_) {}
+        if (drag.captured) try { drag.carousel.releasePointerCapture?.(event.pointerId); } catch (_) {}
         showcaseMenuCarouselDrag = null;
       }
 
@@ -949,6 +1000,25 @@
         const mealFilter = event.target.closest("[data-showcase-meal-filter]")?.dataset.showcaseMealFilter;
         if (mealFilter) {
           showcaseOrderMealFilter = mealFilter;
+          rerenderPhoneState();
+          return;
+        }
+        const kindJump = event.target.closest("[data-showcase-kind-jump]")?.dataset.showcaseKindJump;
+        if (kindJump) {
+          const screenBody = document.querySelector(".menu-aligned .screen-body");
+          const target = document.querySelector(`[data-menu-kind-anchor="${kindJump}"]`);
+          if (screenBody && target) {
+            const bodyRect = screenBody.getBoundingClientRect();
+            const targetRect = target.getBoundingClientRect();
+            screenBody.scrollTo({ top: screenBody.scrollTop + targetRect.top - bodyRect.top - 58, behavior: "smooth" });
+          }
+          return;
+        }
+        const reconcileDetail = event.target.closest("[data-showcase-reconcile-detail]")?.dataset.showcaseReconcileDetail;
+        if (reconcileDetail !== undefined) {
+          const index = Number(reconcileDetail);
+          if (showcaseReconcileDetailOpen.has(index)) showcaseReconcileDetailOpen.delete(index);
+          else showcaseReconcileDetailOpen.add(index);
           rerenderPhoneState();
           return;
         }

@@ -57,8 +57,14 @@
 | `第一个产品/` | 核心资产：数据平权宣言、牛马互助协议、写作参考（对外网站与 webapp 的内容源）+ 摆摊前挑刺记录（grill 留痕 / AI 问答素材） |
 | `小金毛辩论赛摆摊/` | 2026 端午·华语辩坛小友赛 摆摊专属：易拉宝、传单、策划案、准备总览、对话备忘 |
 | [`牛马互助平台/`](./牛马互助平台/README.md) | 近邻互助组产品资料：客户体验原型、实施对照原型、产品决议与 User Stories |
-| [`docs/kith-inn/yao/`](./docs/kith-inn/yao/README.md) | 街坊味产品资料：结果型客户原型、桃子端与顾客端实施对照原型、产品决议与 User Stories |
+| [`街坊味/`](./街坊味/README.md) | 街坊味产品资料与整站子页面：结果型客户原型、桃子端与顾客端实施对照原型、产品决议与 User Stories |
 | [`楼道回收提醒/`](./楼道回收提醒/PRD.md) | “楼道收一收”小程序：住户扫楼层码提醒，收取师傅看待收楼层并一键销单 |
+
+## GitHub Pages 发布
+
+`main` 是产品资料和原型的权威来源；`gh-pages` 只保存可部署的 HTML 与必要静态资产。每次推送到 `main` 时，[GitHub Action](./.github/workflows/sync-prototypes-to-pages.yml) 会生成精简产物；只有产物发生变化才会更新 `gh-pages`。
+
+公开原型目录由 [`pages-prototypes.txt`](./pages-prototypes.txt) 显式登记。新增需要发布的原型时，将它的中文根目录名加入该文件即可。
 
 ## 状态
 
