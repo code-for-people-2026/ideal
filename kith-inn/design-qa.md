@@ -8,12 +8,12 @@
   - `/Users/miyin/code for people/cfp-mono/docs/kith-inn/prototype-taozi/index.html`
   - `/Users/miyin/code for people/cfp-mono/docs/kith-inn/prototype-customer/index.html`
 - 产品内容真相：
-  - `/Users/miyin/code for people/ideal/docs/kith-inn/yao/product-decisions.md`
-  - `/Users/miyin/code for people/ideal/docs/kith-inn/yao/user-stories.md`
+  - `/Users/miyin/code for people/ideal/kith-inn/product-decisions.md`
+  - `/Users/miyin/code for people/ideal/kith-inn/user-stories.md`
 - 实现：
-  - `http://127.0.0.1:4174/ideal/docs/kith-inn/yao/prototype-customer/?step=generate`
-  - `http://127.0.0.1:4174/ideal/docs/kith-inn/yao/prototype-customer/?step=menu`
-  - `http://127.0.0.1:4175/ideal/docs/kith-inn/yao/prototype-implementation/`
+  - `http://127.0.0.1:4174/ideal/kith-inn/prototype-customer/?step=generate`
+  - `http://127.0.0.1:4174/ideal/kith-inn/prototype-customer/?step=menu`
+  - `http://127.0.0.1:4175/ideal/kith-inn/prototype-implementation/`
 
 ## 截图与归一化
 
@@ -83,8 +83,8 @@
 
 ## 菜单对齐专项 · 2026-08-04
 
-- 参考源：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-implementation/prototype-taozi/index.html?step=plan`。
-- 实现：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=menu`。
+- 参考源：`/Users/miyin/code for people/ideal/kith-inn/prototype-implementation/prototype-taozi/index.html?step=plan`。
+- 实现：`/Users/miyin/code for people/ideal/kith-inn/prototype-customer/index.html?step=menu`。
 - 浏览器与状态：Codex Desktop 内置浏览器；工程师版菜单已生成、五天默认收起；展示版同状态。
 - 参考截图：`/tmp/kith-menu-align/reference-engineer-current.png`，`1292 × 884 px`。
 - 实现截图：`/tmp/kith-menu-align/after-showcase.png`，`1277 × 874 px`；比较前归一到参考截图尺寸。
@@ -97,7 +97,7 @@
 
 ## 订单管理可读性专项 · 2026-08-04
 
-- 审查对象：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=orders`。
+- 审查对象：`/Users/miyin/code for people/ideal/kith-inn/prototype-customer/index.html?step=orders`。
 - 修改前截图：`/tmp/kith-orders-audit/01-before.jpg`。
 - 修改后截图：`/tmp/kith-orders-audit/02-after.jpg`。
 - 并排证据：`/tmp/kith-orders-audit/03-before-after.jpg`；左侧为修改前，右侧为修改后。
@@ -109,7 +109,7 @@
 
 ## 微信确认首屏专项 · 2026-08-04
 
-- 审查对象：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=share`。
+- 审查对象：`/Users/miyin/code for people/ideal/kith-inn/prototype-customer/index.html?step=share`。
 - 修改前截图：`/tmp/kith-share-audit/01-before.jpg`。
 - 修改后截图：`/tmp/kith-share-audit/02-after.jpg`。
 - 并排证据：`/tmp/kith-share-audit/03-before-after.jpg`；左侧为修改前，右侧为修改后。
@@ -122,7 +122,7 @@
 ## 微信订单回执参考对齐 · 2026-08-04
 
 - Source visual truth：`/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-54c5c964-2782-4c66-bbb9-c6975ed8bcf1.png`，`1986 × 1684 px`。
-- Implementation：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=share`；浏览器截图 `/tmp/kith-reconcile-audit/04-share-card.jpg`，`1265 × 998 px`。
+- Implementation：`/Users/miyin/code for people/ideal/kith-inn/prototype-customer/index.html?step=share`；浏览器截图 `/tmp/kith-reconcile-audit/04-share-card.jpg`，`1265 × 998 px`。
 - Viewport：`1280 × 720 CSS px`，`devicePixelRatio = 2`；浏览器截图输出已归一为 CSS 像素，不再按 DPR 放大。
 - State：微信群内“桃子发明日菜单 → 顾客确认午晚饭份数 → 顾客分享订单回执”。
 - Full-view comparison：`/tmp/kith-reconcile-audit/05-reference-implementation.jpg`；参考图按高度等比缩放为 `1177 × 998 px`，与实现 `1265 × 998 px` 顶端对齐。
@@ -151,7 +151,7 @@
 > 历史版本：本节记录的是送达当天提醒；当前业务口径已由下方“微信私聊代录场景专项”更新为送餐次日发现未付款后提醒。
 
 - Source visual truth：`/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-f7c86b77-507a-43c0-81a6-57daafeb1352.png`，`1986 × 1684 px`。
-- Implementation：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=share`；浏览器截图 `/tmp/kith-meal-reminder/01-after.jpg`，`1265 × 998 px`。
+- Implementation：`/Users/miyin/code for people/ideal/kith-inn/prototype-customer/index.html?step=share`；浏览器截图 `/tmp/kith-meal-reminder/01-after.jpg`，`1265 × 998 px`。
 - Viewport：`1280 × 720 CSS px`，`devicePixelRatio = 2`；浏览器截图输出已归一为 CSS 像素。
 - State：微信群内“桃子发明日菜单 → 顾客订单回执 → 桃子标记送达 → 未确认收款提醒”。
 - Full-view comparison：`/tmp/kith-meal-reminder/02-full-comparison.jpg`；参考图按高度等比缩放为 `1177 × 998 px`，与实现 `1265 × 998 px` 顶端对齐。
@@ -166,7 +166,7 @@
 
 ## 菜单生成与十餐修改专项 · 2026-08-05
 
-- 工程生成页参考：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-implementation/prototype-taozi/index.html?step=plan` 的未生成状态。
+- 工程生成页参考：`/Users/miyin/code for people/ideal/kith-inn/prototype-implementation/prototype-taozi/index.html?step=plan` 的未生成状态。
 - 换菜交互参考：用户指定的 `/cfp-mono/docs/kith-inn/prototype/menu-brain.html`；本地解析到 `/Users/miyin/code for people/cfp-mono-worktrees/community-cooking-mock-ui/docs/kith-inn/prototype/menu-brain.html`。
 - Source visual truth：`/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-6015be0d-c41e-427a-9e30-6f8e9c245652.png`，`688 × 794 px`。
 - Viewport：Codex Desktop 内置浏览器 `1280 × 720 CSS px`；实现全屏截图为 `1265 × 712 px`。
@@ -193,7 +193,7 @@
 ## 菜单右侧渐变蒙版专项 · 2026-08-10
 
 - Source visual truth：修改前的当前原型 `/tmp/kith-menu-mask-before.png`，结合用户指定的“在横向菜单右侧增加渐变蒙版”作为目标；截图为 `1265 × 998 px`。
-- Implementation：`/Users/miyin/code for people/ideal/docs/kith-inn/yao/prototype-customer/index.html?step=menu`；修改后截图 `/tmp/kith-menu-mask-after.png`，`1265 × 998 px`。
+- Implementation：`/Users/miyin/code for people/ideal/kith-inn/prototype-customer/index.html?step=menu`；修改后截图 `/tmp/kith-menu-mask-after.png`，`1265 × 998 px`。
 - Viewport：Codex Desktop 内置浏览器 `1280 × 720 CSS px`；前后截图使用同一页面、初始横滑位置和像素密度，无需额外缩放。
 - Full-view comparison：`/tmp/kith-menu-mask-comparison.jpg`，左侧修改前、右侧修改后；两侧页面布局、手机画框、文字和卡片位置完全一致。
 - Focused comparison：`/tmp/kith-menu-mask-focus-comparison.jpg`，聚焦横向菜单区域；右侧约 `36px` 从完整内容平滑过渡到透明，第四张半卡仍可辨认，同时更清楚地提示可以继续横滑。
@@ -202,5 +202,104 @@
 - 颜色与资产：蒙版只把内容渐隐到现有暖白背景，不引入新色；Logo 和现有图片资产均未修改。
 - 交互验证：鼠标按住菜单区域从右向左拖动后可进入后续餐次，渐变不拦截拖动或菜品点击；浏览器错误为 `0`。
 - 比较历史：Pass 1 未发现 P0 / P1 / P2 视觉或交互问题；渐变强度足以表达横滑方向，同时没有让半张卡失去辨识度。
+
+## 菜单按日分组与层级收敛专项 · 2026-08-10
+
+- Source visual truth：调整前原型 `/tmp/kith-menu-audit-2026-08-10/01-current-menu.jpg`，`1265 × 998 px`；结合本轮已对齐的产品前提——不要求十个餐次同时出现在一屏，继续保留横向浏览。
+- Implementation：`kith-inn/prototype-customer/index.html?step=menu`；调整后初始状态 `/tmp/kith-menu-refine-2026-08-10/after-initial.jpg`，`1265 × 998 px`。
+- Full-view comparison：`/tmp/kith-menu-refine-2026-08-10/comparison-full.jpg`，左侧为调整前，右侧为调整后；使用相同浏览器、视口、页面步骤和初始横滑位置。
+- 信息结构：十个独立餐次列改为五个日期分组；每个日期只出现一次星期与日期，组内午饭、晚饭并列，因此仍完整覆盖五天十餐，同时减少重复列头。
+- 视觉密度：荤、素、汤不再整格填色，统一为白底，分别以红、绿、蓝左侧窄色条表达类别；首屏仍露出下一日期的部分卡片，并保留右侧渐变以提示可继续横滑。
+- 选中关系：当前菜品使用品牌深绿描边、浅绿底和轻阴影；详情卡增加同色左侧强调线，并明确显示“周几 + 餐次 + 菜品位”，使表格与详情形成直接对应。
+- 操作层级：“换这道”收敛为紧凑的暖灰次级按钮；“确认十餐菜单”继续作为本屏唯一红色实心主按钮。
+- 文案一致性：导航统一为“修改菜单”，卡片标题改为准确日期范围“9月7日—11日菜单”；“左右滑动查看 · 10 餐”使用普通辅助文字，不再表现成可点击胶囊。
+- 交互验证：菜单横向容器 `clientWidth = 322px`、`scrollWidth = 956px`；鼠标拖动后 `scrollLeft` 从 `1` 变为 `193`。拖动后选择周二午饭“番茄炒蛋”，详情同步为“当前选择 · 周二午饭 · 荤2”，横滑位置保持 `193`，没有跳回起点。
+- 浏览器验证：DOM 包含五个日期分组、十个午晚饭区块和五十个菜品按钮；初始状态与拖动、选菜状态均无浏览器错误。
+- 比较结论：相较调整前，日期与餐次重复减少，类别色降噪，选中态与详情联动更明确；下一日期的局部露出仍能表达横滑，不要求把十餐压缩到同一屏。未发现剩余 P0 / P1 / P2 视觉或核心交互问题。
+
+## 菜单手机可读性与纵向空间专项 · 2026-08-10
+
+- Source visual truth：放大前当前原型 `/tmp/kith-menu-scale-2026-08-10/before.jpg`，`1265 × 998 px`；本轮目标是保持按日期横滑和既有视觉语言，只提升真实手机上的阅读、点击尺寸并使用下方空白。
+- Implementation：`kith-inn/prototype-customer/index.html?step=menu`；放大后初始状态 `/tmp/kith-menu-scale-2026-08-10/after-pass1.jpg`，`1265 × 998 px`。
+- Full-view comparison：`/tmp/kith-menu-scale-2026-08-10/comparison-full.jpg`；Focused comparison：`/tmp/kith-menu-scale-2026-08-10/comparison-phone.jpg`。两组证据均为左侧放大前、右侧放大后，使用相同浏览器、视口、页面步骤和初始横滑位置。
+- 布局：菜单页正文改为纵向弹性布局；菜单卡高度从约 `406px` 增至 `510px`，横向菜单区域从 `283px` 增至 `377px`，确认按钮贴近内容区底部，不再在按钮与底栏之间保留约百像素无效空白。
+- 点击与阅读：单个菜品格高度提升到约 `54.5px`，并同步放大菜名、星期、日期、午晚饭标签、详情说明和“换这道”按钮；一天卡片宽度从容器 `58%` 增至 `68%`，使午晚饭两列在手机上更容易辨认和点击。
+- 信息保持：仍是一张日期卡包含午饭、晚饭，仍显示 `2荤2素1汤` 的五道菜；右侧渐变、当前选中态、详情卡、次级换菜与红色主按钮层级全部保留。
+- 字体与颜色：继续使用原型既有系统中文字体与暖白、品牌绿、品牌红色板；仅提升字号和可点击面积，没有引入新的字体、颜色或视觉资产。
+- 图片与资产：页面没有新增图片需求，Logo 及原有品牌资产未修改；未使用占位图或低清替代资源。
+- 文案：所有菜单、餐次、说明和按钮文字保持不变，本轮没有增加新的认知负担。
+- 交互验证：横向拖动后可从周一进入周二、周三；选择周二午饭“红烧排骨”后详情同步到对应菜品，再点击“换这道”可替换为“葱油鸡”。拖动、选菜和换菜过程中浏览器错误均为 `0`。
+- 比较结论：放大后的菜单使用完整正文高度，菜品名称与点击区域明显改善，底部导航和确认按钮仍完整可见；未发现剩余 P0 / P1 / P2 视觉或核心交互问题。
+
+## 菜品横向密度专项 · 2026-08-10
+
+- Source visual truth：用户指出留白过大的局部截图 `/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-04b32ade-e2fd-4943-a09f-54423b8f194f.png`，`660 × 536 px`；同状态完整页面使用 `/tmp/kith-menu-scale-2026-08-10/after-pass1.jpg`，`1265 × 998 px`。
+- Implementation：`kith-inn/prototype-customer/index.html?step=menu`；调整后 `/tmp/kith-menu-density-2026-08-10/after.jpg`，`1265 × 998 px`。
+- Full-view comparison：`/tmp/kith-menu-density-2026-08-10/comparison-full.jpg`；Focused comparison：`/tmp/kith-menu-density-2026-08-10/comparison-phone.jpg`。两组证据均为左侧调整前、右侧调整后，使用相同浏览器、视口、菜单状态和初始横滑位置。
+- P2 修复：上一轮把每日卡片加宽到容器 `68%`，首屏只完整显示周一午饭、晚饭和周二午饭三个餐次，菜名两侧留白偏大。本轮将每日卡片收窄至 `56%`，同步缩小日期卡内边距、午晚饭列间距和菜品格水平内边距。
+- 可见餐次：浏览器实测首屏四个餐次的可见比例为 `[1, 1, 1, 0.6]`，即三个完整餐次加约六成的第四个餐次；第四列的截断结合右侧渐变继续表达可横滑，而不是渲染错误。
+- 阅读与点击：菜品格宽度从约 `97px` 收敛到 `81px`，高度仍保持约 `55.5px`，字号仍为 `10px`；减少的是无效左右留白，没有退回上一版本偏小的文字和点击区域。
+- 字体、颜色与资产：系统中文字体、品牌红绿、类别窄色条、Logo 和既有图片资产均未修改；菜名没有异常换行或截断。
+- 文案：菜单日期、餐次、菜名、详情和操作文案保持不变。
+- 交互验证：点击周二午饭“红烧排骨”后详情正确联动；横向拖动后 `scrollLeft = 187`，选中状态与详情内容保持不变，浏览器错误为 `0`。
+- 比较结论：信息密度恢复到约三餐半，同时保留上一轮的纵向放大和手机可读性；未发现剩余 P0 / P1 / P2 视觉或核心交互问题。
+
+## 菜名字号专项 · 2026-08-10
+
+- Source visual truth：字号调整前 `/tmp/kith-menu-density-2026-08-10/after.jpg`，`1265 × 998 px`；用户明确要求只把“土豆烧牛肉”等菜名放大一级，不改变卡片尺寸和首屏餐次密度。
+- Implementation：`kith-inn/prototype-customer/index.html?step=menu`；调整后 `/tmp/kith-menu-font-2026-08-10/after.jpg`，`1265 × 998 px`。
+- Focused comparison：`/tmp/kith-menu-font-2026-08-10/comparison-phone.jpg`，左侧菜名为 `10px`，右侧为 `11px`；完整手机画框、布局和初始状态一致，因此无需额外全屏比较。
+- 字体：所有菜名字号从 `10px` 提升到 `11px`，计算行高为 `12.98px`；五字菜名均保持单行，没有溢出、截断或异常换行。
+- 布局与间距：菜品格继续保持约 `80.9 × 55.5px`，首屏四个餐次可见比例仍为 `[1, 1, 1, 0.6]`，没有因字号变化减少可见餐次数量。
+- 色彩、图片和文案：颜色、类别窄色条、Logo、品牌资产和全部菜名内容均未修改。
+- 交互验证：页面加载与菜品选择逻辑保持正常，浏览器错误为 `0`。
+- 比较结论：菜名辨识度提升，同时保持当前横向密度；未发现 P0 / P1 / P2 视觉或核心交互问题。
+
+## 菜名字号与换行容错专项 · 2026-08-10
+
+- 调整目标：继续放大菜单菜名，并允许较长菜名自然换行；保持菜单卡尺寸和首屏餐次密度不变。
+- Implementation：`kith-inn/prototype-customer/index.html?step=menu`；浏览器截图 `/tmp/kith-menu-wrap-2026-08-10/after.jpg`，`1265 × 998 px`。
+- 字体：菜名从 `11px` 提升到 `13px`，行高设为 `1.25`；启用正常空白处理和任意位置换行，后续更长菜名可以在现有格子中显示两行。
+- 布局：菜品格继续保持约 `80.9 × 55.5px`，没有改变日期卡宽度、横滑位置或首屏三餐半的可见密度。
+- 溢出检查：当前五十个菜品按钮均未出现水平或垂直溢出；现有菜名长度仍可单行显示，较长数据进入时具备两行容错。
+- 色彩、图片与文案：颜色、分类色条、Logo、品牌资产和菜单内容均未修改。
+- 浏览器验证：页面加载与菜单交互无错误；未发现 P0 / P1 / P2 视觉或核心交互问题。
+
+## 餐次标签字号专项 · 2026-08-10
+
+- 调整结果：菜单卡中的“午饭 / 晚饭”从 `9px` 提升到 `11px`，标签区域高度仍为 `23px`。
+- 布局保持：菜名继续使用 `13px`，日期卡宽度、菜品格尺寸和首屏三餐半的横向密度均未改变。
+- 浏览器验证：五十个菜品按钮均无水平或垂直溢出，页面运行错误为 `0`；未发现 P0 / P1 / P2 问题。
+
+## 三日菜单与连续对账清单专项 · 2026-08-11
+
+- Source visual truth：用户菜单截图 `/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-4f1a54f4-b71d-4232-93ad-68260b675e5c.png`，`830 × 1334 px`；类型导航局部 `/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-51b16d17-b97f-42a0-b3b2-45cdec6f3c40.png`，`339 × 80 px`。用户文字要求定义目标变化：一天合并成一列、菜品右上角午晚角标、首屏对比三天、允许纵向滚动、类型按钮定位，以及今天默认展开的轻量对账分组。
+- 对账参考：滴答清单官方“用分组和排序管理任务”与产品首页任务列表示例；只借鉴连续任务表面、轻量分组标题、单行任务与勾选关系，没有复制其品牌色、导航或产品功能。
+- Implementation：`kith-inn/prototype-customer/index.html?step=menu` 与 `?step=reconcile`。
+- Viewport：Codex Desktop 内置浏览器默认视口 `1280 × 720 CSS px`，浏览器截图 `1265 × 712 px`；手机框实际 `390 × 748 CSS px`。视觉比较使用同一视口中可见的手机区域 `390 × 539 px`，无需像素密度换算。
+- Full-view evidence：修改后菜单 `/tmp/kith-menu-reconcile-2026-08-11/menu-after-viewport.png`；修改后对账 `/tmp/kith-menu-reconcile-2026-08-11/reconcile-after-viewport.png`。
+- Focused comparison：菜单前后 `/tmp/kith-menu-reconcile-2026-08-11/menu-comparison.png`；对账前后 `/tmp/kith-menu-reconcile-2026-08-11/reconcile-comparison.png`。两张比较图均把同尺寸、同状态的 `390 × 539 px` 手机区域并排放置。
+- Pass 1 findings：菜单原来一天占午饭、晚饭两列，首屏无法同时对比三天；午晚餐依赖重复列头，纵向空间没有用于展示后续菜品。对账原来四个日期各自使用独立圆角卡和大号彩色展开按钮，视觉被切成四块，今天也默认收起。两项均为 P2 信息密度与任务连续性问题。
+- Pass 1 fixes：每日菜单改成单列十道菜，按荤菜、素菜、汤纵向排列；每道菜右上角增加“午 / 晚”角标，首屏精确显示三个完整日期列。顶部辅助文案改成“荤菜 / 素菜 / 汤”三个按钮，点击后在可滚动菜单中定位对应类别。对账四个日期收进同一张连续清单，移除彩色状态方块和分离卡片，今天默认展开，其他日期保持可折叠。
+- 字体与文案：沿用系统中文字体、原有字重和菜单日期层级；窄列菜名使用 `11px` 并允许换行。页面说明同步描述三日对比、午晚角标、类型定位与今天默认展开，没有残留“左右滑动查看 · 10 餐”。
+- 间距与布局：菜单横向容器 `clientWidth = 311px`，日期列宽为 `(100% - 12px) / 3`，首四列可见比例 `[1, 1, 1, 0]`；页面正文 `clientHeight = 590px`、`scrollHeight = 844px`，可上下滚动。对账四个分组 `margin-bottom = 0`、`border-radius = 0`，统一由外层清单承载圆角和边框。
+- 颜色与状态：继续使用街坊味品牌红、绿、金和现有荤素汤左侧色条；午饭角标用金色、晚饭角标用深绿。菜单选中态与详情关联保持原有深绿，对账待核记录为红色、系统唯一匹配依据为绿色、已划项目保持删除线。
+- 图片与资产：没有新增图片需求；既有 Logo 和品牌图片保持原文件、裁切与清晰度，没有占位图、代码绘制图标或低清替代资源。
+- 交互验证：菜单包含 `5` 个日期列、`50` 个菜品按钮、`25` 个午饭角标和 `25` 个晚饭角标；鼠标拖动后横向 `scrollLeft` 从 `1` 到 `210`。点击“汤”后正文 `scrollTop` 从 `0` 到 `253.5`，汤类行进入可见区；选菜、换菜逻辑继续工作。对账初始 `aria-expanded` 为“今天 true、其余 false”，可见 `3` 笔今天记录；展开旧账后可见记录增至 `5` 笔。
+- 浏览器验证：菜单页和对账页控制台错误均为 `0`；HTML 内联脚本解析通过，未发现横向溢出遮挡、失效按钮或不可达的主要操作。
+- Post-fix result：前后比较确认菜单从约一天半提升到三天完整并排，午晚角标清晰；对账从四张独立卡收敛为一张连续任务清单。未发现剩余 P0 / P1 / P2；P3 可继续观察窄屏上较长菜名的两行断点。
+
+## 菜单密度、点选与对账详情专项 · 2026-08-11
+
+- Source visual truth：用户指出对账默认状态不应直接展示的两行截图 `/var/folders/f7/0tfdpjzs0yz9lw9zfh1mjc780000gn/T/codex-clipboard-d3e5f7a6-ca27-4c84-a3d4-c8165189ac4c.png`，`500 × 94 px`；菜单密度与右侧蒙版以本轮修改前截图 `/tmp/kith-refine-2026-08-11/menu-before.png` 为基线。
+- Implementation：`kith-inn/prototype-customer/index.html?step=menu` 与 `?step=reconcile`；默认状态截图 `/tmp/kith-refine-2026-08-11/menu-after.png`、`/tmp/kith-refine-2026-08-11/reconcile-after.png`，对账详情展开截图 `/tmp/kith-refine-2026-08-11/reconcile-detail-open.png`，切换到“白切鸡”的真实指针验证截图 `/tmp/kith-refine-2026-08-11/menu-selected-white-chicken.png`。
+- 视觉比较：在同一次视觉检查中并列查看用户截图、菜单修改后截图、对账默认截图与详情展开截图。默认对账项只保留顾客、时间、金额和“订单详情”；原来的“待对应订单”及红色同金额候选说明仅在展开详情后出现，信息层级符合用户要求。
+- 菜单密度：恢复横向容器右侧 `24px` 渐变蒙版；每日卡内边距收至 `4px`、菜品组间距为 `3px`、菜品格高度为 `40px`，格内边距为 `2px 7px 2px 2px`。菜名使用 `13px / 1.12` 并允许换行，首屏仍可完整对比三天、每列完整展示十道菜。
+- P1 交互修复：原拖动逻辑在 `pointerdown` 时立即抢占指针，真实鼠标或触摸的轻微位移可能把点选误判为横拖，表现为选中态一直停在“土豆烧牛肉”。现在只记录按下位置，横向位移超过 `10px` 才进入拖动并捕获指针；普通点击不再被拦截。
+- 点选验证：使用浏览器真实指针点击周一午饭“白切鸡”，按钮 `aria-pressed` 从默认状态切换为 `true`，详情同步为“当前选择 · 周一午饭 · 荤2 / 白切鸡”，证明可以从“土豆烧牛肉”切换到其他菜品。
+- 对账交互：初始今天展开且可见 `3` 笔记录，详情面板、订单说明和匹配理由数量均为 `0`；点击小太阳的“订单详情”后仅展开 `1` 个面板，并显示“待对应订单”和同金额候选原因。再次收起不影响清单，复选框从未勾选切换为勾选后对应行正确进入划掉状态。
+- 字体、颜色与资产：沿用系统中文字体、品牌暖白/深绿/红色和现有荤素汤窄色条；没有新增图片、图标或外部资产，也没有改变业务文案含义。
+- 静态验证：`5` 个 HTML 文件、`3` 段内联脚本全部解析通过；检查 `43` 个本地链接，缺失链接为 `0`；`git diff --check` 通过。
+- 比较结论：菜单右缘继续明确提示横向内容，菜名更大但卡片更紧凑；普通点选与横向拖动不再争抢指针；对账原因从默认视图下沉到按需详情。未发现剩余 P0 / P1 / P2 视觉或核心交互问题。
 
 final result: passed

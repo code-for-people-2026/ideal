@@ -1,6 +1,6 @@
 # Kith Inn · 街坊味产品资料
 
-本目录把“给客户看最终价值”和“给工程团队理解完整实现”分开维护。
+本目录是 Kith Inn 的唯一权威维护目录，同时作为整站 `/kith-inn/` 子页面的内容源。这里把“给客户看最终价值”和“给工程团队理解完整实现”分开维护。
 
 - [双原型入口](./index.html)
 - [客户体验原型](./prototype-customer/)
@@ -34,5 +34,5 @@
 在 `code for people` 目录运行静态服务器后打开：
 
 ```text
-http://127.0.0.1:4173/ideal/docs/kith-inn/yao/
+http://127.0.0.1:4173/ideal/kith-inn/
 ```
