@@ -1729,6 +1729,49 @@
       .variant-b .resident-hero .scan-visual { width: 58px; height: 58px; margin: 0; border-radius: 18px; font-size: 21px; }
       .variant-b .resident-hero .identified-floor { margin-top: 13px; }
       .variant-b .success-assurance { justify-content: flex-start; }
+      .variant-b .success-assurance::before { content: "说明"; }
+
+      .round-context-note {
+        display: grid;
+        margin-top: 14px;
+        padding: 14px 15px;
+        gap: 4px;
+        border: 1px solid #d9e5dd;
+        border-radius: 16px;
+        background: #eef6f1;
+      }
+
+      .round-context-note strong {
+        color: var(--green-dark);
+        font-size: 14px;
+      }
+
+      .round-context-note span {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .round-add-button {
+        width: 100%;
+        min-height: 54px;
+        margin-top: 12px;
+        border: 2px solid #ef8b61;
+        border-radius: 14px;
+        cursor: pointer;
+        color: #91421f;
+        background: #fff4ed;
+        font-size: 15px;
+        font-weight: 950;
+      }
+
+      .round-action-note {
+        margin: 7px 4px 0;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.45;
+        text-align: center;
+      }
 
       .progress-card > strong { display: block; margin-bottom: 11px; font-size: 16px; }
       .progress-step {
@@ -1846,7 +1889,7 @@
         <section class="story" aria-labelledby="page-title">
           <div class="eyebrow">楼道协作 · 楼道收一收</div>
           <h1 id="page-title">扫一下，<br />师傅就知道。</h1>
-          <p class="lead">住户扫本层二维码后已经提醒成功，无需再填表或选地点。只有现场不好找时，才自愿补充一张照片或一句话。</p>
+          <p class="lead">住户扫码进入本层当前的回收轮次：没有进行中的轮次才自动创建；已经在等待时只显示进展，不会重复提醒。</p>
 
           <div class="flow" aria-label="产品主流程">
             <div class="flow-item">
@@ -1860,23 +1903,24 @@
             <div class="flow-item">
               <div class="flow-number">2</div>
               <div class="flow-copy">
-                <strong>扫码后立即提醒</strong>
-                <span>不填表，也不需要第二次确认</span>
+                <strong>按当前轮次分流</strong>
+                <span>首次创建，重新打开或再扫只看进展</span>
               </div>
               <span class="flow-arrow" aria-hidden="true">→</span>
             </div>
             <div class="flow-item">
               <div class="flow-number">3</div>
               <div class="flow-copy">
-                <strong>有需要再补充</strong>
-                <span>照片和留言都可选，与本层当前一轮提醒聚合</span>
+                <strong>明确新增才计一次</strong>
+                <span>只有又放了可回收物，才增加本轮待收确认</span>
               </div>
               <span class="flow-arrow" aria-hidden="true">✓</span>
             </div>
           </div>
 
           <div class="demo-actions" aria-label="原型演示操作">
-            <button class="demo-button primary" type="button" data-action="scan">体验住户端</button>
+            <button class="demo-button primary" type="button" data-action="first-scan">演示首次扫码</button>
+            <button class="demo-button secondary" type="button" data-action="reopen-round">演示重新打开</button>
             <button class="demo-button secondary" type="button" data-action="collector">打开师傅端</button>
             <button class="demo-button secondary" type="button" data-action="collected">演示已经收好</button>
             <button class="demo-button ghost" type="button" data-action="reset">恢复演示数据</button>
@@ -1944,6 +1988,8 @@
         variant: getVariantFromUrl(),
         scanPhase: getViewFromUrl() === "resident" ? "success" : "idle",
         residentStatus: "waiting",
+        residentEntry: getViewFromUrl() === "resident" ? "reopened" : "none",
+        completedRoundCount: 0,
         residentPhoto: false,
         residentMessage: "",
         residentDraft: "",
@@ -2066,7 +2112,7 @@
               return `
                 <div class="floor-control-row">
                   <div class="floor-control-copy">
-                    <span class="floor-control-meta">${task.floor} 楼 · ${selectedTasks.length} 项待处理</span>
+                    <span class="floor-control-meta">${task.floor} 楼 · 本轮 ${task.count} 次待收确认</span>
                     <strong>${request.taskTitle}${task.hasPhoto ? ' <span class="floor-control-note">· 附照片</span>' : ""}</strong>
                   </div>
                   <button class="floor-control-button" type="button" data-clear-task="${task.id}">${request.completion}</button>
@@ -2110,7 +2156,9 @@
                   const floorTasks = tasksByFloor.get(floor) || [];
                   if (!floorTasks.length) return `<div class="floor-cell"><strong>${floor} 楼</strong><span>无事</span></div>`;
                   const selectedClass = state.selectedFloor === floor ? " selected" : "";
-                  const summary = floorTasks.length === 1 ? `${requestFor(floorTasks[0]).short} · ${floorTasks[0].latest}` : `${floorTasks.length} 项待处理`;
+                  const summary = floorTasks.length === 1
+                    ? `${requestFor(floorTasks[0]).short} · ${floorTasks[0].latest}${floorTasks[0].count > 1 ? ` · ${floorTasks[0].count} 次` : ""}`
+                    : `${floorTasks.length} 项待处理`;
                   return `<button class="floor-cell pending${selectedClass}" type="button" data-select-floor="${floor}"><strong>${floor} 楼</strong><span>${summary}</span></button>`;
                 }).join("")}
               </div>
@@ -2278,10 +2326,11 @@
 
       function renderResidentProgress(includeSupplement = true) {
         const task = residentTask();
+        const roundCount = task?.count || state.completedRoundCount || 1;
         return `
           <div class="progress-card">
             <strong>这轮回收进展</strong>
-            <div class="progress-step"><time>刚刚</time><span><strong>提醒成功</strong><br />幸福苑 2 栋 · 6 楼${task?.count > 1 ? ` · 本轮 ${task.count} 次提醒` : ""}</span></div>
+            <div class="progress-step"><time>本轮</time><span><strong>已登记待收</strong><br />幸福苑 2 栋 · 6 楼 · 已有 ${roundCount} 次待收确认</span></div>
             ${includeSupplement && (state.residentPhoto || state.residentMessage) ? `
               <div class="progress-step"><time>刚刚</time><span><strong>已补充现场信息</strong><br />${state.residentPhoto && state.residentMessage ? "照片和留言" : state.residentPhoto ? "现场照片" : "一句留言"}</span></div>` : ""}
             <div class="progress-step"><time>接下来</time><span><strong>等师傅来收</strong><br />收好后这里会更新</span></div>
@@ -2311,19 +2360,53 @@
       }
 
       function renderResidentVariantB() {
+        const task = residentTask();
+        const roundCount = task?.count || 1;
+        const entryCopy = {
+          created: {
+            symbol: "已",
+            title: "已告诉师傅",
+            description: "已为 6 楼创建这一轮待收。",
+            assurance: "现在可以离开",
+          },
+          reopened: {
+            symbol: "进",
+            title: "6 楼正在等待收取",
+            description: "你看到的是同一轮回收进展，没有重复提醒。",
+            assurance: "重新打开或再扫都不会增加次数",
+          },
+          added: {
+            symbol: "+1",
+            title: "已记入这一轮",
+            description: `本轮现在有 ${roundCount} 次待收确认。`,
+            assurance: "师傅仍然只看到 6 楼这一轮",
+          },
+        }[state.residentEntry] || {
+          symbol: "进",
+          title: "6 楼正在等待收取",
+          description: "你看到的是同一轮回收进展，没有重复提醒。",
+          assurance: "重新打开或再扫都不会增加次数",
+        };
+
         return `
           <div class="resident-hero">
             <div class="hero-status-row">
-              <div class="scan-visual" aria-hidden="true">已</div>
-              <div><h2>提醒已经发出</h2><p>不需要再提交任何内容。</p></div>
+              <div class="scan-visual" aria-hidden="true">${entryCopy.symbol}</div>
+              <div><h2>${entryCopy.title}</h2><p>${entryCopy.description}</p></div>
             </div>
             <div class="identified-floor">幸福苑 2 栋 · 6 楼</div>
-            <div class="success-assurance">现在就可以离开</div>
+            <div class="success-assurance">${entryCopy.assurance}</div>
           </div>
           ${renderResidentProgress(false)}
+          <div class="round-context-note">
+            <strong>本轮已有 ${roundCount} 次待收确认</strong>
+            <span>重新打开应用或再次扫码，只查看进展，不会增加次数。</span>
+          </div>
+          <button class="round-add-button" type="button" data-action="add-more">这里又多了可回收物</button>
+          <p class="round-action-note">只有确实又放了东西时才点，内容会并入这一轮。</p>
           ${renderSupplementPreview()}
           <button class="open-sheet-button" type="button" data-action="open-sheet">${state.residentPhoto || state.residentMessage ? "查看或修改现场补充" : "补充现场信息（可选）"}</button>
-          <div class="withdraw-wrap"><button class="withdraw-button" type="button" data-action="withdraw">扫错了，撤回这次提醒</button></div>`;
+          ${state.residentEntry === "created" ? `<div class="withdraw-wrap"><button class="withdraw-button" type="button" data-action="withdraw">扫错了，撤回这次提醒</button></div>` : ""}`;
       }
 
       function renderResidentVariantC() {
@@ -2370,6 +2453,7 @@
       }
 
       function renderResidentCollected() {
+        const roundCount = state.completedRoundCount || 1;
         return `
           <div class="completion-card">
             <div class="scan-visual" aria-hidden="true">好</div>
@@ -2379,7 +2463,7 @@
           </div>
           <div class="progress-card">
             <strong>这轮回收记录</strong>
-            <div class="progress-step"><time>9:41</time><span><strong>住户发出提醒</strong><br />幸福苑 2 栋 · 6 楼</span></div>
+            <div class="progress-step"><time>9:41</time><span><strong>本轮登记待收</strong><br />幸福苑 2 栋 · 6 楼 · 共 ${roundCount} 次待收确认</span></div>
             ${state.residentPhoto || state.residentMessage ? `<div class="progress-step"><time>9:42</time><span><strong>住户补充了现场信息</strong></span></div>` : ""}
             <div class="progress-step"><time>10:18</time><span><strong>师傅标记为已收好</strong></span></div>
           </div>
@@ -2434,6 +2518,11 @@
       function clearTask(taskId) {
         const task = state.tasks.find(item => item.id === taskId);
         if (!task) return;
+        if (taskId === "6-recycle") {
+          state.completedRoundCount = task.count;
+          state.residentStatus = "collected";
+          state.residentEntry = "reopened";
+        }
         state.tasks = state.tasks.filter(item => item.id !== taskId);
         state.lastCleared = task;
         render();
@@ -2444,6 +2533,11 @@
         const restoredFloor = state.lastCleared.floor;
         if (!state.tasks.some(item => item.id === state.lastCleared.id)) {
           state.tasks.push(state.lastCleared);
+        }
+        if (state.lastCleared.id === "6-recycle") {
+          state.residentStatus = "waiting";
+          state.completedRoundCount = 0;
+          state.residentEntry = "reopened";
         }
         state.lastCleared = null;
         state.selectedFloor = restoredFloor;
@@ -2539,12 +2633,15 @@
       }
 
       /* #39 住户端状态操作：覆盖 main 版的选事项表单流程。 */
-      function startScan() {
+      function startFirstScan() {
         clearTimeout(state.scanTimer);
+        state.tasks = state.tasks.filter(item => item.id !== "6-recycle");
         state.beforeScan = structuredClone(state.tasks);
         state.view = "resident";
         state.scanPhase = "sending";
         state.residentStatus = "waiting";
+        state.residentEntry = "created";
+        state.completedRoundCount = 0;
         state.residentPhoto = false;
         state.residentMessage = "";
         state.residentDraft = "";
@@ -2555,10 +2652,42 @@
         render();
 
         state.scanTimer = setTimeout(() => {
-          ensureResidentTask(true);
+          ensureResidentTask(false);
           state.scanPhase = "success";
           render();
         }, 850);
+      }
+
+      function reopenRound() {
+        clearTimeout(state.scanTimer);
+        state.view = "resident";
+        state.residentEditor = null;
+        state.residentSheetOpen = false;
+        state.lastCleared = null;
+
+        if (state.residentStatus !== "collected" && !residentTask()) {
+          startFirstScan();
+          return;
+        }
+
+        state.scanPhase = "success";
+        state.residentEntry = "reopened";
+        syncViewToUrl();
+        render();
+      }
+
+      function addMoreToRound() {
+        if (state.residentStatus === "collected" || !residentTask()) {
+          startFirstScan();
+          return;
+        }
+        ensureResidentTask(true);
+        state.residentEntry = "added";
+        render();
+      }
+
+      function startNewRound() {
+        startFirstScan();
       }
 
       function withdrawScan() {
@@ -2581,12 +2710,15 @@
 
       function showCollectedFeedback() {
         clearTimeout(state.scanTimer);
+        const completedTask = residentTask();
+        state.completedRoundCount = completedTask?.count || state.completedRoundCount || 1;
+        state.tasks = state.tasks.filter(item => item.id !== "6-recycle");
         state.view = "resident";
         state.scanPhase = "success";
         state.residentStatus = "collected";
+        state.residentEntry = "reopened";
         state.residentEditor = null;
         state.residentSheetOpen = false;
-        ensureResidentTask();
         syncViewToUrl();
         render();
       }
@@ -2598,6 +2730,8 @@
         state.view = "collector";
         state.scanPhase = "idle";
         state.residentStatus = "waiting";
+        state.residentEntry = "none";
+        state.completedRoundCount = 0;
         state.residentPhoto = false;
         state.residentMessage = "";
         state.residentDraft = "";
@@ -2628,7 +2762,9 @@
         const actionButton = event.target.closest("[data-action]");
         if (!actionButton) return;
         const action = actionButton.dataset.action;
-        if (action === "scan") startScan();
+        if (action === "scan" || action === "first-scan") startFirstScan();
+        if (action === "reopen-round") reopenRound();
+        if (action === "add-more") addMoreToRound();
         if (action === "collector") {
           clearTimeout(state.scanTimer);
           clearTimeout(state.submitTimer);
@@ -2643,7 +2779,7 @@
         if (action === "undo") undoClear();
         if (action === "reset") resetDemo();
         if (action === "collected") showCollectedFeedback();
-        if (action === "new-round") startScan();
+        if (action === "new-round") startNewRound();
         if (action === "toggle-photo") {
           state.residentPhoto = !state.residentPhoto;
           syncResidentSupplement();
@@ -2714,8 +2850,11 @@
         state.residentSheetOpen = false;
         if (state.view === "resident") {
           state.scanPhase = "success";
-          state.residentStatus = "waiting";
-          ensureResidentTask();
+          if (state.residentStatus !== "collected") {
+            state.residentStatus = "waiting";
+            ensureResidentTask();
+          }
+          state.residentEntry = "reopened";
         }
         render();
       });
