@@ -1064,7 +1064,7 @@
         font-size: 17px;
       }
 
-      .request-summary span {
+      .request-summary > div > span {
         display: block;
         margin-top: 4px;
         color: var(--muted);
@@ -1108,23 +1108,38 @@
         font-weight: 900;
       }
 
-      .photo-add-button span {
-        display: block;
-        margin-top: 5px;
+      .photo-add-content {
+        display: grid;
+        margin: 0;
+        justify-items: center;
+        gap: 5px;
+      }
+
+      .photo-add-title {
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 900;
+        line-height: 1.25;
+      }
+
+      .photo-add-note {
         color: var(--muted);
         font-size: 12px;
         font-weight: 700;
+        line-height: 1.4;
       }
 
       .photo-add-icon {
         display: grid;
         width: 40px;
         height: 40px;
+        margin: 0;
         place-items: center;
         border-radius: 13px;
         color: #fff;
         background: var(--green);
         font-size: 23px;
+        line-height: 1;
       }
 
       .photo-preview-card {
@@ -1786,7 +1801,11 @@
                     </div>
                   </div>` : `
                   <button class="photo-add-button" type="button" data-action="add-photo">
-                    <span><span class="photo-add-icon" aria-hidden="true">＋</span>添加现场照片<span>不添加也可以直接提交</span></span>
+                    <span class="photo-add-content">
+                      <span class="photo-add-icon" aria-hidden="true">＋</span>
+                      <span class="photo-add-title">添加现场照片</span>
+                      <span class="photo-add-note">不添加也可以直接提交</span>
+                    </span>
                   </button>`}
               </div>
               <button class="resident-submit" type="button" data-action="submit-request">${state.photoAttached ? "带上照片，发出提醒" : "不添加照片，直接发出提醒"}</button>
