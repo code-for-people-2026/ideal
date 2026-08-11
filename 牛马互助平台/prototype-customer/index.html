@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>近邻互助组 · 客户体验原型</title>
+    <link rel="stylesheet" href="../../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据
       问题：第一次接触产品的人，能否在 2–3 分钟内看懂价值并顺滑走完高光路径？
@@ -44,7 +45,7 @@
       .page { min-height: 100vh; padding: 28px 30px 110px; }
       .topbar {
         width: min(1220px, 100%); margin: 0 auto; display: flex; align-items: center;
-        justify-content: space-between; gap: 18px; padding-right: 220px;
+        justify-content: space-between; gap: 18px; padding-right: 178px;
       }
       .brand { display: flex; align-items: center; gap: 11px; font-weight: 900; }
       .brand-mark {
@@ -221,18 +222,13 @@
       .dots { display: flex; justify-content: center; gap: 5px; margin-top: 3px; }
       .dots i { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.25); }
       .dots i.active { width: 13px; border-radius: 5px; background: var(--flag-gold); }
-      .page-switcher {
-        position: fixed; z-index: 22; top: 18px; right: 20px; display: flex; gap: 4px; padding: 5px;
-        border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.9);
-        box-shadow: 0 8px 24px rgba(24,48,31,.08); backdrop-filter: blur(10px);
+      .audience-switch {
+        position: fixed; z-index: 20; top: 22px; right: 24px; padding: 9px 12px; border: 1px solid var(--line);
+        border-radius: 999px; background: rgba(255,255,255,.86); color: var(--muted); text-decoration: none;
+        font-size: 11px; font-weight: 800; box-shadow: 0 8px 24px rgba(24,48,31,.08); backdrop-filter: blur(10px);
       }
-      .page-switcher a {
-        padding: 7px 10px; border-radius: 999px; color: var(--muted); text-decoration: none;
-        font-size: 10px; font-weight: 850; white-space: nowrap;
-      }
-      .page-switcher a.active { color: #fff; background: var(--ink); }
       @media (max-width: 930px) {
-        .topbar { padding-right: 220px; }
+        .topbar { padding-right: 0; }
         .layout { grid-template-columns: 1fr; gap: 20px; }
         .story { text-align: center; }
         .lead, .proofs { margin-left: auto; margin-right: auto; }
@@ -243,8 +239,7 @@
       @media (max-width: 560px) {
         .page { padding: 18px 14px 105px; }
         .proto-note { display: none; }
-        .topbar { padding-right: 0; }
-        .page-switcher { position: static; width: max-content; max-width: calc(100% - 28px); margin: 14px; overflow-x: auto; }
+        .audience-switch { position: static; display: inline-block; margin: 14px; }
         .layout { margin-top: 14px; }
         .story { padding-top: 0; }
         h1 { font-size: 43px; }
@@ -257,11 +252,8 @@
     </style>
   </head>
   <body>
-    <nav class="page-switcher" aria-label="切换展示页面">
-      <a class="active" href="./">客户体验</a>
-      <a href="../prototype-implementation/">实施对照</a>
-      <a href="../街坊味-一页介绍.html">街坊味</a>
-    </nav>
+    <a class="prototype-home-link" href="../../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
+    <a class="audience-switch" href="../prototype-implementation/">切到实施对照原型 →</a>
     <div id="app"></div>
 
     <script>

@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>近邻互助组 · 选择原型</title>
+    <link rel="stylesheet" href="../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据
-      三种页面共享产品事实，但承担不同的说明任务：
+      两种原型只共享产品事实，不共享叙事密度：
       1. 客户体验原型：验证价值是否一眼可懂、主流程是否顺滑。
       2. 工程实现原型：验证 User Story、状态、数据与验收边界是否完整。
-      3. 街坊味场景页：验证平台价值是否能落到具体业务闭环。
       运行：python3 -m http.server 4173
     -->
     <style>
@@ -23,8 +23,6 @@
         --green-soft: #dff3e8;
         --blue: #315da8;
         --blue-soft: #e7eefb;
-        --red: #d42b1e;
-        --red-soft: #fbe5e1;
         --shadow: 0 24px 70px rgba(29, 45, 34, 0.12);
       }
       * { box-sizing: border-box; }
@@ -48,7 +46,7 @@
       .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
       h1 { max-width: 760px; margin: 22px 0 14px; font-size: clamp(38px, 6vw, 72px); line-height: .98; letter-spacing: -.055em; }
       .lead { max-width: 720px; margin: 0; color: var(--muted); font-size: 18px; line-height: 1.75; }
-      .choice-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 48px; }
+      .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 48px; }
       .choice {
         position: relative; overflow: hidden; min-height: 430px; padding: 30px;
         border: 1px solid var(--line); border-radius: 28px; background: rgba(255,255,255,.86);
@@ -62,7 +60,6 @@
       }
       .choice.customer { --accent: var(--green); --accent-soft: var(--green-soft); }
       .choice.engineer { --accent: var(--blue); --accent-soft: var(--blue-soft); }
-      .choice.street { --accent: var(--red); --accent-soft: var(--red-soft); }
       .choice-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
       .audience { color: var(--accent); font-size: 12px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
       .arrow { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 22px; }
@@ -77,22 +74,20 @@
         background: rgba(255,255,255,.56); color: var(--muted); font-size: 14px; line-height: 1.65;
       }
       .boundary strong { color: var(--ink); white-space: nowrap; }
-      @media (max-width: 920px) {
-        .choice-grid { grid-template-columns: 1fr; }
-        .choice { min-height: 360px; }
-      }
       @media (max-width: 760px) {
         main { padding-top: 40px; }
+        .choice-grid { grid-template-columns: 1fr; }
         .choice { min-height: 390px; }
         .boundary { grid-template-columns: 1fr; }
       }
     </style>
   </head>
   <body>
+    <a class="prototype-home-link" href="../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
     <main>
-      <div class="eyebrow">IDEAL · 选择观看页面</div>
-      <h1>同一个平台，<br />三种观看方式。</h1>
-      <p class="lead">客户版讲价值，工程版讲系统；街坊味用一个具体应用说明，平台如何把可信推荐继续推进到订餐、履约和付款。</p>
+      <div class="eyebrow">PROTOTYPE · 选择观看视角</div>
+      <h1>同一个产品，<br />两种说明方式。</h1>
+      <p class="lead">客户需要迅速感到“这能帮我什么”；工程师需要准确知道“系统必须怎样工作”。两份原型共享产品事实，但不混用表达任务。</p>
 
       <section class="choice-grid" aria-label="选择原型">
         <a class="choice customer" href="./prototype-customer/">
@@ -122,25 +117,11 @@
             <div class="check"><span>✓</span>对照 User Story 实现</div>
           </div>
         </a>
-
-        <a class="choice street" href="./街坊味-一页介绍.html">
-          <div class="choice-top">
-            <div class="audience">Scenario app</div>
-            <div class="arrow">↗</div>
-          </div>
-          <h2>看见闭环怎样落地</h2>
-          <p class="desc">用社区供餐应用“街坊味”说明，可信的服务关系如何继续走向菜单、订单、送达和付款。</p>
-          <div class="checks">
-            <div class="check"><span>✓</span>一个场景一页讲清</div>
-            <div class="check"><span>✓</span>菜单到付款完整串联</div>
-            <div class="check"><span>✓</span>平台价值落到具体业务</div>
-          </div>
-        </a>
       </section>
 
       <div class="boundary">
         <strong>边界原则</strong>
-        <span>客户版可以省略内部状态，工程版可以展开系统复杂度，场景应用页负责证明业务闭环。三种表达可以有不同密度，但产品事实与责任边界必须一致。</span>
+        <span>客户版可以省略内部状态，但不能夸大能力；工程版可以展示复杂度，但不能把尚未确认的交互当成需求。产品规则、责任边界和数据承诺必须在两边保持一致。</span>
       </div>
     </main>
   </body>

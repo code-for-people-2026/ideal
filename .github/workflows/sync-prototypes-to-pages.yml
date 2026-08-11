@@ -1,0 +1,50 @@
+name: Sync prototypes to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: github-pages-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Build the deployable site
+        run: bash scripts/build-pages-site.sh "$GITHUB_WORKSPACE/_site"
+
+      - name: Replace the gh-pages contents
+        env:
+          PAGES_SOURCE_SHA: ${{ github.sha }}
+        run: |
+          git fetch origin gh-pages
+          pages_worktree="$(mktemp -d "$RUNNER_TEMP/ideal-pages.XXXXXX")"
+          git worktree add --detach "$pages_worktree" origin/gh-pages
+
+          find "$pages_worktree" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf -- {} +
+          cp -a "$GITHUB_WORKSPACE/_site/." "$pages_worktree/"
+
+          cd "$pages_worktree"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "gh-pages already matches the deployable site."
+            exit 0
+          fi
+
+          git commit -m "deploy: sync prototypes from ${PAGES_SOURCE_SHA:0:7}"
+          git push origin HEAD:gh-pages
