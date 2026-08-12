@@ -8,41 +8,32 @@
       content="近邻互助组通过真实亲历帮助邻里找到彼此，街坊味和楼道收一收承接具体协作。"
     />
     <title>近邻互助组 · 原型地图</title>
-    <!--
-      PROTOTYPE — 不接真实数据，不是生产代码。
-      本轮问题：入口页能否像社交图谱一样表达近邻互助组与不同应用之间的关系，而不形成树状层级？
-    -->
+    <!-- PROTOTYPE — 不接真实数据，不是生产代码。 -->
     <style>
       :root {
         color-scheme: light;
         --ink: #172019;
-        --muted: #5e695f;
-        --paper: #f5f1e7;
-        --paper-deep: #eae3d4;
-        --green: #176044;
-        --green-dark: #0d422f;
-        --red: #b43d31;
-        --red-dark: #78241f;
-        --orange: #d8652d;
-        --orange-dark: #8b3517;
-        --grey: #a9afa8;
-        --shadow: 0 26px 70px rgba(35, 47, 38, 0.14);
+        --muted: #4f5751;
+        --paper: #f7f3eb;
+        --green: #2f5f48;
+        --green-soft: #78937f;
+        --red: #a94031;
+        --orange: #bd6616;
+        --future: #64806e;
       }
 
       * { box-sizing: border-box; }
 
-      html {
-        min-width: 320px;
-      }
+      html { min-width: 320px; }
 
       body {
         min-height: 100vh;
         margin: 0;
         color: var(--ink);
         background:
-          radial-gradient(circle at 9% 7%, rgba(216, 101, 45, 0.12), transparent 29rem),
-          radial-gradient(circle at 91% 24%, rgba(23, 96, 68, 0.12), transparent 31rem),
-          linear-gradient(180deg, #faf8f2 0%, var(--paper) 48%, var(--paper-deep) 100%);
+          radial-gradient(circle at 24% 34%, rgba(169, 64, 49, 0.035), transparent 28rem),
+          radial-gradient(circle at 69% 52%, rgba(47, 95, 72, 0.035), transparent 34rem),
+          var(--paper);
         font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
         -webkit-font-smoothing: antialiased;
       }
@@ -52,94 +43,97 @@
         -webkit-tap-highlight-color: transparent;
       }
 
-      a:focus-visible {
-        outline: 4px solid rgba(23, 96, 68, 0.36);
-        outline-offset: 5px;
-      }
-
       .page {
-        width: min(1320px, calc(100% - 48px));
+        width: min(1404px, calc(100% - 80px));
         margin: 0 auto;
-        padding: 28px 0 54px;
+        padding: 34px 0 48px;
       }
 
       .topbar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 18px;
-      }
-
-      .brand {
-        font-size: 15px;
-        font-weight: 900;
+        gap: 24px;
+        font-size: 16px;
+        font-weight: 750;
         letter-spacing: -0.02em;
       }
 
       .status {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border: 1px solid rgba(23, 96, 68, 0.16);
-        border-radius: 999px;
         color: var(--green);
-        background: rgba(255, 255, 255, 0.62);
-        font-size: 11px;
-        font-weight: 850;
+        font-weight: 500;
       }
 
-      .status::before {
-        content: "";
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #29a36a;
-        box-shadow: 0 0 0 4px rgba(41, 163, 106, 0.12);
+      .showcase {
+        display: grid;
+        min-height: 920px;
+        grid-template-columns: 350px minmax(0, 1fr);
+        gap: 28px;
       }
 
-      .hero {
-        max-width: 980px;
-        margin: 0 auto;
-        padding: 70px 0 50px;
-        text-align: center;
+      .intro {
+        position: relative;
+        z-index: 4;
+        padding-top: 152px;
+        padding-left: 18px;
       }
 
       .eyebrow {
         color: var(--red);
-        font-size: 12px;
-        font-weight: 900;
-        letter-spacing: 0.1em;
+        font-size: 17px;
+        font-weight: 650;
+        letter-spacing: 0.12em;
       }
 
       h1 {
-        max-width: 960px;
-        margin: 17px auto 22px;
-        font-size: clamp(48px, 6.5vw, 88px);
-        line-height: 1;
-        letter-spacing: -0.02em;
-        text-wrap: balance;
+        margin: 22px 0 34px;
+        font-size: clamp(52px, 4vw, 60px);
+        font-weight: 750;
+        line-height: 1.6;
+        letter-spacing: -0.055em;
+      }
+
+      h1 span { display: block; white-space: nowrap; }
+
+      .divider {
+        width: 38px;
+        height: 1px;
+        margin-bottom: 38px;
+        background: var(--ink);
       }
 
       .lead {
-        max-width: 720px;
-        margin: 0 auto;
-        color: var(--muted);
-        font-size: clamp(17px, 1.8vw, 21px);
-        line-height: 1.72;
-        text-wrap: pretty;
+        max-width: 276px;
+        margin: 0;
+        color: #303733;
+        font-size: 16px;
+        line-height: 2.55;
       }
 
-      .atlas {
+      .guide {
+        display: flex;
+        margin: 28px 0 0;
+        align-items: center;
+        gap: 9px;
+        color: var(--green);
+        font-size: 14px;
+        font-weight: 650;
+        letter-spacing: 0.02em;
+      }
+
+      .guide::before {
+        content: "";
+        width: 7px;
+        height: 7px;
+        flex: 0 0 auto;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      .graph {
         position: relative;
-        height: 800px;
-        border: 1px solid rgba(53, 65, 56, 0.12);
-        border-radius: 44px;
-        overflow: hidden;
-        background:
-          radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.42) 45%, transparent 72%),
-          rgba(255, 255, 255, 0.34);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), var(--shadow);
+        height: 920px;
+        min-width: 0;
       }
 
       .connections {
@@ -148,24 +142,36 @@
         inset: 0;
         width: 100%;
         height: 100%;
+        overflow: visible;
         pointer-events: none;
       }
 
-      .connection {
+      .orbit {
         fill: none;
-        stroke: rgba(23, 96, 68, 0.42);
-        stroke-width: 1.8;
+        stroke: var(--green-soft);
+        stroke-width: 1.25;
         vector-effect: non-scaling-stroke;
       }
 
-      .connection.future {
-        stroke: rgba(111, 121, 112, 0.42);
-        stroke-dasharray: 5 8;
+      .orbit.dashed {
+        stroke-dasharray: 3 6;
+        stroke-width: 1.45;
       }
+
+      .orbit.faint { opacity: 0.22; }
+
+      .anchor { stroke: var(--paper); stroke-width: 4; }
+      .anchor.green { fill: var(--green); }
+      .anchor.red { fill: var(--red); }
+      .anchor.orange { fill: var(--orange); }
 
       .connections-mobile { display: none; }
 
-      .map-node {
+      .node {
+        --x: 50%;
+        --y: 50%;
+        --size: 180px;
+        --node-color: var(--green);
         position: absolute;
         z-index: 2;
         left: var(--x);
@@ -173,110 +179,144 @@
         display: flex;
         width: var(--size);
         height: var(--size);
-        padding: 26px;
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        padding: 34px;
         transform: translate(-50%, -50%);
+        border: 2px solid var(--node-color);
         border-radius: 50%;
+        background: rgba(247, 243, 235, 0.93);
         text-align: center;
       }
 
-      a.map-node {
+      .node::after {
+        content: "";
+        position: absolute;
+        inset: 9px;
+        border: 1px solid color-mix(in srgb, var(--node-color) 76%, transparent);
+        border-radius: inherit;
+        pointer-events: none;
+      }
+
+      .kith::after,
+      .recycle::after { display: none; }
+
+      a.node {
         cursor: pointer;
         text-decoration: none;
-        transition: transform 180ms ease, box-shadow 180ms ease;
+        transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
       }
 
-      a.map-node:hover {
-        transform: translate(-50%, -50%) scale(1.05);
+      a.node:hover {
+        background: color-mix(in srgb, var(--node-color) 8%, var(--paper));
+        box-shadow: 0 18px 38px color-mix(in srgb, var(--node-color) 18%, transparent);
+        transform: translate(-50%, -50%) scale(1.028);
       }
 
-      a.hub-node:hover {
-        box-shadow: 0 36px 88px rgba(13, 66, 47, 0.36), inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+      a.node:focus-visible {
+        outline: 3px solid color-mix(in srgb, var(--node-color) 34%, transparent);
+        outline-offset: 7px;
       }
 
-      a.app-node:hover {
-        box-shadow: 0 30px 74px rgba(58, 42, 32, 0.27), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+      a.node::before {
+        content: "进入原型 ↗";
+        position: absolute;
+        z-index: 3;
+        bottom: 26px;
+        left: 50%;
+        color: var(--node-color);
+        font-size: 13px;
+        font-weight: 650;
+        letter-spacing: 0.04em;
+        opacity: 0;
+        transform: translate(-50%, 5px);
+        transition: opacity 180ms ease, transform 180ms ease;
+        white-space: nowrap;
       }
 
-      .map-node h2,
-      .map-node h3 {
+      a.node:hover::before,
+      a.node:focus-visible::before {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      .hub::before { bottom: 74px; }
+
+      .node h2,
+      .node h3 {
+        position: relative;
+        z-index: 1;
         margin: 0;
-        line-height: 1.06;
+        color: var(--node-color);
+        line-height: 1.12;
         letter-spacing: -0.045em;
       }
 
-      .map-node h2 { font-size: 38px; }
-      .map-node h3 { font-size: 29px; }
+      .node h2 { font-size: 40px; font-weight: 680; }
+      .node h3 { font-size: 28px; font-weight: 680; }
 
-      .map-node p {
-        max-width: 210px;
-        margin: 12px 0 0;
-        font-size: 13px;
-        line-height: 1.58;
-        text-wrap: pretty;
+      .node h2::after,
+      .node h3::after {
+        content: "";
+        display: block;
+        width: 38px;
+        height: 1.5px;
+        margin: 24px auto 22px;
+        background: var(--node-color);
       }
 
-      .hub-node {
-        --x: 47%;
-        --y: 412px;
-        --size: 280px;
-        color: #fff;
-        background:
-          radial-gradient(circle at 31% 23%, rgba(255, 255, 255, 0.16), transparent 36%),
-          linear-gradient(145deg, #1b6d4d, var(--green-dark));
-        box-shadow: 0 30px 72px rgba(13, 66, 47, 0.28), inset 0 0 0 1px rgba(255, 255, 255, 0.17);
-      }
-
-      .hub-node p { color: rgba(255, 255, 255, 0.78); }
-
-      .app-node {
-        --size: 232px;
-        color: #fff;
-        box-shadow: 0 24px 58px rgba(58, 42, 32, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.24);
-      }
-
-      .app-node p {
-        max-width: 174px;
-        color: rgba(255, 255, 255, 0.8);
-      }
-
-      .kith-node {
-        --x: 19%;
-        --y: 330px;
-        background:
-          radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.18), transparent 36%),
-          linear-gradient(145deg, #c94a3d, var(--red-dark));
-      }
-
-      .recycle-node {
-        --x: 81%;
-        --y: 470px;
-        background:
-          radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.2), transparent 36%),
-          linear-gradient(145deg, #e4773f, var(--orange-dark));
-      }
-
-      .future-node {
-        --size: 138px;
+      .node p {
+        position: relative;
         z-index: 1;
-        padding: 20px;
-        color: #55605a;
-        border: 1px dashed #9aa29a;
-        background: rgba(227, 228, 223, 0.88);
-        box-shadow: 0 12px 28px rgba(59, 65, 59, 0.08);
+        max-width: 230px;
+        margin: 0;
+        color: #303733;
+        font-size: 16px;
+        line-height: 1.78;
       }
 
-      .future-node h3 { font-size: 17px; }
-      .future-node p { margin-top: 7px; font-size: 10.5px; line-height: 1.5; }
-      .future-one { --x: 50%; --y: 90px; }
-      .future-two { --x: 20%; --y: 680px; }
-      .future-three { --x: 78%; --y: 135px; }
+      .hub {
+        --x: 47%;
+        --y: 53%;
+        --size: 520px;
+        --node-color: var(--green);
+      }
+
+      .kith {
+        --x: 17%;
+        --y: 27%;
+        --size: 300px;
+        --node-color: var(--red);
+      }
+
+      .recycle {
+        --x: 71%;
+        --y: 81%;
+        --size: 305px;
+        --node-color: var(--orange);
+      }
+
+      .future {
+        --size: 190px;
+        --node-color: var(--future);
+        z-index: 1;
+        padding: 28px;
+        border-width: 1.5px;
+        border-style: dashed;
+      }
+
+      .future::after { display: none; }
+      .future h3 { color: #244b39; font-size: 24px; }
+      .future h3::after { display: none; }
+      .future p { margin-top: 18px; font-size: 15px; line-height: 1.6; }
+      .future-one { --x: 69%; --y: 17%; }
+      .future-two { --x: 90%; --y: 56%; }
+      .future-three { --x: 15%; --y: 81%; }
 
       footer {
         display: flex;
-        margin-top: 38px;
+        margin-top: 120px;
         align-items: center;
         justify-content: space-between;
         gap: 20px;
@@ -287,119 +327,115 @@
 
       footer strong { color: var(--ink); }
 
-      @media (max-width: 900px) {
-        .page { width: min(100% - 32px, 760px); }
-        .hero { padding: 62px 0 44px; }
-        .atlas { height: 790px; border-radius: 34px; }
+      @media (max-width: 1080px) {
+        .page { width: min(100% - 48px, 940px); }
+        .showcase { grid-template-columns: 300px minmax(0, 1fr); gap: 8px; }
+        .intro { padding-top: 120px; }
+        h1 { font-size: 54px; }
+        .graph { transform: scale(0.88); transform-origin: center left; width: 113.64%; }
+      }
+
+      @media (max-width: 760px) {
+        .page { width: calc(100% - 32px); padding-top: 24px; }
+        .topbar { font-size: 13px; }
+        .showcase { display: block; min-height: 0; }
+        .intro { padding: 74px 4px 30px; }
+        .eyebrow { font-size: 13px; }
+        h1 { margin: 22px 0 28px; font-size: clamp(46px, 13.5vw, 62px); line-height: 1.26; }
+        .divider { margin-bottom: 26px; }
+        .lead { max-width: 560px; font-size: 15px; line-height: 2; }
+        .guide { margin-top: 22px; font-size: 13px; }
+        .graph { width: 100%; height: 720px; transform: none; }
         .connections-desktop { display: none; }
         .connections-mobile { display: block; }
 
-        .hub-node { --x: 50%; --y: 370px; --size: 230px; }
-        .app-node { --size: 164px; }
-        .kith-node { --x: 23%; --y: 145px; }
-        .recycle-node { --x: 77%; --y: 605px; }
-        .future-node { --size: 88px; }
-        .future-one { --x: 82%; --y: 145px; }
-        .future-two { --x: 15%; --y: 585px; }
-        .future-three { --x: 50%; --y: 735px; }
+        .node { padding: 20px; }
+        .node h2 { font-size: 26px; }
+        .node h3 { font-size: 20px; }
+        .node h2::after,
+        .node h3::after { width: 24px; margin: 14px auto 12px; }
+        .node p { font-size: 10px; line-height: 1.55; }
+        a.node::before { display: none; }
 
-        .map-node { padding: 18px; }
-        .map-node h2 { font-size: 30px; }
-        .map-node h3 { font-size: 23px; }
-        .map-node p { margin-top: 9px; font-size: 10px; line-height: 1.48; }
-        .future-node h3 { font-size: 13px; }
-        .future-node p { margin-top: 5px; font-size: 9px; }
-      }
-
-      @media (max-width: 560px) {
-        .page { width: calc(100% - 24px); padding-top: 18px; }
-        .brand { font-size: 12px; }
-        .status { padding: 7px 9px; font-size: 9px; }
-        .hero { padding: 36px 5px 28px; }
-        .eyebrow { font-size: 10px; }
-        h1 { font-size: clamp(38px, 12vw, 52px); }
-        .lead { font-size: 15px; }
-        .atlas { height: 720px; border-radius: 28px; }
-
-        .hub-node { --y: 340px; --size: 210px; }
-        .app-node { --size: 150px; }
-        .kith-node { --y: 125px; }
-        .recycle-node { --y: 555px; }
-        .future-node { --size: 94px; }
-        .future-one { --y: 125px; }
-        .future-two { --y: 545px; }
-        .future-three { --y: 655px; }
-
-        .map-node { padding: 14px; }
-        .map-node h2 { font-size: 27px; }
-        .map-node h3 { font-size: 20px; }
-        .map-node p { margin-top: 7px; font-size: 10px; line-height: 1.5; }
-        footer { align-items: flex-start; flex-direction: column; }
+        .hub { --x: 50%; --y: 44%; --size: 218px; }
+        .kith { --x: 22%; --y: 17%; --size: 150px; }
+        .recycle { --x: 77%; --y: 70%; --size: 150px; }
+        .future { --size: 82px; padding: 10px; }
+        .future h3 { font-size: 14px; }
+        .future p { margin-top: 7px; font-size: 9px; }
+        .future-one { --x: 79%; --y: 16%; }
+        .future-two { --x: 85%; --y: 56%; }
+        .future-three { --x: 17%; --y: 68%; }
+        footer { margin-top: 32px; align-items: flex-start; flex-direction: column; }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        a.map-node { transition: none; }
+        a.node { transition: none; }
       }
     </style>
   </head>
   <body>
     <div class="page">
       <header class="topbar">
-        <div class="brand">近邻互助组 · 原型地图</div>
-        <div class="status">2 个应用开放</div>
+        <div>近邻互助组 · 原型地图</div>
+        <div class="status">3 个原型可体验</div>
       </header>
 
-      <main>
-        <section class="hero" aria-labelledby="page-title">
+      <main class="showcase">
+        <section class="intro" aria-labelledby="page-title">
           <div class="eyebrow">邻里之间，真实发生</div>
-          <h1 id="page-title">一次互助，长出更多相遇。</h1>
+          <h1 id="page-title"><span>始于一次互助，</span><span>共建和谐社区。</span></h1>
+          <div class="divider" aria-hidden="true"></div>
           <p class="lead">
-            近邻互助组用真实亲历帮助邻里找到彼此；不同的小应用把一次具体协作接住，新的经历又会帮助下一次相遇发生。
+            近邻互助组用真实亲历帮助邻<br />里找到彼此；不同的小应用把<br />一次具体协作接住，让互助逐<br />渐成为社区里的日常。
           </p>
+          <p class="guide">点击圆形，进入对应原型</p>
         </section>
 
-        <section class="atlas" aria-label="近邻互助组应用图谱">
-          <svg class="connections connections-desktop" viewBox="0 0 1000 800" preserveAspectRatio="none" aria-hidden="true">
-            <line class="connection" x1="470" y1="412" x2="190" y2="330" />
-            <line class="connection" x1="470" y1="412" x2="810" y2="470" />
-            <line class="connection future" x1="470" y1="412" x2="500" y2="90" />
-            <line class="connection future" x1="470" y1="412" x2="200" y2="680" />
-            <line class="connection future" x1="470" y1="412" x2="780" y2="135" />
+        <section class="graph" aria-label="近邻互助组应用图谱">
+          <svg class="connections connections-desktop" viewBox="0 0 1000 920" preserveAspectRatio="none" aria-hidden="true">
+            <ellipse class="orbit faint" cx="470" cy="480" rx="390" ry="330" />
+            <ellipse class="orbit dashed" cx="505" cy="484" rx="420" ry="365" />
+            <circle class="anchor red" cx="340" cy="282" r="9" />
+            <circle class="anchor green" cx="682" cy="316" r="9" />
+            <circle class="anchor green" cx="326" cy="678" r="9" />
+            <circle class="anchor orange" cx="607" cy="718" r="9" />
           </svg>
-          <svg class="connections connections-mobile" viewBox="0 0 1000 760" preserveAspectRatio="none" aria-hidden="true">
-            <line class="connection" x1="500" y1="354" x2="230" y2="132" />
-            <line class="connection" x1="500" y1="354" x2="770" y2="585" />
-            <line class="connection future" x1="500" y1="354" x2="820" y2="132" />
-            <line class="connection future" x1="500" y1="354" x2="150" y2="575" />
-            <line class="connection future" x1="500" y1="354" x2="500" y2="690" />
+          <svg class="connections connections-mobile" viewBox="0 0 1000 780" preserveAspectRatio="none" aria-hidden="true">
+            <ellipse class="orbit faint" cx="500" cy="350" rx="385" ry="310" />
+            <ellipse class="orbit dashed" cx="515" cy="360" rx="425" ry="335" />
+            <circle class="anchor red" cx="315" cy="205" r="10" />
+            <circle class="anchor green" cx="690" cy="235" r="10" />
+            <circle class="anchor green" cx="315" cy="585" r="10" />
+            <circle class="anchor orange" cx="680" cy="560" r="10" />
           </svg>
 
-          <a class="map-node hub-node" href="./牛马互助平台/" aria-label="打开近邻互助组原型入口">
+          <a class="node hub" href="./牛马互助平台/" aria-label="打开近邻互助组原型入口">
             <h2>近邻互助组</h2>
-            <p>用真实发生过的互助经历，帮助邻里找到值得信任、真正帮得上忙的人。</p>
+            <p>真实亲历，<br />帮助邻里找到彼此</p>
           </a>
 
-          <a class="map-node app-node kith-node" href="./街坊味/" aria-label="打开街坊味原型入口">
+          <a class="node kith" href="./街坊味/" aria-label="打开街坊味原型入口">
             <h3>街坊味</h3>
-            <p>认识附近做饭的人，从菜单选择到送达收款，把一餐饭稳稳接住。</p>
+            <p>认识附近做饭的人，<br />把一餐稳稳接住</p>
           </a>
 
-          <a class="map-node app-node recycle-node" href="./楼道回收提醒/" aria-label="打开楼道收一收原型入口">
+          <a class="node recycle" href="./楼道回收提醒/" aria-label="打开楼道收一收原型入口">
             <h3>楼道收一收</h3>
-            <p>住户按楼层上报回收或打扫，师傅查看待办并逐项处理。</p>
+            <p>扫码上报回收或打扫，<br />师傅按楼层处理</p>
           </a>
 
-          <div class="map-node future-node future-one">
+          <div class="node future future-one">
             <h3>待探索</h3>
-            <p>新的邻里协作</p>
+            <p>更多邻里协作</p>
           </div>
-          <div class="map-node future-node future-two">
+          <div class="node future future-two">
             <h3>待探索</h3>
-            <p>新的邻里协作</p>
+            <p>更多邻里协作</p>
           </div>
-          <div class="map-node future-node future-three">
+          <div class="node future future-three">
             <h3>待探索</h3>
-            <p>新的邻里协作</p>
+            <p>更多邻里协作</p>
           </div>
         </section>
       </main>
