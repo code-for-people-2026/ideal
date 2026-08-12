@@ -117,7 +117,7 @@
         margin: 17px auto 22px;
         font-size: clamp(48px, 6.5vw, 88px);
         line-height: 1;
-        letter-spacing: -0.07em;
+        letter-spacing: -0.02em;
         text-wrap: balance;
       }
 
@@ -183,12 +183,21 @@
       }
 
       a.map-node {
+        cursor: pointer;
         text-decoration: none;
         transition: transform 180ms ease, box-shadow 180ms ease;
       }
 
       a.map-node:hover {
-        transform: translate(-50%, -50%) scale(1.025);
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+
+      a.hub-node:hover {
+        box-shadow: 0 36px 88px rgba(13, 66, 47, 0.36), inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+      }
+
+      a.app-node:hover {
+        box-shadow: 0 30px 74px rgba(58, 42, 32, 0.27), inset 0 0 0 1px rgba(255, 255, 255, 0.3);
       }
 
       .map-node h2,
@@ -204,15 +213,15 @@
       .map-node p {
         max-width: 210px;
         margin: 12px 0 0;
-        font-size: 12px;
+        font-size: 13px;
         line-height: 1.58;
         text-wrap: pretty;
       }
 
       .hub-node {
-        --x: 50%;
-        --y: 400px;
-        --size: 310px;
+        --x: 47%;
+        --y: 412px;
+        --size: 280px;
         color: #fff;
         background:
           radial-gradient(circle at 31% 23%, rgba(255, 255, 255, 0.16), transparent 36%),
@@ -223,7 +232,7 @@
       .hub-node p { color: rgba(255, 255, 255, 0.78); }
 
       .app-node {
-        --size: 224px;
+        --size: 232px;
         color: #fff;
         box-shadow: 0 24px 58px rgba(58, 42, 32, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.24);
       }
@@ -235,7 +244,7 @@
 
       .kith-node {
         --x: 19%;
-        --y: 290px;
+        --y: 330px;
         background:
           radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.18), transparent 36%),
           linear-gradient(145deg, #c94a3d, var(--red-dark));
@@ -243,26 +252,26 @@
 
       .recycle-node {
         --x: 81%;
-        --y: 515px;
+        --y: 470px;
         background:
           radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.2), transparent 36%),
           linear-gradient(145deg, #e4773f, var(--orange-dark));
       }
 
       .future-node {
-        --size: 116px;
+        --size: 138px;
         z-index: 1;
-        padding: 17px;
-        color: #697169;
-        border: 1px dashed #aeb4ad;
+        padding: 20px;
+        color: #55605a;
+        border: 1px dashed #9aa29a;
         background: rgba(227, 228, 223, 0.88);
         box-shadow: 0 12px 28px rgba(59, 65, 59, 0.08);
       }
 
       .future-node h3 { font-size: 17px; }
-      .future-node p { margin-top: 7px; font-size: 9px; line-height: 1.4; }
+      .future-node p { margin-top: 7px; font-size: 10.5px; line-height: 1.5; }
       .future-one { --x: 50%; --y: 90px; }
-      .future-two { --x: 25%; --y: 700px; }
+      .future-two { --x: 20%; --y: 680px; }
       .future-three { --x: 78%; --y: 135px; }
 
       footer {
@@ -289,7 +298,7 @@
         .app-node { --size: 164px; }
         .kith-node { --x: 23%; --y: 145px; }
         .recycle-node { --x: 77%; --y: 605px; }
-        .future-node { --size: 76px; padding: 10px; }
+        .future-node { --size: 88px; }
         .future-one { --x: 82%; --y: 145px; }
         .future-two { --x: 15%; --y: 585px; }
         .future-three { --x: 50%; --y: 735px; }
@@ -298,33 +307,33 @@
         .map-node h2 { font-size: 30px; }
         .map-node h3 { font-size: 23px; }
         .map-node p { margin-top: 9px; font-size: 10px; line-height: 1.48; }
-        .future-node h3 { font-size: 12px; }
-        .future-node p { margin-top: 4px; font-size: 7px; }
+        .future-node h3 { font-size: 13px; }
+        .future-node p { margin-top: 5px; font-size: 9px; }
       }
 
       @media (max-width: 560px) {
         .page { width: calc(100% - 24px); padding-top: 18px; }
         .brand { font-size: 12px; }
         .status { padding: 7px 9px; font-size: 9px; }
-        .hero { padding: 52px 5px 36px; }
+        .hero { padding: 36px 5px 28px; }
         .eyebrow { font-size: 10px; }
-        h1 { font-size: clamp(43px, 14vw, 62px); }
-        .lead { font-size: 16px; }
-        .atlas { height: 760px; border-radius: 28px; }
+        h1 { font-size: clamp(38px, 12vw, 52px); }
+        .lead { font-size: 15px; }
+        .atlas { height: 720px; border-radius: 28px; }
 
-        .hub-node { --y: 354px; --size: 210px; }
-        .app-node { --size: 146px; }
-        .kith-node { --y: 132px; }
-        .recycle-node { --y: 574px; }
-        .future-node { --size: 66px; }
-        .future-one { --y: 132px; }
-        .future-two { --y: 558px; }
-        .future-three { --y: 700px; }
+        .hub-node { --y: 340px; --size: 210px; }
+        .app-node { --size: 150px; }
+        .kith-node { --y: 125px; }
+        .recycle-node { --y: 555px; }
+        .future-node { --size: 94px; }
+        .future-one { --y: 125px; }
+        .future-two { --y: 545px; }
+        .future-three { --y: 655px; }
 
         .map-node { padding: 14px; }
         .map-node h2 { font-size: 27px; }
         .map-node h3 { font-size: 20px; }
-        .map-node p { margin-top: 7px; font-size: 9px; line-height: 1.44; }
+        .map-node p { margin-top: 7px; font-size: 10px; line-height: 1.5; }
         footer { align-items: flex-start; flex-direction: column; }
       }
 
@@ -351,18 +360,18 @@
 
         <section class="atlas" aria-label="近邻互助组应用图谱">
           <svg class="connections connections-desktop" viewBox="0 0 1000 800" preserveAspectRatio="none" aria-hidden="true">
-            <line class="connection" x1="500" y1="400" x2="190" y2="290" />
-            <line class="connection" x1="500" y1="400" x2="810" y2="515" />
-            <line class="connection future" x1="500" y1="400" x2="500" y2="90" />
-            <line class="connection future" x1="500" y1="400" x2="250" y2="700" />
-            <line class="connection future" x1="500" y1="400" x2="780" y2="135" />
+            <line class="connection" x1="470" y1="412" x2="190" y2="330" />
+            <line class="connection" x1="470" y1="412" x2="810" y2="470" />
+            <line class="connection future" x1="470" y1="412" x2="500" y2="90" />
+            <line class="connection future" x1="470" y1="412" x2="200" y2="680" />
+            <line class="connection future" x1="470" y1="412" x2="780" y2="135" />
           </svg>
           <svg class="connections connections-mobile" viewBox="0 0 1000 760" preserveAspectRatio="none" aria-hidden="true">
             <line class="connection" x1="500" y1="354" x2="230" y2="132" />
-            <line class="connection" x1="500" y1="354" x2="770" y2="574" />
+            <line class="connection" x1="500" y1="354" x2="770" y2="585" />
             <line class="connection future" x1="500" y1="354" x2="820" y2="132" />
-            <line class="connection future" x1="500" y1="354" x2="150" y2="558" />
-            <line class="connection future" x1="500" y1="354" x2="500" y2="700" />
+            <line class="connection future" x1="500" y1="354" x2="150" y2="575" />
+            <line class="connection future" x1="500" y1="354" x2="500" y2="690" />
           </svg>
 
           <a class="map-node hub-node" href="./牛马互助平台/" aria-label="打开近邻互助组原型入口">
