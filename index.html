@@ -7,11 +7,10 @@
       name="description"
       content="近邻互助组通过真实亲历帮助邻里找到彼此，街坊味和楼道收一收承接具体协作。"
     />
-    <title>近邻互助组 · 应用图谱 A</title>
+    <title>近邻互助组 · 原型地图</title>
     <!--
       PROTOTYPE — 不接真实数据，不是生产代码。
-      本轮问题：入口页如何用中心辐射式图谱表达近邻互助组、已开放应用与未来可能？
-      三种布局通过 ?variant=A / B / C 切换；确认一种后删除其余方案与切换器。
+      本轮问题：入口页能否像社交图谱一样表达近邻互助组与不同应用之间的关系，而不形成树状层级？
     -->
     <style>
       :root {
@@ -22,16 +21,11 @@
         --paper-deep: #eae3d4;
         --green: #176044;
         --green-dark: #0d422f;
-        --green-soft: #e0eee4;
         --red: #b43d31;
         --red-dark: #78241f;
-        --red-soft: #fae7e1;
         --orange: #d8652d;
         --orange-dark: #8b3517;
-        --orange-soft: #ffeadb;
         --grey: #a9afa8;
-        --grey-soft: #e3e4df;
-        --line: #c7cec3;
         --shadow: 0 26px 70px rgba(35, 47, 38, 0.14);
       }
 
@@ -39,13 +33,11 @@
 
       html {
         min-width: 320px;
-        scroll-behavior: smooth;
       }
 
       body {
         min-height: 100vh;
         margin: 0;
-        padding-bottom: 104px;
         color: var(--ink);
         background:
           radial-gradient(circle at 9% 7%, rgba(216, 101, 45, 0.12), transparent 29rem),
@@ -55,21 +47,20 @@
         -webkit-font-smoothing: antialiased;
       }
 
-      a,
-      button {
+      a {
+        color: inherit;
         -webkit-tap-highlight-color: transparent;
       }
 
-      a:focus-visible,
-      button:focus-visible {
-        outline: 3px solid rgba(23, 96, 68, 0.4);
-        outline-offset: 4px;
+      a:focus-visible {
+        outline: 4px solid rgba(23, 96, 68, 0.36);
+        outline-offset: 5px;
       }
 
       .page {
         width: min(1320px, calc(100% - 48px));
         margin: 0 auto;
-        padding: 28px 0 56px;
+        padding: 28px 0 54px;
       }
 
       .topbar {
@@ -80,24 +71,9 @@
       }
 
       .brand {
-        display: inline-flex;
-        align-items: center;
-        gap: 11px;
         font-size: 15px;
         font-weight: 900;
         letter-spacing: -0.02em;
-      }
-
-      .brand-mark {
-        display: grid;
-        width: 38px;
-        height: 38px;
-        place-items: center;
-        border-radius: 50%;
-        color: #fff;
-        background: var(--green);
-        box-shadow: 0 12px 28px rgba(23, 96, 68, 0.23);
-        font-size: 17px;
       }
 
       .status {
@@ -125,26 +101,15 @@
       .hero {
         max-width: 980px;
         margin: 0 auto;
-        padding: 76px 0 54px;
+        padding: 70px 0 50px;
         text-align: center;
       }
 
       .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 9px;
         color: var(--red);
         font-size: 12px;
         font-weight: 900;
         letter-spacing: 0.1em;
-      }
-
-      .eyebrow::before,
-      .eyebrow::after {
-        content: "";
-        width: 24px;
-        height: 2px;
-        background: currentColor;
       }
 
       h1 {
@@ -157,7 +122,7 @@
       }
 
       .lead {
-        max-width: 760px;
+        max-width: 720px;
         margin: 0 auto;
         color: var(--muted);
         font-size: clamp(17px, 1.8vw, 21px);
@@ -167,69 +132,14 @@
 
       .atlas {
         position: relative;
+        height: 800px;
         border: 1px solid rgba(53, 65, 56, 0.12);
         border-radius: 44px;
-        background:
-          radial-gradient(circle at 50% 46%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.38) 43%, transparent 70%),
-          rgba(255, 255, 255, 0.35);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), var(--shadow);
         overflow: hidden;
-      }
-
-      .atlas-heading {
-        position: absolute;
-        z-index: 5;
-        top: 24px;
-        left: 28px;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-      }
-
-      .atlas-heading strong {
-        font-size: 14px;
-        letter-spacing: -0.02em;
-      }
-
-      .atlas-heading span {
-        color: var(--muted);
-        font-size: 11px;
-        font-weight: 750;
-      }
-
-      .map-legend {
-        position: absolute;
-        z-index: 5;
-        top: 24px;
-        right: 28px;
-        display: flex;
-        align-items: center;
-        gap: 13px;
-        color: var(--muted);
-        font-size: 10px;
-        font-weight: 850;
-      }
-
-      .map-legend span {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-      }
-
-      .map-legend i {
-        display: block;
-        width: 9px;
-        height: 9px;
-        border-radius: 50%;
-        background: var(--green);
-      }
-
-      .map-legend span:last-child i { background: var(--grey); }
-
-      .map-stage {
-        position: relative;
-        height: 820px;
-        min-height: 820px;
+        background:
+          radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.42) 45%, transparent 72%),
+          rgba(255, 255, 255, 0.34);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), var(--shadow);
       }
 
       .connections {
@@ -241,42 +151,29 @@
         pointer-events: none;
       }
 
-      .connector-set { display: none; }
-      .atlas[data-variant="A"] .connector-a,
-      .atlas[data-variant="B"] .connector-b,
-      .atlas[data-variant="C"] .connector-c { display: block; }
-
       .connection {
         fill: none;
-        stroke: #aeb9ae;
-        stroke-width: 1.5;
+        stroke: rgba(23, 96, 68, 0.42);
+        stroke-width: 1.8;
         vector-effect: non-scaling-stroke;
       }
 
-      .connection.live {
-        stroke: rgba(23, 96, 68, 0.5);
-        stroke-width: 2;
+      .connection.future {
+        stroke: rgba(111, 121, 112, 0.42);
+        stroke-dasharray: 5 8;
       }
 
-      .connection.future {
-        stroke: rgba(116, 126, 117, 0.48);
-        stroke-dasharray: 6 8;
-      }
+      .connections-mobile { display: none; }
 
       .map-node {
         position: absolute;
         z-index: 2;
         left: var(--x);
         top: var(--y);
-        transition: left 360ms ease, top 360ms ease;
-      }
-
-      .node-circle {
-        position: absolute;
         display: flex;
         width: var(--size);
         height: var(--size);
-        padding: 24px;
+        padding: 26px;
         align-items: center;
         justify-content: center;
         flex-direction: column;
@@ -285,165 +182,88 @@
         text-align: center;
       }
 
-      .node-kicker {
-        margin-bottom: 8px;
-        font-size: 10px;
-        font-weight: 900;
-        letter-spacing: 0.1em;
+      a.map-node {
+        text-decoration: none;
+        transition: transform 180ms ease, box-shadow 180ms ease;
       }
 
-      .node-icon {
-        display: grid;
-        width: 48px;
-        height: 48px;
-        margin-bottom: 12px;
-        place-items: center;
-        border-radius: 50%;
-        font-size: 22px;
-        font-weight: 950;
+      a.map-node:hover {
+        transform: translate(-50%, -50%) scale(1.025);
       }
 
-      .node-circle h2,
-      .node-circle h3 {
+      .map-node h2,
+      .map-node h3 {
         margin: 0;
-        line-height: 1.05;
+        line-height: 1.06;
         letter-spacing: -0.045em;
       }
 
-      .node-circle h2 { font-size: 34px; }
-      .node-circle h3 { font-size: 29px; }
+      .map-node h2 { font-size: 38px; }
+      .map-node h3 { font-size: 29px; }
 
-      .node-circle p {
-        margin: 10px 0 0;
+      .map-node p {
+        max-width: 210px;
+        margin: 12px 0 0;
         font-size: 12px;
-        line-height: 1.55;
+        line-height: 1.58;
         text-wrap: pretty;
       }
 
-      .hub-node { --size: 292px; }
-      .hub-node .node-circle {
+      .hub-node {
+        --x: 50%;
+        --y: 400px;
+        --size: 310px;
         color: #fff;
         background:
-          radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.16), transparent 36%),
+          radial-gradient(circle at 31% 23%, rgba(255, 255, 255, 0.16), transparent 36%),
           linear-gradient(145deg, #1b6d4d, var(--green-dark));
-        box-shadow: 0 30px 70px rgba(13, 66, 47, 0.28), inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+        box-shadow: 0 30px 72px rgba(13, 66, 47, 0.28), inset 0 0 0 1px rgba(255, 255, 255, 0.17);
       }
 
-      .hub-node .node-kicker { color: rgba(255, 255, 255, 0.68); }
-      .hub-node .node-icon { color: var(--green-dark); background: #fff; }
-      .hub-node .node-circle p { max-width: 222px; color: rgba(255, 255, 255, 0.78); }
+      .hub-node p { color: rgba(255, 255, 255, 0.78); }
 
-      .app-node { --size: 224px; }
-      .app-node .node-circle {
+      .app-node {
+        --size: 224px;
         color: #fff;
         box-shadow: 0 24px 58px rgba(58, 42, 32, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.24);
       }
 
-      .app-node .node-kicker { color: rgba(255, 255, 255, 0.72); }
-      .app-node .node-icon { background: rgba(255, 255, 255, 0.9); }
-      .app-node .node-circle p { max-width: 178px; color: rgba(255, 255, 255, 0.8); }
+      .app-node p {
+        max-width: 174px;
+        color: rgba(255, 255, 255, 0.8);
+      }
 
-      .kith-node .node-circle {
+      .kith-node {
+        --x: 19%;
+        --y: 290px;
         background:
           radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.18), transparent 36%),
           linear-gradient(145deg, #c94a3d, var(--red-dark));
       }
-      .kith-node .node-icon { color: var(--red); }
 
-      .recycle-node .node-circle {
+      .recycle-node {
+        --x: 81%;
+        --y: 515px;
         background:
           radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.2), transparent 36%),
           linear-gradient(145deg, #e4773f, var(--orange-dark));
       }
-      .recycle-node .node-icon { color: var(--orange); }
 
-      .future-node { --size: 92px; z-index: 1; }
-      .future-node .node-circle {
-        padding: 12px;
+      .future-node {
+        --size: 116px;
+        z-index: 1;
+        padding: 17px;
         color: #697169;
         border: 1px dashed #aeb4ad;
-        background: rgba(227, 228, 223, 0.86);
+        background: rgba(227, 228, 223, 0.88);
         box-shadow: 0 12px 28px rgba(59, 65, 59, 0.08);
       }
 
-      .future-node b {
-        font-size: 24px;
-        line-height: 1;
-      }
-
-      .future-node span {
-        margin-top: 5px;
-        font-size: 9px;
-        font-weight: 850;
-      }
-
-      .node-actions {
-        position: absolute;
-        top: calc(var(--size) / 2 + 14px);
-        left: 0;
-        display: flex;
-        width: 190px;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        transform: translateX(-50%);
-      }
-
-      .hub-node .node-actions { width: 390px; }
-
-      .node-link {
-        display: inline-flex;
-        min-height: 40px;
-        align-items: center;
-        justify-content: center;
-        padding: 0 12px;
-        border: 1px solid rgba(49, 62, 52, 0.15);
-        border-radius: 12px;
-        color: #455148;
-        background: rgba(255, 255, 255, 0.86);
-        box-shadow: 0 8px 22px rgba(39, 48, 41, 0.1);
-        font-size: 11px;
-        font-weight: 900;
-        text-decoration: none;
-      }
-
-      .node-link.primary {
-        gap: 6px;
-        border-color: var(--green);
-        color: #fff;
-        background: var(--green);
-      }
-
-      .kith-node .node-link.primary { border-color: var(--red); background: var(--red); }
-      .recycle-node .node-link.primary { border-color: var(--orange); background: var(--orange); }
-
-      .node-link span { transition: transform 180ms ease; }
-      .node-link:hover span { transform: translateX(3px); }
-
-      /* A：均衡环绕，所有应用与未来节点围成开放环。 */
-      .atlas[data-variant="A"] .hub-node { --x: 50%; --y: 360px; }
-      .atlas[data-variant="A"] .kith-node { --x: 18%; --y: 310px; }
-      .atlas[data-variant="A"] .recycle-node { --x: 82%; --y: 310px; }
-      .atlas[data-variant="A"] .future-one { --x: 50%; --y: 92px; }
-      .atlas[data-variant="A"] .future-two { --x: 28%; --y: 700px; }
-      .atlas[data-variant="A"] .future-three { --x: 72%; --y: 700px; }
-
-      /* B：关系向右生长，中心与两个应用形成不对称双翼。 */
-      .atlas[data-variant="B"] .hub-node { --x: 38%; --y: 365px; }
-      .atlas[data-variant="B"] .kith-node { --x: 73%; --y: 205px; }
-      .atlas[data-variant="B"] .recycle-node { --x: 78%; --y: 535px; }
-      .atlas[data-variant="B"] .future-one { --x: 11%; --y: 145px; }
-      .atlas[data-variant="B"] .future-two { --x: 9%; --y: 620px; }
-      .atlas[data-variant="B"] .future-three { --x: 51%; --y: 755px; }
-
-      /* C：两种已开放应用像花瓣托住中心，未来节点留在外围。 */
-      .atlas[data-variant="C"] .hub-node { --x: 50%; --y: 275px; }
-      .atlas[data-variant="C"] .kith-node { --x: 24%; --y: 575px; }
-      .atlas[data-variant="C"] .recycle-node { --x: 76%; --y: 575px; }
-      .atlas[data-variant="C"] .future-one { --x: 14%; --y: 130px; }
-      .atlas[data-variant="C"] .future-two { --x: 50%; --y: 750px; }
-      .atlas[data-variant="C"] .future-three { --x: 86%; --y: 130px; }
+      .future-node h3 { font-size: 17px; }
+      .future-node p { margin-top: 7px; font-size: 9px; line-height: 1.4; }
+      .future-one { --x: 50%; --y: 90px; }
+      .future-two { --x: 25%; --y: 700px; }
+      .future-three { --x: 78%; --y: 135px; }
 
       footer {
         display: flex;
@@ -458,135 +278,66 @@
 
       footer strong { color: var(--ink); }
 
-      .prototype-switcher {
-        position: fixed;
-        z-index: 20;
-        right: 50%;
-        bottom: max(18px, env(safe-area-inset-bottom));
-        display: grid;
-        width: min(440px, calc(100% - 30px));
-        min-height: 62px;
-        grid-template-columns: 54px 1fr 54px;
-        align-items: center;
-        transform: translateX(50%);
-        border: 1px solid rgba(255, 255, 255, 0.16);
-        border-radius: 20px;
-        color: #fff;
-        background: rgba(19, 29, 23, 0.94);
-        box-shadow: 0 20px 50px rgba(13, 22, 16, 0.28);
-        backdrop-filter: blur(14px);
-      }
-
-      .switcher-arrow {
-        height: 100%;
-        border: 0;
-        cursor: pointer;
-        color: #fff;
-        background: transparent;
-        font-size: 23px;
-      }
-
-      .switcher-copy {
-        text-align: center;
-      }
-
-      .switcher-copy strong,
-      .switcher-copy span { display: block; }
-      .switcher-copy strong { font-size: 12px; }
-      .switcher-copy span { margin-top: 3px; color: rgba(255, 255, 255, 0.58); font-size: 9px; }
-
-      .connector-mobile { display: none; }
-
       @media (max-width: 900px) {
         .page { width: min(100% - 32px, 760px); }
-        .hero { padding: 68px 0 46px; }
-        .atlas { border-radius: 34px; }
-        .map-stage { height: 840px; min-height: 840px; }
-        .connector-a,
-        .connector-b,
-        .connector-c { display: none !important; }
-        .connector-mobile { display: block; }
+        .hero { padding: 62px 0 44px; }
+        .atlas { height: 790px; border-radius: 34px; }
+        .connections-desktop { display: none; }
+        .connections-mobile { display: block; }
 
-        .atlas[data-variant] .hub-node { --x: 50%; --y: 205px; }
-        .atlas[data-variant] .kith-node { --x: 25%; --y: 545px; }
-        .atlas[data-variant] .recycle-node { --x: 75%; --y: 545px; }
-        .atlas[data-variant] .future-one { --x: 15%; --y: 765px; }
-        .atlas[data-variant] .future-two { --x: 50%; --y: 765px; }
-        .atlas[data-variant] .future-three { --x: 85%; --y: 765px; }
+        .hub-node { --x: 50%; --y: 370px; --size: 230px; }
+        .app-node { --size: 164px; }
+        .kith-node { --x: 23%; --y: 145px; }
+        .recycle-node { --x: 77%; --y: 605px; }
+        .future-node { --size: 76px; padding: 10px; }
+        .future-one { --x: 82%; --y: 145px; }
+        .future-two { --x: 15%; --y: 585px; }
+        .future-three { --x: 50%; --y: 735px; }
 
-        .hub-node { --size: 244px; }
-        .app-node { --size: 178px; }
-        .future-node { --size: 76px; }
-        .hub-node .node-actions { width: 340px; }
-        .app-node .node-actions { width: 164px; }
-        .node-circle { padding: 18px; }
-        .node-circle h2 { font-size: 30px; }
-        .node-circle h3 { font-size: 24px; }
-        .node-circle p { font-size: 10px; }
-        .node-icon { width: 40px; height: 40px; margin-bottom: 9px; font-size: 19px; }
+        .map-node { padding: 18px; }
+        .map-node h2 { font-size: 30px; }
+        .map-node h3 { font-size: 23px; }
+        .map-node p { margin-top: 9px; font-size: 10px; line-height: 1.48; }
+        .future-node h3 { font-size: 12px; }
+        .future-node p { margin-top: 4px; font-size: 7px; }
       }
 
       @media (max-width: 560px) {
-        body { padding-bottom: 96px; }
-        .page { width: calc(100% - 24px); padding-top: 16px; }
-        .topbar { gap: 10px; }
-        .brand { gap: 8px; font-size: 12px; }
-        .brand-mark { width: 34px; height: 34px; font-size: 15px; }
+        .page { width: calc(100% - 24px); padding-top: 18px; }
+        .brand { font-size: 12px; }
         .status { padding: 7px 9px; font-size: 9px; }
-        .status span { display: none; }
-        .hero { padding: 56px 5px 38px; }
+        .hero { padding: 52px 5px 36px; }
         .eyebrow { font-size: 10px; }
-        .eyebrow::before,
-        .eyebrow::after { width: 17px; }
         h1 { font-size: clamp(43px, 14vw, 62px); }
         .lead { font-size: 16px; }
-        .atlas { border-radius: 28px; }
-        .atlas-heading { top: 19px; left: 18px; }
-        .atlas-heading span { display: none; }
-        .map-legend { top: 20px; right: 18px; gap: 8px; }
-        .map-legend span { gap: 4px; }
-        .map-stage { height: 800px; min-height: 800px; }
+        .atlas { height: 760px; border-radius: 28px; }
 
-        .atlas[data-variant] .hub-node { --x: 50%; --y: 190px; }
-        .atlas[data-variant] .kith-node { --x: 25%; --y: 512px; }
-        .atlas[data-variant] .recycle-node { --x: 75%; --y: 512px; }
-        .atlas[data-variant] .future-one { --x: 15%; --y: 715px; }
-        .atlas[data-variant] .future-two { --x: 50%; --y: 715px; }
-        .atlas[data-variant] .future-three { --x: 85%; --y: 715px; }
-
-        .hub-node { --size: 218px; }
+        .hub-node { --y: 354px; --size: 210px; }
         .app-node { --size: 146px; }
+        .kith-node { --y: 132px; }
+        .recycle-node { --y: 574px; }
         .future-node { --size: 66px; }
-        .hub-node .node-actions { width: min(310px, calc(100vw - 42px)); }
-        .app-node .node-actions { width: 148px; }
-        .node-circle { padding: 13px; }
-        .node-kicker { margin-bottom: 5px; font-size: 8px; }
-        .node-circle h2 { font-size: 27px; }
-        .node-circle h3 { font-size: 20px; }
-        .node-circle p { margin-top: 7px; font-size: 9px; line-height: 1.45; }
-        .node-icon { width: 34px; height: 34px; margin-bottom: 7px; font-size: 16px; }
-        .future-node b { font-size: 19px; }
-        .future-node span { font-size: 8px; }
-        .node-link { min-height: 38px; padding: 0 9px; font-size: 10px; }
-        .hub-node .node-link { min-height: 36px; }
+        .future-one { --y: 132px; }
+        .future-two { --y: 558px; }
+        .future-three { --y: 700px; }
+
+        .map-node { padding: 14px; }
+        .map-node h2 { font-size: 27px; }
+        .map-node h3 { font-size: 20px; }
+        .map-node p { margin-top: 7px; font-size: 9px; line-height: 1.44; }
         footer { align-items: flex-start; flex-direction: column; }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        html { scroll-behavior: auto; }
-        .map-node,
-        .node-link span { transition: none; }
+        a.map-node { transition: none; }
       }
     </style>
   </head>
   <body>
     <div class="page">
       <header class="topbar">
-        <div class="brand">
-          <span class="brand-mark" aria-hidden="true">邻</span>
-          <span>近邻互助组 · 原型地图</span>
-        </div>
-        <div class="status"><span>2 个应用开放 · </span>更多在生长</div>
+        <div class="brand">近邻互助组 · 原型地图</div>
+        <div class="status">2 个应用开放</div>
       </header>
 
       <main>
@@ -594,99 +345,52 @@
           <div class="eyebrow">邻里之间，真实发生</div>
           <h1 id="page-title">一次互助，长出更多相遇。</h1>
           <p class="lead">
-            近邻互助组用真实亲历帮助邻里找到彼此；街坊味和楼道收一收，则把一次供餐、一次楼道协作真正接住。新的经历留下来，又会帮助下一次相遇发生。
+            近邻互助组用真实亲历帮助邻里找到彼此；不同的小应用把一次具体协作接住，新的经历又会帮助下一次相遇发生。
           </p>
         </section>
 
-        <section class="atlas" data-variant="A" aria-labelledby="atlas-title">
-          <div class="atlas-heading">
-            <strong id="atlas-title">邻里协作图谱</strong>
-            <span>中心建立连接，周围应用承接事情</span>
+        <section class="atlas" aria-label="近邻互助组应用图谱">
+          <svg class="connections connections-desktop" viewBox="0 0 1000 800" preserveAspectRatio="none" aria-hidden="true">
+            <line class="connection" x1="500" y1="400" x2="190" y2="290" />
+            <line class="connection" x1="500" y1="400" x2="810" y2="515" />
+            <line class="connection future" x1="500" y1="400" x2="500" y2="90" />
+            <line class="connection future" x1="500" y1="400" x2="250" y2="700" />
+            <line class="connection future" x1="500" y1="400" x2="780" y2="135" />
+          </svg>
+          <svg class="connections connections-mobile" viewBox="0 0 1000 760" preserveAspectRatio="none" aria-hidden="true">
+            <line class="connection" x1="500" y1="354" x2="230" y2="132" />
+            <line class="connection" x1="500" y1="354" x2="770" y2="574" />
+            <line class="connection future" x1="500" y1="354" x2="820" y2="132" />
+            <line class="connection future" x1="500" y1="354" x2="150" y2="558" />
+            <line class="connection future" x1="500" y1="354" x2="500" y2="700" />
+          </svg>
+
+          <a class="map-node hub-node" href="./牛马互助平台/" aria-label="打开近邻互助组原型入口">
+            <h2>近邻互助组</h2>
+            <p>用真实发生过的互助经历，帮助邻里找到值得信任、真正帮得上忙的人。</p>
+          </a>
+
+          <a class="map-node app-node kith-node" href="./街坊味/" aria-label="打开街坊味原型入口">
+            <h3>街坊味</h3>
+            <p>认识附近做饭的人，从菜单选择到送达收款，把一餐饭稳稳接住。</p>
+          </a>
+
+          <a class="map-node app-node recycle-node" href="./楼道回收提醒/" aria-label="打开楼道收一收原型入口">
+            <h3>楼道收一收</h3>
+            <p>住户按楼层上报回收或打扫，师傅查看待办并逐项处理。</p>
+          </a>
+
+          <div class="map-node future-node future-one">
+            <h3>待探索</h3>
+            <p>新的邻里协作</p>
           </div>
-          <div class="map-legend" aria-label="图例">
-            <span><i></i>已开放</span>
-            <span><i></i>待探索</span>
+          <div class="map-node future-node future-two">
+            <h3>待探索</h3>
+            <p>新的邻里协作</p>
           </div>
-
-          <div class="map-stage">
-            <svg class="connections" viewBox="0 0 1000 820" preserveAspectRatio="none" aria-hidden="true">
-              <g class="connector-set connector-a">
-                <line class="connection live" x1="500" y1="360" x2="180" y2="310" />
-                <line class="connection live" x1="500" y1="360" x2="820" y2="310" />
-                <line class="connection future" x1="500" y1="360" x2="500" y2="92" />
-                <line class="connection future" x1="500" y1="360" x2="280" y2="700" />
-                <line class="connection future" x1="500" y1="360" x2="720" y2="700" />
-              </g>
-              <g class="connector-set connector-b">
-                <path class="connection live" d="M380 365 C520 320 600 250 730 205" />
-                <path class="connection live" d="M380 365 C530 410 650 500 780 535" />
-                <path class="connection future" d="M380 365 C260 290 210 190 110 145" />
-                <path class="connection future" d="M380 365 C260 430 190 565 90 620" />
-                <path class="connection future" d="M380 365 C400 520 450 650 510 755" />
-              </g>
-              <g class="connector-set connector-c">
-                <line class="connection live" x1="500" y1="275" x2="240" y2="575" />
-                <line class="connection live" x1="500" y1="275" x2="760" y2="575" />
-                <path class="connection future" d="M500 275 C360 190 250 145 140 130" />
-                <line class="connection future" x1="500" y1="275" x2="500" y2="750" />
-                <path class="connection future" d="M500 275 C640 190 750 145 860 130" />
-              </g>
-              <g class="connector-mobile">
-                <line class="connection live" x1="500" y1="198" x2="250" y2="528" />
-                <line class="connection live" x1="500" y1="198" x2="750" y2="528" />
-                <line class="connection future" x1="500" y1="198" x2="150" y2="740" />
-                <line class="connection future" x1="500" y1="198" x2="500" y2="740" />
-                <line class="connection future" x1="500" y1="198" x2="850" y2="740" />
-              </g>
-            </svg>
-
-            <article class="map-node hub-node">
-              <div class="node-circle">
-                <div class="node-kicker">真实亲历 · 找到彼此</div>
-                <div class="node-icon" aria-hidden="true">邻</div>
-                <h2>近邻互助组</h2>
-                <p>看看邻里亲身经历过的互助，找到值得信任、真正帮得上忙的人。</p>
-              </div>
-              <div class="node-actions" aria-label="近邻互助组原型入口">
-                <a class="node-link primary" href="./牛马互助平台/">查看原型 <span aria-hidden="true">→</span></a>
-                <a class="node-link" href="./牛马互助平台/prototype-customer/">客户体验</a>
-                <a class="node-link" href="./牛马互助平台/prototype-implementation/">实施对照</a>
-              </div>
-            </article>
-
-            <article class="map-node app-node kith-node">
-              <div class="node-circle">
-                <div class="node-kicker">邻里供餐</div>
-                <div class="node-icon" aria-hidden="true">味</div>
-                <h3>街坊味</h3>
-                <p>认识附近做饭的人，从菜单选择到送达收款，把一餐饭稳稳接住。</p>
-              </div>
-              <div class="node-actions">
-                <a class="node-link primary" href="./街坊味/">打开原型 <span aria-hidden="true">→</span></a>
-              </div>
-            </article>
-
-            <article class="map-node app-node recycle-node">
-              <div class="node-circle">
-                <div class="node-kicker">楼道协作</div>
-                <div class="node-icon" aria-hidden="true">收</div>
-                <h3>楼道收一收</h3>
-                <p>住户按楼层上报回收或打扫，师傅查看待办并逐项处理。</p>
-              </div>
-              <div class="node-actions">
-                <a class="node-link primary" href="./楼道回收提醒/">打开原型 <span aria-hidden="true">→</span></a>
-              </div>
-            </article>
-
-            <div class="map-node future-node future-one" aria-label="未来应用节点，待探索">
-              <div class="node-circle"><b aria-hidden="true">＋</b><span>待探索</span></div>
-            </div>
-            <div class="map-node future-node future-two" aria-label="未来应用节点，待探索">
-              <div class="node-circle"><b aria-hidden="true">＋</b><span>待探索</span></div>
-            </div>
-            <div class="map-node future-node future-three" aria-label="未来应用节点，待探索">
-              <div class="node-circle"><b aria-hidden="true">＋</b><span>待探索</span></div>
-            </div>
+          <div class="map-node future-node future-three">
+            <h3>待探索</h3>
+            <p>新的邻里协作</p>
           </div>
         </section>
       </main>
@@ -696,62 +400,5 @@
         <div>全部页面均为交互原型，不接入真实业务数据。</div>
       </footer>
     </div>
-
-    <nav class="prototype-switcher" aria-label="入口图谱方案切换">
-      <button class="switcher-arrow" type="button" data-direction="-1" aria-label="上一个方案">←</button>
-      <div class="switcher-copy">
-        <strong id="variant-label">A — 开放环</strong>
-        <span>原型评估工具 · 方向键也可切换</span>
-      </div>
-      <button class="switcher-arrow" type="button" data-direction="1" aria-label="下一个方案">→</button>
-    </nav>
-
-    <script>
-      const variants = [
-        { key: "A", label: "A — 开放环" },
-        { key: "B", label: "B — 双翼生长" },
-        { key: "C", label: "C — 花瓣罗盘" },
-      ];
-      const atlas = document.querySelector(".atlas");
-      const variantLabel = document.querySelector("#variant-label");
-
-      function variantFromUrl() {
-        const value = new URLSearchParams(location.search).get("variant")?.toUpperCase();
-        return variants.some(item => item.key === value) ? value : "A";
-      }
-
-      function applyVariant(key, replace = true) {
-        const item = variants.find(variant => variant.key === key) || variants[0];
-        atlas.dataset.variant = item.key;
-        variantLabel.textContent = item.label;
-        document.title = `近邻互助组 · 应用图谱 ${item.key}`;
-        if (replace) {
-          const url = new URL(location.href);
-          url.searchParams.set("variant", item.key);
-          history.replaceState({}, "", url);
-        }
-      }
-
-      function changeVariant(direction) {
-        const currentIndex = variants.findIndex(item => item.key === atlas.dataset.variant);
-        const nextIndex = (currentIndex + direction + variants.length) % variants.length;
-        applyVariant(variants[nextIndex].key);
-      }
-
-      document.addEventListener("click", event => {
-        const button = event.target.closest("[data-direction]");
-        if (button) changeVariant(Number(button.dataset.direction));
-      });
-
-      window.addEventListener("keydown", event => {
-        const active = document.activeElement;
-        if (["INPUT", "TEXTAREA"].includes(active?.tagName) || active?.isContentEditable) return;
-        if (event.key === "ArrowLeft") changeVariant(-1);
-        if (event.key === "ArrowRight") changeVariant(1);
-      });
-
-      window.addEventListener("popstate", () => applyVariant(variantFromUrl(), false));
-      applyVariant(variantFromUrl(), false);
-    </script>
   </body>
 </html>
