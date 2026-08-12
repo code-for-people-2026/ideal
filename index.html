@@ -5,26 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="近邻互助组保存真实发生的邻里互助经历，并通过围绕不同场景的小工具帮助后来的人找到彼此。"
+      content="近邻互助组通过真实亲历帮助邻里找到彼此，街坊味和楼道收一收承接具体协作。"
     />
-    <title>近邻互助组 · 原型地图</title>
+    <title>近邻互助组 · 应用图谱 A</title>
+    <!--
+      PROTOTYPE — 不接真实数据，不是生产代码。
+      本轮问题：入口页如何用中心辐射式图谱表达近邻互助组、已开放应用与未来可能？
+      三种布局通过 ?variant=A / B / C 切换；确认一种后删除其余方案与切换器。
+    -->
     <style>
       :root {
         color-scheme: light;
         --ink: #172019;
         --muted: #5e695f;
-        --paper: #f4f1e8;
-        --paper-deep: #ebe5d8;
-        --card: rgba(255, 255, 255, 0.82);
-        --line: #cfd6ca;
+        --paper: #f5f1e7;
+        --paper-deep: #eae3d4;
         --green: #176044;
-        --green-soft: #e3f0e7;
-        --red: #bd392b;
-        --red-soft: #fae6e1;
+        --green-dark: #0d422f;
+        --green-soft: #e0eee4;
+        --red: #b43d31;
+        --red-dark: #78241f;
+        --red-soft: #fae7e1;
         --orange: #d8652d;
-        --orange-soft: #ffeddf;
-        --yellow: #e5b43d;
-        --shadow: 0 28px 80px rgba(34, 48, 37, 0.11);
+        --orange-dark: #8b3517;
+        --orange-soft: #ffeadb;
+        --grey: #a9afa8;
+        --grey-soft: #e3e4df;
+        --line: #c7cec3;
+        --shadow: 0 26px 70px rgba(35, 47, 38, 0.14);
       }
 
       * { box-sizing: border-box; }
@@ -37,29 +45,31 @@
       body {
         min-height: 100vh;
         margin: 0;
+        padding-bottom: 104px;
         color: var(--ink);
         background:
-          radial-gradient(circle at 7% 6%, rgba(216, 101, 45, 0.11), transparent 28rem),
-          radial-gradient(circle at 92% 28%, rgba(23, 96, 68, 0.11), transparent 30rem),
-          linear-gradient(180deg, #f8f6f0 0%, var(--paper) 48%, var(--paper-deep) 100%);
+          radial-gradient(circle at 9% 7%, rgba(216, 101, 45, 0.12), transparent 29rem),
+          radial-gradient(circle at 91% 24%, rgba(23, 96, 68, 0.12), transparent 31rem),
+          linear-gradient(180deg, #faf8f2 0%, var(--paper) 48%, var(--paper-deep) 100%);
         font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
         -webkit-font-smoothing: antialiased;
       }
 
-      a {
-        color: inherit;
+      a,
+      button {
         -webkit-tap-highlight-color: transparent;
       }
 
-      a:focus-visible {
-        outline: 3px solid rgba(23, 96, 68, 0.38);
+      a:focus-visible,
+      button:focus-visible {
+        outline: 3px solid rgba(23, 96, 68, 0.4);
         outline-offset: 4px;
       }
 
       .page {
-        width: min(1240px, calc(100% - 48px));
+        width: min(1320px, calc(100% - 48px));
         margin: 0 auto;
-        padding: 28px 0 52px;
+        padding: 28px 0 56px;
       }
 
       .topbar {
@@ -83,11 +93,11 @@
         width: 38px;
         height: 38px;
         place-items: center;
-        border-radius: 13px;
+        border-radius: 50%;
         color: #fff;
         background: var(--green);
         box-shadow: 0 12px 28px rgba(23, 96, 68, 0.23);
-        font-size: 18px;
+        font-size: 17px;
       }
 
       .status {
@@ -98,7 +108,7 @@
         border: 1px solid rgba(23, 96, 68, 0.16);
         border-radius: 999px;
         color: var(--green);
-        background: rgba(255, 255, 255, 0.6);
+        background: rgba(255, 255, 255, 0.62);
         font-size: 11px;
         font-weight: 850;
       }
@@ -113,8 +123,10 @@
       }
 
       .hero {
-        max-width: 920px;
-        padding: 96px 0 70px;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 76px 0 54px;
+        text-align: center;
       }
 
       .eyebrow {
@@ -122,301 +134,320 @@
         align-items: center;
         gap: 9px;
         color: var(--red);
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 900;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
       }
 
-      .eyebrow::before {
+      .eyebrow::before,
+      .eyebrow::after {
         content: "";
-        width: 28px;
+        width: 24px;
         height: 2px;
-        background: var(--red);
+        background: currentColor;
       }
 
       h1 {
-        max-width: 900px;
-        margin: 18px 0 24px;
-        font-size: clamp(52px, 7vw, 96px);
-        line-height: 0.98;
+        max-width: 960px;
+        margin: 17px auto 22px;
+        font-size: clamp(48px, 6.5vw, 88px);
+        line-height: 1;
         letter-spacing: -0.07em;
         text-wrap: balance;
       }
 
       .lead {
         max-width: 760px;
-        margin: 0;
+        margin: 0 auto;
         color: var(--muted);
-        font-size: clamp(18px, 2vw, 23px);
-        line-height: 1.7;
+        font-size: clamp(17px, 1.8vw, 21px);
+        line-height: 1.72;
         text-wrap: pretty;
       }
 
-      .map {
+      .atlas {
         position: relative;
-        padding: 0 0 20px;
+        border: 1px solid rgba(53, 65, 56, 0.12);
+        border-radius: 44px;
+        background:
+          radial-gradient(circle at 50% 46%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.38) 43%, transparent 70%),
+          rgba(255, 255, 255, 0.35);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), var(--shadow);
+        overflow: hidden;
       }
 
-      .hub {
-        position: relative;
-        z-index: 2;
-        display: grid;
-        width: min(760px, 100%);
-        margin: 0 auto 80px;
-        grid-template-columns: 1fr auto;
-        gap: 28px;
-        align-items: center;
-        padding: 30px 34px;
-        border: 1px solid rgba(23, 96, 68, 0.25);
-        border-radius: 28px;
-        background: linear-gradient(135deg, rgba(255,255,255,.95), rgba(227,240,231,.86));
-        box-shadow: var(--shadow);
-      }
-
-      .hub::after {
-        content: "";
+      .atlas-heading {
         position: absolute;
-        top: 100%;
-        left: 50%;
-        width: 1px;
-        height: 81px;
-        background: var(--line);
+        z-index: 5;
+        top: 24px;
+        left: 28px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
       }
 
-      .hub-kicker {
-        margin-bottom: 8px;
-        color: var(--green);
+      .atlas-heading strong {
+        font-size: 14px;
+        letter-spacing: -0.02em;
+      }
+
+      .atlas-heading span {
+        color: var(--muted);
         font-size: 11px;
-        font-weight: 900;
-        letter-spacing: 0.11em;
-        text-transform: uppercase;
+        font-weight: 750;
       }
 
-      .hub h2 {
+      .map-legend {
+        position: absolute;
+        z-index: 5;
+        top: 24px;
+        right: 28px;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 850;
+      }
+
+      .map-legend span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .map-legend i {
+        display: block;
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      .map-legend span:last-child i { background: var(--grey); }
+
+      .map-stage {
+        position: relative;
+        height: 820px;
+        min-height: 820px;
+      }
+
+      .connections {
+        position: absolute;
+        z-index: 0;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .connector-set { display: none; }
+      .atlas[data-variant="A"] .connector-a,
+      .atlas[data-variant="B"] .connector-b,
+      .atlas[data-variant="C"] .connector-c { display: block; }
+
+      .connection {
+        fill: none;
+        stroke: #aeb9ae;
+        stroke-width: 1.5;
+        vector-effect: non-scaling-stroke;
+      }
+
+      .connection.live {
+        stroke: rgba(23, 96, 68, 0.5);
+        stroke-width: 2;
+      }
+
+      .connection.future {
+        stroke: rgba(116, 126, 117, 0.48);
+        stroke-dasharray: 6 8;
+      }
+
+      .map-node {
+        position: absolute;
+        z-index: 2;
+        left: var(--x);
+        top: var(--y);
+        transition: left 360ms ease, top 360ms ease;
+      }
+
+      .node-circle {
+        position: absolute;
+        display: flex;
+        width: var(--size);
+        height: var(--size);
+        padding: 24px;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        text-align: center;
+      }
+
+      .node-kicker {
+        margin-bottom: 8px;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.1em;
+      }
+
+      .node-icon {
+        display: grid;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 12px;
+        place-items: center;
+        border-radius: 50%;
+        font-size: 22px;
+        font-weight: 950;
+      }
+
+      .node-circle h2,
+      .node-circle h3 {
         margin: 0;
-        font-size: clamp(29px, 3vw, 42px);
-        line-height: 1.1;
+        line-height: 1.05;
         letter-spacing: -0.045em;
       }
 
-      .hub p {
-        max-width: 560px;
+      .node-circle h2 { font-size: 34px; }
+      .node-circle h3 { font-size: 29px; }
+
+      .node-circle p {
         margin: 10px 0 0;
-        color: var(--muted);
-        font-size: 14px;
-        line-height: 1.65;
+        font-size: 12px;
+        line-height: 1.55;
+        text-wrap: pretty;
       }
 
-      .hub-actions {
+      .hub-node { --size: 292px; }
+      .hub-node .node-circle {
+        color: #fff;
+        background:
+          radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.16), transparent 36%),
+          linear-gradient(145deg, #1b6d4d, var(--green-dark));
+        box-shadow: 0 30px 70px rgba(13, 66, 47, 0.28), inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+      }
+
+      .hub-node .node-kicker { color: rgba(255, 255, 255, 0.68); }
+      .hub-node .node-icon { color: var(--green-dark); background: #fff; }
+      .hub-node .node-circle p { max-width: 222px; color: rgba(255, 255, 255, 0.78); }
+
+      .app-node { --size: 224px; }
+      .app-node .node-circle {
+        color: #fff;
+        box-shadow: 0 24px 58px rgba(58, 42, 32, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+      }
+
+      .app-node .node-kicker { color: rgba(255, 255, 255, 0.72); }
+      .app-node .node-icon { background: rgba(255, 255, 255, 0.9); }
+      .app-node .node-circle p { max-width: 178px; color: rgba(255, 255, 255, 0.8); }
+
+      .kith-node .node-circle {
+        background:
+          radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.18), transparent 36%),
+          linear-gradient(145deg, #c94a3d, var(--red-dark));
+      }
+      .kith-node .node-icon { color: var(--red); }
+
+      .recycle-node .node-circle {
+        background:
+          radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.2), transparent 36%),
+          linear-gradient(145deg, #e4773f, var(--orange-dark));
+      }
+      .recycle-node .node-icon { color: var(--orange); }
+
+      .future-node { --size: 92px; z-index: 1; }
+      .future-node .node-circle {
+        padding: 12px;
+        color: #697169;
+        border: 1px dashed #aeb4ad;
+        background: rgba(227, 228, 223, 0.86);
+        box-shadow: 0 12px 28px rgba(59, 65, 59, 0.08);
+      }
+
+      .future-node b {
+        font-size: 24px;
+        line-height: 1;
+      }
+
+      .future-node span {
+        margin-top: 5px;
+        font-size: 9px;
+        font-weight: 850;
+      }
+
+      .node-actions {
+        position: absolute;
+        top: calc(var(--size) / 2 + 14px);
+        left: 0;
         display: flex;
+        width: 190px;
         flex-wrap: wrap;
-        gap: 8px;
-        margin-top: 20px;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        transform: translateX(-50%);
       }
 
-      .hub-link {
+      .hub-node .node-actions { width: 390px; }
+
+      .node-link {
         display: inline-flex;
         min-height: 40px;
         align-items: center;
         justify-content: center;
         padding: 0 12px;
-        border: 1px solid rgba(23, 96, 68, 0.18);
+        border: 1px solid rgba(49, 62, 52, 0.15);
         border-radius: 12px;
-        color: var(--green);
-        background: rgba(255, 255, 255, 0.68);
+        color: #455148;
+        background: rgba(255, 255, 255, 0.86);
+        box-shadow: 0 8px 22px rgba(39, 48, 41, 0.1);
         font-size: 11px;
         font-weight: 900;
         text-decoration: none;
       }
 
-      .hub-link--primary {
-        gap: 7px;
+      .node-link.primary {
+        gap: 6px;
         border-color: var(--green);
         color: #fff;
         background: var(--green);
-        box-shadow: 0 10px 22px rgba(23, 96, 68, 0.2);
       }
 
-      .hub-symbol {
-        display: grid;
-        width: 88px;
-        height: 88px;
-        place-items: center;
-        border-radius: 27px;
-        color: #fff;
-        background: var(--green);
-        box-shadow: 0 18px 34px rgba(23, 96, 68, 0.24);
-        font-size: 38px;
-        font-weight: 950;
-      }
+      .kith-node .node-link.primary { border-color: var(--red); background: var(--red); }
+      .recycle-node .node-link.primary { border-color: var(--orange); background: var(--orange); }
 
-      .prototype-grid {
-        position: relative;
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 22px;
-      }
+      .node-link span { transition: transform 180ms ease; }
+      .node-link:hover span { transform: translateX(3px); }
 
-      .prototype-grid::before {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        top: -1px;
-        left: 25%;
-        right: 25%;
-        height: 1px;
-        background: var(--line);
-      }
+      /* A：均衡环绕，所有应用与未来节点围成开放环。 */
+      .atlas[data-variant="A"] .hub-node { --x: 50%; --y: 360px; }
+      .atlas[data-variant="A"] .kith-node { --x: 18%; --y: 310px; }
+      .atlas[data-variant="A"] .recycle-node { --x: 82%; --y: 310px; }
+      .atlas[data-variant="A"] .future-one { --x: 50%; --y: 92px; }
+      .atlas[data-variant="A"] .future-two { --x: 28%; --y: 700px; }
+      .atlas[data-variant="A"] .future-three { --x: 72%; --y: 700px; }
 
-      .prototype-card {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        min-height: 420px;
-        flex-direction: column;
-        overflow: hidden;
-        padding: 28px;
-        border: 1px solid rgba(49, 62, 52, 0.13);
-        border-radius: 26px;
-        background: var(--card);
-        box-shadow: 0 20px 60px rgba(39, 48, 41, 0.08);
-        backdrop-filter: blur(12px);
-      }
+      /* B：关系向右生长，中心与两个应用形成不对称双翼。 */
+      .atlas[data-variant="B"] .hub-node { --x: 38%; --y: 365px; }
+      .atlas[data-variant="B"] .kith-node { --x: 73%; --y: 205px; }
+      .atlas[data-variant="B"] .recycle-node { --x: 78%; --y: 535px; }
+      .atlas[data-variant="B"] .future-one { --x: 11%; --y: 145px; }
+      .atlas[data-variant="B"] .future-two { --x: 9%; --y: 620px; }
+      .atlas[data-variant="B"] .future-three { --x: 51%; --y: 755px; }
 
-      .prototype-card::before {
-        content: "";
-        position: absolute;
-        bottom: 100%;
-        left: 50%;
-        width: 1px;
-        height: 26px;
-        background: var(--line);
-      }
-
-      .prototype-card::after {
-        content: "";
-        position: absolute;
-        top: -86px;
-        right: -76px;
-        width: 210px;
-        height: 210px;
-        border-radius: 50%;
-        background: var(--accent-soft);
-        opacity: 0.9;
-      }
-
-      .kith { --accent: var(--red); --accent-soft: var(--red-soft); }
-      .recycle { --accent: var(--orange); --accent-soft: var(--orange-soft); }
-
-      .card-head {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 16px;
-      }
-
-      .card-type {
-        color: var(--accent);
-        font-size: 11px;
-        font-weight: 900;
-        letter-spacing: 0.09em;
-      }
-
-      .card-icon {
-        display: grid;
-        width: 52px;
-        height: 52px;
-        flex: 0 0 auto;
-        place-items: center;
-        border-radius: 17px;
-        color: var(--accent);
-        background: rgba(255, 255, 255, 0.66);
-        font-size: 23px;
-        font-weight: 950;
-        box-shadow: 0 10px 24px rgba(35, 43, 37, 0.08);
-      }
-
-      .prototype-card h3 {
-        position: relative;
-        z-index: 1;
-        margin: 32px 0 12px;
-        font-size: clamp(27px, 2.6vw, 38px);
-        line-height: 1.08;
-        letter-spacing: -0.045em;
-      }
-
-      .card-copy {
-        position: relative;
-        z-index: 1;
-        margin: 0;
-        color: var(--muted);
-        font-size: 14px;
-        line-height: 1.7;
-      }
-
-      .tags {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 7px;
-        margin: 20px 0 26px;
-      }
-
-      .tag {
-        padding: 6px 9px;
-        border: 1px solid rgba(49, 62, 52, 0.11);
-        border-radius: 999px;
-        color: #4d5a50;
-        background: rgba(255,255,255,.64);
-        font-size: 10px;
-        font-weight: 800;
-      }
-
-      .actions {
-        position: relative;
-        z-index: 1;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: auto;
-      }
-
-      .primary-link,
-      .secondary-link {
-        display: inline-flex;
-        min-height: 44px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 13px;
-        font-size: 12px;
-        font-weight: 900;
-        text-decoration: none;
-      }
-
-      .primary-link {
-        gap: 8px;
-        padding: 0 15px;
-        color: #fff;
-        background: var(--accent);
-        box-shadow: 0 12px 26px color-mix(in srgb, var(--accent) 24%, transparent);
-      }
-
-      .primary-link span { transition: transform 180ms ease; }
-      .primary-link:hover span { transform: translateX(3px); }
-
-      .secondary-link {
-        padding: 0 12px;
-        border: 1px solid rgba(49, 62, 52, 0.13);
-        color: #49564c;
-        background: rgba(255,255,255,.58);
-      }
+      /* C：两种已开放应用像花瓣托住中心，未来节点留在外围。 */
+      .atlas[data-variant="C"] .hub-node { --x: 50%; --y: 275px; }
+      .atlas[data-variant="C"] .kith-node { --x: 24%; --y: 575px; }
+      .atlas[data-variant="C"] .recycle-node { --x: 76%; --y: 575px; }
+      .atlas[data-variant="C"] .future-one { --x: 14%; --y: 130px; }
+      .atlas[data-variant="C"] .future-two { --x: 50%; --y: 750px; }
+      .atlas[data-variant="C"] .future-three { --x: 86%; --y: 130px; }
 
       footer {
         display: flex;
-        margin-top: 52px;
+        margin-top: 38px;
         align-items: center;
         justify-content: space-between;
         gap: 20px;
@@ -427,38 +458,124 @@
 
       footer strong { color: var(--ink); }
 
+      .prototype-switcher {
+        position: fixed;
+        z-index: 20;
+        right: 50%;
+        bottom: max(18px, env(safe-area-inset-bottom));
+        display: grid;
+        width: min(440px, calc(100% - 30px));
+        min-height: 62px;
+        grid-template-columns: 54px 1fr 54px;
+        align-items: center;
+        transform: translateX(50%);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        border-radius: 20px;
+        color: #fff;
+        background: rgba(19, 29, 23, 0.94);
+        box-shadow: 0 20px 50px rgba(13, 22, 16, 0.28);
+        backdrop-filter: blur(14px);
+      }
+
+      .switcher-arrow {
+        height: 100%;
+        border: 0;
+        cursor: pointer;
+        color: #fff;
+        background: transparent;
+        font-size: 23px;
+      }
+
+      .switcher-copy {
+        text-align: center;
+      }
+
+      .switcher-copy strong,
+      .switcher-copy span { display: block; }
+      .switcher-copy strong { font-size: 12px; }
+      .switcher-copy span { margin-top: 3px; color: rgba(255, 255, 255, 0.58); font-size: 9px; }
+
+      .connector-mobile { display: none; }
+
       @media (max-width: 900px) {
-        .page { width: min(100% - 32px, 720px); }
-        .hero { padding: 76px 0 56px; }
-        .hub { margin-bottom: 52px; }
-        .hub::after,
-        .prototype-grid::before,
-        .prototype-card::before { display: none; }
-        .prototype-grid { grid-template-columns: 1fr; }
-        .prototype-card { min-height: 0; }
+        .page { width: min(100% - 32px, 760px); }
+        .hero { padding: 68px 0 46px; }
+        .atlas { border-radius: 34px; }
+        .map-stage { height: 840px; min-height: 840px; }
+        .connector-a,
+        .connector-b,
+        .connector-c { display: none !important; }
+        .connector-mobile { display: block; }
+
+        .atlas[data-variant] .hub-node { --x: 50%; --y: 205px; }
+        .atlas[data-variant] .kith-node { --x: 25%; --y: 545px; }
+        .atlas[data-variant] .recycle-node { --x: 75%; --y: 545px; }
+        .atlas[data-variant] .future-one { --x: 15%; --y: 765px; }
+        .atlas[data-variant] .future-two { --x: 50%; --y: 765px; }
+        .atlas[data-variant] .future-three { --x: 85%; --y: 765px; }
+
+        .hub-node { --size: 244px; }
+        .app-node { --size: 178px; }
+        .future-node { --size: 76px; }
+        .hub-node .node-actions { width: 340px; }
+        .app-node .node-actions { width: 164px; }
+        .node-circle { padding: 18px; }
+        .node-circle h2 { font-size: 30px; }
+        .node-circle h3 { font-size: 24px; }
+        .node-circle p { font-size: 10px; }
+        .node-icon { width: 40px; height: 40px; margin-bottom: 9px; font-size: 19px; }
       }
 
       @media (max-width: 560px) {
-        .page { width: calc(100% - 28px); padding-top: 18px; }
-        .topbar { gap: 12px; }
-        .brand { gap: 8px; font-size: 13px; }
-        .brand > span:last-child,
-        .status { white-space: nowrap; }
-        .brand-mark { width: 34px; height: 34px; border-radius: 11px; font-size: 16px; }
-        .status { padding: 7px 9px; font-size: 10px; }
-        .hero { padding: 68px 0 46px; }
-        h1 { margin-top: 15px; font-size: clamp(46px, 15vw, 65px); }
-        .lead { font-size: 17px; }
-        .hub { grid-template-columns: 1fr; padding: 25px; }
-        .hub-symbol { width: 68px; height: 68px; border-radius: 21px; font-size: 30px; }
-        .prototype-card { padding: 24px; border-radius: 22px; }
-        .prototype-card h3 { font-size: 31px; }
+        body { padding-bottom: 96px; }
+        .page { width: calc(100% - 24px); padding-top: 16px; }
+        .topbar { gap: 10px; }
+        .brand { gap: 8px; font-size: 12px; }
+        .brand-mark { width: 34px; height: 34px; font-size: 15px; }
+        .status { padding: 7px 9px; font-size: 9px; }
+        .status span { display: none; }
+        .hero { padding: 56px 5px 38px; }
+        .eyebrow { font-size: 10px; }
+        .eyebrow::before,
+        .eyebrow::after { width: 17px; }
+        h1 { font-size: clamp(43px, 14vw, 62px); }
+        .lead { font-size: 16px; }
+        .atlas { border-radius: 28px; }
+        .atlas-heading { top: 19px; left: 18px; }
+        .atlas-heading span { display: none; }
+        .map-legend { top: 20px; right: 18px; gap: 8px; }
+        .map-legend span { gap: 4px; }
+        .map-stage { height: 800px; min-height: 800px; }
+
+        .atlas[data-variant] .hub-node { --x: 50%; --y: 190px; }
+        .atlas[data-variant] .kith-node { --x: 25%; --y: 512px; }
+        .atlas[data-variant] .recycle-node { --x: 75%; --y: 512px; }
+        .atlas[data-variant] .future-one { --x: 15%; --y: 715px; }
+        .atlas[data-variant] .future-two { --x: 50%; --y: 715px; }
+        .atlas[data-variant] .future-three { --x: 85%; --y: 715px; }
+
+        .hub-node { --size: 218px; }
+        .app-node { --size: 146px; }
+        .future-node { --size: 66px; }
+        .hub-node .node-actions { width: min(310px, calc(100vw - 42px)); }
+        .app-node .node-actions { width: 148px; }
+        .node-circle { padding: 13px; }
+        .node-kicker { margin-bottom: 5px; font-size: 8px; }
+        .node-circle h2 { font-size: 27px; }
+        .node-circle h3 { font-size: 20px; }
+        .node-circle p { margin-top: 7px; font-size: 9px; line-height: 1.45; }
+        .node-icon { width: 34px; height: 34px; margin-bottom: 7px; font-size: 16px; }
+        .future-node b { font-size: 19px; }
+        .future-node span { font-size: 8px; }
+        .node-link { min-height: 38px; padding: 0 9px; font-size: 10px; }
+        .hub-node .node-link { min-height: 36px; }
         footer { align-items: flex-start; flex-direction: column; }
       }
 
       @media (prefers-reduced-motion: reduce) {
         html { scroll-behavior: auto; }
-        .primary-link span { transition: none; }
+        .map-node,
+        .node-link span { transition: none; }
       }
     </style>
   </head>
@@ -469,69 +586,108 @@
           <span class="brand-mark" aria-hidden="true">邻</span>
           <span>近邻互助组 · 原型地图</span>
         </div>
-        <div class="status">近邻互助组 · 2 个承接应用</div>
+        <div class="status"><span>2 个应用开放 · </span>更多在生长</div>
       </header>
 
       <main>
         <section class="hero" aria-labelledby="page-title">
-          <div class="eyebrow">COMMUNITY MUTUAL AID</div>
-          <h1 id="page-title">让每一次邻里互助，帮助下一次相遇。</h1>
+          <div class="eyebrow">邻里之间，真实发生</div>
+          <h1 id="page-title">一次互助，长出更多相遇。</h1>
           <p class="lead">
-            近邻互助组保存邻里真实发生过的互助经历，让有需要的人更容易找到合适的人。围绕不同场景的小工具承接具体请求，帮助双方把事情办完；这次互助随后又成为一段新的亲历，让后来的人有据可循，也更容易找到彼此。
+            近邻互助组用真实亲历帮助邻里找到彼此；街坊味和楼道收一收，则把一次供餐、一次楼道协作真正接住。新的经历留下来，又会帮助下一次相遇发生。
           </p>
         </section>
 
-        <section class="map" aria-label="近邻互助组及两个承接应用">
-          <article class="hub">
-            <div>
-              <div class="hub-kicker">共同底座 · 近邻互助组</div>
-              <h2>近邻互助组</h2>
-              <p>把居民亲身经历过的互助整理成亲历卡片，让邻里了解谁曾经帮过什么忙、事情是怎样完成的，为寻找合适的人提供真实参考。</p>
-              <div class="hub-actions">
-                <a class="hub-link hub-link--primary" href="./牛马互助平台/">查看近邻互助组原型 <span aria-hidden="true">→</span></a>
-                <a class="hub-link" href="./牛马互助平台/prototype-customer/">客户体验</a>
-                <a class="hub-link" href="./牛马互助平台/prototype-implementation/">实施对照</a>
-              </div>
-            </div>
-            <div class="hub-symbol" aria-hidden="true">互</div>
-          </article>
-
-          <div class="prototype-grid">
-            <article class="prototype-card kith">
-              <div class="card-head">
-                <div class="card-type">承接应用 · 社区供餐</div>
-                <div class="card-icon" aria-hidden="true">味</div>
-              </div>
-              <h3>Kith Inn<br />街坊味</h3>
-              <p class="card-copy">居民可以查看邻里介绍的供餐者和当日菜单，完成选餐、下单、送达与付款；供餐者也可以管理菜单和订单。</p>
-              <div class="tags" aria-label="原型关键词">
-                <span class="tag">社区供餐</span>
-                <span class="tag">熟人邀请</span>
-                <span class="tag">履约记录</span>
-              </div>
-              <div class="actions">
-                <a class="primary-link" href="./街坊味/">打开原型入口 <span aria-hidden="true">→</span></a>
-              </div>
-            </article>
-
-            <article class="prototype-card recycle">
-              <div class="card-head">
-                <div class="card-type">承接应用 · 楼道协作</div>
-                <div class="card-icon" aria-hidden="true">收</div>
-              </div>
-              <h3>楼道<br />收一收</h3>
-              <p class="card-copy">住户可以发出“有垃圾要回收”或“楼层需要打扫”的提醒，并按需上传照片；师傅集中查看待处理楼层，完成后及时反馈。</p>
-              <div class="tags" aria-label="原型关键词">
-                <span class="tag">居民提醒</span>
-                <span class="tag">楼层任务</span>
-                <span class="tag">完成反馈</span>
-              </div>
-              <div class="actions">
-                <a class="primary-link" href="./楼道回收提醒/">打开客户原型 <span aria-hidden="true">→</span></a>
-              </div>
-            </article>
+        <section class="atlas" data-variant="A" aria-labelledby="atlas-title">
+          <div class="atlas-heading">
+            <strong id="atlas-title">邻里协作图谱</strong>
+            <span>中心建立连接，周围应用承接事情</span>
+          </div>
+          <div class="map-legend" aria-label="图例">
+            <span><i></i>已开放</span>
+            <span><i></i>待探索</span>
           </div>
 
+          <div class="map-stage">
+            <svg class="connections" viewBox="0 0 1000 820" preserveAspectRatio="none" aria-hidden="true">
+              <g class="connector-set connector-a">
+                <line class="connection live" x1="500" y1="360" x2="180" y2="310" />
+                <line class="connection live" x1="500" y1="360" x2="820" y2="310" />
+                <line class="connection future" x1="500" y1="360" x2="500" y2="92" />
+                <line class="connection future" x1="500" y1="360" x2="280" y2="700" />
+                <line class="connection future" x1="500" y1="360" x2="720" y2="700" />
+              </g>
+              <g class="connector-set connector-b">
+                <path class="connection live" d="M380 365 C520 320 600 250 730 205" />
+                <path class="connection live" d="M380 365 C530 410 650 500 780 535" />
+                <path class="connection future" d="M380 365 C260 290 210 190 110 145" />
+                <path class="connection future" d="M380 365 C260 430 190 565 90 620" />
+                <path class="connection future" d="M380 365 C400 520 450 650 510 755" />
+              </g>
+              <g class="connector-set connector-c">
+                <line class="connection live" x1="500" y1="275" x2="240" y2="575" />
+                <line class="connection live" x1="500" y1="275" x2="760" y2="575" />
+                <path class="connection future" d="M500 275 C360 190 250 145 140 130" />
+                <line class="connection future" x1="500" y1="275" x2="500" y2="750" />
+                <path class="connection future" d="M500 275 C640 190 750 145 860 130" />
+              </g>
+              <g class="connector-mobile">
+                <line class="connection live" x1="500" y1="198" x2="250" y2="528" />
+                <line class="connection live" x1="500" y1="198" x2="750" y2="528" />
+                <line class="connection future" x1="500" y1="198" x2="150" y2="740" />
+                <line class="connection future" x1="500" y1="198" x2="500" y2="740" />
+                <line class="connection future" x1="500" y1="198" x2="850" y2="740" />
+              </g>
+            </svg>
+
+            <article class="map-node hub-node">
+              <div class="node-circle">
+                <div class="node-kicker">真实亲历 · 找到彼此</div>
+                <div class="node-icon" aria-hidden="true">邻</div>
+                <h2>近邻互助组</h2>
+                <p>看看邻里亲身经历过的互助，找到值得信任、真正帮得上忙的人。</p>
+              </div>
+              <div class="node-actions" aria-label="近邻互助组原型入口">
+                <a class="node-link primary" href="./牛马互助平台/">查看原型 <span aria-hidden="true">→</span></a>
+                <a class="node-link" href="./牛马互助平台/prototype-customer/">客户体验</a>
+                <a class="node-link" href="./牛马互助平台/prototype-implementation/">实施对照</a>
+              </div>
+            </article>
+
+            <article class="map-node app-node kith-node">
+              <div class="node-circle">
+                <div class="node-kicker">邻里供餐</div>
+                <div class="node-icon" aria-hidden="true">味</div>
+                <h3>街坊味</h3>
+                <p>认识附近做饭的人，从菜单选择到送达收款，把一餐饭稳稳接住。</p>
+              </div>
+              <div class="node-actions">
+                <a class="node-link primary" href="./街坊味/">打开原型 <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+
+            <article class="map-node app-node recycle-node">
+              <div class="node-circle">
+                <div class="node-kicker">楼道协作</div>
+                <div class="node-icon" aria-hidden="true">收</div>
+                <h3>楼道收一收</h3>
+                <p>住户按楼层上报回收或打扫，师傅查看待办并逐项处理。</p>
+              </div>
+              <div class="node-actions">
+                <a class="node-link primary" href="./楼道回收提醒/">打开原型 <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+
+            <div class="map-node future-node future-one" aria-label="未来应用节点，待探索">
+              <div class="node-circle"><b aria-hidden="true">＋</b><span>待探索</span></div>
+            </div>
+            <div class="map-node future-node future-two" aria-label="未来应用节点，待探索">
+              <div class="node-circle"><b aria-hidden="true">＋</b><span>待探索</span></div>
+            </div>
+            <div class="map-node future-node future-three" aria-label="未来应用节点，待探索">
+              <div class="node-circle"><b aria-hidden="true">＋</b><span>待探索</span></div>
+            </div>
+          </div>
         </section>
       </main>
 
@@ -540,5 +696,62 @@
         <div>全部页面均为交互原型，不接入真实业务数据。</div>
       </footer>
     </div>
+
+    <nav class="prototype-switcher" aria-label="入口图谱方案切换">
+      <button class="switcher-arrow" type="button" data-direction="-1" aria-label="上一个方案">←</button>
+      <div class="switcher-copy">
+        <strong id="variant-label">A — 开放环</strong>
+        <span>原型评估工具 · 方向键也可切换</span>
+      </div>
+      <button class="switcher-arrow" type="button" data-direction="1" aria-label="下一个方案">→</button>
+    </nav>
+
+    <script>
+      const variants = [
+        { key: "A", label: "A — 开放环" },
+        { key: "B", label: "B — 双翼生长" },
+        { key: "C", label: "C — 花瓣罗盘" },
+      ];
+      const atlas = document.querySelector(".atlas");
+      const variantLabel = document.querySelector("#variant-label");
+
+      function variantFromUrl() {
+        const value = new URLSearchParams(location.search).get("variant")?.toUpperCase();
+        return variants.some(item => item.key === value) ? value : "A";
+      }
+
+      function applyVariant(key, replace = true) {
+        const item = variants.find(variant => variant.key === key) || variants[0];
+        atlas.dataset.variant = item.key;
+        variantLabel.textContent = item.label;
+        document.title = `近邻互助组 · 应用图谱 ${item.key}`;
+        if (replace) {
+          const url = new URL(location.href);
+          url.searchParams.set("variant", item.key);
+          history.replaceState({}, "", url);
+        }
+      }
+
+      function changeVariant(direction) {
+        const currentIndex = variants.findIndex(item => item.key === atlas.dataset.variant);
+        const nextIndex = (currentIndex + direction + variants.length) % variants.length;
+        applyVariant(variants[nextIndex].key);
+      }
+
+      document.addEventListener("click", event => {
+        const button = event.target.closest("[data-direction]");
+        if (button) changeVariant(Number(button.dataset.direction));
+      });
+
+      window.addEventListener("keydown", event => {
+        const active = document.activeElement;
+        if (["INPUT", "TEXTAREA"].includes(active?.tagName) || active?.isContentEditable) return;
+        if (event.key === "ArrowLeft") changeVariant(-1);
+        if (event.key === "ArrowRight") changeVariant(1);
+      });
+
+      window.addEventListener("popstate", () => applyVariant(variantFromUrl(), false));
+      applyVariant(variantFromUrl(), false);
+    </script>
   </body>
 </html>
