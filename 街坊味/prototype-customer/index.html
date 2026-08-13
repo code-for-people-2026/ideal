@@ -181,10 +181,10 @@
       .weekly-menu-jumps button:hover { color: var(--green-dark); }
       .weekly-menu-jumps button.active { background: #fff; color: var(--green-dark); box-shadow: 0 2px 6px rgba(52,41,31,.1); }
       .weekly-menu-jumps button:focus-visible { outline: 2px solid var(--green-dark); outline-offset: 1px; }
-      .weekly-menu-grid { display: grid; grid-template-columns: 35px minmax(0, 1fr); align-items: start; gap: 4px; margin-top: 5px; }
-      .weekly-menu-meal-axis { position: relative; z-index: 2; display: grid; grid-template-rows: 38px auto auto; gap: 3px; background: #fff; }
+      .weekly-menu-grid { display: grid; grid-template-columns: 24px minmax(0, 1fr); align-items: start; gap: 4px; margin-top: 5px; }
+      .weekly-menu-meal-axis { position: relative; z-index: 2; display: grid; grid-template-rows: 38px auto auto; gap: 12px; background: #fff; }
       .weekly-menu-axis-head { border-bottom: 1px solid #eee6da; }
-      .weekly-menu-meal-label { display: grid; min-height: calc(var(--menu-dish-count) * 44px + (var(--menu-dish-count) - 1) * 2px); place-items: center; border-radius: 6px; background: #f7f3eb; color: var(--muted); font-size: 11px; font-weight: 850; line-height: 1; white-space: nowrap; }
+      .weekly-menu-meal-label { display: grid; min-height: calc(var(--menu-dish-count) * 44px + (var(--menu-dish-count) - 1) * 10px); place-items: center; border-radius: 6px; background: #f6f1e8; color: #6b655d; font-size: 12px; font-weight: 850; line-height: 1; letter-spacing: 3px; text-orientation: upright; white-space: nowrap; writing-mode: vertical-rl; }
       .weekly-menu-carousel { display: grid; min-width: 0; grid-auto-flow: column; grid-auto-columns: calc((100% - 12px) / 3); align-items: start; gap: 6px; overflow-x: auto; overscroll-behavior-inline: contain; padding: 0 1px 3px; scroll-snap-type: inline proximity; scrollbar-width: none; cursor: grab; touch-action: pan-y; user-select: none; -webkit-overflow-scrolling: touch; -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%); mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%); }
       .weekly-menu-carousel.dragging { cursor: grabbing; scroll-snap-type: none; }
       .weekly-menu-carousel::-webkit-scrollbar { display: none; }
@@ -192,8 +192,8 @@
       .weekly-day-card-head { display: block; height: 38px; padding: 1px 0 4px; border-bottom: 1px solid #eee6da; text-align: center; }
       .weekly-day-card-head strong { display: block; font-size: 13px; }
       .weekly-day-card-head small { display: block; margin-top: 2px; color: var(--muted); font-size: 10px; font-weight: 750; }
-      .weekly-day-dishes { display: grid; gap: 3px; margin-top: 3px; }
-      .weekly-menu-meal-dishes { display: grid; gap: 2px; }
+      .weekly-day-dishes { display: grid; gap: 12px; margin-top: 8px; }
+      .weekly-menu-meal-dishes { display: grid; gap: 10px; }
       .weekly-dish-cell { position: relative; display: grid; min-height: 44px; place-items: center; padding: 2px; overflow: hidden; border: 1px solid var(--line); border-left: 3px solid #d88374; border-radius: 6px; background: #fff; color: var(--ink); font-size: 16px; font-weight: 850; line-height: 1.12; text-align: center; white-space: nowrap; overflow-wrap: normal; transition: background .15s ease, border-color .15s ease; }
       .weekly-dish-cell.veg { border-left-color: #70a98b; }
       .weekly-dish-cell.soup { border-left-color: #7fa7cf; }
@@ -207,19 +207,20 @@
       .replace-selected { min-height: 32px; padding: 0 11px; border: 1px solid var(--line); border-radius: 9px; background: #f4efe7; color: var(--ink); font-size: 9px; font-weight: 900; white-space: nowrap; }
       .plan-action { position: sticky; z-index: 3; bottom: -15px; margin-top: 9px; padding: 8px 0 2px; background: linear-gradient(transparent, #fbf8f1 25%); }
       .plan-action .primary { margin-top: 0; box-shadow: 0 8px 20px rgba(182,65,49,.16); }
-      .menu-aligned .screen-body { display: block; padding: 12px; overflow-y: auto; scroll-behavior: smooth; }
+      .menu-aligned .screen-body { display: block; padding: 12px; overflow-y: auto; scroll-behavior: smooth; scrollbar-width: none; }
+      .menu-aligned .screen-body::-webkit-scrollbar { display: none; }
       .menu-aligned .weekly-menu-boards { display: block; }
       .menu-aligned .weekly-menu-board { height: auto; padding: 8px; }
       .menu-aligned .weekly-menu-title { position: sticky; z-index: 4; top: -12px; margin: -8px -8px 0; padding: 10px 8px 6px; border-bottom: 1px solid #eee6da; background: rgba(255,255,255,.97); }
       .menu-aligned .weekly-menu-title strong { font-size: 16px; }
       .menu-aligned .weekly-menu-carousel { grid-auto-columns: calc((100% - 12px) / 3); gap: 6px; }
       .menu-aligned .weekly-dish-cell { min-height: 44px; font-size: 16px; }
-      .menu-aligned .weekly-dish-detail { flex: 0 0 auto; min-height: 72px; padding: 10px 9px 10px 11px; }
+      .menu-aligned .weekly-dish-detail { position: sticky; z-index: 3; bottom: 58px; min-height: 72px; padding: 10px 9px 10px 11px; box-shadow: 0 10px 24px rgba(41,35,29,.12); }
       .menu-aligned .weekly-dish-detail small { font-size: 9px; }
       .menu-aligned .weekly-dish-detail strong { font-size: 13px; }
       .menu-aligned .weekly-dish-detail span { font-size: 10px; }
       .menu-aligned .replace-selected { min-height: 36px; padding: 0 13px; font-size: 10px; }
-      .menu-aligned .plan-action { position: static; flex: 0 0 auto; bottom: auto; margin-top: 8px; padding: 0; background: none; }
+      .menu-aligned .plan-action { position: sticky; z-index: 3; bottom: -12px; margin-top: 8px; padding: 12px 0 2px; background: linear-gradient(transparent, #fbf8f1 30%); }
       .menu-aligned .plan-action .primary { min-height: 48px; font-size: 14px; }
       .candidate-sheet { position: sticky; z-index: 8; bottom: -15px; margin: 10px -15px -15px; padding: 13px 15px 17px; border-top: 1px solid var(--line); border-radius: 18px 18px 0 0; background: #fff; box-shadow: 0 -18px 40px rgba(41,35,29,.18); }
       .sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
@@ -481,7 +482,7 @@
         menu: {
           kicker: "修改过程 · 02",
           title: "十个餐次逐一看，<br />不满意当场换。",
-          lead: "一天的午饭和晚饭合成一列，用左侧固定餐次栏分段；首屏同时比较三天，也可以只看荤菜、素菜或汤，再点一次取消筛选。",
+          lead: "一天的午饭和晚饭合成一列，用左侧固定餐次栏分段；首屏同时比较三天，默认只看荤菜，也可以切换查看全部菜品。",
           proofs: [
             ["三", "首屏横向对比三天菜单"],
             ["午", "午晚餐合成一列，用标题分段"],
@@ -560,7 +561,7 @@
       const showcaseDishSmartSwapHistory = {};
       const showcaseWeeklyMenu = [
         { day: "周一", date: "9月7日", lunch: [["土豆烧牛肉","meat"],["白切鸡","meat"],["蒜蓉菜心","veg"],["清炒西兰花","veg"],["冬瓜虾皮汤","soup"]], dinner: [["梅菜扣肉","meat"],["清蒸鲈鱼","meat"],["荷塘小炒","veg"],["手撕包菜","veg"],["玉米排骨汤","soup"]] },
-        { day: "周二", date: "9月8日", lunch: [["红烧排骨","meat"],["番茄炒蛋","meat"],["清炒油麦菜","veg"],["香菇青菜","veg"],["海带豆腐汤","soup"]], dinner: [["红烧牛腩","meat"],["清蒸鲈鱼","meat"],["蒜蓉时蔬","veg"],["手撕包菜","veg"],["番茄蛋汤","soup"]] },
+        { day: "周二", date: "9月8日", lunch: [["红烧排骨","meat"],["番茄炒蛋","meat"],["清炒油麦菜","veg"],["香菇青菜","veg"],["海带豆腐汤","soup"]], dinner: [["红烧牛腩","meat"],["冬菇蒸肉饼","meat"],["蒜蓉时蔬","veg"],["清炒芦笋","veg"],["番茄蛋汤","soup"]] },
         { day: "周三", date: "9月9日", lunch: [["香菇滑鸡","meat"],["萝卜炖肉","meat"],["清炒菠菜","veg"],["酸辣土豆丝","veg"],["菌菇汤","soup"]], dinner: [["糖醋排骨","meat"],["芹菜炒肉","meat"],["蚝油生菜","veg"],["家常茄子","veg"],["紫菜蛋花汤","soup"]] },
         { day: "周四", date: "9月10日", lunch: [["啤酒鸭","meat"],["豆角炒肉","meat"],["蒜蓉空心菜","veg"],["清炒藕片","veg"],["萝卜汤","soup"]], dinner: [["清炖狮子头","meat"],["豉汁蒸鱼","meat"],["小炒杏鲍菇","veg"],["上汤娃娃菜","veg"],["丝瓜蛋汤","soup"]] },
         { day: "周五", date: "9月11日", lunch: [["板栗烧鸡","meat"],["木须肉","meat"],["清炒小白菜","veg"],["麻婆豆腐","veg"],["莲藕排骨汤","soup"]], dinner: [["土豆焖鸭","meat"],["红烧带鱼","meat"],["蒜蓉西兰花","veg"],["干煸四季豆","veg"],["冬瓜肉丸汤","soup"]] },
@@ -629,7 +630,7 @@
         const key = showcaseDishKey(dayIndex, meal, dishIndex);
         const day = showcaseWeeklyMenu[dayIndex];
         const mealLabel = meal === "dinner" ? "晚饭" : "午饭";
-        const dishSlotLabel = ["荤1", "荤2", "素1", "素2", "汤"][dishIndex];
+        const dishSlotLabel = ["荤菜 1", "荤菜 2", "素菜 1", "素菜 2", "汤"][dishIndex];
         return `<button class="weekly-dish-cell ${kind} ${selectedShowcaseDishKey === key ? "active" : ""}" data-showcase-select-dish="${key}" type="button" aria-label="${day.day}${mealLabel}${dishSlotLabel}：${name}" aria-pressed="${selectedShowcaseDishKey === key}"><span class="weekly-dish-name">${name}</span></button>`;
       }
 
@@ -654,13 +655,14 @@
 
       function showcaseWeeklyBoard() {
         const selectedParts = selectedShowcaseDishKey?.split("-") || [];
-        const dayIndex = Number(selectedParts[0]);
-        const meal = selectedParts[1];
-        const dishIndex = Number(selectedParts[2]);
+        const hasSelection = selectedParts.length === 3;
+        const dayIndex = hasSelection ? Number(selectedParts[0]) : 0;
+        const meal = hasSelection ? selectedParts[1] : "lunch";
+        const dishIndex = hasSelection ? Number(selectedParts[2]) : 0;
         const [name, kind] = showcaseDishFor(dayIndex, meal, dishIndex);
         const selectedDay = showcaseWeeklyMenu[dayIndex];
         const mealLabel = meal === "dinner" ? "晚饭" : "午饭";
-        const dishSlotLabel = ["荤1", "荤2", "素1", "素2", "汤"][dishIndex];
+        const dishSlotLabel = ["荤菜 1", "荤菜 2", "素菜 1", "素菜 2", "汤"][dishIndex];
         const categorySpecs = [
           { kind: "meat", indexes: [0, 1] },
           { kind: "veg", indexes: [2, 3] },
@@ -677,12 +679,12 @@
           return `<section class="weekly-day-card"><div class="weekly-day-card-head"><strong>${day.day}</strong><small>${day.date}</small></div><div class="weekly-day-dishes">${mealSections}</div></section>`;
         }).join("");
         return `<section class="weekly-menu-board">
-          <div class="weekly-menu-title"><strong>9月7日—11日菜单</strong><div class="weekly-menu-shortcuts"><span>筛选</span><nav class="weekly-menu-jumps" aria-label="按菜品类型筛选"><button class="${showcaseMenuKindFilter === "meat" ? "active" : ""}" type="button" data-showcase-kind-filter="meat" aria-pressed="${showcaseMenuKindFilter === "meat"}">荤菜</button><button class="${showcaseMenuKindFilter === "veg" ? "active" : ""}" type="button" data-showcase-kind-filter="veg" aria-pressed="${showcaseMenuKindFilter === "veg"}">素菜</button><button class="${showcaseMenuKindFilter === "soup" ? "active" : ""}" type="button" data-showcase-kind-filter="soup" aria-pressed="${showcaseMenuKindFilter === "soup"}">汤</button></nav></div></div>
+          <div class="weekly-menu-title"><strong>9月7日—11日菜单</strong><div class="weekly-menu-shortcuts"><span>筛选</span><nav class="weekly-menu-jumps" aria-label="筛选菜单菜品"><button class="${showcaseMenuKindFilter === "meat" ? "active" : ""}" type="button" data-showcase-kind-filter="meat" aria-pressed="${showcaseMenuKindFilter === "meat"}">荤菜</button><button class="${showcaseMenuKindFilter === null ? "active" : ""}" type="button" data-showcase-kind-filter="all" aria-pressed="${showcaseMenuKindFilter === null}">全部</button></nav></div></div>
           <div class="weekly-menu-grid" style="--menu-dish-count: ${visibleDishIndexes.length}">
             <div class="weekly-menu-meal-axis" aria-hidden="true"><span class="weekly-menu-axis-head"></span><span class="weekly-menu-meal-label">午饭</span><span class="weekly-menu-meal-label">晚饭</span></div>
             <div class="weekly-menu-carousel" aria-label="9月7日至11日菜单，左侧按午饭和晚饭分组，左右滑动查看更多日期">${dayCards}</div>
           </div>
-          <div class="weekly-dish-detail"><div class="weekly-dish-detail-copy"><small>当前选择 · ${selectedDay.day}${mealLabel} · ${dishSlotLabel}</small><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span></div><button class="replace-selected" data-showcase-rotate="${selectedShowcaseDishKey}" data-kind="${kind}" type="button">换这道</button></div>
+          ${hasSelection ? `<div class="weekly-dish-detail"><div class="weekly-dish-detail-copy"><small>当前选择 · ${selectedDay.day}${mealLabel} · ${dishSlotLabel}</small><strong>${name}</strong><span>${showcaseDishMeta(kind)}</span></div><button class="replace-selected" data-showcase-rotate="${selectedShowcaseDishKey}" data-kind="${kind}" type="button">换这道</button></div>` : ""}
         </section>`;
       }
 
@@ -978,7 +980,7 @@
         }
         const selectedDish = event.target.closest("[data-showcase-select-dish]")?.dataset.showcaseSelectDish;
         if (selectedDish) {
-          selectedShowcaseDishKey = selectedDish;
+          selectedShowcaseDishKey = selectedShowcaseDishKey === selectedDish ? null : selectedDish;
           showcaseCandidateSheet = null;
           rerenderPhoneState();
           return;
@@ -1019,8 +1021,8 @@
         }
         const kindFilter = event.target.closest("[data-showcase-kind-filter]")?.dataset.showcaseKindFilter;
         if (kindFilter) {
-          showcaseMenuKindFilter = showcaseMenuKindFilter === kindFilter ? null : kindFilter;
-          if (showcaseMenuKindFilter) {
+          showcaseMenuKindFilter = kindFilter === "all" ? null : "meat";
+          if (showcaseMenuKindFilter && selectedShowcaseDishKey) {
             const [selectedDayIndex, selectedMeal, selectedDishIndex] = selectedShowcaseDishKey.split("-");
             const selectedKind = showcaseDishFor(Number(selectedDayIndex), selectedMeal, Number(selectedDishIndex))[1];
             if (selectedKind !== showcaseMenuKindFilter) {
