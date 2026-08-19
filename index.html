@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="近邻互助组通过真实亲历帮助邻里找到彼此，街坊味和楼道收一收承接具体协作。"
+      content="近邻互助组通过真实亲历帮助邻里找到彼此，街坊味、排好菜和楼道收一收承接具体协作。"
     />
     <title>近邻互助组 · 原型地图</title>
     <!-- PROTOTYPE — 不接真实数据，不是生产代码。 -->
@@ -297,6 +297,13 @@
         --node-color: var(--orange);
       }
 
+      .paihaocai {
+        --x: 69%;
+        --y: 17%;
+        --size: 220px;
+        --node-color: var(--green);
+      }
+
       .future {
         --size: 190px;
         --node-color: var(--future);
@@ -310,7 +317,6 @@
       .future h3 { color: #244b39; font-size: 24px; }
       .future h3::after { display: none; }
       .future p { margin-top: 18px; font-size: 15px; line-height: 1.6; }
-      .future-one { --x: 69%; --y: 17%; }
       .future-two { --x: 90%; --y: 56%; }
       .future-three { --x: 15%; --y: 81%; }
 
@@ -359,11 +365,11 @@
 
         .hub { --x: 50%; --y: 44%; --size: 218px; }
         .kith { --x: 22%; --y: 17%; --size: 150px; }
+        .paihaocai { --x: 79%; --y: 16%; --size: 132px; }
         .recycle { --x: 77%; --y: 70%; --size: 150px; }
         .future { --size: 82px; padding: 10px; }
         .future h3 { font-size: 14px; }
         .future p { margin-top: 7px; font-size: 9px; }
-        .future-one { --x: 79%; --y: 16%; }
         .future-two { --x: 85%; --y: 56%; }
         .future-three { --x: 17%; --y: 68%; }
         footer { margin-top: 32px; align-items: flex-start; flex-direction: column; }
@@ -378,7 +384,7 @@
     <div class="page">
       <header class="topbar">
         <div>近邻互助组 · 原型地图</div>
-        <div class="status">3 个原型可体验</div>
+        <div class="status">4 个原型可体验</div>
       </header>
 
       <main class="showcase">
@@ -420,15 +426,16 @@
             <p>认识附近做饭的人，<br />把一餐稳稳接住</p>
           </a>
 
+          <a class="node paihaocai" href="./排好菜/" aria-label="打开排好菜原型入口">
+            <h3>排好菜</h3>
+            <p>五天十餐，<br />生成一周菜单</p>
+          </a>
+
           <a class="node recycle" href="./楼道回收提醒/" aria-label="打开楼道收一收原型入口">
             <h3>楼道收一收</h3>
             <p>扫码上报回收或打扫，<br />师傅按楼层处理</p>
           </a>
 
-          <div class="node future future-one">
-            <h3>待探索</h3>
-            <p>更多邻里协作</p>
-          </div>
           <div class="node future future-two">
             <h3>待探索</h3>
             <p>更多邻里协作</p>
