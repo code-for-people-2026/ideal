@@ -11,6 +11,8 @@
 
 ## 预览
 
+合并部署配置后，可通过 [ideal.codeforpeople.cn/排好菜/](https://ideal.codeforpeople.cn/%E6%8E%92%E5%A5%BD%E8%8F%9C/) 查看在线原型。
+
 ```bash
 cd prototype-engineering
 npm ci

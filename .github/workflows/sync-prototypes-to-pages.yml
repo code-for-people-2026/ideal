@@ -22,6 +22,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: 排好菜/prototype-engineering/package-lock.json
+
       - name: Build the deployable site
         run: bash scripts/build-pages-site.sh "$GITHUB_WORKSPACE/_site"
 
