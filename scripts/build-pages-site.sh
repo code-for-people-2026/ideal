@@ -62,6 +62,23 @@ while IFS= read -r prototype_dir || [[ -n "$prototype_dir" ]]; do
     exit 1
   fi
 
+  engineering_dir="$repo_root/$prototype_dir/prototype-engineering"
+  if [[ -f "$engineering_dir/package.json" ]]; then
+    echo "Building $prototype_dir for GitHub Pages"
+    npm --prefix "$engineering_dir" ci
+    npm --prefix "$engineering_dir" run build:pages
+
+    engineering_output="$engineering_dir/dist/client"
+    if [[ ! -f "$engineering_output/index.html" ]]; then
+      echo "Missing built prototype entry: $engineering_output/index.html" >&2
+      exit 1
+    fi
+
+    mkdir -p "$output_dir/$prototype_dir"
+    cp -a "$engineering_output/." "$output_dir/$prototype_dir/"
+    continue
+  fi
+
   while IFS= read -r -d '' source_file; do
     copy_file "$source_file"
   done < <(
