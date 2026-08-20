@@ -27,9 +27,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-          cache-dependency-path: |
-            排好菜/prototype-customer/package-lock.json
-            排好菜/prototype-engineering/package-lock.json
+          cache-dependency-path: 排好菜/prototype-customer/package-lock.json
 
       - name: Build the deployable site
         run: bash scripts/build-pages-site.sh "$GITHUB_WORKSPACE/_site"
