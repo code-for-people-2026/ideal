@@ -62,7 +62,35 @@ while IFS= read -r prototype_dir || [[ -n "$prototype_dir" ]]; do
     exit 1
   fi
 
+  customer_dir="$repo_root/$prototype_dir/prototype-customer"
   engineering_dir="$repo_root/$prototype_dir/prototype-engineering"
+
+  if [[ -f "$customer_dir/package.json" && -f "$engineering_dir/package.json" ]]; then
+    if [[ ! -f "$repo_root/$prototype_dir/index.html" ]]; then
+      echo "Missing prototype chooser: $prototype_dir/index.html" >&2
+      exit 1
+    fi
+
+    copy_file "$repo_root/$prototype_dir/index.html"
+
+    for app_dir in "$customer_dir" "$engineering_dir"; do
+      app_name="$(basename "$app_dir")"
+      echo "Building $prototype_dir/$app_name for GitHub Pages"
+      npm --prefix "$app_dir" ci
+      npm --prefix "$app_dir" run build:pages
+
+      app_output="$app_dir/dist/client"
+      if [[ ! -f "$app_output/index.html" ]]; then
+        echo "Missing built prototype entry: $app_output/index.html" >&2
+        exit 1
+      fi
+
+      mkdir -p "$output_dir/$prototype_dir/$app_name"
+      cp -a "$app_output/." "$output_dir/$prototype_dir/$app_name/"
+    done
+    continue
+  fi
+
   if [[ -f "$engineering_dir/package.json" ]]; then
     echo "Building $prototype_dir for GitHub Pages"
     npm --prefix "$engineering_dir" ci
