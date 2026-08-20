@@ -62,55 +62,28 @@ while IFS= read -r prototype_dir || [[ -n "$prototype_dir" ]]; do
     exit 1
   fi
 
-  customer_dir="$repo_root/$prototype_dir/prototype-customer"
-  engineering_dir="$repo_root/$prototype_dir/prototype-engineering"
+  prototype_root="$repo_root/$prototype_dir"
+  # ponytail: empty sentinel keeps Bash 3.2 + `set -u` happy; loop bodies skip it.
+  app_dirs=("")
 
-  if [[ -f "$customer_dir/package.json" && -f "$engineering_dir/package.json" ]]; then
-    if [[ ! -f "$repo_root/$prototype_dir/index.html" ]]; then
-      echo "Missing prototype chooser: $prototype_dir/index.html" >&2
-      exit 1
-    fi
-
-    copy_file "$repo_root/$prototype_dir/index.html"
-
-    for app_dir in "$customer_dir" "$engineering_dir"; do
-      app_name="$(basename "$app_dir")"
-      echo "Building $prototype_dir/$app_name for GitHub Pages"
-      npm --prefix "$app_dir" ci
-      npm --prefix "$app_dir" run build:pages
-
-      app_output="$app_dir/dist/client"
-      if [[ ! -f "$app_output/index.html" ]]; then
-        echo "Missing built prototype entry: $app_output/index.html" >&2
-        exit 1
-      fi
-
-      mkdir -p "$output_dir/$prototype_dir/$app_name"
-      cp -a "$app_output/." "$output_dir/$prototype_dir/$app_name/"
-    done
-    continue
-  fi
-
-  if [[ -f "$engineering_dir/package.json" ]]; then
-    echo "Building $prototype_dir for GitHub Pages"
-    npm --prefix "$engineering_dir" ci
-    npm --prefix "$engineering_dir" run build:pages
-
-    engineering_output="$engineering_dir/dist/client"
-    if [[ ! -f "$engineering_output/index.html" ]]; then
-      echo "Missing built prototype entry: $engineering_output/index.html" >&2
-      exit 1
-    fi
-
-    mkdir -p "$output_dir/$prototype_dir"
-    cp -a "$engineering_output/." "$output_dir/$prototype_dir/"
-    continue
-  fi
+  while IFS= read -r -d '' package_file; do
+    app_dirs+=("$(dirname "$package_file")")
+  done < <(find "$prototype_root" -mindepth 2 -maxdepth 2 -type f -name package.json -print0)
 
   while IFS= read -r -d '' source_file; do
+    inside_app=false
+    for app_dir in "${app_dirs[@]}"; do
+      [[ -z "$app_dir" ]] && continue
+      if [[ "$source_file" == "$app_dir"/* ]]; then
+        inside_app=true
+        break
+      fi
+    done
+
+    [[ "$inside_app" == true ]] && continue
     copy_file "$source_file"
   done < <(
-    find "$repo_root/$prototype_dir" -type f \
+    find "$prototype_root" -type f \
       \( \
         -iname '*.html' -o -iname '*.htm' -o \
         -iname '*.css' -o -iname '*.js' -o -iname '*.mjs' -o -iname '*.json' -o \
@@ -121,6 +94,23 @@ while IFS= read -r prototype_dir || [[ -n "$prototype_dir" ]]; do
         -iname '*.ogg' -o -iname '*.pdf' -o -iname '*.webmanifest' \
       \) -print0
   )
+
+  for app_dir in "${app_dirs[@]}"; do
+    [[ -z "$app_dir" ]] && continue
+    app_path="${app_dir#"$repo_root/"}"
+    echo "Building $app_path for GitHub Pages"
+    npm --prefix "$app_dir" ci
+    npm --prefix "$app_dir" run build:pages
+
+    app_output="$app_dir/dist/client"
+    if [[ ! -f "$app_output/index.html" ]]; then
+      echo "Missing built prototype entry: $app_output/index.html" >&2
+      exit 1
+    fi
+
+    mkdir -p "$output_dir/$app_path"
+    cp -a "$app_output/." "$output_dir/$app_path/"
+  done
 done < "$prototype_manifest"
 
 touch "$output_dir/.nojekyll"

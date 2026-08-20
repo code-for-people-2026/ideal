@@ -332,7 +332,7 @@ export function App() {
   return (
     <>
       <a className="prototype-home-link" href="../../" aria-label="返回全部原型入口"><ArrowLeftIcon />全部原型</a>
-      <a className="audience-switch" href="../prototype-engineering/">切到工程原型 <ArrowRightIcon /></a>
+      <a className="audience-switch" href="../prototype-implementation/">切到实施对照原型 <ArrowRightIcon /></a>
       <main className="prototype-page">
         <header className="topbar"><div className="brand"><span className="brand-icon"><CalendarIcon /></span><span>排好菜</span></div><div className="prototype-note">客户体验原型 · 不接真实数据</div></header>
         <div className="showcase-layout">
