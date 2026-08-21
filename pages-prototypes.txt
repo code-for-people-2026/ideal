@@ -1,5 +1,7 @@
 # One public, root-level prototype directory per line.
-# Add a new Chinese directory here when it should be published to GitHub Pages.
+# Add a source directory here when it should be published to GitHub Pages.
+neighbors
+# Permanent compatibility redirects for former public URLs.
 牛马互助平台
 街坊味
 楼道回收提醒

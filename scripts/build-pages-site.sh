@@ -31,7 +31,7 @@ copy_file() {
   cp "$source_file" "$output_dir/$relative_path"
 }
 
-for root_file in index.html prototype-nav.css prototype-shell.css CNAME; do
+for root_file in index.html prototype-nav.css prototype-shell.css prototype-shell.js CNAME; do
   if [[ ! -f "$repo_root/$root_file" ]]; then
     echo "Missing required Pages file: $root_file" >&2
     exit 1
