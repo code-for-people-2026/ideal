@@ -8,7 +8,6 @@
       content="楼道收一收是近邻互助组中的楼道提醒应用：住户扫码后选择回收或打扫需求，随即上报给师傅。"
     />
     <title>楼道收一收 · 近邻互助组</title>
-    <link rel="stylesheet" href="../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据，不是生产代码。
       本轮问题：如何保留电梯楼层面板的概览优势，用底部抽屉承载楼层待办操作？
@@ -64,36 +63,6 @@
         padding: 24px 30px 138px;
       }
 
-      .topbar {
-        display: flex;
-        width: min(1220px, 100%);
-        margin: 0 auto;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-      }
-
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 16px;
-        font-weight: 900;
-        letter-spacing: -0.02em;
-      }
-
-      .brand-mark {
-        display: grid;
-        width: 40px;
-        height: 40px;
-        place-items: center;
-        border-radius: 13px;
-        color: #fff;
-        background: var(--green);
-        box-shadow: 0 10px 24px rgba(22, 116, 81, 0.24);
-        font-size: 22px;
-      }
-
       .icon-sprite {
         position: absolute;
         width: 0;
@@ -111,16 +80,6 @@
         stroke-width: 2;
         stroke-linecap: round;
         stroke-linejoin: round;
-      }
-
-      .prototype-note {
-        padding: 8px 12px;
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        color: var(--muted);
-        background: rgba(255, 255, 255, 0.62);
-        font-size: 11px;
-        font-weight: 800;
       }
 
       .layout {
@@ -1575,8 +1534,6 @@
 
       @media (max-width: 620px) {
         .page { overflow: hidden; padding: 17px 14px 128px; }
-        .prototype-note { display: none; }
-        .brand-mark { width: 36px; height: 36px; }
         h1 { font-size: clamp(42px, 13vw, 58px); }
         .lead { font-size: 17px; }
         .flow-item { grid-template-columns: 40px 1fr; }
@@ -2064,6 +2021,129 @@
       .switcher-copy strong { display: block; font-size: 13px; }
       .switcher-copy span { display: block; margin-top: 2px; color: #b8c3bc; font-size: 9px; font-weight: 700; }
 
+      /* 公开原型承载层：只约束故事、布局与手机舞台，不改写 App 内部样式。 */
+      .page {
+        min-height: auto;
+        padding: clamp(32px, 4vw, 64px);
+        color: var(--public-foreground);
+        background: var(--public-surface);
+      }
+
+      .layout {
+        width: min(1280px, 100%);
+        margin-top: 0;
+        grid-template-columns: minmax(320px, 0.86fr) minmax(520px, 1.14fr);
+        gap: clamp(36px, 5vw, 72px);
+      }
+
+      .story {
+        padding: 18px 0;
+      }
+
+      .story .eyebrow {
+        color: var(--public-primary);
+        font-size: 12px;
+        font-weight: 750;
+      }
+
+      .story .eyebrow::before {
+        width: 7px;
+        height: 7px;
+        background: var(--public-primary);
+        box-shadow: none;
+      }
+
+      .story h1 {
+        margin-top: 20px;
+        color: var(--public-foreground);
+        font-size: clamp(44px, 5vw, 70px);
+        line-height: 1.02;
+      }
+
+      .story .lead,
+      .flow-copy span {
+        color: var(--public-muted-foreground);
+      }
+
+      .flow-item {
+        border-color: var(--public-border);
+        border-radius: 14px;
+        background: var(--public-surface);
+        box-shadow: var(--public-e1);
+      }
+
+      .flow-number,
+      .flow-item:nth-child(2) .flow-number,
+      .flow-item:nth-child(3) .flow-number {
+        border: 1px solid var(--public-border);
+        border-radius: 10px;
+        color: var(--public-primary);
+        background: var(--public-primary-soft);
+      }
+
+      .flow-arrow {
+        color: var(--public-border-strong);
+      }
+
+      .demo-button {
+        border-radius: 9px;
+        font-weight: 750;
+      }
+
+      .demo-button.primary {
+        color: #fff;
+        background: var(--public-primary);
+        box-shadow: 0 8px 20px rgba(210, 13, 24, 0.18);
+      }
+
+      .demo-button.primary:hover {
+        background: var(--public-primary-hover);
+      }
+
+      .demo-button.secondary {
+        color: var(--public-foreground);
+        border-color: var(--public-border-strong);
+        background: var(--public-surface);
+      }
+
+      .demo-button.ghost {
+        color: var(--public-muted-foreground);
+      }
+
+      .visual.public-stage-surface {
+        min-width: 0;
+        min-height: 850px;
+        padding: 28px;
+      }
+
+      @media (max-width: 1080px) {
+        .layout {
+          grid-template-columns: minmax(290px, 0.8fr) minmax(430px, 1.2fr);
+          gap: 32px;
+        }
+      }
+
+      @media (max-width: 880px) {
+        .page { padding: 32px 20px 138px; }
+        .layout { grid-template-columns: 1fr; margin-top: 0; }
+        .visual.public-stage-surface { min-height: 850px; }
+      }
+
+      @media (max-width: 620px) {
+        .page { padding: 24px 14px 128px; }
+        .story h1 { font-size: clamp(40px, 13vw, 56px); }
+        .visual.public-stage-surface {
+          width: calc(100% + 28px);
+          min-height: 806px;
+          margin-left: -14px;
+          padding: 14px 0;
+          border-right: 0;
+          border-left: 0;
+          border-radius: 0;
+        }
+        .phone { width: min(400px, 100%); }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after {
           scroll-behavior: auto !important;
@@ -2073,8 +2153,9 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="../prototype-shell.css" />
   </head>
-  <body>
+  <body class="public-prototype-page">
     <svg class="icon-sprite" aria-hidden="true">
       <symbol id="recycle-icon" viewBox="0 0 24 24">
         <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5" />
@@ -2085,18 +2166,37 @@
         <path d="m13.378 9.633 4.096 1.098 1.097-4.096" />
       </symbol>
     </svg>
-    <a class="prototype-home-link" href="../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
-    <div class="page">
-      <header class="topbar">
-        <div class="brand">
-          <div class="brand-mark" aria-hidden="true">
-            <svg class="recycle-icon" viewBox="0 0 24 24"><use href="#recycle-icon"></use></svg>
-          </div>
-          <span>楼道收一收</span>
+    <div class="public-site-frame">
+      <header class="public-shell-header">
+        <div class="public-shell-identity">
+          <a class="public-shell-brand" href="../" aria-label="返回原型首页">
+            <span class="public-shell-seal" aria-hidden="true">仝</span>
+            <span class="public-shell-brand-copy">
+              <strong>码成仝</strong>
+              <small>为工友敲键盘</small>
+            </span>
+          </a>
+          <span class="public-shell-divider" aria-hidden="true"></span>
+          <span class="public-shell-context">楼道收一收</span>
+          <span class="public-shell-badge">场景探索</span>
         </div>
-        <div class="prototype-note">近邻互助组 · 楼道协作场景</div>
+        <a class="public-shell-official-link" href="https://www.codeforpeople.cn/" target="_blank" rel="noreferrer">返回官网 <span aria-hidden="true">↗</span></a>
       </header>
+      <div class="public-prototype-status" role="status">
+        <div class="public-shell-status-copy">
+          <span class="public-status-primary">公开交互原型</span>
+          <span class="public-status-separator" aria-hidden="true"></span>
+          <span>验证楼道协作场景与关键流程 · 不接真实业务数据</span>
+        </div>
+      </div>
 
+      <nav class="public-shell-breadcrumb" aria-label="面包屑导航">
+        <a href="../">原型首页</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <span class="public-breadcrumb-current" aria-current="page">楼道收一收</span>
+      </nav>
+
+      <div class="page public-page-surface">
       <main class="layout">
         <section class="story" aria-labelledby="page-title">
           <div class="eyebrow">楼道协作 · 楼道收一收</div>
@@ -2138,7 +2238,7 @@
 
         </section>
 
-        <section class="visual" aria-label="可交互小程序演示">
+        <section class="visual public-stage-surface" aria-label="可交互小程序演示">
           <div class="phone">
             <div class="phone-status"><span>9:41</span><span>●●● ◒ ■</span></div>
             <div class="phone-screen" id="phone-screen" aria-live="polite"></div>
@@ -2155,6 +2255,7 @@
       </div>
       <button class="switcher-arrow" type="button" data-action="next-variant" aria-label="下一个方案">→</button>
     </nav>
+    </div>
 
     <script>
       const initialTasks = [

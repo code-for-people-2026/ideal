@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="街坊味帮助社区供餐者规划菜单、开放餐次、汇总订单、完成配送并记录线下收款。" />
     <title>街坊味 · 社区供餐原型入口</title>
-    <link rel="stylesheet" href="../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据
       两种原型只共享产品事实，不共享叙事密度：
@@ -16,15 +15,15 @@
     <style>
       :root {
         color-scheme: light;
-        --ink: #18211b;
-        --muted: #66706a;
-        --line: #dce4de;
-        --paper: #f3f6f2;
-        --green: #b64131;
-        --green-soft: #fbe9e4;
-        --blue: #287557;
-        --blue-soft: #e7f3ec;
-        --shadow: 0 24px 70px rgba(29, 45, 34, 0.12);
+        --ink: #081628;
+        --muted: #5c6877;
+        --line: #d7dfe8;
+        --paper: #f4f7fa;
+        --green: #d20d18;
+        --green-soft: #fff0f1;
+        --blue: #081628;
+        --blue-soft: #eef2f6;
+        --shadow: 0 12px 36px rgba(8, 22, 40, 0.08);
       }
       * { box-sizing: border-box; }
       body {
@@ -32,10 +31,7 @@
         min-width: 320px;
         min-height: 100vh;
         color: var(--ink);
-        background:
-          radial-gradient(circle at 8% 5%, rgba(8,127,79,.13), transparent 28rem),
-          radial-gradient(circle at 92% 90%, rgba(49,93,168,.12), transparent 30rem),
-          var(--paper);
+        background: var(--paper);
         font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
       }
       main { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 72px 0 90px; }
@@ -55,10 +51,6 @@
         transition: transform .2s ease, box-shadow .2s ease;
       }
       .choice:hover { transform: translateY(-5px); box-shadow: 0 30px 90px rgba(29,45,34,.16); }
-      .choice::after {
-        content: ""; position: absolute; right: -80px; bottom: -120px; width: 320px; height: 320px;
-        border-radius: 50%; background: var(--accent-soft); opacity: .85;
-      }
       .choice.customer { --accent: var(--green); --accent-soft: var(--green-soft); }
       .choice.engineer { --accent: var(--blue); --accent-soft: var(--blue-soft); }
       .choice-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; }
@@ -82,16 +74,37 @@
         .boundary { grid-template-columns: 1fr; }
       }
     </style>
+    <link rel="stylesheet" href="../prototype-shell.css" />
   </head>
-  <body>
-    <a class="prototype-home-link" href="../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
-    <main>
+  <body class="public-prototype-page">
+    <div class="public-site-frame">
+      <header class="public-shell-header">
+        <div class="public-shell-identity">
+          <a class="public-shell-brand" href="../" aria-label="返回原型首页">
+            <span class="public-shell-seal" aria-hidden="true">仝</span>
+            <span class="public-shell-brand-copy"><strong>码成仝</strong><small>为工友敲键盘</small></span>
+          </a>
+          <span class="public-shell-divider" aria-hidden="true"></span>
+          <span class="public-shell-context">街坊味 · 原型入口</span>
+          <span class="public-shell-badge">场景探索</span>
+        </div>
+        <a class="public-shell-official-link" href="https://www.codeforpeople.cn/" target="_blank" rel="noreferrer">返回官网 <span aria-hidden="true">↗</span></a>
+      </header>
+      <div class="public-prototype-status" role="status">
+        <div class="public-shell-status-copy"><span class="public-status-primary">公开交互原型</span><span class="public-status-separator" aria-hidden="true"></span><span>用于验证场景与流程，不接真实业务数据</span></div>
+      </div>
+      <nav class="public-shell-breadcrumb" aria-label="面包屑导航">
+        <a href="../">原型首页</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <span class="public-breadcrumb-current" aria-current="page">街坊味</span>
+      </nav>
+    <main class="public-page-surface public-page-section">
       <div class="eyebrow"><img src="./prototype-implementation/kith-inn-logo.png" alt="街坊味" />社区供餐 · Kith Inn</div>
       <h1>一周的家常饭，<br />排得明白，也送得明白。</h1>
       <p class="lead">街坊味服务社区里的小规模供餐者和邻里顾客。桃子把会做的菜排成每周午餐与晚餐，按餐次开放预订；邻居从微信卡片查看菜单并下单，桃子再按统一订单完成备餐、配送和线下收款记录。</p>
 
       <section class="choice-grid" aria-label="选择街坊味原型">
-        <a class="choice customer" href="./prototype-customer/">
+        <a class="choice customer public-card-surface" href="./prototype-customer/">
           <div class="choice-top">
             <div class="audience">客户体验原型</div>
             <div class="arrow">↗</div>
@@ -105,7 +118,7 @@
           </div>
         </a>
 
-        <a class="choice engineer" href="./prototype-implementation/">
+        <a class="choice engineer public-card-surface" href="./prototype-implementation/">
           <div class="choice-top">
             <div class="audience">实施对照原型</div>
             <div class="arrow">↗</div>
@@ -120,10 +133,11 @@
         </a>
       </section>
 
-      <div class="boundary">
+      <div class="boundary public-card-surface">
         <strong>产品边界</strong>
         <span>街坊味不是外卖平台，也不是复杂的餐饮 ERP。它把原本散落在微信群、私聊和个人记忆里的菜单、订单、配送与收款记录整理到一起；付款和退款仍由桃子与顾客在微信完成。</span>
       </div>
     </main>
+    </div>
   </body>
 </html>

@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>近邻互助组 · 客户体验原型</title>
-    <link rel="stylesheet" href="../../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据
       问题：第一次接触产品的人，能否在 2–3 分钟内看懂价值并顺滑走完高光路径？
@@ -33,28 +32,15 @@
         min-width: 320px;
         min-height: 100vh;
         color: var(--ink);
-        background:
-          radial-gradient(circle at 8% 10%, rgba(212,43,30,.08), transparent 30rem),
-          radial-gradient(circle at 92% 84%, rgba(242,185,13,.16), transparent 30rem),
-          var(--paper);
+        background: var(--paper);
         font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
         -webkit-font-smoothing: antialiased;
       }
       button, input { font: inherit; }
       button { cursor: pointer; }
-      .page { min-height: 100vh; padding: 28px 30px 110px; }
-      .topbar {
-        width: min(1220px, 100%); margin: 0 auto; display: flex; align-items: center;
-        justify-content: space-between; gap: 18px; padding-right: 178px;
-      }
-      .brand { display: flex; align-items: center; gap: 11px; font-weight: 900; }
-      .brand-mark {
-        display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px;
-        color: #fff; background: var(--flag-red); box-shadow: 0 10px 24px rgba(212,43,30,.25);
-      }
-      .proto-note { color: var(--muted); font-size: 12px; font-weight: 750; }
+      .page { min-height: 0; padding: 46px 30px 110px; background: var(--public-surface); }
       .layout {
-        width: min(1220px, 100%); margin: 34px auto 0; display: grid;
+        width: min(1220px, 100%); margin: 0 auto; display: grid;
         grid-template-columns: minmax(340px, .95fr) minmax(390px, 1.05fr); gap: 72px; align-items: center;
       }
       .story { padding: 20px 0; }
@@ -64,21 +50,22 @@
       .proofs { display: grid; gap: 12px; margin-top: 34px; max-width: 560px; }
       .proof {
         display: grid; grid-template-columns: 38px 1fr; gap: 13px; align-items: center;
-        padding: 14px 16px; border: 1px solid var(--line); border-radius: 17px;
-        background: rgba(255,255,255,.68); font-size: 14px; font-weight: 750;
+        padding: 14px 16px; border: 1px solid var(--public-border); border-radius: 14px;
+        background: var(--public-surface); box-shadow: var(--public-e1); font-size: 14px; font-weight: 750;
       }
       .proof-icon { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: var(--flag-red-soft); color: var(--flag-red); }
       .story-action {
         display: inline-flex; align-items: center; gap: 10px; margin-top: 28px; padding: 15px 20px;
-        border: 0; border-radius: 15px; background: var(--ink); color: #fff; font-weight: 850;
-        box-shadow: 0 14px 30px rgba(23,32,25,.16);
+        border: 1px solid var(--public-primary); border-radius: 10px; background: var(--public-primary); color: #fff; font-weight: 850;
+        box-shadow: 0 10px 24px rgba(210,13,24,.18);
       }
-      .story-action span { color: var(--flag-gold); font-size: 20px; }
-      .visual { position: relative; min-height: 790px; display: grid; place-items: center; }
-      .halo {
-        position: absolute; inset: 8% 4%; border-radius: 50%; filter: blur(.1px);
-        background: radial-gradient(circle, rgba(242,185,13,.32), rgba(212,43,30,.08) 45%, transparent 69%);
+      .story-action span { color: #fff; font-size: 20px; }
+      .visual {
+        position: relative; min-height: 790px; display: grid; place-items: center; padding: 28px;
+        overflow: hidden; border: 1px solid #17283b; border-radius: 20px;
+        background: var(--public-prototype-stage); box-shadow: var(--public-e3);
       }
+      .halo { display: none; }
       .phone {
         position: relative; z-index: 1; width: min(390px, 92vw); height: 748px; overflow: hidden;
         border: 7px solid var(--phone); border-radius: 42px; background: #fff; box-shadow: var(--shadow);
@@ -204,8 +191,8 @@
       .value small { display: block; margin-top: 2px; color: rgba(255,255,255,.78); font-size: 11px; line-height: 1.45; }
       .new-need { margin-top: 22px; padding: 13px; border: 1px solid var(--flag-gold); border-radius: 13px; color: var(--flag-gold); text-align: center; font-size: 12px; font-weight: 850; }
       .floating-card {
-        position: absolute; z-index: 3; padding: 11px 14px; border: 1px solid var(--line); border-radius: 14px;
-        background: rgba(255,255,255,.9); box-shadow: 0 14px 34px rgba(24,48,31,.13); backdrop-filter: blur(12px);
+        position: absolute; z-index: 3; padding: 11px 14px; border: 1px solid var(--public-border); border-radius: 12px;
+        background: var(--public-surface); box-shadow: 0 14px 34px rgba(8,22,40,.18);
         font-size: 11px; font-weight: 800;
       }
       .floating-card.top { top: 10%; right: -4%; transform: rotate(3deg); }
@@ -222,13 +209,7 @@
       .dots { display: flex; justify-content: center; gap: 5px; margin-top: 3px; }
       .dots i { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.25); }
       .dots i.active { width: 13px; border-radius: 5px; background: var(--flag-gold); }
-      .audience-switch {
-        position: fixed; z-index: 20; top: 22px; right: 24px; padding: 9px 12px; border: 1px solid var(--line);
-        border-radius: 999px; background: rgba(255,255,255,.86); color: var(--muted); text-decoration: none;
-        font-size: 11px; font-weight: 800; box-shadow: 0 8px 24px rgba(24,48,31,.08); backdrop-filter: blur(10px);
-      }
       @media (max-width: 930px) {
-        .topbar { padding-right: 0; }
         .layout { grid-template-columns: 1fr; gap: 20px; }
         .story { text-align: center; }
         .lead, .proofs { margin-left: auto; margin-right: auto; }
@@ -237,24 +218,48 @@
         .floating-card.top { right: 5%; } .floating-card.bottom { left: 4%; }
       }
       @media (max-width: 560px) {
-        .page { padding: 18px 14px 105px; }
-        .proto-note { display: none; }
-        .audience-switch { position: static; display: inline-block; margin: 14px; }
-        .layout { margin-top: 14px; }
+        .page { padding: 28px 8px 105px; }
         .story { padding-top: 0; }
         h1 { font-size: 43px; }
         .proofs { display: none; }
-        .visual { min-height: 720px; }
-        .phone { height: 690px; border-radius: 36px; }
+        .visual { min-height: 720px; padding: 8px; border-radius: 14px; }
+        .phone { width: 100%; height: 690px; border-radius: 36px; }
         .screen-body { height: 590px; }
         .floating-card { display: none; }
       }
     </style>
+    <link rel="stylesheet" href="../../prototype-shell.css" />
   </head>
-  <body>
-    <a class="prototype-home-link" href="../../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
-    <a class="audience-switch" href="../prototype-implementation/">切到实施对照原型 →</a>
-    <div id="app"></div>
+  <body class="public-prototype-page">
+    <div class="public-site-frame">
+      <header class="public-shell-header">
+        <div class="public-shell-identity">
+          <a class="public-shell-brand" href="../../" aria-label="返回原型首页">
+            <span class="public-shell-seal" aria-hidden="true">仝</span>
+            <span class="public-shell-brand-copy"><strong>码成仝</strong><small>为工友敲键盘</small></span>
+          </a>
+          <span class="public-shell-divider" aria-hidden="true"></span>
+          <span class="public-shell-context">近邻互助组 · 客户体验</span>
+          <span class="public-shell-badge">客户体验</span>
+        </div>
+        <a class="public-shell-official-link" href="https://www.codeforpeople.cn/" target="_blank" rel="noreferrer">返回官网 <span aria-hidden="true">↗</span></a>
+      </header>
+      <div class="public-prototype-status" role="note">
+        <div class="public-shell-status-copy">
+          <span class="public-status-primary">公开交互原型</span>
+          <span class="public-status-separator" aria-hidden="true"></span>
+          <span>五步高光路径 · 可通过 step 参数分享当前状态 · 不接真实业务数据</span>
+        </div>
+      </div>
+      <nav class="public-shell-breadcrumb" aria-label="面包屑导航">
+        <a href="../../">原型首页</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <a href="../">近邻互助组</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <span class="public-breadcrumb-current" aria-current="page">客户体验</span>
+      </nav>
+      <div id="app" class="public-page-surface"></div>
+    </div>
 
     <script>
       const steps = ["intro", "need", "trust", "chat", "finish"];
@@ -471,10 +476,6 @@
         document.title = `${labels[step]} · 客户体验原型 · 近邻互助组`;
         document.querySelector("#app").innerHTML = `
           <main class="page">
-            <header class="topbar">
-              <div class="brand"><span class="brand-mark">邻</span>近邻互助组</div>
-              <div class="proto-note">客户体验原型 · 不接真实数据</div>
-            </header>
             <div class="layout">
               <section class="story">
                 <div class="step-kicker">${item.kicker}</div>

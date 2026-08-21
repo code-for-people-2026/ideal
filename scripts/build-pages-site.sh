@@ -31,7 +31,7 @@ copy_file() {
   cp "$source_file" "$output_dir/$relative_path"
 }
 
-for root_file in index.html prototype-nav.css CNAME; do
+for root_file in index.html prototype-nav.css prototype-shell.css CNAME; do
   if [[ ! -f "$repo_root/$root_file" ]]; then
     echo "Missing required Pages file: $root_file" >&2
     exit 1
@@ -112,6 +112,8 @@ while IFS= read -r prototype_dir || [[ -n "$prototype_dir" ]]; do
     cp -a "$app_output/." "$output_dir/$app_path/"
   done
 done < "$prototype_manifest"
+
+python3 "$repo_root/scripts/check-public-prototype-shell.py" "$output_dir"
 
 touch "$output_dir/.nojekyll"
 
