@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>街坊味 · 实施对照原型总蓝图</title>
-    <link rel="stylesheet" href="../../prototype-nav.css" />
     <!--
       IMPLEMENTATION REFERENCE PROTOTYPE — 不接真实数据。
       本页负责系统总览；桃子端与顾客端保留各自完整的 iPhone 交互原型。
@@ -13,17 +12,17 @@
     <style>
       :root {
         color-scheme: light;
-        --ink: #29231d;
-        --muted: #675d53;
-        --line: #e6dccd;
-        --paper: #fff8ed;
-        --red: #b64131;
-        --red-soft: #fbe9e4;
-        --green: #287557;
-        --green-soft: #e7f3ec;
-        --gold: #edae32;
-        --gold-soft: #fff2d5;
-        --shadow: 0 24px 70px rgba(82, 48, 28, 0.12);
+        --ink: #081628;
+        --muted: #5c6877;
+        --line: #d7dfe8;
+        --paper: #f4f7fa;
+        --red: #d20d18;
+        --red-soft: #fff0f1;
+        --green: #2aa79d;
+        --green-soft: #e9f7f5;
+        --gold: #8a6500;
+        --gold-soft: #fff8dd;
+        --shadow: 0 12px 36px rgba(8, 22, 40, 0.08);
       }
       * { box-sizing: border-box; }
       body {
@@ -31,19 +30,12 @@
         min-width: 320px;
         min-height: 100vh;
         color: var(--ink);
-        background:
-          radial-gradient(circle at 7% 4%, rgba(182, 65, 49, .1), transparent 29rem),
-          radial-gradient(circle at 93% 90%, rgba(237, 174, 50, .18), transparent 32rem),
-          var(--paper);
+        background: var(--paper);
         font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
         -webkit-font-smoothing: antialiased;
       }
       a { color: inherit; }
       main { width: min(1160px, calc(100% - 40px)); margin: 0 auto; padding: 56px 0 92px; }
-      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
-      .brand { display: flex; align-items: center; gap: 11px; font-weight: 900; }
-      .brand img { width: 38px; height: 38px; border-radius: 12px; object-fit: cover; box-shadow: 0 10px 24px rgba(182,65,49,.2); }
-      .switch { padding: 10px 13px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.78); color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 850; box-shadow: 0 8px 22px rgba(82,48,28,.07); }
       .hero { margin: 70px 0 36px; }
       .eyebrow { color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
       h1 { max-width: 900px; margin: 14px 0 18px; font-size: clamp(43px, 7vw, 78px); line-height: .98; letter-spacing: -.055em; }
@@ -52,7 +44,6 @@
       .authority strong { flex: 0 0 auto; color: #7a5510; }
       .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
       .role-card { position: relative; overflow: hidden; min-height: 330px; padding: 28px; border: 1px solid var(--line); border-radius: 28px; background: rgba(255,255,255,.84); box-shadow: var(--shadow); }
-      .role-card::after { content: ""; position: absolute; right: -90px; bottom: -130px; width: 300px; height: 300px; border-radius: 50%; background: var(--soft); }
       .role-card.taozi { --accent: var(--red); --soft: var(--red-soft); }
       .role-card.customer { --accent: var(--green); --soft: var(--green-soft); }
       .role-meta { position: relative; z-index: 1; color: var(--accent); font-size: 12px; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }
@@ -86,31 +77,50 @@
         .section-head { align-items: flex-start; flex-direction: column; }
       }
     </style>
+    <link rel="stylesheet" href="../../prototype-shell.css" />
   </head>
-  <body>
-    <a class="prototype-home-link" href="../../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
-    <main>
-      <header class="topbar">
-        <div class="brand"><img src="./kith-inn-logo.png" alt="街坊味" />街坊味 · Kith Inn</div>
-        <a class="switch" href="../prototype-customer/">切到客户体验原型 →</a>
+  <body class="public-prototype-page">
+    <div class="public-site-frame">
+      <header class="public-shell-header">
+        <div class="public-shell-identity">
+          <a class="public-shell-brand" href="../../" aria-label="返回原型首页">
+            <span class="public-shell-seal" aria-hidden="true">仝</span>
+            <span class="public-shell-brand-copy"><strong>码成仝</strong><small>为工友敲键盘</small></span>
+          </a>
+          <span class="public-shell-divider" aria-hidden="true"></span>
+          <span class="public-shell-context">街坊味 · 实施对照总蓝图</span>
+          <span class="public-shell-badge">场景探索</span>
+        </div>
+        <a class="public-shell-official-link" href="https://www.codeforpeople.cn/" target="_blank" rel="noreferrer">返回官网 <span aria-hidden="true">↗</span></a>
       </header>
+      <div class="public-prototype-status" role="status">
+        <div class="public-shell-status-copy"><span class="public-status-primary">公开交互原型</span><span class="public-status-separator" aria-hidden="true"></span><span>用于验证场景与流程，不接真实业务数据</span></div>
+      </div>
+      <nav class="public-shell-breadcrumb" aria-label="面包屑导航">
+        <a href="../../">原型首页</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <a href="../">街坊味</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <span class="public-breadcrumb-current" aria-current="page">实施对照</span>
+      </nav>
+    <main class="public-page-surface public-page-section">
 
       <section class="hero">
         <div class="eyebrow">Implementation reference · 总蓝图</div>
         <h1>一个产品，<br />桃子端与顾客端一起成立。</h1>
         <p class="lead">这里不删过程：工程师从两个角色分别进入，逐屏理解菜单、餐次、订单、配送和收款怎样连接。两套 iPhone 原型保留全部讲解状态，后续写 App 时按 User Story 对照。</p>
-        <div class="authority"><strong>最新实现口径</strong><span>产品决策与 User Story 是开发需求；迁入角色稿里的“长期订单”和“截图对账”保留为历史讨论页，P0 实现采用“桃子维护订餐约定”和“按订单手工标记收款”。</span></div>
+        <div class="authority public-card-surface"><strong>最新实现口径</strong><span>产品决策与 User Story 是开发需求；迁入角色稿里的“长期订单”和“截图对账”保留为历史讨论页，P0 实现采用“桃子维护订餐约定”和“按订单手工标记收款”。</span></div>
       </section>
 
       <section class="role-grid" aria-label="选择角色原型">
-        <article class="role-card taozi">
+        <article class="role-card taozi public-card-surface">
           <div class="role-meta">Role A · 经营者</div>
           <h2>桃子使用端</h2>
           <p>从菜品池、配送范围和周菜单，到发布餐次、查看订单、手动补单与收款标记，保留完整经营过程。</p>
           <div class="role-facts"><span>9 个讲解状态</span><span>4 个 App 底部入口</span><span>发布后菜单锁定</span></div>
           <div class="role-actions"><a href="./prototype-taozi/?step=intro">打开桃子端</a><a class="secondary" href="./prototype-taozi/?step=orders">直接看订单</a></div>
         </article>
-        <article class="role-card customer">
+        <article class="role-card customer public-card-surface">
           <div class="role-meta">Role B · 顾客</div>
           <h2>顾客使用端</h2>
           <p>从微信群菜单卡片进入，查看午晚餐、提交订单、选择配送地址，再回到“我的订单”确认状态。</p>
@@ -123,19 +133,20 @@
         <div class="section-kicker">System journey</div>
         <div class="section-head"><h2>从准备到对账的六段闭环</h2><span class="section-source">需求来源：完整 User Stories</span></div>
         <div class="flow">
-          <article class="flow-card"><div class="flow-number">01 · 准备</div><h3>菜品与经营边界</h3><p>桃子录入菜品池，确认荤、素、汤分类，并维护配送小区。</p><div class="stories"><span>US-A01—A04</span></div></article>
-          <article class="flow-card"><div class="flow-number">02 · 排菜</div><h3>周菜单生成与微调</h3><p>从启用菜品随机生成餐次；软规则可放宽，换一道只影响目标菜。</p><div class="stories"><span>US-B01—B04</span></div></article>
-          <article class="flow-card"><div class="flow-number">03 · 开放</div><h3>餐次开放与分享</h3><p>开放前确认菜单、价格、截止与容量；分享卡片携带正确餐次上下文。</p><div class="stories"><span>US-C01—C05</span></div></article>
-          <article class="flow-card"><div class="flow-number">04 · 下单</div><h3>顾客关系与订单</h3><p>首单申请与正式订单分开；已确认顾客可自助下单，桃子也可代下单。</p><div class="stories"><span>US-D01—D06</span><span>US-E01—E06</span></div></article>
-          <article class="flow-card"><div class="flow-number">05 · 履约</div><h3>制作份数与配送</h3><p>餐次订单汇总成制作份数，再按小区与地址组织配送清单。</p><div class="stories"><span>US-F01—F04</span></div></article>
-          <article class="flow-card"><div class="flow-number">06 · 收款</div><h3>线下付款与人工确认</h3><p>平台不接支付、不保存收款截图；桃子按订单编号或顾客查找并手工标记。</p><div class="stories"><span>US-G01—G04</span><span>US-H01—H02</span></div></article>
+          <article class="flow-card public-card-surface"><div class="flow-number">01 · 准备</div><h3>菜品与经营边界</h3><p>桃子录入菜品池，确认荤、素、汤分类，并维护配送小区。</p><div class="stories"><span>US-A01—A04</span></div></article>
+          <article class="flow-card public-card-surface"><div class="flow-number">02 · 排菜</div><h3>周菜单生成与微调</h3><p>从启用菜品随机生成餐次；软规则可放宽，换一道只影响目标菜。</p><div class="stories"><span>US-B01—B04</span></div></article>
+          <article class="flow-card public-card-surface"><div class="flow-number">03 · 开放</div><h3>餐次开放与分享</h3><p>开放前确认菜单、价格、截止与容量；分享卡片携带正确餐次上下文。</p><div class="stories"><span>US-C01—C05</span></div></article>
+          <article class="flow-card public-card-surface"><div class="flow-number">04 · 下单</div><h3>顾客关系与订单</h3><p>首单申请与正式订单分开；已确认顾客可自助下单，桃子也可代下单。</p><div class="stories"><span>US-D01—D06</span><span>US-E01—E06</span></div></article>
+          <article class="flow-card public-card-surface"><div class="flow-number">05 · 履约</div><h3>制作份数与配送</h3><p>餐次订单汇总成制作份数，再按小区与地址组织配送清单。</p><div class="stories"><span>US-F01—F04</span></div></article>
+          <article class="flow-card public-card-surface"><div class="flow-number">06 · 收款</div><h3>线下付款与人工确认</h3><p>平台不接支付、不保存收款截图；桃子按订单编号或顾客查找并手工标记。</p><div class="stories"><span>US-G01—G04</span><span>US-H01—H02</span></div></article>
         </div>
         <div class="docs">
-          <span class="doc"><strong>PRD</strong><span>目标、范围、角色与核心规则</span></span>
-          <span class="doc"><strong>产品决策</strong><span>已确认边界、研究依据与待讨论项</span></span>
-          <span class="doc"><strong>领域词汇</strong><span>统一“餐次、订单、订餐约定”等名称</span></span>
+          <span class="doc public-card-surface"><strong>PRD</strong><span>目标、范围、角色与核心规则</span></span>
+          <span class="doc public-card-surface"><strong>产品决策</strong><span>已确认边界、研究依据与待讨论项</span></span>
+          <span class="doc public-card-surface"><strong>领域词汇</strong><span>统一“餐次、订单、订餐约定”等名称</span></span>
         </div>
       </section>
     </main>
+    </div>
   </body>
 </html>

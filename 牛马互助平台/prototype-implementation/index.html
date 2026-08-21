@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>近邻互助组 · 实施对照原型</title>
-    <link rel="stylesheet" href="../../prototype-nav.css" />
     <!--
       近邻互助组 · 面向工程师的实施对照原型（IRP / PROTOTYPE）
       问题：工程师能否逐条对照 User Story，理解角色、状态、权限、数据与验收边界？
@@ -39,41 +38,41 @@
         margin: 0;
         min-width: 320px;
         color: var(--ink);
-        background: var(--paper);
+        background: var(--public-background);
         font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
         -webkit-font-smoothing: antialiased;
       }
       button { font: inherit; cursor: pointer; }
 
-      .shell { min-height: 100vh; padding: 32px 24px 100px; }
-      .shell.wechat, .shell.shared, .shell.private { background: #eef1ee; }
-      .shell.pioneer, .shell.confirm, .shell.mycards, .shell.discover, .shell.provide, .shell.home { background: #f8f5eb; }
-      .shell.requester { background: #f9f1f1; }
+      .shell { min-height: 0; padding: 42px 32px 100px; background: var(--public-surface); }
+      .shell.wechat, .shell.shared, .shell.private,
+      .shell.pioneer, .shell.confirm, .shell.mycards, .shell.discover, .shell.provide, .shell.home,
+      .shell.requester { background: var(--public-surface); }
 
-      .hero { max-width: 1120px; margin: 0 auto 20px; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+      .hero { max-width: 1200px; margin: 0 auto 24px; display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
       .hero-main h1 { margin: 0; font-size: clamp(28px, 4vw, 40px); line-height: 1.1; letter-spacing: -0.03em; }
-      .hero-main p { margin: 12px 0 0; color: var(--muted); font-size: 16px; line-height: 1.6; max-width: 640px; }
-      .badge { flex: 0 0 auto; padding: 8px 14px; border: 1px solid #ddd6c8; border-radius: 999px; background: rgba(255,255,255,0.7); color: #7a6b4e; font-size: 12px; font-weight: 700; }
+      .hero-main p { margin: 12px 0 0; color: var(--public-muted-foreground); font-size: 16px; line-height: 1.6; max-width: 640px; }
+      .badge { flex: 0 0 auto; padding: 8px 14px; border: 1px solid var(--public-border); border-radius: 999px; background: var(--public-muted); color: var(--public-muted-foreground); font-size: 12px; font-weight: 700; }
 
-      .scenario-switch { max-width: 1120px; margin: 0 auto 24px; display: flex; gap: 12px; }
-      .scenario-btn { flex: 1; padding: 16px 18px; border: 2px solid var(--line); border-radius: 16px; background: #fff; text-align: left; transition: all 160ms ease; }
+      .scenario-switch { max-width: 1200px; margin: 0 auto 24px; display: flex; gap: 12px; }
+      .scenario-btn { flex: 1; padding: 16px 18px; border: 1px solid var(--public-border); border-radius: 14px; background: var(--public-surface); text-align: left; transition: border-color 160ms ease, background 160ms ease, transform 160ms ease, box-shadow 160ms ease; }
       .scenario-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.06); }
-      .scenario-btn.active.lu { border-color: var(--gold); background: var(--gold-soft); }
-      .scenario-btn.active.taozi { border-color: var(--wechat); background: var(--wechat-soft); }
-      .scenario-btn .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 4px; }
+      .scenario-btn.active.lu, .scenario-btn.active.taozi { border-color: var(--public-primary); background: var(--public-primary-soft); }
+      .scenario-btn .scenario-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: var(--public-muted-foreground); margin-bottom: 4px; }
       .scenario-btn .scenario-title { font-size: 16px; font-weight: 800; }
       .scenario-btn .scenario-desc { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
 
-      .journey { max-width: 1120px; margin: 0 auto 32px; display: grid; gap: 12px; }
+      .journey { max-width: 1200px; margin: 0 auto 32px; display: grid; gap: 12px; }
       .journey.flow-4 { grid-template-columns: repeat(4, 1fr); }
       .journey.flow-5 { grid-template-columns: repeat(5, 1fr); }
       .journey.flow-6 { grid-template-columns: repeat(6, 1fr); }
-      .journey-step { position: relative; padding: 18px 16px; border-radius: 18px; background: rgba(255,255,255,0.7); border: 1px solid var(--line); cursor: pointer; transition: transform 160ms ease, box-shadow 160ms ease; text-align: left; }
+      .journey-step { position: relative; padding: 18px 16px; border-radius: 14px; background: var(--public-surface); border: 1px solid var(--public-border); cursor: pointer; transition: border-color 160ms ease, background 160ms ease, transform 160ms ease, box-shadow 160ms ease; text-align: left; }
       .journey-step:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
       .journey-step.active { border-width: 2px; }
-      .journey-step.active.wechat-step, .journey-step.active.private-step, .journey-step.active.shared-step { border-color: var(--wechat); background: var(--wechat-soft); }
-      .journey-step.active.pioneer-step, .journey-step.active.confirm-step, .journey-step.active.mycards-step, .journey-step.active.discover-step, .journey-step.active.provide-step, .journey-step.active.home-step { border-color: var(--gold); background: var(--gold-soft); }
-      .journey-step.active.requester-step { border-color: var(--red); background: var(--red-soft); }
+      .journey-step.active.wechat-step, .journey-step.active.private-step, .journey-step.active.shared-step,
+      .journey-step.active.pioneer-step, .journey-step.active.confirm-step, .journey-step.active.mycards-step,
+      .journey-step.active.discover-step, .journey-step.active.provide-step, .journey-step.active.home-step,
+      .journey-step.active.requester-step { border-color: var(--public-primary); background: var(--public-primary-soft); }
       .journey-step .step-label { display: block; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; color: var(--muted); }
       .journey-step.active .step-label { color: inherit; }
       .journey-step .step-title { font-size: 15px; font-weight: 800; line-height: 1.3; display: block; }
@@ -82,8 +81,8 @@
       .journey-step.active.pioneer-step .step-role, .journey-step.active.confirm-step .step-role, .journey-step.active.mycards-step .step-role, .journey-step.active.discover-step .step-role, .journey-step.active.provide-step .step-role, .journey-step.active.home-step .step-role { background: rgba(200,148,43,0.15); color: var(--gold-dark); }
       .journey-step.active.requester-step .step-role { background: rgba(197,62,69,0.15); color: var(--red-dark); }
 
-      .stage { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 32px; align-items: start; }
-      .phone-stage { display: grid; place-items: center; min-height: 760px; padding: 40px; border-radius: 32px; background: rgba(255,255,255,0.55); box-shadow: var(--shadow); }
+      .stage { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; align-items: start; }
+      .phone-stage { display: grid; place-items: center; min-height: 760px; padding: 40px; overflow: hidden; border: 1px solid #17283b; border-radius: 20px; background: var(--public-prototype-stage); box-shadow: var(--public-e3); }
 
       .phone { width: min(100%, 380px); min-height: 720px; background: #fff; border-radius: 36px; border: 6px solid #1f2422; overflow: hidden; box-shadow: 0 24px 50px rgba(0,0,0,0.18); position: relative; }
       .statusbar { height: 34px; padding: 0 18px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; font-weight: 700; }
@@ -335,11 +334,12 @@
       .bar2-community { display: flex; align-items: center; gap: 4px; border: 0; background: #fff; border-radius: 999px; padding: 8px 14px; font-size: 13px; font-weight: 800; color: var(--gold-dark); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
       .requester-phone .bar2-community { color: var(--red-dark); }
 
-      .status-panel { position: sticky; top: 24px; background: #fff; border-radius: 22px; border: 1px solid var(--line); overflow: hidden; }
+      .status-panel { position: sticky; top: 24px; background: var(--public-surface); border-radius: 14px; border: 1px solid var(--public-border); overflow: hidden; box-shadow: var(--public-e1); }
       .status-head { padding: 20px; color: #fff; }
-      .wechat .status-head, .shared .status-head, .private .status-head { background: var(--wechat); }
-      .pioneer .status-head, .confirm .status-head, .mycards .status-head, .discover .status-head, .provide .status-head, .home .status-head { background: var(--gold); }
-      .requester .status-head { background: var(--red); }
+      .wechat .status-head, .shared .status-head, .private .status-head,
+      .pioneer .status-head, .confirm .status-head, .mycards .status-head,
+      .discover .status-head, .provide .status-head, .home .status-head,
+      .requester .status-head { background: var(--public-foreground); }
       .status-head .scene { font-size: 11px; opacity: 0.85; margin-bottom: 6px; }
       .status-head h2 { margin: 0; font-size: 22px; }
       .status-body { padding: 18px; }
@@ -347,42 +347,64 @@
       .status-item:last-child { border-bottom: 0; }
       .status-item .label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
       .status-item .value { font-size: 14px; font-weight: 800; }
-      .status-copy { margin: 16px 18px 18px; padding: 14px; border-radius: 14px; background: #f5f4ef; font-size: 13px; line-height: 1.55; color: #555; }
-      .story-block { margin: 0 18px 18px; padding: 14px; border: 1px solid #dce5f4; border-radius: 14px; background: #f4f7fc; }
-      .story-kicker { color: #47699e; font-size: 10px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; }
+      .status-copy { margin: 16px 18px 18px; padding: 14px; border-radius: 12px; background: var(--public-muted); font-size: 13px; line-height: 1.55; color: var(--public-muted-foreground); }
+      .story-block { margin: 0 18px 18px; padding: 14px; border: 1px solid var(--public-border); border-radius: 12px; background: var(--public-muted); }
+      .story-kicker { color: var(--public-primary); font-size: 10px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; }
       .story-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-      .story-chip { display: inline-flex; padding: 5px 8px; border-radius: 999px; background: #dfe9f8; color: #315988; font-size: 11px; font-weight: 900; text-decoration: none; }
+      .story-chip { display: inline-flex; padding: 5px 8px; border-radius: 999px; background: var(--public-primary-soft); color: var(--public-primary); font-size: 11px; font-weight: 900; text-decoration: none; }
       .story-title { margin-top: 9px; font-size: 13px; font-weight: 850; line-height: 1.45; }
       .accept-list { display: grid; gap: 6px; margin: 10px 0 0; padding: 0; list-style: none; }
       .accept-list li { position: relative; padding-left: 16px; color: #596779; font-size: 11px; line-height: 1.45; }
       .accept-list li::before { content: "✓"; position: absolute; left: 0; color: #315988; font-weight: 900; }
       .spec-links { display: flex; gap: 8px; margin: 0 18px 14px; }
-      .spec-links a { flex: 1; padding: 9px 8px; border: 1px solid var(--line); border-radius: 10px; color: var(--muted); text-align: center; text-decoration: none; font-size: 10px; font-weight: 800; }
+      .spec-links a { flex: 1; padding: 9px 8px; border: 1px solid var(--public-border); border-radius: 9px; color: var(--public-muted-foreground); text-align: center; text-decoration: none; font-size: 10px; font-weight: 800; }
       .status-action { width: calc(100% - 36px); margin: 0 18px 18px; padding: 13px; border: 0; border-radius: 14px; font-size: 15px; font-weight: 800; }
-      .status-action.green { background: var(--wechat); color: #fff; }
-      .status-action.gold { background: var(--gold); color: #fff; }
-      .status-action.red { background: var(--red); color: #fff; }
-      .status-action.white { background: #fff; color: var(--ink); border: 1px solid var(--line); }
+      .status-action.green, .status-action.gold, .status-action.red { background: var(--public-primary); color: #fff; }
+      .status-action.white { background: var(--public-surface); color: var(--public-foreground); border: 1px solid var(--public-border-strong); }
 
-      .switcher { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1d211e; color: #fff; border-radius: 999px; padding: 8px; display: flex; align-items: center; gap: 10px; box-shadow: 0 12px 32px rgba(0,0,0,0.25); z-index: 20; }
+      .switcher { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--public-prototype-stage); color: #fff; border: 1px solid #24364a; border-radius: 999px; padding: 8px; display: flex; align-items: center; gap: 10px; box-shadow: 0 12px 32px rgba(0,0,0,0.25); z-index: 20; }
       .switcher button { width: 38px; height: 38px; border: 0; border-radius: 50%; background: rgba(255,255,255,0.12); color: #fff; font-size: 18px; }
       .switcher-label { min-width: 200px; text-align: center; font-size: 13px; font-weight: 800; }
-      .audience-switch { position: fixed; z-index: 21; top: 18px; right: 20px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,0.9); color: var(--muted); text-decoration: none; font-size: 11px; font-weight: 850; box-shadow: 0 8px 22px rgba(0,0,0,0.08); backdrop-filter: blur(10px); }
-
       @media (max-width: 960px) {
         .stage { grid-template-columns: 1fr; }
         .status-panel { position: static; }
         .journey.flow-4, .journey.flow-5, .journey.flow-6 { grid-template-columns: repeat(2, 1fr); }
         .scenario-switch { flex-direction: column; }
         .phone-stage { min-height: auto; padding: 20px; }
-        .audience-switch { position: static; display: inline-block; margin: 14px 18px 0; }
       }
     </style>
+    <link rel="stylesheet" href="../../prototype-shell.css" />
   </head>
-  <body>
-    <a class="prototype-home-link" href="../../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
-    <a class="audience-switch" href="../prototype-customer/">切到客户体验原型 →</a>
-    <div id="app"></div>
+  <body class="public-prototype-page">
+    <div class="public-site-frame">
+      <header class="public-shell-header">
+        <div class="public-shell-identity">
+          <a class="public-shell-brand" href="../../" aria-label="返回原型首页">
+            <span class="public-shell-seal" aria-hidden="true">仝</span>
+            <span class="public-shell-brand-copy"><strong>码成仝</strong><small>为工友敲键盘</small></span>
+          </a>
+          <span class="public-shell-divider" aria-hidden="true"></span>
+          <span class="public-shell-context">近邻互助组 · 实施对照</span>
+          <span class="public-shell-badge">实施对照</span>
+        </div>
+        <a class="public-shell-official-link" href="https://www.codeforpeople.cn/" target="_blank" rel="noreferrer">返回官网 <span aria-hidden="true">↗</span></a>
+      </header>
+      <div class="public-prototype-status" role="note">
+        <div class="public-shell-status-copy">
+          <span class="public-status-primary">公开交互原型</span>
+          <span class="public-status-separator" aria-hidden="true"></span>
+          <span>按场景、角色、状态与 User Story 对照实施边界 · 不接真实业务数据</span>
+        </div>
+      </div>
+      <nav class="public-shell-breadcrumb" aria-label="面包屑导航">
+        <a href="../../">原型首页</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <a href="../">近邻互助组</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <span class="public-breadcrumb-current" aria-current="page">实施对照</span>
+      </nav>
+      <div id="app" class="public-page-surface"></div>
+    </div>
     <script>
       const scenarios = {
         lu: {
