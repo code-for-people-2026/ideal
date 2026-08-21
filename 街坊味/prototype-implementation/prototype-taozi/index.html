@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>街坊味 · 桃子使用端原型</title>
-    <link rel="stylesheet" href="../../../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据
       目标：展示桃子如何维护菜品池、排菜单、分享预订、看订单并辅助对账。
@@ -37,35 +36,14 @@
         min-width: 320px;
         min-height: 100vh;
         color: var(--ink);
-        background:
-          radial-gradient(circle at 8% 10%, rgba(182, 65, 49, 0.1), transparent 30rem),
-          radial-gradient(circle at 92% 84%, rgba(237, 174, 50, 0.2), transparent 30rem),
-          var(--paper);
+        background: var(--paper);
         font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
         -webkit-font-smoothing: antialiased;
       }
 
       button, input, textarea, select { font: inherit; }
       button { cursor: pointer; }
-      .page { min-height: 100vh; padding: 28px 30px 110px; }
-      .topbar {
-        width: min(1220px, 100%);
-        margin: 0 auto;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 18px;
-        padding-right: 178px;
-      }
-      .brand { display: flex; align-items: center; gap: 11px; font-weight: 900; }
-      .brand-logo {
-        width: 38px;
-        height: 38px;
-        border-radius: 12px;
-        object-fit: cover;
-        box-shadow: 0 10px 24px rgba(182, 65, 49, 0.2);
-      }
-      .proto-note { color: var(--muted); font-size: 12px; font-weight: 750; }
+      .page { min-height: calc(100vh - 132px); padding: 28px 30px 110px; }
       .layout {
         width: min(1220px, 100%);
         margin: 34px auto 0;
@@ -75,7 +53,7 @@
         align-items: center;
       }
       .story { padding: 20px 0; }
-      .step-kicker { color: var(--red); font-size: 12px; font-weight: 900; letter-spacing: 0.08em; }
+      .step-kicker { color: var(--public-primary); font-size: 12px; font-weight: 900; letter-spacing: 0.08em; }
       h1 {
         max-width: 610px;
         margin: 14px 0 18px;
@@ -104,8 +82,8 @@
         width: 38px;
         height: 38px;
         border-radius: 12px;
-        background: var(--red-soft);
-        color: var(--red-dark);
+        background: var(--public-primary-soft);
+        color: var(--public-primary);
         font-weight: 900;
       }
       .story-action {
@@ -116,19 +94,13 @@
         padding: 15px 20px;
         border: 0;
         border-radius: 15px;
-        background: var(--ink);
+        background: var(--public-foreground);
         color: #fff;
         font-weight: 850;
-        box-shadow: 0 14px 30px rgba(41, 35, 29, 0.18);
+        box-shadow: 0 14px 30px rgba(8, 22, 40, 0.18);
       }
-      .story-action span { color: var(--gold); font-size: 20px; }
-      .visual { position: relative; min-height: 790px; display: grid; place-items: center; }
-      .halo {
-        position: absolute;
-        inset: 8% 4%;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(237, 174, 50, 0.34), rgba(182, 65, 49, 0.08) 45%, transparent 69%);
-      }
+      .story-action span { color: var(--public-primary); font-size: 20px; }
+      .visual { position: relative; min-height: 790px; display: grid; place-items: center; padding: 20px; }
       .phone {
         position: relative;
         z-index: 1;
@@ -481,11 +453,7 @@
       .present-dots { display: flex; justify-content: center; gap: 5px; margin-top: 3px; }
       .present-dots i { width: 4px; height: 4px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); }
       .present-dots i.active { width: 13px; border-radius: 5px; background: var(--gold); }
-      .audience-switch { position: fixed; z-index: 20; top: 22px; right: 24px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.86); color: var(--muted); text-decoration: none; font-size: 11px; font-weight: 800; box-shadow: 0 8px 24px rgba(52, 41, 31, 0.08); backdrop-filter: blur(10px); }
-      .blueprint-switch { position: fixed; z-index: 20; top: 66px; right: 24px; padding: 8px 12px; border-radius: 999px; background: var(--green-dark); color: #fff; text-decoration: none; font-size: 11px; font-weight: 850; box-shadow: 0 8px 24px rgba(30,93,69,.16); }
-
       @media (max-width: 930px) {
-        .topbar { padding-right: 0; }
         .layout { grid-template-columns: 1fr; gap: 20px; }
         .story { text-align: center; }
         .lead, .proofs { margin-right: auto; margin-left: auto; }
@@ -495,25 +463,47 @@
       }
       @media (max-width: 560px) {
         .page { padding: 18px 14px 105px; }
-        .proto-note { display: none; }
-        .audience-switch, .blueprint-switch { position: static; display: inline-block; margin: 14px 4px 0 14px; }
         .layout { margin-top: 14px; }
         .story { padding-top: 0; }
         h1 { font-size: 43px; }
         .proofs { display: none; }
-        .visual { min-height: 720px; }
-        .phone { height: 690px; border-radius: 36px; }
+        .visual { min-height: 720px; padding: 10px; }
+        .phone { width: 100%; height: 690px; border-radius: 36px; }
         .screen-body { height: 590px; }
         .phone.has-app-tabs .screen-body { height: 532px; }
         .floating-card { display: none; }
       }
     </style>
+    <link rel="stylesheet" href="../../../prototype-shell.css" />
   </head>
-  <body>
-    <a class="prototype-home-link" href="../../../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
-    <a class="audience-switch" href="../prototype-customer/">切到顾客使用端 →</a>
-    <a class="blueprint-switch" href="../">返回工程总蓝图</a>
-    <div id="app"></div>
+  <body class="public-prototype-page">
+    <div class="public-site-frame">
+      <header class="public-shell-header">
+        <div class="public-shell-identity">
+          <a class="public-shell-brand" href="../../../" aria-label="返回原型首页">
+            <span class="public-shell-seal" aria-hidden="true">仝</span>
+            <span class="public-shell-brand-copy"><strong>码成仝</strong><small>为工友敲键盘</small></span>
+          </a>
+          <span class="public-shell-divider" aria-hidden="true"></span>
+          <span class="public-shell-context">街坊味 · 桃子使用端</span>
+          <span class="public-shell-badge">场景探索</span>
+        </div>
+        <a class="public-shell-official-link" href="https://www.codeforpeople.cn/" target="_blank" rel="noreferrer">返回官网 <span aria-hidden="true">↗</span></a>
+      </header>
+      <div class="public-prototype-status" role="status">
+        <div class="public-shell-status-copy"><span class="public-status-primary">公开交互原型</span><span class="public-status-separator" aria-hidden="true"></span><span>用于验证场景与流程，不接真实业务数据</span></div>
+      </div>
+      <nav class="public-shell-breadcrumb" aria-label="面包屑导航">
+        <a href="../../../">原型首页</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <a href="../../">街坊味</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <a href="../">实施对照</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <span class="public-breadcrumb-current" aria-current="page">桃子端</span>
+      </nav>
+      <div id="app"></div>
+    </div>
 
     <script>
       const steps = ["intro", "settings", "dishes", "delivery", "plan", "publish", "orders", "reconcile", "finish"];
@@ -1033,12 +1023,11 @@
         const item = copy[step];
         const stepIndex = steps.indexOf(step);
         document.title = `${labels[step]} · 桃子使用端原型 · 街坊味`;
-        document.querySelector("#app").innerHTML = `<main class="page">
-          <header class="topbar"><div class="brand">${logo("brand-logo")}街坊味 · Kith Inn</div><div class="proto-note">桃子使用端原型 · 不接真实数据</div></header>
-          <div class="layout"><section class="story"><div class="step-kicker">${item.kicker}</div><h1>${item.title}</h1><p class="lead">${item.lead}</p>
+        document.querySelector("#app").innerHTML = `<main class="page public-page-surface">
+          <div class="layout public-page-section"><section class="story"><div class="step-kicker">${item.kicker}</div><h1>${item.title}</h1><p class="lead">${item.lead}</p>
             <div class="proofs">${item.proofs.map(([icon, text]) => `<div class="proof"><span class="proof-icon">${icon}</span>${text}</div>`).join("")}</div>
             <button class="story-action" data-present-next>${item.action}<span>→</span></button></section>
-            <section class="visual" aria-label="手机交互演示"><div class="halo"></div>${phoneFor(step)}
+            <section class="visual public-stage-surface" aria-label="手机交互演示">${phoneFor(step)}
               <div class="floating-card top">桃子只需要知道<em>“今天该做什么”</em></div>
             </section></div></main>
           <nav class="present-nav" aria-label="桃子端原型讲解顺序"><button data-present-prev aria-label="上一个讲解页面">←</button><div class="present-label">讲解 ${stepIndex + 1} / ${steps.length} · ${labels[step]}<div class="present-dots">${steps.map((_, index) => `<i class="${index === stepIndex ? "active" : ""}"></i>`).join("")}</div></div><button data-present-next aria-label="下一个讲解页面">→</button></nav>`;

@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>街坊味 · 客户体验原型</title>
-    <link rel="stylesheet" href="../../prototype-nav.css" />
     <!--
       PROTOTYPE — 不接真实数据
       问题：第一次接触产品的人，能否在 2 分钟内看懂菜单生成过程和四个最终结果？
@@ -42,24 +41,13 @@
       }
       button, input { font: inherit; }
       button { cursor: pointer; }
-      .page { min-height: 100vh; padding: 28px 30px 110px; }
-      .topbar {
-        width: min(1220px, 100%); margin: 0 auto; display: flex; align-items: center;
-        justify-content: space-between; gap: 18px; padding-right: 178px;
-      }
-      .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; }
-      .brand-mark {
-        display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px;
-        color: #fff; background: var(--flag-red); box-shadow: 0 10px 24px rgba(212,43,30,.25);
-      }
-      .brand-logo { width: 36px; height: 36px; border-radius: 12px; object-fit: cover; box-shadow: 0 10px 24px rgba(182,65,49,.22); }
-      .proto-note { color: var(--muted); font-size: 12px; font-weight: 750; }
+      .page { min-height: calc(100vh - 132px); padding: 28px 30px 110px; }
       .layout {
         width: min(1220px, 100%); margin: 34px auto 0; display: grid;
         grid-template-columns: minmax(340px, .95fr) minmax(390px, 1.05fr); gap: 72px; align-items: center;
       }
       .story { padding: 20px 0; }
-      .step-kicker { color: var(--flag-red); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+      .step-kicker { color: var(--public-primary); font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
       h1 { max-width: 610px; margin: 12px 0 14px; font-size: clamp(30px, 3.4vw, 44px); line-height: 1.12; letter-spacing: -.03em; text-wrap: balance; }
       .lead { max-width: 540px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
       .proofs { display: grid; gap: 9px; margin-top: 24px; max-width: 520px; }
@@ -67,14 +55,14 @@
         display: grid; grid-template-columns: 26px 1fr; gap: 11px; align-items: center;
         padding: 3px 0; font-size: 13px; font-weight: 600;
       }
-      .proof-icon { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--flag-red-soft); color: var(--flag-red); font-size: 12px; font-weight: 800; }
+      .proof-icon { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: var(--public-primary-soft); color: var(--public-primary); font-size: 12px; font-weight: 800; }
       .story-action {
         display: inline-flex; align-items: center; gap: 10px; margin-top: 24px; padding: 13px 18px;
-        border: 0; border-radius: 13px; background: var(--ink); color: #fff; font-weight: 800;
-        box-shadow: 0 10px 24px rgba(23,32,25,.14);
+        border: 0; border-radius: 13px; background: var(--public-foreground); color: #fff; font-weight: 800;
+        box-shadow: 0 10px 24px rgba(8,22,40,.14);
       }
-      .story-action span { color: var(--flag-gold); font-size: 18px; }
-      .visual { position: relative; min-height: 790px; display: grid; place-items: center; }
+      .story-action span { color: var(--public-primary); font-size: 18px; }
+      .visual { position: relative; min-height: 790px; display: grid; place-items: center; padding: 20px; }
       .phone {
         position: relative; z-index: 1; width: min(390px, 92vw); height: 748px; overflow: hidden;
         border: 7px solid var(--phone); border-radius: 42px; background: #fff; box-shadow: var(--shadow);
@@ -423,13 +411,7 @@
       .dots { display: flex; justify-content: center; gap: 5px; margin-top: 3px; }
       .dots i { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.25); }
       .dots i.active { width: 13px; border-radius: 5px; background: var(--flag-gold); }
-      .audience-switch {
-        position: fixed; z-index: 20; top: 22px; right: 24px; padding: 9px 12px; border: 1px solid var(--line);
-        border-radius: 999px; background: rgba(255,255,255,.86); color: var(--muted); text-decoration: none;
-        font-size: 11px; font-weight: 800; box-shadow: 0 8px 24px rgba(24,48,31,.08); backdrop-filter: blur(10px);
-      }
       @media (max-width: 930px) {
-        .topbar { padding-right: 0; }
         .layout { grid-template-columns: 1fr; gap: 20px; }
         .story { text-align: center; }
         .lead, .proofs { margin-left: auto; margin-right: auto; }
@@ -438,23 +420,44 @@
       }
       @media (max-width: 560px) {
         .page { padding: 18px 14px 105px; }
-        .proto-note { display: none; }
-        .audience-switch { position: static; display: inline-block; margin: 14px; }
         .layout { margin-top: 14px; }
         .story { padding-top: 0; }
         h1 { font-size: 32px; }
         .proofs { display: none; }
-        .visual { min-height: 720px; }
-        .phone { height: 690px; border-radius: 36px; }
+        .visual { min-height: 720px; padding: 10px; }
+        .phone { width: 100%; height: 690px; border-radius: 36px; }
         .screen-body { height: 590px; }
         .phone.has-app-tabs .screen-body { height: 532px; }
       }
     </style>
+    <link rel="stylesheet" href="../../prototype-shell.css" />
   </head>
-  <body>
-    <a class="prototype-home-link" href="../../" aria-label="返回全部原型入口"><span aria-hidden="true">←</span> 全部原型</a>
-    <a class="audience-switch" href="../prototype-implementation/">切到实施对照原型 →</a>
-    <div id="app"></div>
+  <body class="public-prototype-page">
+    <div class="public-site-frame">
+      <header class="public-shell-header">
+        <div class="public-shell-identity">
+          <a class="public-shell-brand" href="../../" aria-label="返回原型首页">
+            <span class="public-shell-seal" aria-hidden="true">仝</span>
+            <span class="public-shell-brand-copy"><strong>码成仝</strong><small>为工友敲键盘</small></span>
+          </a>
+          <span class="public-shell-divider" aria-hidden="true"></span>
+          <span class="public-shell-context">街坊味 · 客户体验</span>
+          <span class="public-shell-badge">场景探索</span>
+        </div>
+        <a class="public-shell-official-link" href="https://www.codeforpeople.cn/" target="_blank" rel="noreferrer">返回官网 <span aria-hidden="true">↗</span></a>
+      </header>
+      <div class="public-prototype-status" role="status">
+        <div class="public-shell-status-copy"><span class="public-status-primary">公开交互原型</span><span class="public-status-separator" aria-hidden="true"></span><span>用于验证场景与流程，不接真实业务数据</span></div>
+      </div>
+      <nav class="public-shell-breadcrumb" aria-label="面包屑导航">
+        <a href="../../">原型首页</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <a href="../">街坊味</a>
+        <span class="public-breadcrumb-separator" aria-hidden="true">/</span>
+        <span class="public-breadcrumb-current" aria-current="page">客户体验</span>
+      </nav>
+      <div id="app"></div>
+    </div>
 
     <script>
       const steps = ["generate", "menu", "overview", "share", "orders", "reconcile"];
@@ -884,12 +887,8 @@
         const stepIndex = steps.indexOf(step);
         document.title = `${labels[step]} · 客户体验原型 · 街坊味`;
         document.querySelector("#app").innerHTML = `
-          <main class="page">
-            <header class="topbar">
-              <div class="brand"><img class="brand-logo" src="../prototype-implementation/kith-inn-logo.png" alt="街坊味" />街坊味 · Kith Inn</div>
-              <div class="proto-note">客户体验原型 · 不接真实数据</div>
-            </header>
-            <div class="layout">
+          <main class="page public-page-surface">
+            <div class="layout public-page-section">
               <section class="story">
                 <div class="step-kicker">${item.kicker}</div>
                 <h1>${item.title}</h1>
@@ -897,7 +896,7 @@
                 <div class="proofs">${item.proofs.map(([icon, text]) => `<div class="proof"><span class="proof-icon">${icon}</span>${text}</div>`).join("")}</div>
                 <button class="story-action" data-next>${item.action}<span>→</span></button>
               </section>
-              <section class="visual" aria-label="手机交互演示">
+              <section class="visual public-stage-surface" aria-label="手机交互演示">
                 ${phoneFor(step)}
               </section>
             </div>

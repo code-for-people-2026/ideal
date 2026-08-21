@@ -160,11 +160,6 @@
 
       .orbit.faint { opacity: 0.22; }
 
-      .anchor { stroke: var(--paper); stroke-width: 4; }
-      .anchor.green { fill: var(--green); }
-      .anchor.red { fill: var(--red); }
-      .anchor.orange { fill: var(--orange); }
-
       .connections-mobile { display: none; }
 
       .node {
@@ -379,13 +374,271 @@
         a.node { transition: none; }
       }
     </style>
+    <link rel="stylesheet" href="./prototype-shell.css" />
+    <style>
+      body.public-prototype-page {
+        --ink: var(--public-foreground);
+        --muted: var(--public-muted-foreground);
+        --paper: var(--public-surface);
+        --green: #253b53;
+        --green-soft: var(--public-border-strong);
+        --red: var(--public-primary);
+        --orange: #9f3a42;
+        --future: #708092;
+      }
+
+      .public-prototype-page .page {
+        width: min(1328px, calc(100% - 64px));
+        margin: 0 auto;
+        padding: 0 0 32px;
+      }
+
+      .public-prototype-page .showcase {
+        min-height: 840px;
+        grid-template-columns: 340px minmax(0, 1fr);
+        gap: 24px;
+      }
+
+      .public-prototype-page .intro {
+        padding-top: 136px;
+        padding-left: 0;
+      }
+
+      .public-prototype-page .eyebrow {
+        color: var(--public-primary);
+        font-size: 13px;
+        font-weight: 750;
+        letter-spacing: 0.12em;
+      }
+
+      .public-prototype-page h1 {
+        margin: 18px 0 24px;
+        color: var(--public-foreground);
+        font-size: clamp(46px, 4vw, 58px);
+        font-weight: 780;
+        line-height: 1.34;
+      }
+
+      .public-prototype-page .divider {
+        width: 48px;
+        height: 3px;
+        margin-bottom: 26px;
+        background: var(--public-primary);
+      }
+
+      .public-prototype-page .lead {
+        max-width: 300px;
+        color: var(--public-muted-foreground);
+        line-height: 2.05;
+      }
+
+      .public-prototype-page .guide {
+        color: var(--public-primary);
+      }
+
+      .public-prototype-page .guide::before {
+        background: var(--public-primary);
+      }
+
+      .public-prototype-page .graph {
+        height: 840px;
+      }
+
+      .public-prototype-page .orbit {
+        stroke: var(--public-border-strong);
+      }
+
+      .public-prototype-page .node {
+        border-width: 1px;
+        background: rgba(255, 255, 255, 0.97);
+        box-shadow: 0 10px 34px rgba(8, 22, 40, 0.08);
+      }
+
+      .public-prototype-page .node::after {
+        border-color: color-mix(in srgb, var(--node-color) 45%, transparent);
+      }
+
+      .public-prototype-page a.node:hover {
+        background: color-mix(in srgb, var(--node-color) 5%, var(--public-surface));
+        box-shadow: 0 20px 44px color-mix(in srgb, var(--node-color) 16%, transparent);
+      }
+
+      .public-prototype-page .node p {
+        color: var(--public-muted-foreground);
+      }
+
+      .public-prototype-page .hub {
+        --y: 51%;
+        --size: 500px;
+        --node-color: var(--public-primary);
+        border-width: 2px;
+        background: color-mix(in srgb, var(--public-primary) 4%, var(--public-surface));
+        box-shadow: 0 18px 48px color-mix(in srgb, var(--public-primary) 15%, transparent);
+      }
+
+      .public-prototype-page .kith,
+      .public-prototype-page .paihaocai,
+      .public-prototype-page .recycle {
+        --node-color: var(--green);
+      }
+
+      .public-prototype-page .future {
+        background: var(--public-muted);
+        box-shadow: none;
+      }
+
+      .public-prototype-page .future h3 {
+        color: var(--public-muted-foreground);
+      }
+
+      .public-prototype-page footer {
+        margin-top: 48px;
+        padding-top: 24px;
+        border-top: 1px solid var(--public-border);
+        color: var(--public-muted-foreground);
+      }
+
+      @media (max-width: 1080px) {
+        .public-prototype-page .page {
+          width: min(100% - 48px, 940px);
+        }
+
+        .public-prototype-page .showcase {
+          grid-template-columns: 300px minmax(0, 1fr);
+        }
+      }
+
+      @media (max-width: 760px) {
+        .public-prototype-page .page {
+          width: calc(100% - 32px);
+        }
+
+        .public-prototype-page .showcase {
+          display: block;
+          min-height: 0;
+        }
+
+        .public-prototype-page .intro {
+          padding: 56px 4px 20px;
+        }
+
+        .public-prototype-page h1 {
+          font-size: clamp(42px, 13vw, 58px);
+        }
+
+        .public-prototype-page .lead {
+          max-width: 560px;
+        }
+
+        .public-prototype-page .graph {
+          width: 100%;
+          height: 560px;
+        }
+
+        .public-prototype-page .hub {
+          --x: 50%;
+          --y: 49%;
+          --size: 218px;
+        }
+
+        .public-prototype-page .kith {
+          --x: 24%;
+          --y: 23%;
+          --size: 154px;
+        }
+
+        .public-prototype-page .paihaocai {
+          --x: 78%;
+          --y: 24%;
+          --size: 136px;
+        }
+
+        .public-prototype-page .recycle {
+          --x: 76%;
+          --y: 77%;
+          --size: 154px;
+        }
+
+        .public-prototype-page .future {
+          --size: 80px;
+        }
+
+        .public-prototype-page .future-two {
+          --x: 85%;
+          --y: 58%;
+        }
+
+        .public-prototype-page .future-three {
+          --x: 15%;
+          --y: 71%;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .public-prototype-page .page {
+          width: calc(100% - 24px);
+        }
+
+        .public-prototype-page .intro {
+          padding-top: 42px;
+        }
+
+        .public-prototype-page .graph {
+          height: 500px;
+        }
+
+        .public-prototype-page .hub {
+          --y: 48%;
+          --size: 194px;
+        }
+
+        .public-prototype-page .kith {
+          --y: 22%;
+          --size: 138px;
+        }
+
+        .public-prototype-page .paihaocai {
+          --y: 20%;
+          --size: 120px;
+        }
+
+        .public-prototype-page .recycle {
+          --size: 138px;
+        }
+
+        .public-prototype-page .future {
+          --size: 72px;
+        }
+      }
+    </style>
   </head>
-  <body>
-    <div class="page">
-      <header class="topbar">
-        <div>近邻互助组 · 原型地图</div>
-        <div class="status">4 个原型可体验</div>
+  <body class="public-prototype-page">
+    <div class="public-site-frame">
+      <header class="public-shell-header">
+        <div class="public-shell-identity">
+          <a class="public-shell-brand" href="./" aria-label="返回原型首页">
+            <span class="public-shell-seal" aria-hidden="true">仝</span>
+            <span class="public-shell-brand-copy">
+              <strong>码成仝</strong>
+              <small>为工友敲键盘</small>
+            </span>
+          </a>
+          <span class="public-shell-divider" aria-hidden="true"></span>
+          <span class="public-shell-context">公开原型地图</span>
+          <span class="public-shell-badge">原型站</span>
+        </div>
+        <a class="public-shell-official-link" href="https://www.codeforpeople.cn/" target="_blank" rel="noreferrer">返回官网 <span aria-hidden="true">↗</span></a>
       </header>
+
+      <div class="public-prototype-status" role="note">
+        <div class="public-shell-status-copy">
+          <span class="public-status-primary">公开交互原型</span>
+          <span class="public-status-separator" aria-hidden="true"></span>
+          <span>不接真实业务数据 · 不代表服务已经上线</span>
+        </div>
+      </div>
+
+      <div class="page">
 
       <main class="showcase">
         <section class="intro" aria-labelledby="page-title">
@@ -393,7 +646,7 @@
           <h1 id="page-title"><span>始于一次互助，</span><span>共建和谐社区。</span></h1>
           <div class="divider" aria-hidden="true"></div>
           <p class="lead">
-            近邻互助组用真实亲历帮助邻<br />里找到彼此；不同的小应用把<br />一次具体协作接住，让互助逐<br />渐成为社区里的日常。
+            近邻互助组基于真实经历搭线邻里需求；不同的小应用承接每一次具体协作，让互助逐渐成为社区日常。
           </p>
           <p class="guide">点击圆形，进入对应原型</p>
         </section>
@@ -402,18 +655,10 @@
           <svg class="connections connections-desktop" viewBox="0 0 1000 920" preserveAspectRatio="none" aria-hidden="true">
             <ellipse class="orbit faint" cx="470" cy="480" rx="390" ry="330" />
             <ellipse class="orbit dashed" cx="505" cy="484" rx="420" ry="365" />
-            <circle class="anchor red" cx="340" cy="282" r="9" />
-            <circle class="anchor green" cx="682" cy="316" r="9" />
-            <circle class="anchor green" cx="326" cy="678" r="9" />
-            <circle class="anchor orange" cx="607" cy="718" r="9" />
           </svg>
           <svg class="connections connections-mobile" viewBox="0 0 1000 780" preserveAspectRatio="none" aria-hidden="true">
             <ellipse class="orbit faint" cx="500" cy="350" rx="385" ry="310" />
             <ellipse class="orbit dashed" cx="515" cy="360" rx="425" ry="335" />
-            <circle class="anchor red" cx="315" cy="205" r="10" />
-            <circle class="anchor green" cx="690" cy="235" r="10" />
-            <circle class="anchor green" cx="315" cy="585" r="10" />
-            <circle class="anchor orange" cx="680" cy="560" r="10" />
           </svg>
 
           <a class="node hub" href="./牛马互助平台/" aria-label="打开近邻互助组原型入口">
@@ -448,9 +693,9 @@
       </main>
 
       <footer>
-        <div><strong>码成工</strong> · 一个为工友敲键盘的组织</div>
-        <div>全部页面均为交互原型，不接入真实业务数据。</div>
+        <div><strong>码成仝</strong> · 一个为工友敲键盘的组织</div>
       </footer>
+      </div>
     </div>
   </body>
 </html>
