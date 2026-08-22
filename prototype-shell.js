@@ -19,9 +19,9 @@
 
   const PROTOTYPE_IDS = Object.freeze({
     "/": "prototype-map",
-    "/neighbors/": "neighbors-index",
-    "/neighbors/prototype-customer/": "neighbors-customer",
-    "/neighbors/prototype-implementation/": "neighbors-implementation",
+    "/牛马互助平台/": "neighbors-index",
+    "/牛马互助平台/prototype-customer/": "neighbors-customer",
+    "/牛马互助平台/prototype-implementation/": "neighbors-implementation",
     "/街坊味/": "kith-index",
     "/街坊味/prototype-customer/": "kith-customer",
     "/街坊味/prototype-implementation/": "kith-implementation",

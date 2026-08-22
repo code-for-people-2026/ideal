@@ -1,8 +1,8 @@
 # 牛马互助平台 · 产品资料
 
-本目录保留近邻互助组的产品决议、User Stories 与旧公开链接兼容页。公开原型已经迁移到 canonical 路由；第一次进入请从下面的入口开始：
+本目录把“给客户验证价值”和“给工程团队理解实现”分开维护。第一次进入请从下面的入口开始：
 
-- [公开双原型入口](https://ideal.codeforpeople.cn/neighbors/)
+- [双原型入口](./index.html)
 - [当前产品决议](./product-decisions/近邻互助组-MVP原型设计决议.md)
 - [当前 MVP User Stories](./user-stories/近邻互助组-MVP.md)
 - [双轨原型理论与边界](./product-decisions/双轨原型-理论基础与边界研究.md)
@@ -10,12 +10,7 @@
 ## 目录结构
 
 ```text
-neighbors/                          # 公开 canonical 原型
-├── index.html
-├── prototype-customer/index.html
-└── prototype-implementation/index.html
-
-牛马互助平台/                      # 产品资料与旧 URL 重定向
+牛马互助平台/
 ├── README.md
 ├── index.html
 ├── prototype-customer/
@@ -77,5 +72,5 @@ python3 -m http.server 4173
 然后打开：
 
 ```text
-http://127.0.0.1:4173/neighbors/
+http://127.0.0.1:4173/牛马互助平台/
 ```
