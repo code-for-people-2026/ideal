@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="canonical" href="https://ideal.codeforpeople.cn/%E7%89%9B%E9%A9%AC%E4%BA%92%E5%8A%A9%E5%B9%B3%E5%8F%B0/prototype-implementation/" />
     <title>近邻互助组 · 实施对照原型</title>
     <!--
       近邻互助组 · 面向工程师的实施对照原型（IRP / PROTOTYPE）
@@ -372,14 +373,20 @@
         .scenario-switch { flex-direction: column; }
         .phone-stage { min-height: auto; padding: 20px; }
       }
+      @media (max-width: 560px) {
+        .shell { padding: 28px 16px 96px; }
+        .hero { align-items: stretch; flex-direction: column; gap: 12px; }
+        .badge { align-self: flex-start; }
+      }
     </style>
     <link rel="stylesheet" href="../../prototype-shell.css" />
+    <script src="../../prototype-shell.js" defer></script>
   </head>
   <body class="public-prototype-page">
     <div class="public-site-frame">
       <header class="public-shell-header">
         <div class="public-shell-identity">
-          <a class="public-shell-brand" href="../../" aria-label="返回原型首页">
+          <a class="public-shell-brand" href="https://www.codeforpeople.cn/" aria-label="返回码成仝官网">
             <span class="public-shell-seal" aria-hidden="true">仝</span>
             <span class="public-shell-brand-copy"><strong>码成仝</strong><small>为工友敲键盘</small></span>
           </a>
@@ -387,13 +394,13 @@
           <span class="public-shell-context">近邻互助组 · 实施对照</span>
           <span class="public-shell-badge">实施对照</span>
         </div>
-        <a class="public-shell-official-link" href="https://www.codeforpeople.cn/" target="_blank" rel="noreferrer">返回官网 <span aria-hidden="true">↗</span></a>
+        <a class="public-shell-official-link" href="https://www.codeforpeople.cn/neighbors" target="_blank" rel="noreferrer">返回正式介绍 <span aria-hidden="true">↗</span></a>
       </header>
       <div class="public-prototype-status" role="note">
         <div class="public-shell-status-copy">
-          <span class="public-status-primary">公开交互原型</span>
+          <span class="public-status-primary">公开体验原型</span>
           <span class="public-status-separator" aria-hidden="true"></span>
-          <span>按场景、角色、状态与 User Story 对照实施边界 · 不接真实业务数据</span>
+          <span>不能完成真实事务 · 不接真实业务数据 · 按场景、角色、状态与 User Story 对照实施边界</span>
         </div>
       </div>
       <nav class="public-shell-breadcrumb" aria-label="面包屑导航">
@@ -1177,13 +1184,13 @@
             <div class="status-copy">${data.copy}</div>
             <div class="story-block">
               <div class="story-kicker">Implementation reference</div>
-              <div class="story-chips">${data.stories.map(id => `<a class="story-chip" href="../user-stories/近邻互助组-MVP.md" title="打开 User Stories">${id}</a>`).join("")}</div>
+              <div class="story-chips">${data.stories.map(id => `<a class="story-chip" href="https://github.com/code-for-people-2026/ideal/blob/main/%E7%89%9B%E9%A9%AC%E4%BA%92%E5%8A%A9%E5%B9%B3%E5%8F%B0/user-stories/%E8%BF%91%E9%82%BB%E4%BA%92%E5%8A%A9%E7%BB%84-MVP.md" title="打开 User Stories">${id}</a>`).join("")}</div>
               <div class="story-title">${data.storyTitle}</div>
               <ul class="accept-list">${data.accepts.map(item => `<li>${item}</li>`).join("")}</ul>
             </div>
             <div class="spec-links">
-              <a href="../user-stories/近邻互助组-MVP.md">完整 User Stories</a>
-              <a href="../product-decisions/双轨原型-理论基础与边界研究.md">原型边界</a>
+              <a href="https://github.com/code-for-people-2026/ideal/blob/main/%E7%89%9B%E9%A9%AC%E4%BA%92%E5%8A%A9%E5%B9%B3%E5%8F%B0/user-stories/%E8%BF%91%E9%82%BB%E4%BA%92%E5%8A%A9%E7%BB%84-MVP.md">完整 User Stories</a>
+              <a href="https://github.com/code-for-people-2026/ideal/blob/main/%E7%89%9B%E9%A9%AC%E4%BA%92%E5%8A%A9%E5%B9%B3%E5%8F%B0/product-decisions/%E5%8F%8C%E8%BD%A8%E5%8E%9F%E5%9E%8B-%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E4%B8%8E%E8%BE%B9%E7%95%8C%E7%A0%94%E7%A9%B6.md">原型边界</a>
             </div>
             <button class="status-action ${colorClass}" data-action="${data.action}">${data.next}</button>
           </aside>`;
