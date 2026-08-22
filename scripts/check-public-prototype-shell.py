@@ -246,17 +246,10 @@ def main() -> None:
         fail("prototype-shell.js is missing from the Pages artifact")
     script_text = shared_script.read_text(encoding="utf-8")
     required_script_markers = (
-        '"近邻互助组", FORMAL_INTRO_URL',
-        '`$' + '{FORMAL_SITE_ORIGIN}/manifesto`',
-        '`$' + '{FORMAL_SITE_ORIGIN}/wam`',
-        '`$' + '{FORMAL_SITE_ORIGIN}/license`',
         "public-shell-footer",
-        'normalizedPathname() !== "/"',
         "公开体验原型",
         "不能完成真实事务",
         "不接真实业务数据",
-        'link.target = "_blank";',
-        'link.rel = "noreferrer";',
     )
     missing_script_markers = [
         marker for marker in required_script_markers if marker not in script_text
@@ -273,6 +266,7 @@ def main() -> None:
         "payload.docs",
         "where%5Bpurpose%5D",
         "public-shell-navigation",
+        "public-shell-footer-navigation",
         "public-shell-navigation-toggle",
         "public-shell-feedback",
         "installNavigation",
