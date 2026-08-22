@@ -41,14 +41,14 @@ CANONICAL_URLS = {
     ),
 }
 
-FORMAL_INTRO_LINK = (
-    '<a class="public-shell-official-link" '
-    'href="https://www.codeforpeople.cn/neighbors" target="_blank" '
-    'rel="noreferrer">返回正式介绍 <span aria-hidden="true">↗</span></a>'
-)
 PUBLIC_BRAND_LINK = (
     'class="public-shell-brand" href="https://www.codeforpeople.cn/" '
     'aria-label="返回码成仝官网"'
+)
+PUBLIC_BRAND_LOGO = (
+    '<img class="public-shell-seal" '
+    'src="https://www.codeforpeople.cn/assets/brand/code-for-people-logo.png" '
+    'alt="" width="36" height="36" />'
 )
 
 PERMANENT_REDIRECTS = {
@@ -67,7 +67,8 @@ COMMON_REQUIRED_MARKERS = (
     "prototype-shell.css",
     "public-prototype-page",
     "public-shell-header",
-    "public-shell-official-link",
+    "public-shell-seal",
+    "https://www.codeforpeople.cn/assets/brand/code-for-people-logo.png",
     'aria-label="返回码成仝官网"',
     "public-prototype-status",
     "公开体验原型",
@@ -82,6 +83,13 @@ FORBIDDEN_MARKERS = (
     "public-shell-actions",
     "public-shell-link",
     "public-feedback",
+    "public-shell-navigation",
+    "public-shell-navigation-toggle",
+    "public-shell-feedback",
+    "public-shell-official-link",
+    "帮助我们改进这个原型",
+    "反馈入口暂不可用",
+    "返回正式介绍",
     "反馈入口尚未配置",
     "反馈通道准备中",
 )
@@ -213,10 +221,8 @@ def main() -> None:
         fail("prototype-shell.css is missing from the Pages artifact")
     styles_text = shared_styles.read_text(encoding="utf-8")
     required_style_markers = (
-        ".public-shell-navigation-toggle",
-        "min-width: 44px;",
-        "min-height: 44px;",
-        ".public-shell-navigation-toggle:not([hidden])",
+        ".public-shell-seal",
+        "object-fit: cover;",
         ".public-shell-badge::before",
     )
     missing_style_markers = [
@@ -224,7 +230,7 @@ def main() -> None:
     ]
     if missing_style_markers:
         fail(
-            "prototype-shell.css is missing mobile navigation/badge markers: "
+            "prototype-shell.css is missing shared logo/badge markers: "
             + ", ".join(missing_style_markers)
         )
     hidden_badge = re.search(
@@ -244,69 +250,42 @@ def main() -> None:
         '`$' + '{FORMAL_SITE_ORIGIN}/manifesto`',
         '`$' + '{FORMAL_SITE_ORIGIN}/wam`',
         '`$' + '{FORMAL_SITE_ORIGIN}/license`',
-        "public-shell-navigation",
         "public-shell-footer",
-        "public-shell-feedback",
-        "public-shell-navigation-toggle",
-        'toggle.setAttribute("aria-controls", NAVIGATION_ID)',
-        'toggle.setAttribute("aria-expanded", String(isExpanded))',
-        'event.key === "Escape"',
-        'setNavigationExpanded(false, true)',
         'normalizedPathname() !== "/"',
         "公开体验原型",
         "不能完成真实事务",
         "不接真实业务数据",
-        "反馈正文由你主动填写；联系方式可选；内容仅维护者可见，不会自动公开。",
-        "反馈入口暂不可用 · 诊断码：",
-        '`${FORMAL_SITE_ORIGIN}/api/public/critique-form`',
-        "payload?.unavailable === true",
-        'typeof payload?.label === "string"',
-        'typeof payload?.url === "string"',
-        'Object.freeze(["prototype", "step", "source"])',
-        'Object.freeze(["step", "scenario", "variant", "view"])',
         'link.target = "_blank";',
         'link.rel = "noreferrer";',
-        'new URL(window.location.pathname, window.location.origin)',
-        'mode: "cors"',
-        'credentials: "omit"',
     )
     missing_script_markers = [
         marker for marker in required_script_markers if marker not in script_text
     ]
     if missing_script_markers:
         fail(
-            "prototype-shell.js is missing public navigation/feedback contract markers: "
+            "prototype-shell.js is missing footer contract markers: "
             + ", ".join(missing_script_markers)
         )
 
     forbidden_script_markers = (
+        "/api/public/critique-form",
         "/api/form-links",
         "payload.docs",
         "where%5Bpurpose%5D",
+        "public-shell-navigation",
+        "public-shell-navigation-toggle",
+        "public-shell-feedback",
+        "installNavigation",
+        "installFeedback",
+        "buildFeedbackUrl",
     )
     old_contract_markers = [
         marker for marker in forbidden_script_markers if marker in script_text
     ]
     if old_contract_markers:
         fail(
-            "prototype-shell.js still exposes the generic Payload form-links contract: "
+            "prototype-shell.js still contains removed navigation/feedback behavior: "
             + ", ".join(old_contract_markers)
-        )
-
-    feedback_parameters = re.findall(
-        r'feedbackUrl\.searchParams\.set\("([^"]+)"', script_text
-    )
-    if feedback_parameters != ["prototype", "step", "source"]:
-        fail("prototype-shell.js may only append prototype, step, and source feedback metadata")
-
-    forbidden_feedback_markers = ("FormData", "localStorage", "sessionStorage", ".value")
-    present_forbidden = [
-        marker for marker in forbidden_feedback_markers if marker in script_text
-    ]
-    if present_forbidden:
-        fail(
-            "prototype-shell.js must not read or forward user input: "
-            + ", ".join(present_forbidden)
         )
 
     for relative_path in PUBLIC_SHELL_PAGES:
@@ -317,9 +296,6 @@ def main() -> None:
         missing = [marker for marker in COMMON_REQUIRED_MARKERS if marker not in text]
         if missing:
             fail(f"{relative_path} is missing: {', '.join(missing)}")
-        if "public-shell-feedback-link" in text:
-            fail(f"{relative_path} must not contain a feedback link before CMS validation")
-
         canonical_url = CANONICAL_URLS.get(relative_path)
         if canonical_url:
             canonical_markup = f'<link rel="canonical" href="{canonical_url}" />'
@@ -351,13 +327,8 @@ def main() -> None:
         if text.count(PUBLIC_BRAND_LINK) != 1:
             fail(f"{relative_path} brand must link to the 码成仝 website home")
 
-        if text.count("public-shell-official-link") != 1:
-            fail(f"{relative_path} must render exactly one standalone official-site link")
-
-        if text.count(FORMAL_INTRO_LINK) != 1:
-            fail(f"{relative_path} must link directly to the formal neighbors introduction")
-        if "返回官网" in text:
-            fail(f"{relative_path} must label the action as 返回正式介绍")
+        if text.count(PUBLIC_BRAND_LOGO) != 1:
+            fail(f"{relative_path} must use the official website brand logo exactly once")
 
         if text.count("public-shell-context") != 1:
             fail(f"{relative_path} must identify exactly one current prototype object")
