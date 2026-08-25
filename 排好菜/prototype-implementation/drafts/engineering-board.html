@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="排好菜工程实现模型：架构、核心链路、数据接口、异常恢复与验收证据。" />
+    <title>排好菜 · 工程实现模型</title>
+    <style>
+      :root {
+        color-scheme:light;
+        --ink:#26211c;
+        --muted:#736a61;
+        --line:#d9d0c5;
+        --paper:#fffaf3;
+        --surface:#f8f4ec;
+        --canvas:#dedad3;
+        --brand:#b73f31;
+        --brand-soft:#f7e7e3;
+        --green:#23684e;
+        --green-soft:#e3f0e9;
+        --gold:#8a641d;
+        --gold-soft:#fff0c9;
+        --shadow:0 20px 60px rgba(57,43,31,.15);
+      }
+      * { box-sizing:border-box; }
+      html,body { width:100%; height:100%; margin:0; overflow:hidden; }
+      body { min-width:320px; background:var(--canvas); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; -webkit-font-smoothing:antialiased; }
+      button,a { color:inherit; font:inherit; }
+      button { cursor:pointer; }
+      button:focus-visible,a:focus-visible,.view-panel:focus-visible { outline:3px solid rgba(35,104,78,.48); outline-offset:4px; }
+      .skip-link { position:fixed; z-index:100; top:8px; left:8px; padding:10px 14px; transform:translateY(-150%); border-radius:9px; background:#fff; color:var(--green); font-weight:850; }
+      .skip-link:focus { transform:none; }
+
+      .toolbar { position:fixed; z-index:40; top:14px; left:50%; display:flex; width:min(1210px,calc(100% - 28px)); min-height:64px; align-items:center; justify-content:space-between; gap:14px; padding:9px 11px 9px 18px; transform:translateX(-50%); border:1px solid rgba(255,255,255,.9); border-radius:18px; background:rgba(255,253,249,.95); box-shadow:0 14px 36px rgba(54,40,30,.13); backdrop-filter:blur(18px); }
+      .brand { display:grid; min-width:196px; line-height:1.1; }
+      .brand strong { font-size:16px; font-weight:950; }
+      .brand small { margin-top:4px; color:var(--muted); font-size:10px; font-weight:750; }
+      .view-tabs { display:flex; gap:4px; padding:4px; border:1px solid var(--line); border-radius:12px; background:#f2eee8; }
+      .view-tab { min-height:36px; padding:7px 11px; border:0; border-radius:8px; background:transparent; color:var(--muted); font-size:11px; font-weight:850; white-space:nowrap; }
+      .view-tab[aria-pressed="true"] { background:#fff; color:var(--ink); box-shadow:0 4px 12px rgba(70,48,32,.08); }
+      .toolbar-meta { display:flex; min-width:max-content; align-items:center; gap:8px; }
+      .mock-badge { padding:7px 9px; border-radius:9px; background:var(--gold-soft); color:#765313; font-size:9px; font-weight:900; }
+      .toolbar-link { padding:9px 11px; border:1px solid var(--line); border-radius:10px; background:#fff; color:var(--muted); font-size:10px; font-weight:850; text-decoration:none; }
+
+      .viewport { position:fixed; inset:0; overflow:hidden; cursor:grab; touch-action:none; background-color:var(--canvas); background-image:linear-gradient(rgba(76,65,56,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(76,65,56,.08) 1px,transparent 1px); background-size:24px 24px; }
+      .viewport.is-dragging { cursor:grabbing; user-select:none; }
+      .board { position:absolute; top:0; left:0; width:2360px; height:1270px; overflow:hidden; transform-origin:0 0; border:1px solid #d2c8bb; border-radius:34px; background:var(--paper); box-shadow:0 30px 90px rgba(56,40,29,.17); will-change:transform; }
+      .board-title { position:absolute; top:6px; left:64px; display:flex; width:2232px; align-items:flex-end; justify-content:space-between; gap:40px; }
+      .board.view-focused .board-title { visibility:hidden; }
+      .board-title h1 { margin:4px 0 0; font-size:28px; line-height:1; letter-spacing:-.04em; }
+      .eyebrow,.panel-number,.mini-label { color:var(--green); font-size:11px; font-weight:950; letter-spacing:.08em; text-transform:uppercase; }
+      .board-title p { max-width:720px; margin:0; color:var(--muted); font-size:12px; line-height:1.6; text-align:right; }
+
+      .view-panel { position:absolute; width:1080px; height:540px; overflow:hidden; padding:22px 26px 26px; border:1px solid var(--line); border-radius:24px; background:rgba(255,255,255,.96); box-shadow:var(--shadow); cursor:zoom-in; }
+      .view-panel[data-view="overview"] { top:112px; left:64px; }
+      .view-panel[data-view="generation"] { top:112px; left:1216px; }
+      .view-panel[data-view="contracts"] { top:696px; left:64px; }
+      .view-panel[data-view="acceptance"] { top:696px; left:1216px; }
+      .view-panel.is-focused { border-color:#8db5a2; box-shadow:0 0 0 3px rgba(35,104,78,.12),var(--shadow); }
+      .panel-head { display:grid; grid-template-columns:50px 1fr auto; align-items:start; gap:12px; padding-bottom:10px; border-bottom:1px solid var(--line); }
+      .panel-number { display:flex; width:44px; height:44px; align-items:center; justify-content:center; border-radius:13px; background:var(--green-soft); font-size:12px; }
+      .panel-head h2 { margin:1px 0 4px; font-size:23px; line-height:1.1; letter-spacing:-.035em; }
+      .panel-head p { margin:0; color:var(--muted); font-size:12px; line-height:1.55; }
+      .panel-state { padding:7px 9px; border-radius:9px; background:#f1ede7; color:#6c635a; font-size:9px; font-weight:900; }
+      .panel-body { height:calc(100% - 58px); padding-top:12px; }
+      .section-title { display:flex; align-items:center; gap:8px; margin:0 0 10px; color:#4d463f; font-size:12px; font-weight:950; }
+      .section-title::before { content:""; width:18px; height:3px; border-radius:3px; background:var(--green); }
+      .section-title.risk::before { background:var(--brand); }
+      .caption { margin:7px 0 0; color:var(--muted); font-size:10px; line-height:1.5; }
+      .tag-row { display:flex; flex-wrap:wrap; gap:6px; }
+      .tag { padding:5px 7px; border-radius:7px; background:#f1ede7; color:#655d55; font-size:9px; font-weight:850; }
+      .tag.good { background:var(--green-soft); color:var(--green); }
+      .tag.risk { background:var(--brand-soft); color:#8f3027; }
+      .tag.mock { background:var(--gold-soft); color:#765313; }
+
+      .overview-layout { display:grid; height:100%; grid-template-columns:1fr 1.03fr; gap:28px; }
+      .overview-column + .overview-column { padding-left:28px; border-left:1px solid var(--line); }
+      .version-line { display:flex; align-items:center; justify-content:space-between; gap:18px; margin-bottom:14px; }
+      .version-line strong { font-size:15px; }
+      .version-line span { color:var(--muted); font-size:10px; }
+      .scope-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:17px; }
+      .scope-list { margin:0; padding:0; list-style:none; }
+      .scope-list li { position:relative; margin:0 0 5px; padding-left:15px; color:#544d46; font-size:11px; line-height:1.4; }
+      .scope-list li::before { content:""; position:absolute; top:.48em; left:0; width:7px; height:7px; border-radius:50%; background:var(--green); }
+      .scope-list.out li::before { border:2px solid var(--brand); background:transparent; }
+      .context-flow { display:grid; grid-template-columns:1fr 24px 1fr 24px 1fr 24px 1fr; align-items:stretch; }
+      .context-node { display:flex; min-height:66px; flex-direction:column; justify-content:center; padding:9px; border-top:3px solid var(--green); background:var(--surface); }
+      .context-node:last-child { border-top-color:var(--gold); }
+      .context-node strong { font-size:11px; }
+      .context-node span { margin-top:4px; color:var(--muted); font-size:9.5px; line-height:1.35; }
+      .context-arrow { display:flex; align-items:center; justify-content:center; color:var(--green); font-weight:950; }
+      .layers { border-top:1px solid var(--line); }
+      .layer { display:grid; min-height:43px; grid-template-columns:138px 1fr; align-items:center; gap:14px; border-bottom:1px solid var(--line); }
+      .layer strong { color:var(--green); font-size:11px; }
+      .layer span { color:#5f5750; font-size:10px; line-height:1.45; }
+      .dependency-note { margin-top:9px; padding:8px 11px; border-left:3px solid var(--brand); background:var(--brand-soft); color:#70433d; font-size:9.5px; line-height:1.42; }
+
+      .pipeline { display:grid; grid-template-columns:repeat(5,1fr); gap:9px; margin-bottom:14px; }
+      .pipeline-step { position:relative; min-height:54px; padding:8px 11px; border-top:3px solid var(--green); background:var(--surface); }
+      .pipeline-step:not(:last-child)::after { content:"→"; position:absolute; z-index:2; top:20px; right:-13px; color:var(--green); font-size:16px; font-weight:950; }
+      .pipeline-step b { display:block; font-size:11px; }
+      .pipeline-step span { display:block; margin-top:3px; color:var(--muted); font-size:9.5px; line-height:1.3; }
+      .trace { border-top:1px solid var(--line); }
+      .trace-row { display:grid; min-height:33px; grid-template-columns:36px 1.15fr 1.15fr 1.15fr 1.15fr; align-items:center; border-bottom:1px solid var(--line); }
+      .trace-row .seq { color:var(--green); font-size:11px; font-weight:950; }
+      .trace-cell { padding:5px 9px; color:#564f48; font-size:9.5px; line-height:1.3; }
+      .trace-cell.call { position:relative; background:linear-gradient(90deg,var(--green-soft),rgba(227,240,233,.18)); color:#1e5b45; font-weight:850; }
+      .trace-cell.call::after { content:"→"; position:absolute; right:7px; }
+      .trace-cell.return { background:linear-gradient(90deg,var(--gold-soft),rgba(255,240,201,.18)); color:#765313; font-weight:850; }
+      .failure-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:10px; }
+      .failure { min-height:58px; padding:8px 10px; border-left:3px solid var(--brand); background:var(--brand-soft); }
+      .failure strong { display:block; color:#8f3027; font-size:10px; }
+      .failure span { display:block; margin-top:4px; color:#694b47; font-size:9.5px; line-height:1.35; }
+
+      .contract-layout { display:grid; height:100%; grid-template-columns:1.06fr .94fr; gap:26px; }
+      .contract-layout > section + section { padding-left:26px; border-left:1px solid var(--line); }
+      .domain-map { display:grid; grid-template-columns:1fr 35px 1fr 35px 1fr; align-items:center; margin-bottom:12px; }
+      .domain-node { min-height:91px; padding:9px 10px; border-top:3px solid var(--green); background:var(--surface); }
+      .domain-node.rule { border-top-color:var(--gold); }
+      .domain-node h3 { margin:0 0 7px; font-size:12px; }
+      .domain-node code { display:block; margin-top:2px; color:#5e5650; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:9.2px; line-height:1.35; }
+      .relation { color:var(--green); font-size:9px; font-weight:950; line-height:1.3; text-align:center; }
+      .relation span { display:block; font-size:13px; }
+      .object-footer { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
+      .object-footer div { padding:8px 10px; border-left:3px solid var(--gold); background:var(--gold-soft); color:#674f24; font-size:9.5px; line-height:1.35; }
+      .invariants { display:grid; grid-template-columns:1fr 1fr; gap:7px 18px; margin:0; padding:0; counter-reset:invariant; list-style:none; }
+      .invariants li { position:relative; padding-left:25px; color:#514a43; font-size:10px; line-height:1.35; }
+      .invariants li::before { counter-increment:invariant; content:counter(invariant); position:absolute; top:0; left:0; display:flex; width:18px; height:18px; align-items:center; justify-content:center; border-radius:50%; background:var(--green-soft); color:var(--green); font-size:9px; font-weight:950; }
+      .signature-list { margin:0; padding:0; list-style:none; }
+      .signature-list li { padding:5px 0; border-bottom:1px solid var(--line); }
+      .signature-list code { display:block; color:#245c47; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:9.5px; font-weight:750; line-height:1.35; white-space:normal; }
+      .signature-list span { display:block; margin-top:2px; color:var(--muted); font-size:9.2px; line-height:1.3; }
+      .adapter-boundary { margin-top:8px; padding:7px 10px; border:1px dashed #b7a98f; background:#fffdf8; color:#5f554b; font-size:9.5px; line-height:1.35; }
+      .adapter-boundary strong { color:var(--brand); }
+
+      .acceptance-layout { display:grid; height:100%; grid-template-rows:140px 145px 1fr; gap:9px; }
+      .recovery-table,.test-table { width:100%; border-collapse:collapse; table-layout:fixed; }
+      .recovery-table th,.recovery-table td,.test-table th,.test-table td { padding:4px 7px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+      .recovery-table th,.test-table th { color:var(--muted); font-size:9px; font-weight:950; letter-spacing:.04em; text-transform:uppercase; }
+      .recovery-table td { color:#554e47; font-size:9.5px; line-height:1.28; }
+      .recovery-table td:first-child { color:#8f3027; font-weight:900; }
+      .test-table td { color:#554e47; font-size:9px; line-height:1.28; }
+      .test-table td:first-child { color:var(--ink); font-weight:900; }
+      .status-pending { color:#765313; font-weight:900; }
+      .evidence-layout { display:grid; grid-template-columns:1fr 1fr; gap:24px; padding-top:2px; }
+      .evidence-layout ul { margin:0; padding-left:16px; }
+      .evidence-layout li { margin-bottom:4px; color:#554e47; font-size:9.5px; line-height:1.32; }
+      .evidence-layout code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:9.2px; }
+      .unknowns { padding-left:20px; border-left:1px solid var(--line); }
+      .unknowns li::marker { color:var(--brand); }
+
+      .canvas-hint { position:fixed; z-index:30; bottom:18px; left:18px; padding:9px 12px; border:1px solid rgba(255,255,255,.82); border-radius:11px; background:rgba(255,253,249,.92); color:var(--muted); font-size:10px; font-weight:750; box-shadow:0 10px 26px rgba(54,40,30,.1); backdrop-filter:blur(14px); }
+      .zoom-tools { position:fixed; z-index:30; right:18px; bottom:18px; display:flex; align-items:center; gap:4px; padding:6px; border:1px solid rgba(255,255,255,.84); border-radius:13px; background:rgba(255,253,249,.94); box-shadow:0 10px 26px rgba(54,40,30,.12); backdrop-filter:blur(14px); }
+      .zoom-tools button { min-width:44px; height:34px; padding:0 9px; border:0; border-radius:8px; background:transparent; color:var(--ink); font-size:10px; font-weight:900; }
+      .zoom-tools button:hover { background:#f1ece5; }
+      .zoom-status { min-width:43px; color:var(--muted); font-size:10px; font-weight:850; text-align:center; }
+      .sr-only { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+      @media (max-width:940px) {
+        .toolbar { top:8px; width:calc(100% - 16px); min-height:56px; padding:7px 8px 7px 12px; }
+        .brand { min-width:auto; } .brand small,.toolbar-meta,.canvas-hint { display:none; }
+        .view-tab { padding:7px 8px; font-size:10px; }
+        .zoom-tools { right:10px; bottom:10px; }
+      }
+      @media (max-width:620px) {
+        .brand strong { font-size:13px; }
+        .view-tab { width:34px; overflow:hidden; padding:7px; }
+        .view-tab::first-letter { font-weight:950; }
+      }
+      @media (prefers-reduced-motion:reduce) { * { scroll-behavior:auto !important; } }
+    </style>
+  </head>
+  <body>
+    <a class="skip-link" href="#overview">跳到实现总览</a>
+    <header class="toolbar" aria-label="工程画布工具栏">
+      <div class="brand"><strong>排好菜 · 工程画布</strong><small>工程实现模型 · v0.1</small></div>
+      <nav class="view-tabs" aria-label="四个工程视图">
+        <button class="view-tab" type="button" aria-pressed="true" aria-controls="overview" aria-keyshortcuts="Alt+1" data-focus="overview">实现总览</button>
+        <button class="view-tab" type="button" aria-pressed="false" aria-controls="generation" aria-keyshortcuts="Alt+2" data-focus="generation">生成链路</button>
+        <button class="view-tab" type="button" aria-pressed="false" aria-controls="contracts" aria-keyshortcuts="Alt+3" data-focus="contracts">数据与接口</button>
+        <button class="view-tab" type="button" aria-pressed="false" aria-controls="acceptance" aria-keyshortcuts="Alt+4" data-focus="acceptance">异常与验收</button>
+      </nav>
+      <div class="toolbar-meta"><span class="mock-badge">本地 Mock / 待验证</span><a class="toolbar-link" href="../index.html">项目目录</a></div>
+    </header>
+
+    <main class="viewport" id="viewport" aria-label="可拖动、可缩放的排好菜工程实现画布">
+      <div class="board" id="board">
+        <header class="board-title">
+          <div><div class="eyebrow">Paihaocai · Engineering model</div><h1>从用户动作追溯到可验收实现</h1></div>
+          <p>面向产品、前端、后端与测试团队。所有性能和持久化结果均为 Mock 或待验证；本页面不代表真实后端已经存在。</p>
+        </header>
+
+        <section class="view-panel is-focused" id="overview" data-view="overview" tabindex="0" aria-labelledby="overview-title">
+          <header class="panel-head">
+            <div class="panel-number">01</div>
+            <div><h2 id="overview-title">实现总览</h2><p>锁定 v0.1 的交付边界，让依赖只向领域内侧收敛。</p></div>
+            <span class="panel-state">范围基线 · 契约已对齐</span>
+          </header>
+          <div class="panel-body overview-layout">
+            <section class="overview-column" aria-labelledby="scope-title">
+              <div class="version-line"><strong>工程模型 v0.1</strong><span>实现基线 · 2026-08-24</span></div>
+              <div class="scope-grid">
+                <div><h3 class="section-title" id="scope-title">本轮实现</h3><ul class="scope-list"><li>生成周一至周五、午晚餐共 10 餐</li><li>逐道换菜 / 手选，仅修改选中餐位</li><li>确认保存、历史读取与复制后再调整</li><li>本地 Mock 数据和可替换 Repository</li></ul></div>
+                <div><h3 class="section-title risk">明确不做</h3><ul class="scope-list out"><li>登录、家庭协作与权限模型</li><li>云同步、真实推荐和跨设备冲突合并</li><li>采购清单、库存、营养与成本计算</li><li>后台管理、埋点报表和 KPI 看板</li></ul></div>
+              </div>
+              <h3 class="section-title">系统上下文</h3>
+              <div class="context-flow" aria-label="系统上下文：家庭用户到存储适配器">
+                <div class="context-node"><strong>家庭用户</strong><span>生成、换菜、确认、复制</span></div><div class="context-arrow" aria-hidden="true">→</div>
+                <div class="context-node"><strong>微信小程序</strong><span>页面、状态、可恢复反馈</span></div><div class="context-arrow" aria-hidden="true">→</div>
+                <div class="context-node"><strong>菜单领域</strong><span>计划生成、规则、版本</span></div><div class="context-arrow" aria-hidden="true">→</div>
+                <div class="context-node"><strong>数据边界</strong><span>Mock Repository；真实适配器待定</span></div>
+              </div>
+              <p class="caption">信任边界：页面输入先在应用门面校验；领域层不直接依赖微信 API 或具体存储。</p>
+            </section>
+
+            <section class="overview-column" aria-labelledby="layers-title">
+              <h3 class="section-title" id="layers-title">组件分层与职责</h3>
+              <div class="layers">
+                <div class="layer"><strong>UI 与页面状态</strong><span>收集周起始日、选择餐位、展示草稿 / 警告 / 重试，不直接改存储。</span></div>
+                <div class="layer"><strong>PlanningApplication</strong><span>统一 generatePlan / swapDish / selectDish / confirmPlan / savePlan / copyPlan，编排事务与错误。</span></div>
+                <div class="layer"><strong>PlanGenerator</strong><span>组装完整候选并交由规则校验；成功后形成 EDITING 计划。</span></div>
+                <div class="layer"><strong>RuleEngine</strong><span>返回 RuleEvaluation；硬违规阻断，软违规随成功结果返回。</span></div>
+                <div class="layer"><strong>出站端口</strong><span>DishCatalogPort / WeekPlanRepository / SavedPlanRepository 隔离菜品、活动计划和历史快照。</span></div>
+                <div class="layer"><strong>Storage Adapter</strong><span>v0.1 先接 Mock；未来本地或远端实现必须保持同一契约。</span></div>
+              </div>
+              <div class="dependency-note"><strong>依赖规则：</strong> UI → 应用门面 → 领域服务 → Repository 接口；具体适配器从外部注入。生成失败不得留下半份已保存菜单。</div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view-panel" id="generation" data-view="generation" tabindex="0" aria-labelledby="generation-title">
+          <header class="panel-head">
+            <div class="panel-number">02</div>
+            <div><h2 id="generation-title">生成链路</h2><p>完整成功路径从小程序端穿过应用门面、生成器、规则引擎，到 Repository / 存储。</p></div>
+            <span class="panel-state">动态流程 · Mock 边界</span>
+          </header>
+          <div class="panel-body">
+            <div class="pipeline" aria-label="生成链路组件顺序">
+              <div class="pipeline-step"><b>小程序端</b><span>提交 weekStart 与规则偏好</span></div>
+              <div class="pipeline-step"><b>应用门面</b><span>校验、编排、错误映射</span></div>
+              <div class="pipeline-step"><b>PlanGenerator</b><span>构造 10 餐草稿候选</span></div>
+              <div class="pipeline-step"><b>RuleEngine</b><span>硬约束 / 软提醒分离</span></div>
+              <div class="pipeline-step"><b>Repository / 存储</b><span>保存活动计划；历史快照原子写入</span></div>
+            </div>
+
+            <section aria-labelledby="trace-title">
+              <h3 class="section-title" id="trace-title">一次生成到确认保存</h3>
+              <div class="trace" role="list" aria-label="生成与保存调用轨迹">
+                <div class="trace-row" role="listitem"><span class="seq">01</span><div class="trace-cell call">generatePlan(input)</div><div class="trace-cell call">校验 weekStart / commandId</div><div class="trace-cell"></div><div class="trace-cell"></div></div>
+                <div class="trace-row" role="listitem"><span class="seq">02</span><div class="trace-cell"></div><div class="trace-cell call">listConfirmed() + findRecent()</div><div class="trace-cell"></div><div class="trace-cell"></div></div>
+                <div class="trace-row" role="listitem"><span class="seq">03</span><div class="trace-cell"></div><div class="trace-cell"></div><div class="trace-cell call">为 10 餐 × 5 餐位组装候选</div><div class="trace-cell"></div></div>
+                <div class="trace-row" role="listitem"><span class="seq">04</span><div class="trace-cell"></div><div class="trace-cell"></div><div class="trace-cell call">evaluate(candidate, rules)</div><div class="trace-cell return">RuleEvaluation</div></div>
+                <div class="trace-row" role="listitem"><span class="seq">05</span><div class="trace-cell return">显示 EDITING；允许换菜 / 手选</div><div class="trace-cell return">插入 WeekPlan v1</div><div class="trace-cell"></div><div class="trace-cell return">按 expectedVersion 写入</div></div>
+                <div class="trace-row" role="listitem"><span class="seq">06</span><div class="trace-cell call">confirmPlan(expectedVersion)</div><div class="trace-cell call">重验后置为 CONFIRMED</div><div class="trace-cell"></div><div class="trace-cell"></div></div>
+                <div class="trace-row" role="listitem"><span class="seq">07</span><div class="trace-cell call">savePlan(expectedVersion)</div><div class="trace-cell return">显示 SAVED + SavedPlan</div><div class="trace-cell"></div><div class="trace-cell return">原子保存活动计划与快照</div></div>
+              </div>
+            </section>
+
+            <section class="failure-grid" aria-label="生成与保存失败分支">
+              <div class="failure"><strong>菜品不足</strong><span>INSUFFICIENT_CONFIRMED_DISHES：返回类别需求 / 可用数量；不生成残缺餐。</span></div>
+              <div class="failure"><strong>硬规则冲突</strong><span>HARD_RULE_VIOLATION：返回结构化 RuleViolation；原计划保持不变。</span></div>
+              <div class="failure"><strong>存储失败</strong><span>STORAGE_FAILURE：保留当前 EDITING / CONFIRMED 状态；同一 commandId 可重试。</span></div>
+              <div class="failure"><strong>版本冲突</strong><span>VERSION_CONFLICT：拒绝覆盖并重新读取当前版本；不做静默合并。</span></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view-panel" id="contracts" data-view="contracts" tabindex="0" aria-labelledby="contracts-title">
+          <header class="panel-head">
+            <div class="panel-number">03</div>
+            <div><h2 id="contracts-title">数据与接口</h2><p>领域对象表达业务不变量；应用接口只暴露用例结果与可处理错误。</p></div>
+            <span class="panel-state">契约草案 · 待实现验证</span>
+          </header>
+          <div class="panel-body contract-layout">
+            <section aria-labelledby="domain-title">
+              <h3 class="section-title" id="domain-title">领域对象关系</h3>
+              <div class="domain-map" aria-label="WeekPlan、Meal、DishSelection 和 Dish 的关系">
+                <div class="domain-node"><h3>WeekPlan</h3><code>id, weekStart</code><code>EDITING | CONFIRMED | SAVED</code><code>version, meals[10]</code></div>
+                <div class="relation">1 包含<span>→</span>10</div>
+                <div class="domain-node"><h3>Meal</h3><code>id, date, slot</code><code>dishes[5]</code><code>slot: LUNCH | DINNER</code></div>
+                <div class="relation">1 包含<span>→</span>5</div>
+                <div class="domain-node"><h3>DishSelection → Dish</h3><code>position, expectedKind</code><code>dish: DishSnapshot</code><code>MEAT | VEGETABLE | SOUP</code></div>
+              </div>
+              <div class="object-footer">
+                <div><strong>Dish</strong><br />id · name · kind · mainIngredientKeys[] · status</div>
+                <div><strong>RuleEvaluation</strong><br />hardViolations[] · softViolations[] · isHardValid</div>
+                <div><strong>SavedPlan</strong><br />不可变历史快照 · sourcePlanVersion · savedAt</div>
+              </div>
+              <h3 class="section-title">关键不变量</h3>
+              <ol class="invariants">
+                <li>weekStart 为周一；只包含周一至周五。</li>
+                <li>date + slot 唯一，恰好 10 个 Meal。</li>
+                <li>每餐恰好 2 荤、2 素、1 汤。</li>
+                <li>DishSelection 只能引用 CONFIRMED Dish，kind 与位置匹配。</li>
+                <li>换菜只替换目标 mealId + position；其他 49 位不变。</li>
+                <li>所有成功写命令 version +1；过期 expectedVersion 拒绝覆盖。</li>
+              </ol>
+            </section>
+
+            <section aria-labelledby="interfaces-title">
+              <h3 class="section-title" id="interfaces-title">应用接口签名</h3>
+              <ul class="signature-list">
+                <li><code>generatePlan(input: GeneratePlanInput): Promise&lt;AppResult&lt;PlanMutationResult&gt;&gt;</code><span>生成并插入 EDITING / version 1 活动计划。</span></li>
+                <li><code>swapDish(input: SwapDishInput): Promise&lt;AppResult&lt;PlanMutationResult&gt;&gt;</code><span>自动选择同类有效候选，只改变目标位置。</span></li>
+                <li><code>selectDish(input: SelectDishInput): Promise&lt;AppResult&lt;PlanMutationResult&gt;&gt;</code><span>手选候选；与换一道共享替换和整周校验。</span></li>
+                <li><code>confirmPlan(input: ConfirmPlanInput): Promise&lt;AppResult&lt;PlanMutationResult&gt;&gt;</code><span>EDITING → CONFIRMED；完整重验后进入只读总览。</span></li>
+                <li><code>savePlan(input: SavePlanInput): Promise&lt;AppResult&lt;SavePlanOutput&gt;&gt;</code><span>原子地产生 SAVED WeekPlan 与不可变 SavedPlan。</span></li>
+                <li><code>copyPlan(input: CopyPlanInput): Promise&lt;AppResult&lt;PlanMutationResult&gt;&gt;</code><span>从历史快照创建新 ID、version 1 的 EDITING 计划。</span></li>
+                <li><code>DishCatalogPort.listConfirmed(): Promise&lt;CatalogSnapshot&gt;</code><span>本次命令使用稳定 catalogVersion 的已确认菜品。</span></li>
+              </ul>
+              <div class="adapter-boundary"><strong>Mock 边界：</strong>草稿只约定 InMemory / Fixture Repository；是否使用本地缓存、云数据库或 HTTP API 均待验证。真实适配器不得把存储字段泄漏到领域对象。</div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view-panel" id="acceptance" data-view="acceptance" tabindex="0" aria-labelledby="acceptance-title">
+          <header class="panel-head">
+            <div class="panel-number">04</div>
+            <div><h2 id="acceptance-title">异常与验收</h2><p>失败先保护用户草稿和一致性；所有测试状态默认“待运行”。</p></div>
+            <span class="panel-state">证据清单 · 尚未跑数</span>
+          </header>
+          <div class="panel-body acceptance-layout">
+            <section aria-labelledby="recovery-title">
+              <h3 class="section-title risk" id="recovery-title">异常恢复约定</h3>
+              <table class="recovery-table">
+                <thead><tr><th style="width:18%">错误</th><th style="width:27%">系统保证</th><th style="width:31%">用户恢复</th><th>验收观察点</th></tr></thead>
+                <tbody>
+                  <tr><td>菜品不足</td><td>不返回残缺 WeekPlan</td><td>指出缺少类别，补菜或调整规则后重试</td><td>10 餐 × 5 位仍为硬门槛</td></tr>
+                  <tr><td>规则冲突</td><td>硬冲突不降级为软提醒</td><td>展示可行动的 violation，而非通用失败</td><td>错误包含 ruleId / path / reason</td></tr>
+                  <tr><td>存储失败</td><td>EDITING / CONFIRMED 保留；SAVED 不提前出现</td><td>同一 commandId 重试，避免重复记录</td><td>失败前后持久化快照一致</td></tr>
+                  <tr><td>版本冲突</td><td>expectedVersion 不符即拒绝覆盖</td><td>刷新当前版本；人工重做变化项</td><td>旧版本写入返回 VersionConflict</td></tr>
+                </tbody>
+              </table>
+            </section>
+
+            <section aria-labelledby="matrix-title">
+              <h3 class="section-title" id="matrix-title">最小测试矩阵</h3>
+              <table class="test-table">
+                <thead><tr><th style="width:14%">用例</th><th>领域单测</th><th>应用 / Repository</th><th>页面验收</th><th style="width:12%">状态</th></tr></thead>
+                <tbody>
+                  <tr><td>生成</td><td>10 餐、每餐 2/2/1；硬软规则分离</td><td>读确认菜品与近期历史；不写存储</td><td>一次生成并显示 warning</td><td class="status-pending">待运行</td></tr>
+                  <tr><td>换菜</td><td>仅目标餐位改变；类别保持</td><td>候选排除当前 / 禁用菜品</td><td>其余 49 位 DOM 文本不变</td><td class="status-pending">待运行</td></tr>
+                  <tr><td>保存</td><td>CONFIRMED → SAVED + SavedPlan</td><td>原子写入；version +1；可幂等重试</td><td>失败不出现成功态</td><td class="status-pending">待运行</td></tr>
+                  <tr><td>复制</td><td>新 id / 周起始日 / EDITING</td><td>源 SavedPlan 只读；目标周重复受控</td><td>复制后进入同一调整流</td><td class="status-pending">待运行</td></tr>
+                  <tr><td>异常</td><td>四类错误映射稳定</td><td>失败前后快照一致</td><td>错误可理解、可重试、焦点可达</td><td class="status-pending">待运行</td></tr>
+                </tbody>
+              </table>
+            </section>
+
+            <section class="evidence-layout" aria-label="证据与未知项">
+              <div><h3 class="section-title">证据位置（建议，待产出）</h3><ul><li><code>tests/domain/</code>：不变量、生成与换菜断言</li><li><code>tests/application/</code>：错误映射、幂等与版本冲突</li><li><code>tests/adapters/</code>：Repository 契约套件</li><li><code>artifacts/acceptance/</code>：截图、运行日志、失败快照</li></ul></div>
+              <div class="unknowns"><h3 class="section-title risk">未知项 / 下一步决策</h3><ul><li>真实存储介质、离线策略和 commandId 生命周期</li><li>菜品不足时的数据补充与运营处理机制</li><li>多端版本冲突的产品恢复体验</li><li>性能预算、约束满足率与样本规模：均待跑数</li></ul></div>
+            </section>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <div class="canvas-hint">拖动画布 · 滚轮缩放 · Alt+1–4 定位 · Enter 聚焦</div>
+    <div class="zoom-tools" role="group" aria-label="画布缩放">
+      <button type="button" data-zoom="out" aria-label="缩小画布">缩小</button>
+      <span class="zoom-status" id="zoomStatus" aria-live="polite">100%</span>
+      <button type="button" data-zoom="in" aria-label="放大画布">放大</button>
+      <button type="button" data-zoom="fit" aria-label="适配全部画布">全局</button>
+    </div>
+    <p class="sr-only" id="keyboardHelp">使用工具栏按钮或 Alt 加 1 到 4 定位四个视图。视图获得键盘焦点时会自动进入可读缩放。</p>
+
+    <script>
+      (() => {
+        const viewport = document.querySelector("#viewport");
+        const board = document.querySelector("#board");
+        const status = document.querySelector("#zoomStatus");
+        const tabs = [...document.querySelectorAll("[data-focus]")];
+        const panels = [...document.querySelectorAll(".view-panel")];
+        const state = { x:0, y:0, scale:1, dragging:false, moved:false, px:0, py:0 };
+        const clamp = (value,min,max) => Math.min(max,Math.max(min,value));
+        const regionFor = panel => ({ x:panel.offsetLeft, y:panel.offsetTop, width:panel.offsetWidth, height:panel.offsetHeight });
+        const regions = Object.fromEntries(panels.map(panel => [panel.dataset.view,regionFor(panel)]));
+        const allRegion = { x:0, y:0, width:2360, height:1270 };
+
+        const render = () => {
+          board.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+          status.textContent = `${Math.round(state.scale*100)}%`;
+        };
+
+        const focusRect = (region,name="") => {
+          const topInset = window.innerWidth < 940 ? 76 : 96;
+          const bottomInset = 64;
+          const sideInset = window.innerWidth < 620 ? 12 : 26;
+          const availableWidth = viewport.clientWidth-sideInset*2;
+          const availableHeight = viewport.clientHeight-topInset-bottomInset;
+          state.scale = clamp(Math.min(availableWidth/region.width,availableHeight/region.height),.28,1.12);
+          state.x = sideInset+(availableWidth-region.width*state.scale)/2-region.x*state.scale;
+          state.y = topInset+(availableHeight-region.height*state.scale)/2-region.y*state.scale;
+          panels.forEach(panel => panel.classList.toggle("is-focused",panel.dataset.view===name));
+          tabs.forEach(tab => tab.setAttribute("aria-pressed",String(tab.dataset.focus===name)));
+          board.classList.toggle("view-focused",Boolean(name));
+          render();
+        };
+
+        const focusView = (name,moveFocus=false) => {
+          const panel = document.querySelector(`[data-view="${name}"]`);
+          if (!panel) return;
+          focusRect(regions[name],name);
+          if (moveFocus) panel.focus({ preventScroll:true });
+        };
+
+        const zoomAt = (nextScale,clientX=viewport.clientWidth/2,clientY=viewport.clientHeight/2) => {
+          const oldScale = state.scale;
+          state.scale = clamp(nextScale,.28,1.4);
+          state.x = clientX-((clientX-state.x)/oldScale)*state.scale;
+          state.y = clientY-((clientY-state.y)/oldScale)*state.scale;
+          tabs.forEach(tab => tab.setAttribute("aria-pressed","false"));
+          panels.forEach(panel => panel.classList.remove("is-focused"));
+          board.classList.add("view-focused");
+          render();
+        };
+
+        tabs.forEach((tab,index) => {
+          tab.addEventListener("click",() => focusView(tab.dataset.focus,true));
+          tab.addEventListener("keydown",event => {
+            if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
+            event.preventDefault();
+            const next = event.key==='Home' ? 0 : event.key==='End' ? tabs.length-1 : (index+(event.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+            tabs[next].focus();
+          });
+        });
+
+        panels.forEach(panel => {
+          panel.addEventListener("focus",() => focusView(panel.dataset.view));
+          panel.addEventListener("click",() => { if (!state.moved) focusView(panel.dataset.view); });
+          panel.addEventListener("keydown",event => {
+            if (event.key==='Enter' || event.key===' ') { event.preventDefault(); focusView(panel.dataset.view); }
+          });
+        });
+
+        viewport.addEventListener("pointerdown",event => {
+          if (event.target.closest("a,button")) return;
+          state.dragging=true; state.moved=false; state.px=event.clientX; state.py=event.clientY;
+          viewport.classList.add("is-dragging"); viewport.setPointerCapture(event.pointerId);
+        });
+        viewport.addEventListener("pointermove",event => {
+          if (!state.dragging) return;
+          const dx=event.clientX-state.px, dy=event.clientY-state.py;
+          if (Math.abs(dx)+Math.abs(dy)>2) state.moved=true;
+          state.x+=dx; state.y+=dy; state.px=event.clientX; state.py=event.clientY; render();
+        });
+        const endDrag = event => {
+          state.dragging=false; viewport.classList.remove("is-dragging");
+          if (event && viewport.hasPointerCapture(event.pointerId)) viewport.releasePointerCapture(event.pointerId);
+          window.setTimeout(() => { state.moved=false; },0);
+        };
+        viewport.addEventListener("pointerup",endDrag);
+        viewport.addEventListener("pointercancel",endDrag);
+        viewport.addEventListener("wheel",event => {
+          event.preventDefault(); zoomAt(state.scale*(event.deltaY>0?.9:1.1),event.clientX,event.clientY);
+        },{ passive:false });
+
+        document.querySelector("[data-zoom='out']").addEventListener("click",() => zoomAt(state.scale-.1));
+        document.querySelector("[data-zoom='in']").addEventListener("click",() => zoomAt(state.scale+.1));
+        document.querySelector("[data-zoom='fit']").addEventListener("click",() => focusRect(allRegion));
+        document.addEventListener("keydown",event => {
+          if (event.altKey && /^[1-4]$/.test(event.key)) { event.preventDefault(); focusView(tabs[Number(event.key)-1].dataset.focus,true); }
+          if (event.key==='Escape') focusRect(allRegion);
+        });
+        window.addEventListener("resize",() => {
+          const active = tabs.find(tab => tab.getAttribute("aria-pressed")==='true');
+          active ? focusView(active.dataset.focus) : focusRect(allRegion);
+        });
+
+        focusView("overview");
+      })();
+    </script>
+  </body>
+</html>
