@@ -9,7 +9,6 @@ export default defineConfig({
       input: {
         index: resolve(import.meta.dirname, "index.html"),
         "page-map": resolve(import.meta.dirname, "page-map.html"),
-        "engineering-model": resolve(import.meta.dirname, "engineering-model.html"),
       },
     },
   },

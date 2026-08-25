@@ -22,4 +22,6 @@ npm-debug.log*
 dist/
 build/
 .cache/
+.vite/
+_site/
 小金毛辩论赛摆摊/*.zip

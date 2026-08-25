@@ -3,123 +3,1505 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="排好菜手机页面地图：排菜单、菜品库、历史与我的四条任务流。" />
+    <meta name="description" content="排好菜手机页面地图：四条端到端客户旅程与补充功能验证。" />
     <title>排好菜 · 手机页面地图</title>
     <style>
       :root {
         color-scheme: light;
-        --ink:#1e1b16; --muted:#655d55; --line:#e1d9cd; --canvas:#ddd8d0; --paper:#fff9ef; --phone:#fbf8f1;
-        --red:#b64131; --red-dark:#8f2d22; --red-soft:#fbe9e4; --gold:#edae32; --gold-soft:#fff2d5;
-        --green:#287557; --green-dark:#1e5d45; --green-soft:#e7f3ec; --blue:#557b91; --blue-soft:#e8f0f3;
-        font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; font-synthesis:none; text-rendering:optimizeLegibility;
+        --ink: #1e1b16;
+        --muted: #655d55;
+        --line: #e1d9cd;
+        --canvas: #ddd8d0;
+        --paper: #fff9ef;
+        --phone: #fbf8f1;
+        --red: #b64131;
+        --red-dark: #8f2d22;
+        --red-soft: #fbe9e4;
+        --gold: #edae32;
+        --gold-soft: #fff2d5;
+        --green: #287557;
+        --green-dark: #1e5d45;
+        --green-soft: #e7f3ec;
+        --blue: #557b91;
+        --blue-soft: #e8f0f3;
+        font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-synthesis: none;
+        text-rendering: optimizeLegibility;
       }
-      *{box-sizing:border-box} html,body{width:100%;height:100%;margin:0;overflow:hidden} body{min-width:320px;color:var(--ink);background:var(--canvas);-webkit-font-smoothing:antialiased}
-      button,input,a{color:inherit;font:inherit} button:not(:disabled),a{cursor:pointer} button:focus-visible,input:focus-visible,a:focus-visible,.phone-node:focus-visible{outline:4px solid rgba(40,117,87,.42);outline-offset:5px}
-      .workspace-toolbar{position:fixed;z-index:70;top:0;left:0;width:100%;height:68px;padding:0 24px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;border-bottom:1px solid rgba(45,39,32,.12);background:rgba(255,252,246,.96);box-shadow:0 8px 30px rgba(49,40,31,.06);backdrop-filter:blur(18px)}
-      .workspace-toolbar a{color:inherit;text-decoration:none}.workspace-back,.workspace-customer{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;white-space:nowrap}.workspace-back{justify-self:start}.workspace-customer{justify-self:end;min-height:38px;padding:0 14px;border-radius:11px;color:white!important;background:var(--ink)}
-      .workspace-nav{display:flex;padding:4px;border:1px solid #ded6ca;border-radius:12px;background:#f1ece4}.workspace-nav a,.workspace-nav span{min-height:34px;padding:0 14px;display:grid;place-items:center;border-radius:8px;color:var(--muted);font-size:12px;font-weight:800;white-space:nowrap}.workspace-nav .active{color:var(--green-dark);background:white;box-shadow:0 3px 10px rgba(47,39,31,.09)}
-      .local-toolbar{position:fixed;z-index:60;top:80px;left:50%;width:min(1280px,calc(100% - 24px));min-height:56px;padding:8px 12px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;border:1px solid rgba(255,255,255,.9);border-radius:16px;background:rgba(255,253,249,.96);box-shadow:0 12px 30px rgba(54,40,30,.11);transform:translateX(-50%);backdrop-filter:blur(18px)}
-      .local-label{display:grid;line-height:1.1}.local-label strong{font-size:13px;font-weight:950}.local-label small{margin-top:3px;color:var(--muted);font-size:9px;font-weight:750}
-      .view-tabs{height:40px;padding:3px;display:flex;flex:0 0 auto;gap:2px;border:1px solid var(--line);border-radius:10px;background:#f2eee8}.view-tab{height:32px;min-height:32px;padding:0 12px;border:0;border-radius:7px;color:var(--muted);background:transparent;font-size:11px;font-weight:850;white-space:nowrap}.view-tab[aria-pressed="true"]{color:var(--green-dark);background:var(--green-soft);box-shadow:inset 0 0 0 1px rgba(40,117,87,.18)}
-      .local-state{justify-self:end;padding:7px 9px;border-radius:9px;color:var(--green-dark);background:var(--green-soft);font-size:9px;font-weight:900;white-space:nowrap}
-      .viewport{position:fixed;inset:0;overflow:hidden;cursor:grab;touch-action:none;background:var(--canvas)}.viewport.is-dragging{cursor:grabbing;user-select:none}.board{position:absolute;top:0;left:0;width:5090px;height:2470px;overflow:hidden;transform-origin:0 0;border:1px solid #cec3b6;border-radius:36px;background:var(--paper);box-shadow:0 30px 90px rgba(56,40,29,.17);will-change:transform}
-      .board-intro{position:absolute;top:40px;left:58px}.board-intro span{color:var(--green-dark);font-size:11px;font-weight:950;letter-spacing:.1em;text-transform:uppercase}.board-intro h1{margin:8px 0 0;font-size:42px;line-height:1;letter-spacing:-.045em}.legend{position:absolute;top:70px;right:58px;display:flex;gap:8px}.legend span{padding:7px 10px;border-radius:999px;color:var(--green-dark);background:var(--green-soft);font-size:9px;font-weight:900}.legend .planned{color:var(--red-dark);background:var(--red-soft)}
-      .board[data-view="schedule"] .board-intro,.board[data-view="schedule"] .legend,.board[data-view="library"] .board-intro,.board[data-view="library"] .legend,.board[data-view="history"] .board-intro,.board[data-view="history"] .legend,.board[data-view="profile"] .board-intro,.board[data-view="profile"] .legend{display:none}.board[data-view="schedule"] .lane:not(.schedule),.board[data-view="library"] .lane:not(.library),.board[data-view="history"] .lane:not(.history),.board[data-view="profile"] .lane:not(.profile){visibility:hidden}
-      .lane{position:absolute;width:2444px;height:1120px;padding:20px 24px 26px;border:1px solid var(--line);border-radius:28px;background:rgba(255,255,255,.82);box-shadow:0 18px 46px rgba(55,43,33,.09)}.lane.schedule{top:150px;left:48px;--accent:var(--red);--accent-dark:var(--red-dark);--accent-soft:var(--red-soft)}.lane.library{top:150px;left:2598px;--accent:var(--green);--accent-dark:var(--green-dark);--accent-soft:var(--green-soft)}.lane.history{top:1300px;left:48px;--accent:#a16c10;--accent-dark:#765313;--accent-soft:var(--gold-soft)}.lane.profile{top:1300px;left:2598px;--accent:var(--blue);--accent-dark:#385d70;--accent-soft:var(--blue-soft)}
-      .lane-head{height:74px;display:flex;align-items:flex-start;justify-content:space-between;gap:28px}.lane-title{display:flex;gap:14px;align-items:flex-start}.lane-number{display:grid;width:38px;height:38px;place-items:center;border-radius:12px;color:var(--accent-dark);background:var(--accent-soft);font-size:11px;font-weight:950}.lane-title h2{margin:0;font-size:29px;line-height:1;letter-spacing:-.035em}.lane-title p{margin:6px 0 0;color:var(--muted);font-size:11px;line-height:1.45}.lane-state{flex:0 0 auto;padding:7px 10px;border-radius:999px;color:var(--accent-dark);background:var(--accent-soft);font-size:9px;font-weight:900}
-      .phone-flow{display:grid;align-items:start}.phone-flow.four{grid-template-columns:511px 112px 511px 112px 511px 112px 511px}.phone-flow.three{grid-template-columns:511px 152px 511px 152px 511px;justify-content:center}.connector{height:1020px;display:grid;place-content:center;justify-items:center;color:var(--accent-dark)}.connector b{font-size:36px;line-height:1}.connector small{margin-top:8px;max-width:110px;font-size:9px;font-weight:900;line-height:1.35;text-align:center}.handoff{position:absolute;z-index:2;right:24px;bottom:16px;padding:7px 10px;border:1px solid rgba(40,117,87,.2);border-radius:999px;color:var(--green-dark);background:#f5fbf7;font-size:9px;font-weight:900}
-      .phone-node{position:relative;width:511px;min-height:1020px;border-radius:44px;transition:opacity .16s ease,filter .16s ease}.phone-node.planned::before{content:"";position:absolute;z-index:0;inset:43px 14px 7px;border:3px dashed rgba(182,65,49,.48);border-radius:60px;pointer-events:none}.board.phone-focused .phone-node:not(.is-focused){opacity:.16;filter:saturate(.35)}.phone-node.is-focused{z-index:8}.node-label{height:52px;padding:0 12px 9px;display:flex;align-items:flex-end;justify-content:space-between;gap:12px}.node-label small,.node-label strong{display:block}.node-label small{color:var(--accent-dark);font-size:9px;font-weight:950;letter-spacing:.06em;text-transform:uppercase}.node-label strong{margin-top:3px;overflow:hidden;font-size:15px;text-overflow:ellipsis;white-space:nowrap}.node-label>span{flex:0 0 auto;padding:5px 7px;border-radius:7px;color:var(--accent-dark);background:var(--accent-soft);font-size:8px;font-weight:900}.phone-node.planned .node-label>span{color:var(--red-dark);background:var(--red-soft)}
-      .device-frame{position:relative;z-index:1;width:511px;height:968px;filter:drop-shadow(0 24px 26px rgba(34,28,23,.18))}.phone-bezel{position:absolute;z-index:4;inset:0;width:511px;height:968px;pointer-events:none;user-select:none}.phone-screen{position:absolute;z-index:2;left:59px;top:58px;width:393px;height:852px;overflow:hidden;border-radius:42px;background:var(--phone)}.status-bar{height:54px;padding:0 31px;display:flex;align-items:center;justify-content:space-between;background:white;font-size:14px;font-weight:750}.status-bar img{width:79px;height:13px}.app-bar{height:56px;padding:0 15px;display:grid;grid-template-columns:58px 1fr 58px;align-items:center;border-bottom:1px solid rgba(30,27,22,.07);background:white}.app-bar strong{text-align:center;font-size:17px}.back-button{min-height:34px;padding:0;border:0;color:var(--green-dark);background:transparent;font-size:11px;font-weight:850;text-align:left}.app-state{justify-self:end;padding:5px 7px;border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:8px;font-weight:850}.mobile-content{position:absolute;inset:110px 0 72px;padding:15px;overflow-y:auto;background:var(--phone);scrollbar-width:none}.mobile-content::-webkit-scrollbar,.day-grid-scroll::-webkit-scrollbar{display:none}
-      .bottom-navigation{position:absolute;z-index:12;left:0;right:0;bottom:0;height:72px;padding:8px 12px 10px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;border-top:1px solid #ded8cf;background:rgba(255,255,255,.98)}.bottom-navigation button{border:0;border-radius:10px;color:#8a857e;background:transparent;font-size:10px;font-weight:800}.bottom-navigation button.active{color:var(--green-dark);background:var(--green-soft)}
-      .week-toolbar{display:grid;grid-template-columns:42px 1fr 42px;gap:8px;align-items:center}.week-toolbar button{display:grid;height:40px;place-items:center;border:1px solid var(--line);border-radius:11px;background:white;font-size:10px;font-weight:850}.week-toolbar div{text-align:center}.week-toolbar strong,.week-toolbar small{display:block}.week-toolbar strong{font-size:15px}.week-toolbar small{margin-top:3px;color:var(--muted);font-size:9px}
-      .plan-state,.notice{margin-top:11px;padding:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:13px;color:var(--green-dark);background:var(--green-soft)}.plan-state strong,.plan-state small{display:block}.plan-state small{font-size:9px}.plan-state strong{margin-top:3px;font-size:13px}.plan-state span{padding:5px 8px;border-radius:999px;background:white;font-size:9px;font-weight:850}
-      .card{margin-top:11px;padding:15px;border:1px solid var(--line);border-radius:17px;background:white;box-shadow:0 8px 22px rgba(52,41,31,.06)}.card>small{color:var(--red-dark);font-size:9px;font-weight:900}.card h2{margin:7px 0 5px;font-size:21px}.card p{margin:0;color:var(--muted);font-size:10px;line-height:1.55}.metrics{display:flex;gap:7px;margin-top:12px}.metrics span{padding:6px 9px;border-radius:8px;color:#765313;background:var(--gold-soft);font-size:9px;font-weight:850}.mobile-content .primary{width:100%;min-height:49px;margin-top:13px;border:0;border-radius:13px;color:white;background:var(--red);font-size:13px;font-weight:900;box-shadow:0 9px 20px rgba(182,65,49,.18)}.mobile-content .primary.green{background:var(--green-dark);box-shadow:0 9px 20px rgba(30,93,69,.18)}.mobile-content .primary:active{transform:translateY(1px)}.mini-note{margin-top:10px;padding:11px;border-radius:12px;color:#765313;background:var(--gold-soft);font-size:9px;line-height:1.5}
-      .menu-board{padding:10px;border:1px solid var(--line);border-radius:14px;background:white}.menu-board header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:8px;border-bottom:1px solid #eee6da}.menu-board header strong,.menu-board header small{display:block}.menu-board header strong{font-size:14px}.menu-board header small{margin-top:2px;color:var(--muted);font-size:8px}.segments{display:flex;gap:3px;padding:3px;border-radius:9px;background:#f1ece4}.segments button,.filter-row button{min-height:29px;padding:0 9px;border:0;border-radius:7px;color:var(--muted);background:transparent;font-size:9px;font-weight:850}.segments button.active,.filter-row button.active{color:white;background:var(--green-dark)}
-      .day-grid-scroll{margin-top:8px;overflow-x:auto;scrollbar-width:none}.day-grid{width:max-content;display:grid;grid-template-columns:28px repeat(5,112px);gap:5px}.day-grid span,.day-grid button{min-height:39px;padding:3px;display:grid;place-items:center;border:1px solid var(--line);border-radius:7px;color:var(--ink);background:white;font-size:9px;font-weight:800;text-align:center}.day-grid .head{min-height:28px;border:0;background:transparent;font-size:10px}.day-grid .meal{color:var(--muted);background:#f5f0e8;writing-mode:vertical-rl}.day-grid button.active{border-color:var(--green-dark);background:#eef7f2;box-shadow:0 0 0 1px var(--green-dark)}.replace-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.replace-actions button{min-height:42px;border:1px solid var(--line);border-radius:11px;background:white;font-size:10px;font-weight:900}.replace-actions button:first-child{border-color:var(--red);color:white;background:var(--red)}.replace-actions button:last-child{color:var(--green-dark)}
-      .selection-card{margin-top:10px;padding:11px;display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;border:1px solid #d4dfd8;border-left:3px solid var(--green-dark);border-radius:11px;background:white}.selection-card small,.selection-card strong{display:block}.selection-card small{color:var(--green-dark);font-size:8px;font-weight:850}.selection-card strong{margin-top:3px;font-size:13px}.selection-card button{min-height:34px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:#f4efe7;font-size:9px;font-weight:900}
-      .candidate-list,.dish-list,.meal-list,.history-list{display:grid;gap:8px;margin-top:11px}.candidate-button,.dish-row,.history-week{width:100%;min-height:68px;padding:10px 11px;display:grid;grid-template-columns:26px 1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:13px;color:var(--ink);background:white;text-align:left}.candidate-button.selected{border-color:var(--green);background:#f5fbf7;box-shadow:0 0 0 1px var(--green)}.radio{display:grid;width:24px;height:24px;place-items:center;border:1px solid #d8d0c4;border-radius:50%;color:white;background:white;font-size:0}.selected .radio{border-color:var(--green);background:var(--green)}.selected .radio::after{content:"✓";font-size:12px;font-weight:900}.candidate-button strong,.candidate-button small,.dish-row strong,.dish-row small,.history-week strong,.history-week small{display:block}.candidate-button strong,.dish-row strong,.history-week strong{font-size:12px}.candidate-button small,.dish-row small,.history-week small{margin-top:4px;color:var(--muted);font-size:8px;line-height:1.35}.candidate-button>b,.dish-row>b{color:var(--green-dark);font-size:9px}
-      .hero{padding:15px;border-radius:17px;color:white;background:var(--green-dark)}.hero.red{background:var(--red-dark)}.hero small,.hero strong{display:block}.hero small{font-size:9px;opacity:.78}.hero strong{margin-top:4px;font-size:22px}.hero p{margin:5px 0 0;font-size:9px;line-height:1.5;opacity:.82}.meal-row{padding:10px 11px;border:1px solid var(--line);border-radius:11px;background:white}.meal-row header{display:flex;align-items:center;justify-content:space-between}.meal-row header strong{color:var(--green-dark);font-size:12px}.meal-row header span{color:var(--muted);font-size:9px}.meal-row p{margin:5px 0 0;color:var(--muted);font-size:9px;line-height:1.45}
-      .search-field{min-height:42px;margin-top:10px;padding:0 12px;display:flex;align-items:center;border:1px solid var(--line);border-radius:11px;background:white}.search-field input{width:100%;border:0;outline:0;background:transparent;font-size:10px}.filter-row{display:flex;gap:5px;margin-top:8px}.filter-row button{border:1px solid var(--line);border-radius:999px;background:white}.dish-row{grid-template-columns:9px 1fr auto;min-height:60px}.dish-kind{width:7px;height:30px;border-radius:999px;background:#d88374}.dish-kind.veg{background:#70a98b}.dish-kind.soup{background:#7fa7cf}
-      .detail-title{padding:19px 15px;border-radius:17px;color:white;background:var(--green-dark)}.detail-title small,.detail-title strong{display:block}.detail-title small{font-size:9px;opacity:.78}.detail-title strong{margin-top:5px;font-size:25px}.fact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}.fact-grid div{padding:10px 5px;border-radius:10px;background:white;text-align:center}.fact-grid b,.fact-grid span{display:block}.fact-grid b{font-size:12px}.fact-grid span{margin-top:3px;color:var(--muted);font-size:8px}
-      .planned-banner{padding:12px;border:1px dashed rgba(182,65,49,.55);border-radius:13px;color:var(--red-dark);background:var(--red-soft);font-size:9px;font-weight:900}.form-row{margin-top:9px;padding:11px;border:1px solid var(--line);border-radius:12px;background:white}.form-row>header{display:flex;align-items:center;justify-content:space-between}.form-row header strong{font-size:11px}.form-row header small{color:var(--muted);font-size:8px}.choice-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.choice-row button{min-height:32px;padding:0 10px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:white;font-size:9px;font-weight:850}.choice-row button.active{border-color:var(--blue);color:white;background:var(--blue)}
-      .rule-list{margin-top:10px;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:white}.rule-row{min-height:52px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #eee6da}.rule-row:last-child{border-bottom:0}.rule-row span{color:var(--muted);font-size:9px}.rule-row strong{max-width:230px;font-size:10px;text-align:right}.success-card{margin-top:20px;padding:22px 18px;border-radius:18px;color:var(--green-dark);background:var(--green-soft);text-align:center}.success-card small,.success-card strong{display:block}.success-card small{font-size:9px;font-weight:900}.success-card strong{margin-top:7px;font-size:22px}.success-card p{margin:7px 0 0;font-size:10px;line-height:1.55}
-      .history-week{grid-template-columns:1fr auto}.history-week>b{color:var(--green-dark);font-size:9px}.history-preview{display:none;margin-top:7px;padding:9px 10px;border-radius:10px;color:var(--green-dark);background:var(--green-soft);font-size:9px;line-height:1.45}.history-preview.open{display:block}.copy-dialog{margin-top:68px;padding:20px;border-radius:18px;background:white;box-shadow:0 18px 45px rgba(30,27,22,.18);text-align:center}.copy-dialog small{color:#765313;font-size:9px;font-weight:900}.copy-dialog h2{margin:8px 0 6px;font-size:20px}.copy-dialog p{margin:0;color:var(--muted);font-size:10px;line-height:1.55}.dialog-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}.dialog-actions button{min-height:42px;border:1px solid var(--line);border-radius:11px;background:white;font-size:10px;font-weight:850}.dialog-actions button:last-child{border-color:var(--green-dark);color:white;background:var(--green-dark)}
-      .canvas-hint{position:fixed;z-index:40;bottom:17px;left:17px;padding:9px 12px;border:1px solid rgba(255,255,255,.82);border-radius:11px;color:var(--muted);background:rgba(255,253,249,.94);font-size:10px;font-weight:750;box-shadow:0 10px 26px rgba(54,40,30,.1)}.zoom-tools{position:fixed;z-index:40;right:17px;bottom:17px;padding:6px;display:flex;align-items:center;gap:4px;border:1px solid rgba(255,255,255,.84);border-radius:13px;background:rgba(255,253,249,.95);box-shadow:0 10px 26px rgba(54,40,30,.12)}.zoom-tools button{min-width:46px;height:34px;padding:0 9px;border:0;border-radius:8px;background:transparent;font-size:10px;font-weight:900}.zoom-tools button:hover{background:#f1ece5}.zoom-status{min-width:44px;color:var(--muted);font-size:10px;font-weight:850;text-align:center}
-      @media(max-width:780px){.workspace-toolbar{height:auto;min-height:108px;padding:10px 13px;grid-template-columns:1fr auto;gap:8px}.workspace-nav{grid-row:2;grid-column:1/-1;justify-self:center}.workspace-customer{grid-column:2;grid-row:1}.local-toolbar{top:120px;width:calc(100% - 16px);min-height:52px;padding:6px 8px}.local-label small,.local-state{display:none}.view-tab{padding-inline:9px}.canvas-hint{display:none}}@media(max-width:420px){.workspace-nav a,.workspace-nav span{padding-inline:9px;font-size:10px}.workspace-customer{padding-inline:10px;font-size:10px}.local-toolbar{grid-template-columns:0 auto 0}.local-label{overflow:hidden}.view-tab{padding-inline:7px;font-size:10px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+      * { box-sizing: border-box; }
+      html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+      body { min-width: 320px; color: var(--ink); background: var(--canvas); -webkit-font-smoothing: antialiased; }
+      button, input, a { color: inherit; font: inherit; }
+      button:not(:disabled), a { cursor: pointer; }
+      button:focus-visible, input:focus-visible, a:focus-visible, .phone-node:focus-visible {
+        outline: 4px solid rgba(40, 117, 87, .42);
+        outline-offset: 5px;
+      }
+
+      .workspace-toolbar {
+        position: fixed;
+        z-index: 70;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 68px;
+        padding: 0 24px;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        border-bottom: 1px solid rgba(45, 39, 32, .12);
+        background: rgba(255, 252, 246, .96);
+        box-shadow: 0 8px 30px rgba(49, 40, 31, .06);
+        backdrop-filter: blur(18px);
+      }
+
+      .workspace-toolbar a { color: inherit; text-decoration: none; }
+      .workspace-back, .workspace-customer {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .workspace-back { justify-self: start; }
+      .workspace-customer {
+        justify-self: end;
+        min-height: 38px;
+        padding: 0 14px;
+        border-radius: 11px;
+        color: white !important;
+        background: var(--ink);
+      }
+
+      .workspace-nav {
+        display: flex;
+        padding: 4px;
+        border: 1px solid #ded6ca;
+        border-radius: 12px;
+        background: #f1ece4;
+      }
+      .workspace-nav a, .workspace-nav span {
+        min-height: 34px;
+        padding: 0 14px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .workspace-nav .active {
+        color: var(--green-dark);
+        background: white;
+        box-shadow: 0 3px 10px rgba(47, 39, 31, .09);
+      }
+
+      .local-toolbar {
+        position: fixed;
+        z-index: 60;
+        top: 80px;
+        left: 50%;
+        width: min(1320px, calc(100% - 24px));
+        min-height: 56px;
+        padding: 8px 12px;
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid rgba(255, 255, 255, .9);
+        border-radius: 16px;
+        background: rgba(255, 253, 249, .96);
+        box-shadow: 0 12px 30px rgba(54, 40, 30, .11);
+        transform: translateX(-50%);
+        backdrop-filter: blur(18px);
+      }
+      .local-label { display: grid; line-height: 1.1; }
+      .local-label strong { font-size: 13px; font-weight: 950; }
+      .local-label small { margin-top: 3px; color: var(--muted); font-size: 9px; font-weight: 750; }
+      .view-tabs {
+        height: 40px;
+        padding: 3px;
+        display: flex;
+        flex: 0 0 auto;
+        gap: 2px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #f2eee8;
+      }
+      .view-tab {
+        height: 32px;
+        min-height: 32px;
+        padding: 0 12px;
+        border: 0;
+        border-radius: 7px;
+        color: var(--muted);
+        background: transparent;
+        font-size: 11px;
+        font-weight: 850;
+        white-space: nowrap;
+      }
+      .view-tab[aria-pressed="true"] {
+        color: var(--green-dark);
+        background: var(--green-soft);
+        box-shadow: inset 0 0 0 1px rgba(40, 117, 87, .18);
+      }
+      .local-state {
+        justify-self: end;
+        padding: 7px 9px;
+        border-radius: 9px;
+        color: var(--green-dark);
+        background: var(--green-soft);
+        font-size: 9px;
+        font-weight: 900;
+        white-space: nowrap;
+      }
+
+      .viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        cursor: grab;
+        touch-action: none;
+        background: var(--canvas);
+      }
+      .viewport.is-dragging { cursor: grabbing; user-select: none; }
+      .board {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5200px;
+        height: 5920px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        border: 1px solid #cec3b6;
+        border-radius: 36px;
+        background: var(--paper);
+        box-shadow: 0 30px 90px rgba(56, 40, 29, .17);
+        will-change: transform;
+      }
+      .board-intro { position: absolute; top: 40px; left: 58px; }
+      .board-intro span {
+        color: var(--green-dark);
+        font-size: 11px;
+        font-weight: 950;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+      .board-intro h1 { margin: 8px 0 0; font-size: 42px; line-height: 1; letter-spacing: -.045em; }
+      .legend { position: absolute; top: 70px; right: 58px; display: flex; gap: 8px; }
+      .legend span {
+        padding: 7px 10px;
+        border-radius: 999px;
+        color: var(--green-dark);
+        background: var(--green-soft);
+        font-size: 9px;
+        font-weight: 900;
+      }
+      .legend .planned { color: var(--red-dark); background: var(--red-soft); }
+      .legend .supplementary { color: #765313; background: var(--gold-soft); }
+      .board.is-filtered .board-intro, .board.is-filtered .legend { display: none; }
+      .board.is-filtered .lane:not(.is-active) { visibility: hidden; }
+
+      .lane {
+        position: absolute;
+        top: var(--lane-y);
+        left: 48px;
+        width: 5104px;
+        height: 1120px;
+        padding: 20px 24px 26px;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, .82);
+        box-shadow: 0 18px 46px rgba(55, 43, 33, .09);
+      }
+      .lane.onboarding { --accent: var(--green); --accent-dark: var(--green-dark); --accent-soft: var(--green-soft); }
+      .lane.weekly { --accent: var(--red); --accent-dark: var(--red-dark); --accent-soft: var(--red-soft); }
+      .lane.reuse { --accent: #a16c10; --accent-dark: #765313; --accent-soft: var(--gold-soft); }
+      .lane.rules { --accent: var(--blue); --accent-dark: #385d70; --accent-soft: var(--blue-soft); }
+      .lane.support { --accent: #6f7775; --accent-dark: #46504d; --accent-soft: #edf0ee; }
+      .lane-head {
+        height: 74px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 28px;
+      }
+      .lane-title { display: flex; gap: 14px; align-items: flex-start; }
+      .lane-number {
+        display: grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        border-radius: 12px;
+        color: var(--accent-dark);
+        background: var(--accent-soft);
+        font-size: 11px;
+        font-weight: 950;
+      }
+      .lane-title h2 { margin: 0; font-size: 29px; line-height: 1; letter-spacing: -.035em; }
+      .lane-title p { margin: 6px 0 0; color: var(--muted); font-size: 11px; line-height: 1.45; }
+      .lane-state {
+        flex: 0 0 auto;
+        padding: 7px 10px;
+        border-radius: 999px;
+        color: var(--accent-dark);
+        background: var(--accent-soft);
+        font-size: 9px;
+        font-weight: 900;
+      }
+      .phone-flow { display: flex; align-items: start; justify-content: flex-start; }
+      .connector {
+        flex: 0 0 100px;
+        width: 100px;
+        height: 1020px;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        color: var(--accent-dark);
+      }
+      .connector b { font-size: 36px; line-height: 1; }
+      .connector small {
+        margin-top: 8px;
+        max-width: 96px;
+        font-size: 9px;
+        font-weight: 900;
+        line-height: 1.35;
+        text-align: center;
+      }
+      .journey-result {
+        position: absolute;
+        right: 24px;
+        bottom: 16px;
+        padding: 7px 10px;
+        border: 1px solid color-mix(in srgb, var(--accent) 24%, transparent);
+        border-radius: 999px;
+        color: var(--accent-dark);
+        background: var(--accent-soft);
+        font-size: 9px;
+        font-weight: 900;
+      }
+
+      .phone-node {
+        position: relative;
+        width: 511px;
+        min-height: 1020px;
+        border-radius: 44px;
+        transition: opacity .16s ease, filter .16s ease;
+      }
+      .phone-node.planned::before {
+        content: "";
+        position: absolute;
+        z-index: 0;
+        inset: 43px 14px 7px;
+        border: 3px dashed rgba(182, 65, 49, .48);
+        border-radius: 60px;
+        pointer-events: none;
+      }
+      .board.phone-focused .phone-node:not(.is-focused) { opacity: .16; filter: saturate(.35); }
+      .phone-node.is-focused { z-index: 8; }
+      .node-label {
+        height: 52px;
+        padding: 0 12px 9px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .node-label small, .node-label strong { display: block; }
+      .node-label small {
+        color: var(--accent-dark);
+        font-size: 9px;
+        font-weight: 950;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+      }
+      .node-label strong {
+        margin-top: 3px;
+        overflow: hidden;
+        font-size: 15px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .node-label > span {
+        flex: 0 0 auto;
+        padding: 5px 7px;
+        border-radius: 7px;
+        color: var(--accent-dark);
+        background: var(--accent-soft);
+        font-size: 8px;
+        font-weight: 900;
+      }
+      .phone-node.planned .node-label > span { color: var(--red-dark); background: var(--red-soft); }
+
+      .device-frame {
+        position: relative;
+        z-index: 1;
+        width: 511px;
+        height: 968px;
+        filter: drop-shadow(0 24px 26px rgba(34, 28, 23, .18));
+      }
+      .phone-bezel {
+        position: absolute;
+        z-index: 4;
+        inset: 0;
+        width: 511px;
+        height: 968px;
+        pointer-events: none;
+        user-select: none;
+      }
+      .phone-screen {
+        position: absolute;
+        z-index: 2;
+        left: 59px;
+        top: 58px;
+        width: 393px;
+        height: 852px;
+        overflow: hidden;
+        border-radius: 42px;
+        background: var(--phone);
+      }
+      .status-bar {
+        height: 54px;
+        padding: 0 31px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: white;
+        font-size: 14px;
+        font-weight: 750;
+      }
+      .status-bar img { width: 79px; height: 13px; }
+      .app-bar {
+        height: 56px;
+        padding: 0 15px;
+        display: grid;
+        grid-template-columns: 58px 1fr 58px;
+        align-items: center;
+        border-bottom: 1px solid rgba(30, 27, 22, .07);
+        background: white;
+      }
+      .app-bar strong { text-align: center; font-size: 17px; }
+      .back-button {
+        min-height: 34px;
+        padding: 0;
+        border: 0;
+        color: var(--green-dark);
+        background: transparent;
+        font-size: 11px;
+        font-weight: 850;
+        text-align: left;
+      }
+      .app-state {
+        justify-self: end;
+        padding: 5px 7px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+        font-size: 8px;
+        font-weight: 850;
+      }
+      .mobile-content {
+        position: absolute;
+        inset: 110px 0 72px;
+        padding: 15px;
+        overflow-y: auto;
+        background: var(--phone);
+        scrollbar-width: none;
+      }
+      .phone-node.no-nav .mobile-content { inset-bottom: 20px; }
+      .mobile-content::-webkit-scrollbar, .day-grid-scroll::-webkit-scrollbar { display: none; }
+      .bottom-navigation {
+        position: absolute;
+        z-index: 12;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 72px;
+        padding: 8px 12px 10px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 4px;
+        border-top: 1px solid #ded8cf;
+        background: rgba(255, 255, 255, .98);
+      }
+      .bottom-navigation button, .bottom-navigation [data-static-control] {
+        display: grid;
+        place-items: center;
+        border: 0;
+        border-radius: 10px;
+        color: #8a857e;
+        background: transparent;
+        font-size: 10px;
+        font-weight: 800;
+      }
+      .bottom-navigation button.active, .bottom-navigation [data-static-control].active { color: var(--green-dark); background: var(--green-soft); }
+
+      .week-toolbar {
+        display: grid;
+        grid-template-columns: 42px 1fr 42px;
+        gap: 8px;
+        align-items: center;
+      }
+      .week-toolbar button, .week-toolbar [data-static-control] {
+        display: grid;
+        height: 40px;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: white;
+        font-size: 10px;
+        font-weight: 850;
+      }
+      .week-toolbar div { text-align: center; }
+      .week-toolbar strong, .week-toolbar small { display: block; }
+      .week-toolbar strong { font-size: 15px; }
+      .week-toolbar small { margin-top: 3px; color: var(--muted); font-size: 9px; }
+      .plan-state, .notice {
+        margin-top: 11px;
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        border-radius: 13px;
+        color: var(--green-dark);
+        background: var(--green-soft);
+      }
+      .plan-state strong, .plan-state small { display: block; }
+      .plan-state small { font-size: 9px; }
+      .plan-state strong { margin-top: 3px; font-size: 13px; }
+      .plan-state span { padding: 5px 8px; border-radius: 999px; background: white; font-size: 9px; font-weight: 850; }
+      .card {
+        margin-top: 11px;
+        padding: 15px;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        background: white;
+        box-shadow: 0 8px 22px rgba(52, 41, 31, .06);
+      }
+      .card > small { color: var(--red-dark); font-size: 9px; font-weight: 900; }
+      .card h2 { margin: 7px 0 5px; font-size: 21px; }
+      .card p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+      .metrics { display: flex; gap: 7px; margin-top: 12px; }
+      .metrics span {
+        padding: 6px 9px;
+        border-radius: 8px;
+        color: #765313;
+        background: var(--gold-soft);
+        font-size: 9px;
+        font-weight: 850;
+      }
+      .mobile-content .primary {
+        width: 100%;
+        min-height: 49px;
+        margin-top: 13px;
+        border: 0;
+        border-radius: 13px;
+        color: white;
+        background: var(--red);
+        font-size: 13px;
+        font-weight: 900;
+        box-shadow: 0 9px 20px rgba(182, 65, 49, .18);
+      }
+      .mobile-content .primary.green {
+        background: var(--green-dark);
+        box-shadow: 0 9px 20px rgba(30, 93, 69, .18);
+      }
+      .mobile-content .primary:active { transform: translateY(1px); }
+      .mini-note {
+        margin-top: 10px;
+        padding: 11px;
+        border-radius: 12px;
+        color: #765313;
+        background: var(--gold-soft);
+        font-size: 9px;
+        line-height: 1.5;
+      }
+
+      .menu-board { padding: 10px; border: 1px solid var(--line); border-radius: 14px; background: white; }
+      .menu-board header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #eee6da;
+      }
+      .menu-board header strong, .menu-board header small { display: block; }
+      .menu-board header strong { font-size: 14px; }
+      .menu-board header small { margin-top: 2px; color: var(--muted); font-size: 8px; }
+      .filter-row button, .filter-row [data-static-control] {
+        min-height: 29px;
+        padding: 0 9px;
+        display: grid;
+        place-items: center;
+        border: 0;
+        border-radius: 7px;
+        color: var(--muted);
+        background: transparent;
+        font-size: 9px;
+        font-weight: 850;
+      }
+      .filter-row button.active, .filter-row [data-static-control].active { color: white; background: var(--green-dark); }
+      .view-caption { color: var(--green-dark) !important; font-size: 9px !important; font-weight: 850; }
+      .day-grid-scroll { margin-top: 8px; overflow-x: auto; scrollbar-width: none; }
+      .day-grid {
+        width: max-content;
+        display: grid;
+        grid-template-columns: 28px repeat(5, 112px);
+        gap: 5px;
+      }
+      .day-grid span, .day-grid .dish-cell {
+        min-height: 39px;
+        padding: 3px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        color: var(--ink);
+        background: white;
+        font-size: 9px;
+        font-weight: 800;
+        text-align: center;
+      }
+      .day-grid .head { min-height: 28px; border: 0; background: transparent; font-size: 10px; }
+      .day-grid .meal { color: var(--muted); background: #f5f0e8; writing-mode: vertical-rl; }
+      .replace-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+      .replace-actions button, .replace-actions span, .replace-actions [data-static-control] {
+        min-height: 42px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: white;
+        font-size: 10px;
+        font-weight: 900;
+      }
+      .replace-actions > :first-child { border-color: var(--red); color: white; background: var(--red); }
+      .replace-actions button:last-child, .replace-actions [data-static-control]:last-child { color: var(--green-dark); }
+      .selection-card {
+        margin-top: 10px;
+        padding: 11px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        align-items: center;
+        border: 1px solid #d4dfd8;
+        border-left: 3px solid var(--green-dark);
+        border-radius: 11px;
+        background: white;
+      }
+      .selection-card small, .selection-card strong { display: block; }
+      .selection-card small { color: var(--green-dark); font-size: 8px; font-weight: 850; }
+      .selection-card strong { margin-top: 3px; font-size: 13px; }
+      .selection-card button, .selection-card [data-static-control] {
+        display: grid;
+        place-items: center;
+        min-height: 34px;
+        padding: 0 10px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: #f4efe7;
+        font-size: 9px;
+        font-weight: 900;
+      }
+
+      .candidate-list, .dish-list, .meal-list, .history-list { display: grid; gap: 8px; margin-top: 11px; }
+      .candidate-button, .dish-row, .history-week {
+        width: 100%;
+        min-height: 68px;
+        padding: 10px 11px;
+        display: grid;
+        grid-template-columns: 26px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        color: var(--ink);
+        background: white;
+        text-align: left;
+      }
+      .candidate-button.selected {
+        border-color: var(--green);
+        background: #f5fbf7;
+        box-shadow: 0 0 0 1px var(--green);
+      }
+      .radio {
+        display: grid;
+        width: 24px;
+        height: 24px;
+        place-items: center;
+        border: 1px solid #d8d0c4;
+        border-radius: 50%;
+        color: white;
+        background: white;
+        font-size: 0;
+      }
+      .selected .radio { border-color: var(--green); background: var(--green); }
+      .selected .radio::after { content: "✓"; font-size: 12px; font-weight: 900; }
+      .candidate-button strong, .candidate-button small, .dish-row strong, .dish-row small, .history-week strong, .history-week small { display: block; }
+      .candidate-button strong, .dish-row strong, .history-week strong { font-size: 12px; }
+      .candidate-button small, .dish-row small, .history-week small {
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 8px;
+        line-height: 1.35;
+      }
+      .candidate-button > b, .dish-row > b { color: var(--green-dark); font-size: 9px; }
+      .hero { padding: 15px; border-radius: 17px; color: white; background: var(--green-dark); }
+      .hero.red { background: var(--red-dark); }
+      .hero small, .hero strong { display: block; }
+      .hero small { font-size: 9px; opacity: .78; }
+      .hero strong { margin-top: 4px; font-size: 22px; }
+      .hero p { margin: 5px 0 0; font-size: 9px; line-height: 1.5; opacity: .82; }
+      .meal-row { padding: 10px 11px; border: 1px solid var(--line); border-radius: 11px; background: white; }
+      .meal-row header { display: flex; align-items: center; justify-content: space-between; }
+      .meal-row header strong { color: var(--green-dark); font-size: 12px; }
+      .meal-row header span { color: var(--muted); font-size: 9px; }
+      .meal-row p { margin: 5px 0 0; color: var(--muted); font-size: 9px; line-height: 1.45; }
+
+      .search-field {
+        min-height: 42px;
+        margin-top: 10px;
+        padding: 0 12px;
+        display: flex;
+        align-items: center;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: white;
+      }
+      .search-field input, .search-field .static-phone-field { width: 100%; border: 0; outline: 0; color: var(--muted); background: transparent; font-size: 10px; }
+      .filter-row { display: flex; gap: 5px; margin-top: 8px; }
+      .filter-row button, .filter-row [data-static-control] { border: 1px solid var(--line); border-radius: 999px; background: white; }
+      .dish-row { grid-template-columns: 9px 1fr auto; min-height: 60px; }
+      .dish-kind { width: 7px; height: 30px; border-radius: 999px; background: #d88374; }
+      .dish-kind.veg { background: #70a98b; }
+      .dish-kind.soup { background: #7fa7cf; }
+      .detail-title { padding: 19px 15px; border-radius: 17px; color: white; background: var(--green-dark); }
+      .detail-title small, .detail-title strong { display: block; }
+      .detail-title small { font-size: 9px; opacity: .78; }
+      .detail-title strong { margin-top: 5px; font-size: 25px; }
+      .fact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 10px; }
+      .fact-grid div { padding: 10px 5px; border-radius: 10px; background: white; text-align: center; }
+      .fact-grid b, .fact-grid span { display: block; }
+      .fact-grid b { font-size: 12px; }
+      .fact-grid span { margin-top: 3px; color: var(--muted); font-size: 8px; }
+
+      .planned-banner {
+        padding: 12px;
+        border: 1px dashed rgba(182, 65, 49, .55);
+        border-radius: 13px;
+        color: var(--red-dark);
+        background: var(--red-soft);
+        font-size: 9px;
+        font-weight: 900;
+      }
+      .form-row { margin-top: 9px; padding: 11px; border: 1px solid var(--line); border-radius: 12px; background: white; }
+      .form-row > header { display: flex; align-items: center; justify-content: space-between; }
+      .form-row header strong { font-size: 11px; }
+      .form-row header small { color: var(--muted); font-size: 8px; }
+      .choice-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+      .choice-row button, .choice-row .choice-pill, .choice-row [data-static-control] {
+        min-height: 32px;
+        padding: 0 10px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+        background: white;
+        font-size: 9px;
+        font-weight: 850;
+      }
+      .choice-row button.active, .choice-row .choice-pill.active, .choice-row [data-static-control].active { border-color: var(--accent, var(--green-dark)); color: white; background: var(--accent, var(--green-dark)); }
+      .static-people-options { margin-top: 8px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)) 50px; gap: 4px; }
+      .static-people-options span { min-width: 0; min-height: 36px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 9px; color: var(--muted); background: white; font-size: 8px; font-weight: 850; white-space: nowrap; }
+      .static-people-options span.active { border-color: var(--accent, var(--green-dark)); color: white; background: var(--accent, var(--green-dark)); }
+      .static-weekdays { margin-top: 9px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+      .static-weekdays span { min-width: 0; min-height: 38px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 9px; color: var(--muted); background: white; font-size: 9px; font-weight: 850; }
+      .static-weekdays span.active { border-color: var(--accent, var(--green-dark)); color: white; background: var(--accent, var(--green-dark)); }
+      .static-range-note { margin-top: 8px; color: var(--muted); font-size: 8px; line-height: 1.45; }
+      .static-dish-card { margin-top: 9px; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: white; }
+      .static-dish-card img { width: 100%; height: 128px; display: block; object-fit: cover; }
+      .static-dish-card div { padding: 9px 10px 10px; }
+      .static-dish-card small { color: var(--green-dark); font-size: 7px; font-weight: 850; }
+      .static-dish-card strong { margin-top: 3px; display: block; font-size: 13px; }
+      .static-dish-card p { margin: 3px 0 0; color: var(--muted); font-size: 8px; }
+      .static-dish-actions { margin-top: 7px; display: grid; grid-template-columns: 1fr 1.35fr; gap: 6px; }
+      .static-dish-actions span { min-height: 36px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 9px; color: var(--muted); background: white; font-size: 8px; font-weight: 850; }
+      .static-dish-actions span:last-child { border-color: var(--green-dark); color: white; background: var(--green-dark); }
+      .static-picker-complete { min-height: 42px; margin-top: 7px; padding: 7px 10px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #bad9cd; border-radius: 10px; color: var(--green-dark); background: var(--green-soft); }
+      .static-picker-complete strong, .static-picker-complete small { display: block; }
+      .static-picker-complete strong { font-size: 9px; }
+      .static-picker-complete small { margin-top: 2px; color: #477461; font-size: 7px; }
+      .static-picker-complete > b { font-size: 13px; }
+      .static-selected-row { margin-top: 9px; display: flex; gap: 5px; overflow: hidden; }
+      .static-selected-row span { width: 58px; flex: 0 0 auto; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; background: white; }
+      .static-selected-row img { width: 100%; height: 40px; display: block; object-fit: cover; }
+      .static-selected-row b { padding: 4px; display: block; overflow: hidden; font-size: 6px; text-overflow: ellipsis; white-space: nowrap; }
+      .rule-list { margin-top: 10px; overflow: hidden; border: 1px solid var(--line); border-radius: 14px; background: white; }
+      .rule-row {
+        min-height: 52px;
+        padding: 10px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        border-bottom: 1px solid #eee6da;
+      }
+      .rule-row:last-child { border-bottom: 0; }
+      .rule-row span { color: var(--muted); font-size: 9px; }
+      .rule-row strong { max-width: 230px; font-size: 10px; text-align: right; }
+      .success-card {
+        margin-top: 20px;
+        padding: 22px 18px;
+        border-radius: 18px;
+        color: var(--green-dark);
+        background: var(--green-soft);
+        text-align: center;
+      }
+      .success-card small, .success-card strong { display: block; }
+      .success-card small { font-size: 9px; font-weight: 900; }
+      .success-card strong { margin-top: 7px; font-size: 22px; }
+      .success-card p { margin: 7px 0 0; font-size: 10px; line-height: 1.55; }
+      .history-week { grid-template-columns: 1fr auto; }
+      .history-week > b { color: var(--green-dark); font-size: 9px; }
+      .history-preview {
+        display: none;
+        margin-top: 7px;
+        padding: 9px 10px;
+        border-radius: 10px;
+        color: var(--green-dark);
+        background: var(--green-soft);
+        font-size: 9px;
+        line-height: 1.45;
+      }
+      .history-preview.open { display: block; }
+      .copy-dialog {
+        margin-top: 68px;
+        padding: 20px;
+        border-radius: 18px;
+        background: white;
+        box-shadow: 0 18px 45px rgba(30, 27, 22, .18);
+        text-align: center;
+      }
+      .copy-dialog small { color: #765313; font-size: 9px; font-weight: 900; }
+      .copy-dialog h2 { margin: 8px 0 6px; font-size: 20px; }
+      .copy-dialog p { margin: 0; color: var(--muted); font-size: 10px; line-height: 1.55; }
+      .dialog-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 16px; }
+      .dialog-actions button, .dialog-actions [data-static-control] {
+        display: grid;
+        place-items: center;
+        min-height: 42px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: white;
+        font-size: 10px;
+        font-weight: 850;
+      }
+      .dialog-actions button:last-child, .dialog-actions [data-static-control]:last-child { border-color: var(--green-dark); color: white; background: var(--green-dark); }
+
+      .phone-node [data-static-control] { cursor: default; user-select: none; }
+      .mobile-content .primary[data-static-control] { display: grid; place-items: center; text-align: center; }
+      .back-button[data-static-control] { display: flex; align-items: center; }
+      .empty-state {
+        min-height: 360px;
+        display: grid;
+        place-content: center;
+        justify-items: center;
+        text-align: center;
+      }
+      .empty-state span {
+        display: grid;
+        width: 58px;
+        height: 58px;
+        place-items: center;
+        border-radius: 18px;
+        color: var(--red-dark);
+        background: var(--red-soft);
+        font-size: 24px;
+        font-weight: 900;
+      }
+      .empty-state h2 { margin: 15px 0 7px; font-size: 20px; }
+      .empty-state p { max-width: 260px; margin: 0; color: var(--muted); font-size: 10px; line-height: 1.6; }
+
+      .canvas-hint {
+        position: fixed;
+        z-index: 40;
+        bottom: 17px;
+        left: 17px;
+        padding: 9px 12px;
+        border: 1px solid rgba(255, 255, 255, .82);
+        border-radius: 11px;
+        color: var(--muted);
+        background: rgba(255, 253, 249, .94);
+        font-size: 10px;
+        font-weight: 750;
+        box-shadow: 0 10px 26px rgba(54, 40, 30, .1);
+      }
+      .zoom-tools {
+        position: fixed;
+        z-index: 40;
+        right: 17px;
+        bottom: 17px;
+        padding: 6px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        border: 1px solid rgba(255, 255, 255, .84);
+        border-radius: 13px;
+        background: rgba(255, 253, 249, .95);
+        box-shadow: 0 10px 26px rgba(54, 40, 30, .12);
+      }
+      .zoom-tools button {
+        min-width: 46px;
+        height: 34px;
+        padding: 0 9px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        font-size: 10px;
+        font-weight: 900;
+      }
+      .zoom-tools button:hover { background: #f1ece5; }
+      .zoom-status { min-width: 44px; color: var(--muted); font-size: 10px; font-weight: 850; text-align: center; }
+
+      @media (max-width: 900px) {
+        .local-toolbar { grid-template-columns: 1fr; }
+        .local-label, .local-state { display: none; }
+        .view-tabs { justify-self: center; }
+        .view-tab { padding-inline: 9px; }
+      }
+      @media (max-width: 780px) {
+        .workspace-toolbar {
+          height: auto;
+          min-height: 108px;
+          padding: 10px 13px;
+          grid-template-columns: 1fr auto;
+          gap: 8px;
+        }
+        .workspace-nav { grid-row: 2; grid-column: 1 / -1; justify-self: center; }
+        .workspace-customer { grid-column: 2; grid-row: 1; }
+        .local-toolbar { top: 120px; width: calc(100% - 16px); min-height: 52px; padding: 6px 8px; }
+        .canvas-hint { display: none; }
+      }
+      @media (max-width: 520px) {
+        .workspace-nav a, .workspace-nav span { padding-inline: 9px; font-size: 10px; }
+        .workspace-customer { padding-inline: 10px; font-size: 10px; }
+        .view-tab { padding-inline: 7px; font-size: 9px; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+      }
     </style>
   </head>
   <body>
     <header class="workspace-toolbar" aria-label="工程原型页面">
       <a class="workspace-back" href="../" aria-label="返回项目入口">← 项目入口</a>
-      <nav class="workspace-nav" aria-label="工程原型页面"><a href="./">运行原型</a><span class="active" aria-current="page">页面地图</span><a href="./engineering-model.html">实现说明</a></nav>
+      <nav class="workspace-nav" aria-label="工程原型页面">
+        <a href="./">运行原型</a>
+        <span class="active" aria-current="page">页面地图</span>
+      </nav>
       <a class="workspace-customer" href="../prototype-customer/?step=generate">客户原型 →</a>
     </header>
-    <header class="local-toolbar" aria-label="页面地图功能线">
-      <div class="local-label"><strong>功能线</strong><small>按一级入口查看</small></div>
-      <nav class="view-tabs" aria-label="聚焦功能线"><button class="view-tab" type="button" aria-pressed="true" data-focus="all">全部</button><button class="view-tab" type="button" aria-pressed="false" data-focus="schedule">排菜单</button><button class="view-tab" type="button" aria-pressed="false" data-focus="library">菜品库</button><button class="view-tab" type="button" aria-pressed="false" data-focus="history">历史</button><button class="view-tab" type="button" aria-pressed="false" data-focus="profile">我的</button></nav>
-      <span class="local-state">开发点击探索版</span>
-    </header>
-    <main class="viewport" id="viewport" aria-label="可拖动、缩放的手机页面流程图">
-      <div class="board" id="board"><section class="board-intro"><span>Paihaocai · Mobile page map</span><h1>四个入口，四条手机任务流。</h1></section><div class="legend"><span>工程目标</span><span class="planned">计划中</span></div><div id="lanes"></div></div>
-    </main>
-    <div class="canvas-hint">拖动画布 · 滚轮缩放 · 点击手机聚焦</div>
-    <div class="zoom-tools" aria-label="画布缩放"><button type="button" data-zoom="out">缩小</button><span class="zoom-status" id="zoomStatus">100%</span><button type="button" data-zoom="in">放大</button><button type="button" data-zoom="fit">适配</button></div>
-    <script>
-      (()=>{
-        const tabs=["schedule","library","history","profile"];
-        const labels={schedule:"排菜单",library:"菜品库",history:"历史",profile:"我的"};
-        const nav=(active)=>`<nav class="bottom-navigation" aria-label="小程序主导航">${tabs.map(tab=>`<button type="button" class="${tab===active?"active":""}" data-jump-lane="${tab}">${labels[tab]}</button>`).join("")}</nav>`;
-        const phone=(active,p)=>`<section class="phone-node ${p.planned?"planned":""}" tabindex="0" data-phone-id="${p.id}"><header class="node-label"><div><small>${p.code}</small><strong>${p.name}</strong></div><span>${p.planned?"计划中":"工程目标"}</span></header><div class="device-frame"><div class="phone-screen"><div class="status-bar"><strong>9:41</strong><img src="./assets/status/ios-status-icons.svg" alt=""></div><header class="app-bar">${p.back?'<button class="back-button" type="button">'+p.back+'</button>':"<span></span>"}<strong>${p.title}</strong><span class="app-state">${p.state}</span></header><div class="mobile-content">${p.content}</div>${nav(active)}</div><img class="phone-bezel" src="./assets/iphone/Bezel.png" alt=""></div></section>`;
-        const flow=(active,phones,arrows)=>phones.map((p,i)=>phone(active,p)+(i<arrows.length?`<div class="connector"><b>→</b><small>${arrows[i]}</small></div>`:"")).join("");
-        const meal=(title,date,text)=>`<article class="meal-row"><header><strong>${title}</strong><span>${date}</span></header><p>${text}</p></article>`;
-        const allMeals=[["周一","9/7","萝卜焖牛腩、白切鸡、蒜蓉菜心、清炒西兰花、冬瓜虾皮汤","梅菜扣肉、清蒸鲈鱼、荷塘小炒、手撕包菜、玉米排骨汤"],["周二","9/8","红烧排骨、番茄炒蛋、清炒油麦菜、香菇青菜、海带豆腐汤","红烧牛腩、冬菇蒸肉饼、蓜蓉时蔬、清炒芦笋、番茄蛋汤"],["周三","9/9","香菇滑鸡、萝卜炖肉、清炒菠菜、酸辣土豆丝、菌菇汤","糖醋排骨、芹菜炒肉、蚝油生菜、家常茄子、紫菜蛋花汤"],["周四","9/10","啤酒鸭、豆角炒肉、蓜蓉空心菜、清炒藕片、萝卜汤","清炖狮子头、豉汁蒸鱼、小炒杏鲍菇、上汤娃娃菜、丝瓜蛋汤"],["周五","9/11","板栗烧鸡、木须肉、清炒小白菜、麻婆豆腐、莲藕排骨汤","土豆焖鸭、红烧带鱼、蓜蓉西兰花、干煸四季豆、冬瓜肉丸汤"]].flatMap(([day,date,lunch,dinner])=>[meal(`${day} · 午饭`,date,lunch),meal(`${day} · 晚饭`,date,dinner)]).join("");
-        const candidates=(manual=false)=>`<div class="candidate-list" data-candidate-list><button class="candidate-button selected" type="button" aria-pressed="true"><span class="radio"></span><span><strong>${manual?"姜葱蒸鱼":"萝卜焖牛腩"}</strong><small>近期使用较少 · 主料不重复</small></span><b>已选</b></button><button class="candidate-button" type="button" aria-pressed="false"><span class="radio"></span><span><strong>豉汁排骨</strong><small>同类候选 · 可用菜品</small></span><b>可选</b></button><button class="candidate-button" type="button" aria-pressed="false"><span class="radio"></span><span><strong>香菇蒸鸡</strong><small>同类候选 · 可用菜品</small></span><b>可选</b></button></div>`;
-        const navButtons=`<div class="day-grid-scroll" aria-label="左右滑动查看周一至周五"><div class="day-grid" data-menu-grid><span class="head"></span><span class="head">周一</span><span class="head">周二</span><span class="head">周三</span><span class="head">周四</span><span class="head">周五</span><span class="meal">午饭</span><button class="active" type="button">土豆烧牛肉</button><button type="button">红烧排骨</button><button type="button">香菇滑鸡</button><button type="button">啤酒鸭</button><button type="button">板栗烧鸡</button><span class="meal">晚饭</span><button type="button">梅菜扣肉</button><button type="button">红烧牛腩</button><button type="button">糖醋排骨</button><button type="button">清炖狮子头</button><button type="button">土豆焖鸭</button></div></div>`;
-        const lanes=[
-          {key:"schedule",number:"01",goal:"从选周生成到确认保存，排好完整一周。",state:"工程目标",layout:"four",arrows:["生成 WeekPlan","选中当前 Dish","确认并保存"],phones:[
-            {id:"p01",code:"P01 · Start",name:"选周次并生成",title:"本周菜单",state:"演示",content:`<div class="week-toolbar" data-week-picker><button type="button" data-week-move="-1">上周</button><div><strong data-week-label>9月7日—9月11日</strong><small data-week-sub>本周 · 周一至周五</small></div><button type="button" data-week-move="1">下周</button></div><section class="plan-state" data-generate-state><div><small>本周还没有菜单</small><strong>10 餐待安排</strong></div><span>待生成</span></section><section class="card"><small>默认排菜规则</small><h2>五天十餐，一次排好</h2><p>每餐 2 荤 2 素 1 汤，只使用已确认菜品，同一主料尽量错开。</p><div class="metrics"><span>5 天</span><span>10 餐</span><span>50 道菜</span></div></section><div class="mini-note">菜品池已就绪，生成后可以逐道调整。</div><button class="primary" type="button" data-generate>生成本周菜单</button>`},
-            {id:"p02",code:"P02 · Review",name:"查看五天十餐",title:"修改菜单",state:"调整中",back:"返回",content:`<section class="menu-board"><header><div><strong>五天十餐菜单</strong><small>9月7日—11日</small></div><div class="segments" data-segments><button class="active" type="button" aria-pressed="true">荤菜</button><button type="button" aria-pressed="false">全部</button></div></header>${navButtons}</section><section class="selection-card"><div><small>周一午饭 · 荤菜</small><strong data-selected-dish>土豆烧牛肉</strong></div><button type="button">换这道</button></section><div class="mini-note">左右滑动继续查看周四、周五。</div><button class="primary" type="button">确认十餐菜单</button>`},
-            {id:"p03",code:"P03 · Replace",name:"换一道或自己选",title:"替换菜品",state:"调整中",back:"返回",content:`<section class="card" style="margin-top:0"><small>只换这一道</small><h2>土豆烧牛肉</h2><p>其他 49 道菜保持不变。</p></section><div class="replace-actions"><button type="button">自动换一道</button><button type="button" data-jump-lane="library">去菜品库手选</button></div>${candidates()}<button class="primary" type="button">保存这次替换</button>`},
-            {id:"p04",code:"P04 · Save",name:"确认并保存本周",title:"确认菜单",state:"待保存",back:"返回",content:`<section class="hero"><small>9月7日—11日</small><strong>五天十餐，准备保存</strong><p>共 50 道菜，已保留 1 条软规则提醒。</p></section><div class="meal-list">${allMeals}</div><button class="primary green" type="button" data-save-menu>保存本周菜单</button>`}
-          ]},
-          {key:"library",number:"02",goal:"搜索、了解并选中一道合适的菜。",state:"工程目标",layout:"four",handoff:"返回 Dish → 排菜单 P03",arrows:["查看 Dish 资料","选中同类 Dish","维护 DishCatalog"],phones:[
-            {id:"l01",code:"L01 · Browse",name:"搜索与分类筛选",title:"菜品库",state:"已确认",content:`<section class="hero"><small>已确认菜品池</small><strong>家常菜品库</strong><p>生成和换菜只会使用这个菜品池。</p></section><label class="search-field"><input data-dish-search placeholder="搜索菜名或主料"></label><div class="filter-row" data-library-filters><button class="active" type="button" data-kind="all">全部</button><button type="button" data-kind="meat">荤菜</button><button type="button" data-kind="veg">素菜</button><button type="button" data-kind="soup">汤羹</button></div><div class="dish-list" data-dish-list><button class="dish-row" type="button" data-kind="meat" data-dish-name="土豆烧牛肉 牛肉"><i class="dish-kind"></i><span><strong>土豆烧牛肉</strong><small>荤菜 · 主料牛肉</small></span><b>查看</b></button><button class="dish-row" type="button" data-kind="veg" data-dish-name="蒜蓉菜心 菜心"><i class="dish-kind veg"></i><span><strong>蒜蓉菜心</strong><small>素菜 · 主料菜心</small></span><b>查看</b></button><button class="dish-row" type="button" data-kind="soup" data-dish-name="冬瓜虾皮汤 冬瓜"><i class="dish-kind soup"></i><span><strong>冬瓜虾皮汤</strong><small>汤羹 · 主料冬瓜</small></span><b>查看</b></button></div>`},
-            {id:"l02",code:"L02 · Detail",name:"查看菜品详情",title:"菜品详情",state:"可用",back:"返回",content:`<section class="detail-title"><small>荤菜 · 主料牛肉</small><strong>土豆烧牛肉</strong></section><div class="fact-grid"><div><b>常用</b><span>使用频率</span></div><div><b>午饭</b><span>常用餐次</span></div><div><b>已确认</b><span>菜品状态</span></div></div><section class="card"><small>菜品备注</small><h2>牛肉软烂下饭</h2><p>生成时会与本周其他牛肉菜一起执行主料避重。</p></section><section class="rule-list"><div class="rule-row"><span>菜品分类</span><strong>荤菜</strong></div><div class="rule-row"><span>主料标签</span><strong>牛肉、土豆</strong></div><div class="rule-row"><span>菜品来源</span><strong>家庭常用菜</strong></div></section>`},
-            {id:"l03",code:"L03 · Pick",name:"手选一道菜",title:"手选替换菜",state:"荤菜",back:"取消",content:`<div class="notice"><strong>为“土豆烧牛肉”手选替换</strong></div>${candidates(true)}<button class="primary green" type="button">选中并返回菜单</button><div class="mini-note">选好后回到当前菜单，只替换这一道。</div>`},
-            {id:"l04",code:"L04 · Maintain",name:"新增、编辑与停用",title:"编辑菜品",state:"编辑",back:"取消",planned:true,content:`<section class="form-row" style="margin-top:0"><header><strong>菜品名称</strong><small>必填</small></header><div class="choice-row"><button class="active" type="button">土豆烧牛肉</button></div></section><section class="form-row"><header><strong>菜品类型</strong><small>单选</small></header><div class="choice-row" data-rule-options><button class="active" type="button" aria-pressed="true">荤菜</button><button type="button" aria-pressed="false">素菜</button><button type="button" aria-pressed="false">汤羹</button></div></section><section class="form-row"><header><strong>主料标签</strong><small>可多选</small></header><div class="choice-row"><button class="active" type="button">牛肉</button><button class="active" type="button">土豆</button><button type="button">添加标签</button></div></section><button class="primary green" type="button">保存菜品</button><button class="primary" type="button" style="margin-top:8px">停用这道菜</button>`}
-          ]},
-          {key:"history",number:"03",goal:"查看已保存菜单，需要复用时复制到下一周。",state:"工程目标",layout:"three",handoff:"复制为 WeekPlan draft → 排菜单 P02",arrows:["展开 SavedPlan","复制为 draft"],phones:[
-            {id:"h01",code:"H01 · List",name:"按周查看已保存菜单",title:"历史",state:"已保存",content:`<section class="hero red"><small>已保存菜单</small><strong>按周查看</strong><p>可展开查看完整菜单，也可复制到下一周。</p></section><div class="history-list"><button class="history-week" type="button" data-history-toggle><span><small>本周已保存</small><strong>9月7日—9月11日</strong><small>10 餐 · 50 道菜</small></span><b>展开</b></button><div class="history-preview">周一午饭：萝卜焖牛腩、白切鸡、蒜蓉菜心……</div><button class="history-week" type="button" data-history-toggle><span><small>上周已保存</small><strong>8月31日—9月4日</strong><small>10 餐 · 50 道菜</small></span><b>展开</b></button><div class="history-preview">周一午饭：红烧排骨、番茄炒蛋、清炒油麦菜……</div></div>`},
-            {id:"h02",code:"H02 · Detail",name:"查看完整十餐详情",title:"历史菜单详情",state:"只读",back:"返回",content:`<section class="plan-state"><div><small>9月7日—11日</small><strong>本周已保存</strong></div><span>只读</span></section><div class="meal-list">${allMeals}</div><button class="primary green" type="button">复制到下一周</button>`},
-            {id:"h03",code:"H03 · Copy",name:"确认复制到下周",title:"复制菜单",state:"下周",back:"取消",content:`<section class="copy-dialog"><small>整周复用</small><h2>复制整周菜单？</h2><p>9月7日—11日将复到9月14日—18日，然后生成一份可继续调整的菜单。</p><div class="dialog-actions"><button type="button">取消</button><button type="button" data-copy-confirm>确认复制</button></div></section><div class="mini-note">复制后会回到排菜单，可以再换掉几道菜。</div>`}
-          ]},
-          {key:"profile",number:"04",goal:"设置家庭人数、忌口和排菜偏好，供下次生成使用。",state:"计划中",layout:"three",handoff:"读取 HouseholdRule → 排菜单 P01",arrows:["调整 HouseholdRule","保存规则"],phones:[
-            {id:"m01",code:"M01 · Summary",name:"我的与家庭规则摘要",title:"我的",state:"家庭",planned:true,content:`<section class="hero"><small>家庭菜单工作台</small><strong>桃子家的排好菜</strong><p>默认规则会在每次生成菜单时自动应用。</p></section><section class="rule-list"><div class="rule-row"><span>家庭人数</span><strong>4 人</strong></div><div class="rule-row"><span>排菜周期</span><strong>周一至周五</strong></div><div class="rule-row"><span>餐次</span><strong>午饭和晚饭</strong></div><div class="rule-row"><span>每餐结构</span><strong>2 荤 2 素 1 汤</strong></div><div class="rule-row"><span>忌口</span><strong>不吃芹菜</strong></div><div class="rule-row"><span>避重规则</span><strong>近 5 天主料尽量不重复</strong></div></section>`},
-            {id:"m02",code:"M02 · Configure",name:"编辑人数、忌口与偏好",title:"家庭排菜规则",state:"编辑",back:"取消",planned:true,content:`<section class="form-row" style="margin-top:0"><header><strong>家庭人数</strong><small>单选</small></header><div class="choice-row" data-rule-options><button type="button" aria-pressed="false">2 人</button><button class="active" type="button" aria-pressed="true">4 人</button><button type="button" aria-pressed="false">6 人</button></div></section><section class="form-row"><header><strong>工作日餐次</strong><small>可多选</small></header><div class="choice-row" data-rule-options data-multiple><button class="active" type="button" aria-pressed="true">午饭</button><button class="active" type="button" aria-pressed="true">晚饭</button></div></section><section class="form-row"><header><strong>忌口</strong><small>可多选</small></header><div class="choice-row" data-rule-options data-multiple><button class="active" type="button" aria-pressed="true">芹菜</button><button type="button" aria-pressed="false">香菜</button><button type="button" aria-pressed="false">花生</button></div></section><section class="form-row"><header><strong>每餐结构</strong><small>当前</small></header><div class="choice-row"><button class="active" type="button">2 荤</button><button class="active" type="button">2 素</button><button class="active" type="button">1 汤</button></div></section><button class="primary green" type="button">保存家庭规则</button>`},
-            {id:"m03",code:"M03 · Apply",name:"保存并交给下次生成",title:"规则已保存",state:"已保存",back:"完成",planned:true,content:`<section class="success-card" style="margin-top:0"><small>家庭规则已更新</small><strong>下次生成自动应用</strong><p>新规则不会回头修改已保存的历史菜单。</p></section><section class="card"><small>下次排菜将使用</small><h2>4 人 · 五天十餐</h2><p>午饭和晚饭 · 2 荤 2 素 1 汤 · 不吃芹菜。</p></section><button class="primary green" type="button">回到我的</button>`}
-          ]}
-        ];
-        document.querySelector("#lanes").innerHTML=lanes.map(lane=>`<article class="lane ${lane.key}" data-lane="${lane.key}"><header class="lane-head"><div class="lane-title"><span class="lane-number">${lane.number}</span><div><h2>${labels[lane.key]}</h2><p>${lane.goal}</p></div></div><span class="lane-state">${lane.state}</span></header><div class="phone-flow ${lane.layout}">${flow(lane.key,lane.phones,lane.arrows)}</div>${lane.handoff?`<div class="handoff">${lane.handoff}</div>`:""}</article>`).join("");
 
-        const viewport=document.querySelector("#viewport"),board=document.querySelector("#board"),zoomStatus=document.querySelector("#zoomStatus"),viewTabs=[...document.querySelectorAll("[data-focus]")];
-        const state={x:0,y:0,scale:1,dragging:false,px:0,py:0};
-        const regions={all:{x:0,y:0,width:5090,height:2470},schedule:{x:35,y:130,width:2470,height:1160},library:{x:2585,y:130,width:2470,height:1160},history:{x:260,y:1280,width:2040,height:1160},profile:{x:2810,y:1280,width:2040,height:1160}};
-        const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
-        const render=()=>{board.style.transform=`translate(${state.x}px, ${state.y}px) scale(${state.scale})`;zoomStatus.textContent=`${Math.round(state.scale*100)}%`};
-        const setPressed=name=>viewTabs.forEach(tab=>tab.setAttribute("aria-pressed",String(tab.dataset.focus===name)));
-        const focusRect=(region,name="")=>{const top=window.innerWidth<780?186:148,side=window.innerWidth<700?22:50,aw=viewport.clientWidth-side*2,ah=viewport.clientHeight-top-54,fit=Math.min(aw/region.width,ah/region.height),min=name&&name!=="all"?(window.innerWidth<720?.34:.46):.1;board.classList.remove("phone-focused");document.querySelectorAll(".phone-node.is-focused").forEach(node=>node.classList.remove("is-focused"));state.scale=clamp(Math.max(fit,min),.1,1.15);state.x=(viewport.clientWidth-region.width*state.scale)/2-region.x*state.scale;state.y=top+(ah-region.height*state.scale)/2-region.y*state.scale;board.dataset.view=name||"all";setPressed(name);render()};
-        const focusPhone=el=>{const br=board.getBoundingClientRect(),r=el.getBoundingClientRect(),x=(r.left-br.left)/state.scale,y=(r.top-br.top)/state.scale,w=r.width/state.scale,h=r.height/state.scale,top=window.innerWidth<780?188:150,ah=viewport.clientHeight-top-34;state.scale=clamp(Math.max(Math.min((viewport.clientWidth-44)/w,ah/h,.92),.70),.70,.92);state.x=viewport.clientWidth/2-(x+w/2)*state.scale;state.y=top+(ah-h*state.scale)/2-y*state.scale;board.classList.add("phone-focused");document.querySelectorAll(".phone-node.is-focused").forEach(node=>node.classList.remove("is-focused"));el.classList.add("is-focused");board.dataset.view=el.closest(".lane").dataset.lane;setPressed("");render()};
-        const zoomAt=(next,cx=viewport.clientWidth/2,cy=viewport.clientHeight/2)=>{const old=state.scale;state.scale=clamp(next,.1,1.25);state.x=cx-((cx-state.x)/old)*state.scale;state.y=cy-((cy-state.y)/old)*state.scale;render()};
-        viewport.addEventListener("pointerdown",e=>{if(e.target.closest("a,button,input,.phone-node"))return;state.dragging=true;state.px=e.clientX;state.py=e.clientY;viewport.classList.add("is-dragging");viewport.setPointerCapture(e.pointerId)});viewport.addEventListener("pointermove",e=>{if(!state.dragging)return;state.x+=e.clientX-state.px;state.y+=e.clientY-state.py;state.px=e.clientX;state.py=e.clientY;render()});const endDrag=()=>{state.dragging=false;viewport.classList.remove("is-dragging")};viewport.addEventListener("pointerup",endDrag);viewport.addEventListener("pointercancel",endDrag);viewport.addEventListener("wheel",e=>{e.preventDefault();zoomAt(state.scale*(e.deltaY>0?.9:1.1),e.clientX,e.clientY)},{passive:false});
-        viewTabs.forEach(tab=>tab.addEventListener("click",()=>focusRect(regions[tab.dataset.focus],tab.dataset.focus)));document.querySelector("[data-zoom='out']").addEventListener("click",()=>zoomAt(state.scale-.1));document.querySelector("[data-zoom='in']").addEventListener("click",()=>zoomAt(state.scale+.1));document.querySelector("[data-zoom='fit']").addEventListener("click",()=>focusRect(regions.all,"all"));
-        document.querySelectorAll(".phone-node").forEach(el=>{el.addEventListener("click",e=>{if(!e.target.closest("button,input"))focusPhone(el)});el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();focusPhone(el)}})});document.querySelectorAll("[data-jump-lane]").forEach(button=>button.addEventListener("click",e=>{e.stopPropagation();const lane=button.dataset.jumpLane;focusRect(regions[lane],lane)}));
-        const weeks=[["8月31日—9月4日","上周 · 周一至周五"],["9月7日—9月11日","本周 · 周一至周五"],["9月14日—9月18日","下周 · 周一至周五"]];document.querySelectorAll("[data-week-picker]").forEach(picker=>{let i=1;picker.querySelectorAll("[data-week-move]").forEach(button=>button.addEventListener("click",()=>{i=clamp(i+Number(button.dataset.weekMove),0,2);picker.querySelector("[data-week-label]").textContent=weeks[i][0];picker.querySelector("[data-week-sub]").textContent=weeks[i][1]}))});
-        document.querySelectorAll("[data-generate]").forEach(button=>button.addEventListener("click",()=>{const plan=button.closest(".mobile-content").querySelector("[data-generate-state]");plan.querySelector("small").textContent="本周菜单已生成";plan.querySelector("strong").textContent="5 天 · 10 餐 · 50 道菜";plan.querySelector("span").textContent="调整中";button.textContent="查看并调整菜单"}));
-        document.querySelectorAll("[data-segments]").forEach(group=>group.querySelectorAll("button").forEach(button=>button.addEventListener("click",()=>group.querySelectorAll("button").forEach(item=>{item.classList.toggle("active",item===button);item.setAttribute("aria-pressed",String(item===button))}))));document.querySelectorAll("[data-menu-grid]").forEach(grid=>grid.querySelectorAll("button").forEach(button=>button.addEventListener("click",()=>{grid.querySelectorAll("button").forEach(item=>item.classList.toggle("active",item===button));grid.closest(".mobile-content").querySelector("[data-selected-dish]").textContent=button.textContent})));
-        document.querySelectorAll("[data-candidate-list]").forEach(list=>list.querySelectorAll(".candidate-button").forEach(button=>button.addEventListener("click",()=>list.querySelectorAll(".candidate-button").forEach(item=>{item.classList.toggle("selected",item===button);item.setAttribute("aria-pressed",String(item===button));item.querySelector("b").textContent=item===button?"已选":"可选"}))));
-        document.querySelectorAll("[data-library-filters]").forEach(filters=>{const content=filters.closest(".mobile-content"),search=content.querySelector("[data-dish-search]");let kind="all";const apply=()=>{const q=search.value.trim().toLowerCase();content.querySelectorAll("[data-dish-list] .dish-row").forEach(row=>row.hidden=(kind!=="all"&&row.dataset.kind!==kind)||!row.dataset.dishName.toLowerCase().includes(q))};filters.querySelectorAll("button").forEach(button=>button.addEventListener("click",()=>{kind=button.dataset.kind;filters.querySelectorAll("button").forEach(item=>item.classList.toggle("active",item===button));apply()}));search.addEventListener("input",apply)});
-        document.querySelectorAll("[data-history-toggle]").forEach(button=>button.addEventListener("click",()=>{const preview=button.nextElementSibling,open=preview.classList.toggle("open");button.querySelector("b").textContent=open?"收起":"展开"}));document.querySelectorAll("[data-rule-options]").forEach(group=>group.querySelectorAll("button").forEach(button=>button.addEventListener("click",()=>{if(group.hasAttribute("data-multiple")){button.classList.toggle("active");button.setAttribute("aria-pressed",String(button.classList.contains("active")))}else group.querySelectorAll("button").forEach(item=>{item.classList.toggle("active",item===button);item.setAttribute("aria-pressed",String(item===button))})})));
-        document.querySelectorAll("[data-save-menu],[data-copy-confirm]").forEach(button=>button.addEventListener("click",()=>{button.textContent=button.hasAttribute("data-save-menu")?"本周菜单已保存":"已复制到下周";button.classList.add("green")}));window.addEventListener("resize",()=>focusRect(regions.all,"all"));focusRect(regions.all,"all");
+    <header class="local-toolbar" aria-label="页面地图客户旅程">
+      <div class="local-label"><strong>客户旅程</strong><small>从使用动机走到完成结果</small></div>
+      <nav class="view-tabs" aria-label="聚焦客户旅程">
+        <button class="view-tab" type="button" aria-pressed="true" data-focus="all">全部</button>
+        <button class="view-tab" type="button" aria-pressed="false" data-focus="onboarding">首次准备</button>
+        <button class="view-tab" type="button" aria-pressed="false" data-focus="weekly">本周排菜</button>
+        <button class="view-tab" type="button" aria-pressed="false" data-focus="reuse">复用上周</button>
+        <button class="view-tab" type="button" aria-pressed="false" data-focus="rules">规则变更</button>
+        <button class="view-tab" type="button" aria-pressed="false" data-focus="support">补充验证</button>
+      </nav>
+      <span class="local-state">端到端主线 + 补充覆盖</span>
+    </header>
+
+    <main class="viewport" id="viewport" aria-label="可拖动、缩放的手机客户旅程图">
+      <div class="board" id="board">
+        <section class="board-intro">
+          <span>排好菜 · 客户旅程</span>
+          <h1>四条客户旅程，从第一次使用走到长期复用。</h1>
+        </section>
+        <div class="legend">
+          <span>已实现</span>
+          <span class="planned">计划中</span>
+          <span class="supplementary">补充验证</span>
+        </div>
+        <div id="lanes"></div>
+      </div>
+    </main>
+
+    <div class="canvas-hint">拖动画布 · 滚轮缩放 · 点击手机聚焦</div>
+    <div class="zoom-tools" aria-label="画布缩放">
+      <button type="button" data-zoom="out">缩小</button>
+      <span class="zoom-status" id="zoomStatus">100%</span>
+      <button type="button" data-zoom="in">放大</button>
+      <button type="button" data-zoom="fit">适配</button>
+    </div>
+
+    <script>
+      (() => {
+        const tabs = ["schedule", "library", "history", "profile"];
+        const tabLabels = { schedule: "排菜单", library: "菜品库", history: "历史", profile: "我的" };
+        const navTargets = { schedule: "w01", library: "s01", history: "r01", profile: "q01" };
+
+        const nav = active => `<nav class="bottom-navigation" aria-label="小程序主导航">${tabs.map(tab =>
+          `<button type="button" class="${tab === active ? "active" : ""}" data-focus-target="${navTargets[tab]}">${tabLabels[tab]}</button>`
+        ).join("")}</nav>`;
+
+        const meal = (title, date, text) =>
+          `<article class="meal-row"><header><strong>${title}</strong><span>${date}</span></header><p>${text}</p></article>`;
+
+        const mealData = [
+          ["周一", "9/7", "萝卜焖牛腩、白切鸡、蒜蓉菜心、清炒西兰花、冬瓜虾皮汤", "梅菜扣肉、清蒸鲈鱼、荷塘小炒、手撕包菜、玉米排骨汤"],
+          ["周二", "9/8", "红烧排骨、番茄炒蛋、清炒油麦菜、香菇青菜、海带豆腐汤", "红烧牛腩、冬菇蒸肉饼、蒜蓉时蔬、清炒芦笋、番茄蛋汤"],
+          ["周三", "9/9", "香菇滑鸡、萝卜炖肉、清炒菠菜、酸辣土豆丝、菌菇汤", "糖醋排骨、芹菜炒肉、蚝油生菜、家常茄子、紫菜蛋花汤"],
+          ["周四", "9/10", "啤酒鸭、豆角炒肉、蒜蓉空心菜、清炒藕片、萝卜汤", "清炖狮子头、豉汁蒸鱼、小炒杏鲍菇、上汤娃娃菜、丝瓜蛋汤"],
+          ["周五", "9/11", "板栗烧鸡、木须肉、清炒小白菜、麻婆豆腐、莲藕排骨汤", "土豆焖鸭、红烧带鱼、蒜蓉西兰花、干煸四季豆、冬瓜肉丸汤"]
+        ];
+        const allMeals = mealData.flatMap(([day, date, lunch, dinner]) => [
+          meal(`${day} · 午饭`, date, lunch),
+          meal(`${day} · 晚饭`, date, dinner)
+        ]).join("");
+
+        const candidates = (manual = false) => `
+          <div class="candidate-list">
+            <div class="candidate-button selected">
+              <span class="radio"></span>
+              <span><strong>${manual ? "姜葱蒸鱼" : "萝卜焖牛腩"}</strong><small>近期使用较少 · 主料不重复</small></span>
+              <b>已选</b>
+            </div>
+            <div class="candidate-button">
+              <span class="radio"></span>
+              <span><strong>豉汁排骨</strong><small>同类候选 · 可用菜品</small></span>
+              <b>备选</b>
+            </div>
+            <div class="candidate-button">
+              <span class="radio"></span>
+              <span><strong>香菇蒸鸡</strong><small>同类候选 · 可用菜品</small></span>
+              <b>备选</b>
+            </div>
+          </div>`;
+
+        const menuGrid = (firstDish = "土豆烧牛肉") => `
+          <div class="day-grid-scroll" aria-label="左右滑动查看周一至周五">
+            <div class="day-grid">
+              <span class="head"></span><span class="head">周一</span><span class="head">周二</span><span class="head">周三</span><span class="head">周四</span><span class="head">周五</span>
+              <span class="meal">午饭</span><span class="dish-cell">${firstDish}</span><span class="dish-cell">红烧排骨</span><span class="dish-cell">香菇滑鸡</span><span class="dish-cell">啤酒鸭</span><span class="dish-cell">板栗烧鸡</span>
+              <span class="meal">晚饭</span><span class="dish-cell">梅菜扣肉</span><span class="dish-cell">红烧牛腩</span><span class="dish-cell">糖醋排骨</span><span class="dish-cell">清炖狮子头</span><span class="dish-cell">土豆焖鸭</span>
+            </div>
+          </div>`;
+
+        const historyCards = `
+          <div class="history-list">
+            <button class="history-week" type="button" data-focus-target="r02">
+              <span><small>本周已保存</small><strong>9月7日—9月11日</strong><small>10 餐 · 50 道菜</small></span><b>查看</b>
+            </button>
+            <div class="history-preview">周一午饭：萝卜焖牛腩、白切鸡、蒜蓉菜心……</div>
+            <button class="history-week" type="button" data-history-toggle>
+              <span><small>上周已保存</small><strong>8月31日—9月4日</strong><small>10 餐 · 50 道菜</small></span><b>展开</b>
+            </button>
+            <div class="history-preview">周一午饭：红烧排骨、番茄炒蛋、清炒油麦菜……</div>
+          </div>`;
+
+        const templates = {
+          onboardingWelcome: {
+            tab: "schedule", title: "欢迎使用排好菜", state: "首次准备", hideNav: true,
+            content: `<section class="hero" style="margin-top:0"><small>第一次使用</small><strong>先让排好菜认识你家</strong><p>准备家庭餐型和常用菜品后，第一次生成就更接近家里真正会吃的菜单。</p></section>
+            <section class="rule-list"><div class="rule-row"><span>第 1 步</span><strong>确认人数与用餐时间</strong></div><div class="rule-row"><span>第 2 步</span><strong>选择每餐几荤几素</strong></div><div class="rule-row"><span>第 3 步</span><strong>建立家里的菜品池</strong></div></section>
+            <div class="mini-note">这不是登录资料，而是后续每次排菜都会使用的家庭基础。</div>
+            <button class="primary green" type="button" data-advance>开始准备</button>`
+          },
+          onboardingHousehold: {
+            tab: "profile", title: "家里怎么吃饭", state: "第 1 步", back: "返回", hideNav: true,
+            content: `<section class="form-row" style="margin-top:0"><header><strong>通常几个人吃饭</strong><small>单选 · 最多 20 人</small></header><div class="static-people-options"><span>1 人</span><span>2 人</span><span>3 人</span><span class="active">4 人</span><span>5 人</span><span>6 人</span><span>自定义</span></div></section>
+            <section class="form-row"><header><strong>需要安排哪些餐次</strong><small>可多选</small></header><div class="choice-row"><span class="choice-pill active">午饭</span><span class="choice-pill active">晚饭</span></div></section>
+            <section class="form-row"><header><strong>一周哪些天需要排菜</strong><small>至少选 1 天</small></header><div class="static-weekdays"><span class="active">一</span><span class="active">二</span><span class="active">三</span><span class="active">四</span><span class="active">五</span><span>六</span><span>日</span></div><p class="static-range-note">当前示例：周一至周五；也可设置为周一、周三、周五。</p></section>
+            <button class="primary green" type="button" data-advance>下一步：选择每餐结构</button>`
+          },
+          onboardingPattern: {
+            tab: "profile", title: "每餐怎么搭配", state: "第 2 步", back: "返回", hideNav: true,
+            content: `<section class="card" style="margin-top:0"><small>默认餐型</small><h2>选一个最常用的搭配</h2><p>以后某一餐仍然可以单独调整，不会被固定死。</p></section>
+            <section class="form-row"><header><strong>每餐结构</strong><small>当前设置</small></header><div class="choice-row"><span class="choice-pill active">2 荤 2 素 1 汤</span><span class="choice-pill">2 荤 1 素 1 汤</span><span class="choice-pill">1 荤 2 素 1 汤</span><span class="choice-pill">自定义搭配</span></div><p class="static-range-note">自定义时：荤菜、素菜各 0—3 道，汤羹 0—2 道。</p></section>
+            <section class="plan-state"><div><small>按当前设置</small><strong>每天 10 道菜 · 一周 50 道</strong></div><span>可调整</span></section>
+            <div class="mini-note">餐型决定每餐需要几道菜；菜品池决定这些位置可以从哪些菜里挑。</div>
+            <button class="primary green" type="button" data-advance>下一步：建立菜品池</button>`
+          },
+          onboardingStarter: {
+            tab: "library", title: "挑出家里常吃的菜", state: "第 3 步", back: "返回", hideNav: true,
+            content: `<section class="card" style="margin-top:0"><small>荤菜 · 快速挑选 · 已看 7 道</small><h2>看图挑出家里会吃的菜</h2><p>推荐池有 18 道示例菜，觉得差不多时可以随时结束。</p></section>
+            <section class="static-dish-card"><img src="./assets/dishes/potato-beef.jpg" alt="土豆烧牛肉"><div><small>荤菜</small><strong>土豆烧牛肉</strong><p>主要材料 · 牛肉、土豆</p></div></section>
+            <div class="static-dish-actions"><span>暂时不要</span><span>加入菜品库</span></div>
+            <div class="static-picker-complete"><span><strong>我选得差不多了</strong><small>已选 6 道 · 也可以继续挑</small></span><b>›</b></div>`
+          },
+          onboardingDishes: {
+            tab: "library", title: "还想补充什么菜", state: "第 4 步", back: "返回", hideNav: true,
+            content: `<section class="card" style="margin-top:0"><small>第一轮挑选完成</small><h2>还有家里常吃的菜吗？</h2><p>写下菜名先加入，材料和分类以后再补充。</p><div class="static-selected-row"><span><img src="./assets/dishes/potato-beef.jpg" alt=""><b>土豆烧牛肉</b></span><span><img src="./assets/dishes/shiitake-chicken.jpg" alt=""><b>香菇滑鸡</b></span><span><img src="./assets/dishes/broccoli.jpg" alt=""><b>清炒西兰花</b></span></div></section>
+            <section class="form-row"><header><strong>补充一道家常菜</strong><small>可跳过</small></header><div class="search-field">例如：番茄炒蛋</div></section>
+            <div class="mini-note">首次准备只需要建立一个起点，以后仍可在菜品库继续增删。</div>
+            <button class="primary green" type="button" data-advance>暂时没有，继续</button>`
+          },
+          onboardingReady: {
+            tab: "schedule", title: "准备完成", state: "可排菜", back: "返回", hideNav: true,
+            content: `<section class="success-card" style="margin-top:0"><small>首次准备已完成</small><strong>可以排第一周菜单了</strong><p>以后可以从“我的”修改餐型，从“菜品库”增减常用菜。</p></section>
+            <section class="rule-list"><div class="rule-row"><span>家庭餐次</span><strong>4 人 · 午饭和晚饭</strong></div><div class="rule-row"><span>排菜日期</span><strong>周一至周五</strong></div><div class="rule-row"><span>默认餐型</span><strong>2 荤 2 素 1 汤</strong></div><div class="rule-row"><span>可用菜品池</span><strong>38 道已确认</strong></div></section>
+            <div class="mini-note">第一次生成仍可换菜；保存后才会成为正式的本周菜单。</div>
+            <button class="primary" type="button" data-focus-target="w01">去排第一周菜单</button>`
+          },
+          start: {
+            tab: "schedule", title: "本周菜单", state: "待生成",
+            content: `<div class="week-toolbar" data-week-picker>
+              <button type="button" data-week-move="-1">上周</button>
+              <div><strong data-week-label>9月7日—9月11日</strong><small data-week-sub>本周 · 周一至周五</small></div>
+              <button type="button" data-week-move="1">下周</button>
+            </div>
+            <section class="plan-state" data-generate-state><div><small>本周还没有菜单</small><strong>10 餐待安排</strong></div><span>待生成</span></section>
+            <section class="card"><small>默认排菜规则</small><h2>五天十餐，一次排好</h2><p>每餐 2 荤 2 素 1 汤，只使用已确认菜品，同一主料尽量错开。</p><div class="metrics"><span>5 天</span><span>10 餐</span><span>50 道菜</span></div></section>
+            <div class="mini-note">菜品池已就绪，生成后可以逐道调整。</div>
+            <button class="primary" type="button" data-generate data-advance>生成本周菜单</button>`
+          },
+          review: {
+            tab: "schedule", title: "修改菜单", state: "调整中", back: "返回",
+            content: `<section class="menu-board"><header><div><strong>五天十餐菜单</strong><small>9月7日—11日 · 只读对照</small></div><small class="view-caption">当前查看：荤菜</small></header>${menuGrid()}</section>
+            <section class="selection-card"><div><small>周一午饭 · 荤菜</small><strong>土豆烧牛肉</strong></div><button type="button" data-advance>换这道</button></section>
+            <div class="mini-note">先比较一周分布，再只调整不合适的那一道。</div>
+            <button class="primary" type="button" data-focus-target="w06">直接确认十餐菜单</button>`
+          },
+          replace: {
+            tab: "schedule", title: "替换菜品", state: "调整中", back: "返回",
+            content: `<section class="card" style="margin-top:0"><small>只换这一道</small><h2>土豆烧牛肉</h2><p>其他 49 道菜保持不变。</p></section>
+            <div class="replace-actions"><span>自动换一道（另一条路径）</span><button type="button" data-advance>去菜品库手选</button></div>
+            <div class="mini-note">选择一道候选菜，再保存本次替换。</div>
+            ${candidates()}
+            <button class="primary" type="button" data-save-replacement data-focus-target="w05">保存这次替换</button>`
+          },
+          manualPick: {
+            tab: "library", title: "手选替换菜", state: "荤菜", back: "取消",
+            content: `<div class="notice"><strong>为“土豆烧牛肉”手选替换</strong></div>
+            <div class="mini-note">选择一道候选菜，再返回本周菜单。</div>
+            ${candidates(true)}
+            <button class="primary green" type="button" data-save-replacement data-advance>选中并返回菜单</button>`
+          },
+          replacedReview: {
+            tab: "schedule", title: "修改菜单", state: "已替换", back: "返回",
+            content: `<section class="plan-state"><div><small>周一午饭已更新</small><strong>姜葱蒸鱼</strong></div><span>只改 1 道</span></section>
+            <section class="menu-board"><header><div><strong>五天十餐菜单</strong><small>9月7日—11日 · 只读对照</small></div><small class="view-caption">当前查看：荤菜</small></header>${menuGrid("姜葱蒸鱼")}</section>
+            <div class="mini-note">其他九个餐次保持原样，主料避重已重新检查。</div>
+            <button class="primary" type="button" data-advance>确认十餐菜单</button>`
+          },
+          confirm: {
+            tab: "schedule", title: "确认菜单", state: "待保存", back: "返回",
+            content: `<section class="hero"><small>9月7日—11日</small><strong>五天十餐，准备保存</strong><p>共 50 道菜，已保留 1 条软规则提醒。</p></section>
+            <div class="meal-list">${allMeals}</div>
+            <button class="primary green" type="button" data-save-menu data-advance>保存本周菜单</button>`
+          },
+          saved: {
+            tab: "history", title: "菜单历史", state: "已保存",
+            content: `<section class="success-card" style="margin-top:0"><small>9月7日—9月11日</small><strong>本周菜单已保存</strong><p>5 天 · 10 餐 · 50 道菜</p></section>
+            <button class="history-week" type="button" data-advance style="margin-top:12px"><span><small>本周</small><strong>9月7日—9月11日</strong><small>保存后只读 · 下周可复制</small></span><b>查看完整菜单</b></button>
+            <div class="mini-note">以后从历史查看；需要复用时，先复制成新一周草稿。</div>`
+          },
+          historyList: {
+            tab: "history", title: "历史", state: "已保存",
+            content: `<section class="hero red"><small>已保存菜单</small><strong>按周查看</strong><p>找到合适的一周，查看详情后复制到下一周。</p></section>${historyCards}`
+          },
+          historyDetail: {
+            tab: "history", title: "历史菜单详情", state: "只读", back: "返回",
+            content: `<section class="plan-state"><div><small>9月7日—11日</small><strong>本周已保存</strong></div><span>只读</span></section>
+            <div class="meal-list">${allMeals}</div>
+            <button class="primary green" type="button" data-advance>复制到下一周</button>`
+          },
+          copy: {
+            tab: "history", title: "复制菜单", state: "下周", back: "取消",
+            content: `<section class="copy-dialog"><small>整周复用</small><h2>复制到下一周？</h2><p>9月7日—11日将复制到9月14日—18日，然后生成一份可继续调整的菜单。</p><div class="dialog-actions"><button type="button" data-back-action>取消</button><button type="button" data-copy-confirm data-advance>确认复制</button></div></section>
+            <div class="mini-note">原历史记录保持只读，不会被修改。</div>`
+          },
+          copiedDraft: {
+            tab: "schedule", title: "下周菜单", state: "草稿",
+            content: `<section class="plan-state"><div><small>9月14日—9月18日</small><strong>已从上周复制</strong></div><span>可编辑</span></section>
+            <section class="menu-board"><header><div><strong>下周五天十餐</strong><small>独立菜单草稿</small></div></header>${menuGrid("萝卜焖牛腩")}</section>
+            <div class="mini-note">保留合适的部分，再换掉几道菜。</div>
+            <button class="primary" type="button" data-advance>调整这周菜单</button>`
+          },
+          nextWeekReview: {
+            tab: "schedule", title: "修改下周菜单", state: "调整中", back: "返回",
+            content: `<section class="menu-board"><header><div><strong>9月14日—18日菜单</strong><small>从上周复制后调整 · 只读对照</small></div><small class="view-caption">当前查看：荤菜</small></header>${menuGrid("姜葱蒸鱼")}</section>
+            <section class="selection-card"><div><small>已调整 2 道菜</small><strong>其余安排保持不变</strong></div><button type="button">继续换菜</button></section>
+            <button class="primary" type="button" data-advance>确认下一周菜单</button>`
+          },
+          nextWeekConfirm: {
+            tab: "schedule", title: "确认下周菜单", state: "待保存", back: "返回",
+            content: `<section class="hero"><small>9月14日—18日</small><strong>下周菜单准备保存</strong><p>沿用上周合适部分，已经替换 2 道菜。</p></section>
+            <div class="meal-list">${allMeals}</div>
+            <button class="primary green" type="button" data-save-menu data-advance>保存下一周菜单</button>`
+          },
+          nextWeekSaved: {
+            tab: "history", title: "菜单历史", state: "已保存",
+            content: `<section class="success-card" style="margin-top:0"><small>9月14日—9月18日</small><strong>下一周菜单已保存</strong><p>原历史记录仍然保留，新菜单单独存档。</p></section>
+            <section class="card"><small>完成结果</small><h2>复用，不是覆盖</h2><p>上一周保持只读；下一周可以继续查看和再次复制。</p></section>`
+          },
+          profileSummary: {
+            tab: "profile", title: "我的", state: "家庭", planned: true,
+            content: `<section class="planned-banner">目标交互 · 当前运行原型尚未完整实现</section>
+            <section class="hero"><small>家庭菜单工作台</small><strong>我家的排好菜</strong><p>默认规则会在每次生成菜单时自动应用。</p></section>
+            <section class="rule-list"><div class="rule-row"><span>家庭人数</span><strong>4 人</strong></div><div class="rule-row"><span>排菜日期</span><strong>周一至周五</strong></div><div class="rule-row"><span>餐次</span><strong>午饭和晚饭</strong></div><div class="rule-row"><span>每餐结构</span><strong>2 荤 2 素 1 汤</strong></div><div class="rule-row"><span>忌口</span><strong>不吃芹菜</strong></div></section>
+            <button class="primary green" type="button" data-advance>修改家庭规则</button>`
+          },
+          ruleEdit: {
+            tab: "profile", title: "家庭排菜规则", state: "编辑", back: "取消", planned: true,
+            content: `<section class="planned-banner">目标交互 · 保存后只影响未来生成</section>
+            <section class="form-row"><header><strong>家庭人数</strong><small>单选 · 最多 20 人</small></header><div class="static-people-options"><span>1 人</span><span>2 人</span><span>3 人</span><span class="active">4 人</span><span>5 人</span><span>6 人</span><span>自定义</span></div></section>
+            <section class="form-row"><header><strong>排菜日期</strong><small>当前设置</small></header><div class="static-weekdays"><span class="active">一</span><span class="active">二</span><span class="active">三</span><span class="active">四</span><span class="active">五</span><span>六</span><span>日</span></div></section>
+            <section class="form-row"><header><strong>餐次</strong><small>当前设置</small></header><div class="choice-row"><span class="choice-pill active">午饭</span><span class="choice-pill active">晚饭</span></div></section>
+            <section class="form-row"><header><strong>每餐结构</strong><small>当前设置</small></header><div class="choice-row"><span class="choice-pill active">2 荤 2 素 1 汤</span><span class="choice-pill">2 荤 1 素 1 汤</span><span class="choice-pill">1 荤 2 素 1 汤</span><span class="choice-pill">自定义搭配</span></div></section>
+            <section class="form-row"><header><strong>忌口</strong><small>当前设置</small></header><div class="choice-row"><span class="choice-pill active">芹菜</span><span class="choice-pill">香菜</span><span class="choice-pill">花生</span></div></section>
+            <button class="primary green" type="button" data-advance>保存家庭规则</button>`
+          },
+          ruleSaved: {
+            tab: "profile", title: "规则已保存", state: "已保存", back: "完成", planned: true,
+            content: `<section class="success-card" style="margin-top:0"><small>家庭规则已更新</small><strong>下次生成自动应用</strong><p>新规则不会回头修改已保存的历史菜单。</p></section>
+            <section class="card"><small>下次排菜将使用</small><h2>4 人 · 五天十餐</h2><p>午饭和晚饭 · 2 荤 2 素 1 汤 · 不吃芹菜。</p></section>
+            <button class="primary green" type="button" data-advance>去生成新菜单</button>`
+          },
+          ruledStart: {
+            tab: "schedule", title: "下周菜单", state: "新规则", planned: true,
+            content: `<section class="planned-banner">目标交互 · 读取刚保存的家庭规则</section>
+            <div class="week-toolbar"><button type="button">上周</button><div><strong>9月14日—9月18日</strong><small>下周 · 周一至周五</small></div><button type="button">下周</button></div>
+            <section class="card"><small>本次生成规则</small><h2>4 人 · 午饭和晚饭</h2><p>每餐 2 荤 2 素 1 汤，不使用芹菜，主料尽量错开。</p></section>
+            <button class="primary" type="button" data-advance>按新规则生成菜单</button>`
+          },
+          ruledResult: {
+            tab: "schedule", title: "修改菜单", state: "已应用", back: "返回", planned: true,
+            content: `<section class="plan-state"><div><small>新规则已应用</small><strong>4 人 · 不吃芹菜</strong></div><span>已检查</span></section>
+            <section class="menu-board"><header><div><strong>下周五天十餐</strong><small>没有使用忌口菜品</small></div></header>${menuGrid("萝卜焖牛腩")}</section>
+            <div class="mini-note">已保存的历史菜单没有变化；本次生成使用新的家庭规则。</div>`
+          },
+          libraryBrowse: {
+            tab: "library", title: "菜品库", state: "已确认", support: true,
+            content: `<section class="hero"><small>已确认菜品池</small><strong>家常菜品库</strong><p>主旅程外，单独验证搜索、分类和查看详情。</p></section>
+            <label class="search-field"><input data-dish-search placeholder="搜索菜名或主料"></label>
+            <div class="filter-row" data-library-filters><button class="active" type="button" data-kind="all">全部</button><button type="button" data-kind="meat">荤菜</button><button type="button" data-kind="veg">素菜</button><button type="button" data-kind="soup">汤羹</button></div>
+            <div class="dish-list" data-dish-list>
+              <button class="dish-row" type="button" data-kind="meat" data-dish-name="土豆烧牛肉 牛肉" data-advance><i class="dish-kind"></i><span><strong>土豆烧牛肉</strong><small>荤菜 · 主料牛肉</small></span><b>查看</b></button>
+              <button class="dish-row" type="button" data-kind="veg" data-dish-name="蒜蓉菜心 菜心"><i class="dish-kind veg"></i><span><strong>蒜蓉菜心</strong><small>素菜 · 主料菜心</small></span><b>查看</b></button>
+              <button class="dish-row" type="button" data-kind="soup" data-dish-name="冬瓜虾皮汤 冬瓜"><i class="dish-kind soup"></i><span><strong>冬瓜虾皮汤</strong><small>汤羹 · 主料冬瓜</small></span><b>查看</b></button>
+            </div>`
+          },
+          dishDetail: {
+            tab: "library", title: "菜品详情", state: "可用", back: "返回", support: true,
+            content: `<section class="detail-title"><small>荤菜 · 主料牛肉</small><strong>土豆烧牛肉</strong></section>
+            <div class="fact-grid"><div><b>常用</b><span>使用频率</span></div><div><b>午饭</b><span>常用餐次</span></div><div><b>已确认</b><span>菜品状态</span></div></div>
+            <section class="card"><small>菜品备注</small><h2>牛肉软烂下饭</h2><p>生成时会与本周其他牛肉菜一起执行主料避重。</p></section>
+            <section class="rule-list"><div class="rule-row"><span>菜品分类</span><strong>荤菜</strong></div><div class="rule-row"><span>主料标签</span><strong>牛肉、土豆</strong></div><div class="rule-row"><span>菜品来源</span><strong>家庭常用菜</strong></div></section>`
+          },
+          catalogMaintain: {
+            tab: "library", title: "编辑菜品", state: "编辑", back: "取消", planned: true, support: true,
+            content: `<section class="planned-banner">补充验证 · 菜品维护尚未进入运行原型</section>
+            <section class="form-row"><header><strong>菜品名称</strong><small>必填</small></header><div class="choice-row"><button class="active" type="button">土豆烧牛肉</button></div></section>
+            <section class="form-row"><header><strong>菜品类型</strong><small>单选</small></header><div class="choice-row" data-rule-options><button class="active" type="button" aria-pressed="true">荤菜</button><button type="button" aria-pressed="false">素菜</button><button type="button" aria-pressed="false">汤羹</button></div></section>
+            <section class="form-row"><header><strong>主料标签</strong><small>可多选</small></header><div class="choice-row"><button class="active" type="button">牛肉</button><button class="active" type="button">土豆</button><button type="button">添加标签</button></div></section>
+            <button class="primary green" type="button">保存菜品</button>`
+          },
+          noCandidate: {
+            tab: "schedule", title: "替换菜品", state: "无候选", back: "返回", planned: true, support: true,
+            content: `<section class="planned-banner">补充验证 · 边界状态</section>
+            <section class="empty-state"><span>!</span><h2>暂时没有合适候选</h2><p>当前菜品库中没有同时满足餐标、忌口和主料避重的菜。用户可以返回菜单，或去菜品库补充菜品。</p><button class="primary green" type="button" data-focus-target="s01">去菜品库看看</button></section>`
+          }
+        };
+
+        const make = (template, id, code, name, overrides = {}) => ({
+          ...templates[template], id, code, name, ...overrides
+        });
+
+        const journeys = [
+          {
+            key: "onboarding", number: "01", y: 150, label: "第一次使用，准备好家里的排菜基础",
+            scene: "先确认家庭餐次和每餐结构，再通过看图挑选建立家里的菜品池。",
+            state: "核心旅程", result: "完成：默认餐型与菜品池已就绪，可以开始第一次排菜",
+            phones: [
+              make("onboardingWelcome", "o01", "01-01 · 欢迎", "理解首次准备要做什么"),
+              make("onboardingHousehold", "o02", "01-02 · 家庭设置", "确认人数、排菜日期和餐次"),
+              make("onboardingPattern", "o03", "01-03 · 每餐结构", "选择每餐几荤几素"),
+              make("onboardingStarter", "o04", "01-04 · 自主挑菜", "从推荐池挑选，觉得够用时主动结束"),
+              make("onboardingDishes", "o05", "01-05 · 补充菜品", "补充没有出现在推荐里的菜"),
+              make("onboardingReady", "o06", "01-06 · 准备完成", "确认基础已可用于排菜")
+            ],
+            arrows: [
+              ["先说清家里怎么吃"],
+              ["日期与餐次决定要排多少"],
+              ["餐型决定每餐几个位置"],
+              ["连续挑选，随时可以结束"],
+              ["补充自家常吃的菜"]
+            ]
+          },
+          {
+            key: "weekly", number: "02", y: 1300, label: "给家里排好本周菜单",
+            scene: "周末一次安排五天午晚餐；不合适的只换一道，最后保存到历史。",
+            state: "核心旅程", result: "完成：本周菜单已保存，可查看、可复用",
+            phones: [
+              make("start", "w01", "02-01 · 开始排菜", "选好周次，准备排菜"),
+              make("review", "w02", "02-02 · 对照菜单", "对照五天十餐"),
+              make("replace", "w03", "02-03 · 替换菜品", "决定怎么换这一道"),
+              make("manualPick", "w04", "02-04 · 手选菜品", "从菜品库手选"),
+              make("replacedReview", "w05", "02-05 · 返回菜单", "回到菜单确认只改一道"),
+              make("confirm", "w06", "02-06 · 确认菜单", "查看总览并保存"),
+              make("saved", "w07", "02-07 · 保存完成", "看到保存成功"),
+              make("historyDetail", "w08", "02-08 · 完整结果", "从历史查看完整结果", { content: `<section class="plan-state"><div><small>9月7日—11日</small><strong>本周已保存</strong></div><span>只读</span></section><div class="meal-list">${allMeals}</div>` })
+            ],
+            arrows: [
+              ["生成整周菜单"],
+              ["这道不合适，换一道"],
+              ["想自己挑，从菜品库手选"],
+              ["选好后回到本周菜单"],
+              ["只改这一道，其余不动"],
+              ["确认并保存"],
+              ["保存后查看完整菜单"]
+            ]
+          },
+          {
+            key: "reuse", number: "03", y: 2450, label: "沿用上一周，少改几道菜",
+            scene: "新一周不从空白开始；复制上一周成为新草稿，再调整并单独保存。",
+            state: "核心旅程", result: "完成：旧记录保持只读，新一周独立保存",
+            phones: [
+              make("historyList", "r01", "03-01 · 查找历史", "找到上一周菜单"),
+              make("historyDetail", "r02", "03-02 · 查看菜单", "查看完整十餐"),
+              make("copy", "r03", "03-03 · 确认复制", "确认复制到下一周"),
+              make("copiedDraft", "r04", "03-04 · 生成草稿", "新草稿回到排菜单"),
+              make("nextWeekReview", "r05", "03-05 · 调整菜单", "保留大部分，只改几道"),
+              make("nextWeekConfirm", "r06", "03-06 · 确认菜单", "确认下一周菜单"),
+              make("nextWeekSaved", "r07", "03-07 · 保存完成", "新一周单独保存")
+            ],
+            arrows: [
+              ["找到合适的一周"],
+              ["看完再决定复用"],
+              ["复制，不修改原记录"],
+              ["草稿回到排菜单"],
+              ["换掉不合适的菜"],
+              ["保存成新的一周"]
+            ]
+          },
+          {
+            key: "rules", number: "04", y: 3600, label: "家庭情况变化后重新排菜",
+            scene: "人数、忌口或餐次改变；保存新规则，并验证下一次生成已经应用。",
+            state: "计划中", result: "目标：新规则影响未来生成，不改历史菜单",
+            phones: [
+              make("profileSummary", "q01", "04-01 · 规则摘要", "查看当前家庭规则"),
+              make("ruleEdit", "q02", "04-02 · 修改规则", "修改人数、排菜日期、餐次和忌口"),
+              make("ruleSaved", "q03", "04-03 · 保存规则", "确认新规则摘要"),
+              make("ruledStart", "q04", "04-04 · 生成菜单", "按新规则生成菜单"),
+              make("ruledResult", "q05", "04-05 · 验证结果", "验证生成结果已应用")
+            ],
+            arrows: [
+              ["家庭情况有变化"],
+              ["保存并确认摘要"],
+              ["去排下一周菜单"],
+              ["生成后验证规则生效"]
+            ]
+          },
+          {
+            key: "support", number: "05", y: 4750, label: "主旅程未覆盖的功能验证",
+            scene: "这里检查独立页面、局部控件和边界状态，不把它们包装成客户主故事。",
+            state: "补充验证", result: "覆盖：菜品浏览、详情、维护与无候选状态",
+            phones: [
+              make("libraryBrowse", "s01", "05-01 · 浏览菜品", "搜索与分类筛选"),
+              make("dishDetail", "s02", "05-02 · 菜品详情", "查看独立菜品资料"),
+              make("catalogMaintain", "s03", "05-03 · 维护菜品", "新增、编辑与停用"),
+              make("noCandidate", "s04", "05-04 · 边界状态", "没有合适候选时")
+            ],
+            arrows: [
+              ["查看一份菜品资料"],
+              ["验证计划中的维护页"],
+              ["验证无候选边界"]
+            ]
+          }
+        ];
+
+        const statusLabel = phone => phone.planned ? "计划中" : phone.support ? "补充验证" : "已实现";
+
+        const renderPhone = (phone, previousId, nextId) => `
+          <section class="phone-node ${phone.planned ? "planned" : ""} ${phone.hideNav ? "no-nav" : ""}" tabindex="0" data-phone-id="${phone.id}" data-next-phone="${nextId || ""}" data-previous-phone="${previousId || ""}">
+            <header class="node-label"><div><small>步骤 ${phone.id.slice(1)}</small><strong>${phone.name}</strong></div><span>${statusLabel(phone)}</span></header>
+            <div class="device-frame">
+              <div class="phone-screen">
+                <div class="status-bar"><strong>9:41</strong><img src="./assets/status/ios-status-icons.svg" alt=""></div>
+                <header class="app-bar">
+                  ${phone.back ? `<button class="back-button" type="button" data-back-action>${phone.back}</button>` : "<span></span>"}
+                  <strong>${phone.title}</strong><span class="app-state">${phone.state}</span>
+                </header>
+                <div class="mobile-content">${phone.content}</div>
+                ${phone.hideNav ? "" : nav(phone.tab)}
+              </div>
+              <img class="phone-bezel" src="./assets/iphone/Bezel.png" alt="">
+            </div>
+          </section>`;
+
+        const renderConnector = connector => `
+          <div class="connector"><b>→</b><small>${connector[0]}</small></div>`;
+
+        const renderJourney = journey => `
+          <article class="lane ${journey.key}" data-lane="${journey.key}" style="--lane-y:${journey.y}px">
+            <header class="lane-head">
+              <div class="lane-title"><span class="lane-number">${journey.number}</span><div><h2>${journey.label}</h2><p>${journey.scene}</p></div></div>
+              <span class="lane-state">${journey.state}</span>
+            </header>
+            <div class="phone-flow">
+              ${journey.phones.map((phone, index) =>
+                renderPhone(phone, journey.phones[index - 1]?.id, journey.phones[index + 1]?.id) +
+                (journey.arrows[index] ? renderConnector(journey.arrows[index]) : "")
+              ).join("")}
+            </div>
+            <div class="journey-result">${journey.result}</div>
+          </article>`;
+
+        document.querySelector("#lanes").innerHTML = journeys.map(renderJourney).join("");
+
+        document.querySelectorAll(".phone-node button").forEach(button => {
+          const staticControl = document.createElement("div");
+          staticControl.className = button.className;
+          staticControl.innerHTML = button.innerHTML;
+          staticControl.setAttribute("data-static-control", "");
+          button.replaceWith(staticControl);
+        });
+        document.querySelectorAll(".phone-node input").forEach(input => {
+          const staticField = document.createElement("div");
+          staticField.className = "static-phone-field";
+          staticField.textContent = input.value || input.placeholder;
+          input.replaceWith(staticField);
+        });
+
+        const viewport = document.querySelector("#viewport");
+        const board = document.querySelector("#board");
+        const zoomStatus = document.querySelector("#zoomStatus");
+        const viewTabs = [...document.querySelectorAll("[data-focus]")];
+        const phoneNodes = [...document.querySelectorAll(".phone-node")];
+        const lanes = [...document.querySelectorAll(".lane")];
+        const state = { x: 0, y: 0, scale: 1, dragging: false, px: 0, py: 0 };
+        const regions = {
+          all: { x: 0, y: 0, width: 5200, height: 5920 },
+          onboarding: { x: 35, y: 130, width: 5130, height: 1160 },
+          weekly: { x: 35, y: 1280, width: 5130, height: 1160 },
+          reuse: { x: 35, y: 2430, width: 5130, height: 1160 },
+          rules: { x: 35, y: 3580, width: 5130, height: 1160 },
+          support: { x: 35, y: 4730, width: 5130, height: 1160 }
+        };
+
+        const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+        const render = () => {
+          board.style.transform = `translate(${state.x}px, ${state.y}px) scale(${state.scale})`;
+          zoomStatus.textContent = `${Math.round(state.scale * 100)}%`;
+        };
+        const setPressed = name => viewTabs.forEach(tab =>
+          tab.setAttribute("aria-pressed", String(tab.dataset.focus === name))
+        );
+        const setLaneVisibility = name => {
+          const filtered = name && name !== "all";
+          board.classList.toggle("is-filtered", filtered);
+          lanes.forEach(lane => lane.classList.toggle("is-active", !filtered || lane.dataset.lane === name));
+        };
+        const clearPhoneFocus = () => {
+          board.classList.remove("phone-focused");
+          phoneNodes.forEach(node => node.classList.remove("is-focused"));
+        };
+        const focusRect = (region, name = "all") => {
+          const top = window.innerWidth < 780 ? 186 : 148;
+          const side = window.innerWidth < 700 ? 22 : 50;
+          const availableWidth = viewport.clientWidth - side * 2;
+          const availableHeight = viewport.clientHeight - top - 54;
+          const fit = Math.min(availableWidth / region.width, availableHeight / region.height);
+          const minimum = name !== "all" ? (window.innerWidth < 720 ? .34 : .46) : .1;
+          clearPhoneFocus();
+          setLaneVisibility(name);
+          state.scale = clamp(Math.max(fit, minimum), .1, 1.15);
+          state.x = name === "all"
+            ? (viewport.clientWidth - region.width * state.scale) / 2 - region.x * state.scale
+            : side - region.x * state.scale;
+          state.y = top + (availableHeight - region.height * state.scale) / 2 - region.y * state.scale;
+          board.dataset.view = name;
+          setPressed(name);
+          render();
+        };
+        const focusPhone = element => {
+          const lane = element.closest(".lane");
+          setLaneVisibility(lane.dataset.lane);
+          const boardRect = board.getBoundingClientRect();
+          const rect = element.getBoundingClientRect();
+          const x = (rect.left - boardRect.left) / state.scale;
+          const y = (rect.top - boardRect.top) / state.scale;
+          const width = rect.width / state.scale;
+          const height = rect.height / state.scale;
+          const top = window.innerWidth < 780 ? 188 : 150;
+          const availableHeight = viewport.clientHeight - top - 34;
+          state.scale = clamp(Math.max(Math.min((viewport.clientWidth - 44) / width, availableHeight / height, .92), .70), .70, .92);
+          state.x = viewport.clientWidth / 2 - (x + width / 2) * state.scale;
+          state.y = top + (availableHeight - height * state.scale) / 2 - y * state.scale;
+          board.classList.add("phone-focused");
+          phoneNodes.forEach(node => node.classList.toggle("is-focused", node === element));
+          board.dataset.view = lane.dataset.lane;
+          setPressed("");
+          render();
+        };
+        const focusPhoneById = id => {
+          const target = document.querySelector(`[data-phone-id="${id}"]`);
+          if (target) focusPhone(target);
+        };
+        const zoomAt = (next, cx = viewport.clientWidth / 2, cy = viewport.clientHeight / 2) => {
+          const old = state.scale;
+          state.scale = clamp(next, .1, 1.25);
+          state.x = cx - ((cx - state.x) / old) * state.scale;
+          state.y = cy - ((cy - state.y) / old) * state.scale;
+          render();
+        };
+
+        viewport.addEventListener("pointerdown", event => {
+          if (event.target.closest("a,button,input,.phone-node")) return;
+          state.dragging = true;
+          state.px = event.clientX;
+          state.py = event.clientY;
+          viewport.classList.add("is-dragging");
+          viewport.setPointerCapture(event.pointerId);
+        });
+        viewport.addEventListener("pointermove", event => {
+          if (!state.dragging) return;
+          state.x += event.clientX - state.px;
+          state.y += event.clientY - state.py;
+          state.px = event.clientX;
+          state.py = event.clientY;
+          render();
+        });
+        const endDrag = () => { state.dragging = false; viewport.classList.remove("is-dragging"); };
+        viewport.addEventListener("pointerup", endDrag);
+        viewport.addEventListener("pointercancel", endDrag);
+        viewport.addEventListener("wheel", event => {
+          event.preventDefault();
+          zoomAt(state.scale * (event.deltaY > 0 ? .9 : 1.1), event.clientX, event.clientY);
+        }, { passive: false });
+
+        viewTabs.forEach(tab => tab.addEventListener("click", () =>
+          focusRect(regions[tab.dataset.focus], tab.dataset.focus)
+        ));
+        document.querySelector("[data-zoom='out']").addEventListener("click", () => zoomAt(state.scale - .1));
+        document.querySelector("[data-zoom='in']").addEventListener("click", () => zoomAt(state.scale + .1));
+        document.querySelector("[data-zoom='fit']").addEventListener("click", () => focusRect(regions.all, "all"));
+
+        phoneNodes.forEach(node => {
+          node.addEventListener("click", event => {
+            if (!event.target.closest("button,input")) focusPhone(node);
+          });
+          node.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              focusPhone(node);
+            }
+          });
+        });
+
+        window.addEventListener("resize", () => focusRect(regions.all, "all"));
+        focusRect(regions.all, "all");
       })();
     </script>
   </body>
