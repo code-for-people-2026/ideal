@@ -1,0 +1,13 @@
+{
+  "prompt_tokens": 172100,
+  "completion_tokens": 4037,
+  "total_tokens": 176137,
+  "completion_tokens_details": {
+    "text_tokens": 4037
+  },
+  "prompt_tokens_details": {
+    "video_tokens": 169346,
+    "audio_tokens": 2060,
+    "text_tokens": 694
+  }
+}
