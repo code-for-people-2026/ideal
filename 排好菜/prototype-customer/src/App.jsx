@@ -331,6 +331,10 @@ export function App() {
 
   return (
     <>
+      <div className="mobile-prototype-toolbar" role="navigation" aria-label="手机原型工具栏">
+        <a href="../" aria-label="退出原型，返回排好菜项目入口"><ArrowLeftIcon />退出原型</a>
+        <span>排好菜</span>
+      </div>
       <a className="prototype-home-link" href="../../" aria-label="返回全部原型入口"><ArrowLeftIcon />全部原型</a>
       <a className="audience-switch" href="../prototype-implementation/">切到实施对照原型 <ArrowRightIcon /></a>
       <main className="prototype-page">

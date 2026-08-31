@@ -195,13 +195,17 @@
       }
 
       .demo-button {
+        display: inline-flex;
         min-height: 52px;
         padding: 0 20px;
+        align-items: center;
+        justify-content: center;
         border: 0;
         border-radius: 14px;
         cursor: pointer;
         font-size: 15px;
         font-weight: 900;
+        text-decoration: none;
         transition: transform 0.16s ease, box-shadow 0.16s ease;
       }
 
@@ -2142,6 +2146,36 @@
           border-radius: 0;
         }
         .phone { width: min(400px, 100%); }
+
+        body[data-mobile-prototype-mode="manual"]:not([data-mobile-prototype]) .page {
+          padding-bottom: 32px;
+        }
+
+        body[data-mobile-prototype-mode="manual"]:not([data-mobile-prototype]) .visual {
+          display: none;
+        }
+
+        body[data-mobile-prototype] .building-home {
+          display: flex;
+          height: 100%;
+          min-height: 656px;
+          padding-bottom: 14px;
+          flex-direction: column;
+        }
+
+        body[data-mobile-prototype] .floor-grid {
+          min-height: 532px;
+          flex: 1 1 auto;
+          grid-auto-rows: unset;
+          grid-template-rows: repeat(6, minmax(78px, 1fr));
+        }
+
+        body[data-mobile-prototype] .floor-cell {
+          display: grid;
+          height: 100%;
+          min-height: 78px;
+          align-content: center;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -2156,7 +2190,7 @@
     <link rel="stylesheet" href="../prototype-shell.css" />
     <script src="../prototype-shell.js" defer></script>
   </head>
-  <body class="public-prototype-page">
+  <body class="public-prototype-page" data-mobile-prototype-mode="manual" data-mobile-prototype-exit="./" data-mobile-prototype-title="楼道收一收">
     <svg class="icon-sprite" aria-hidden="true">
       <symbol id="recycle-icon" viewBox="0 0 24 24">
         <path d="M7 19H4.815a1.83 1.83 0 0 1-1.57-.881 1.785 1.785 0 0 1-.004-1.784L7.196 9.5" />
@@ -2231,8 +2265,8 @@
           </div>
 
           <div class="demo-actions" aria-label="原型演示操作">
-            <button class="demo-button primary" type="button" data-action="scan">体验住户扫码</button>
-            <button class="demo-button secondary" type="button" data-action="collector">打开师傅待办</button>
+            <a class="demo-button primary" href="?prototype=1&amp;view=resident">体验住户扫码</a>
+            <a class="demo-button secondary" href="?prototype=1">打开师傅待办</a>
             <button class="demo-button ghost" type="button" data-action="reset">恢复演示数据</button>
           </div>
 

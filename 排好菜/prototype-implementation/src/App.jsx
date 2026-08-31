@@ -778,6 +778,10 @@ export function App() {
 
   return (
     <>
+      <div className="mobile-prototype-toolbar" role="navigation" aria-label="手机原型工具栏">
+        <a href="../" aria-label="退出原型，返回排好菜项目入口"><ArrowLeftIcon />退出原型</a>
+        <span>排好菜</span>
+      </div>
       <header className="workspace-toolbar">
         <a className="back-link" href="../"><ArrowLeftIcon />项目入口</a>
         <nav aria-label="工程原型视图"><span className="active">运行原型</span><a href="./page-map.html">页面地图</a></nav>
