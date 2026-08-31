@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>添加菜方式视觉验收</title>
+    <style>
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 18px; color: #241f1b; background: #e7e1d9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      header { margin-bottom: 14px; }
+      h1 { margin: 0; font-size: 22px; }
+      p { margin: 5px 0 0; color: #6f675e; font-size: 12px; }
+      main { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      figure { margin: 0; padding: 9px; overflow: hidden; border-radius: 14px; background: #fffaf4; box-shadow: 0 10px 26px rgba(38, 31, 26, .12); }
+      figcaption { min-height: 37px; font-size: 12px; font-weight: 800; line-height: 1.35; }
+      .crop { position: relative; height: 615px; overflow: hidden; border-radius: 10px; background: #f5efe8; }
+      img { position: absolute; top: -116px; left: -424px; width: 756px; max-width: none; }
+    </style>
+  </head>
+  <body>
+    <header><h1>添加菜：从直接填写到双入口</h1><p>同一手机界面中检查旧表单、添加方式选择和图片挑选。</p></header>
+    <main>
+      <figure><figcaption>原状态：直接打开填写表单</figcaption><div class="crop"><img src="./library-add-sheet.png" alt="旧的直接填写状态" /></div></figure>
+      <figure><figcaption>新入口：先选择添加方式</figcaption><div class="crop"><img src="./library-add-choice.png" alt="添加方式选择状态" /></div></figure>
+      <figure><figcaption>新入口：继续看图片挑菜</figcaption><div class="crop"><img src="./library-add-recommend.png" alt="图片挑菜状态" /></div></figure>
+    </main>
+  </body>
+</html>

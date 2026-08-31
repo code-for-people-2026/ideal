@@ -1,3 +1,343 @@
+# Design QA — “我的”产品、隐私与数据入口（2026-08-31）
+
+## Comparison target
+
+- Source visual truth: `qa/profile-before-20260831.png`（`869 × 768`，CSS viewport `869 × 768`，1×），改版前已经确认的“我的”视觉语言：家庭卡片、规则列表、米白底色和深绿主色。
+- Rendered implementation 1: `qa/profile-after-top-20260831.png`（`869 × 768`，CSS viewport `869 × 768`，1×），同一已完成首次准备状态下的顶部、产品与支持入口。
+- Rendered implementation 2: `qa/profile-after-lower-20260831.png`（`869 × 768`，CSS viewport `869 × 768`，1×），同一页面向下滚动后的隐私、协议与数据入口。
+- Focused implementation: `qa/profile-privacy-sheet-20260831.png`（`884 × 781`，CSS viewport `884 × 781`，1×），隐私政策详情面板打开状态；仅用于检查详情层级与可读性，不与 `869 × 768` 基线做像素级比较。
+- Full-view combined comparison: `qa/profile-comparison-20260831.png`（`869 × 928`），将基线、改版顶部、改版下半部分和详情面板放入同一对照画布。
+- State: 已完成首次准备；“我的”主导航；10 道已确认菜品；本地 Mock。
+- Normalization: 基线、顶部和下半部分均使用同一浏览器、同一视口、同一密度；组合页只做等比缩放，没有拉伸。
+- Runtime note: 项目没有 `check:runtime` 脚本；已执行现有 `npm test`、`npm run build`、`git diff --check` 和浏览器交互验收。
+
+## Findings
+
+- No actionable P0/P1/P2 differences remain.
+- P3 / launch dependency: 运营主体、联系方式、协议发布日期和正式法律文本仍为明确标注的待确认项；这是工程原型的有意边界，正式上线前不能把占位说明直接当作生效文本。
+
+## Required fidelity surfaces
+
+- Fonts and typography: 延续现有系统中文字体和层级；入口标题、辅助说明、详情标题与正文在手机内没有截断或异常换行。
+- Spacing and layout rhythm: 新入口复用规则列表的卡片边线、圆角和行高，详情复用既有底部弹层；上下滚动后底部导航保持可见。
+- Colors and visual tokens: 继续使用深绿、浅绿、米白、白卡和金色提示令牌，没有新增与现有产品冲突的颜色。
+- Image quality and asset fidelity: 本轮没有新增图片资产；手机框和状态栏继续复用项目既有资产，入口图标来自已安装的 Radix Icons，没有占位图、CSS 绘图或文本符号伪装图标。
+- Copy and content: 产品用途、协议、隐私、双清单与数据权利均从用户可理解的任务命名出发；“当前原型事实”和“上线前待确认”明确分开，没有伪造运营主体或合规结论。
+
+## Interaction and browser checks
+
+- “关于排好菜”“联系与反馈”“用户协议”“隐私政策”“个人信息收集清单”“第三方共享清单”“个人信息与数据管理”7 个入口均可打开对应详情并关闭。
+- 详情打开时使用 `dialog` 和 `aria-modal`，背景滚动锁定；关闭后恢复页面浏览。
+- 全新页面加载后再次打开并关闭“个人信息收集清单”，浏览器 warning / error：0。
+- `npm test`：17/17；`npm run build` 通过；`git diff --check` 通过。
+
+## Comparison history
+
+1. Earlier P1: “我的”只有家庭排菜规则和工程边界，缺少用户可查阅的产品主体、联系渠道、协议、隐私规则、个人信息双清单与数据权利入口。
+2. Fix: 在保留家庭卡片与默认规则的前提下，增加两组可点击入口和复用现有组件的详情弹层；所有占位内容都明确标注正式上线前确认。
+3. Post-fix evidence: `qa/profile-comparison-20260831.png` 显示新内容延续既有视觉令牌；浏览器逐项点击验证 7 个入口全部正常， fresh-load 控制台无 warning / error。
+
+## Implementation checklist
+
+- [x] 保留家庭规则和既有“我的”视觉基线。
+- [x] 增加产品信息与联系反馈入口。
+- [x] 增加用户协议、隐私政策、个人信息收集清单和第三方共享清单。
+- [x] 增加个人信息与数据管理说明。
+- [x] 所有信息入口可点击、可关闭并有明确原型边界。
+- [x] 模型测试、源码契约、构建、浏览器交互与控制台检查通过。
+
+final result: passed
+
+---
+
+# Design QA — 添加菜双入口与弹层锁定（2026-08-31）
+
+## Comparison target
+
+- Source visual truth: `qa/library-add-sheet.png`（`869 × 768`, 1×），用户标注前的“添加菜后直接打开填写表单”状态。
+- Rendered implementation 1: `qa/library-add-choice.png`（`884 × 781`, CSS viewport `884 × 781`, 1×），添加菜先选择“自己填写”或“看图片继续挑”。
+- Rendered implementation 2: `qa/library-add-recommend.png`（`884 × 781`, CSS viewport `884 × 781`, 1×），复用首次准备的图片卡片和左右滑动语义。
+- Combined comparison: `qa/library-add-mode-comparison.png`（`884 × 781`），把旧表单、方式选择和图片挑菜放在同一张画布中检查。
+- State: 已完成首次准备；菜品库为 10 道演示基线；添加方式弹层打开。
+- Normalization: 新实现两张截图来自同一浏览器和视口；旧基线比当前视口小 `15 × 13px`，比较画布内三张图统一等比缩放和裁切，没有非等比拉伸，不对该轻微视口差异做像素级结论。
+- Runtime note: 项目没有 `check:runtime` 脚本；已执行现有 `npm test`、`npm run build` 和浏览器交互验收。
+
+## Findings
+
+- No actionable P0/P1/P2 differences remain.
+- P3: 推荐图片池目前使用项目已有的 9 张家常菜图，后续接入真实菜品服务时可扩大推荐池；当前数量不影响原型验证。
+
+## Required fidelity surfaces
+
+- Fonts and typography: 方式标题、说明、两条入口和图片卡片继续使用现有系统中文字体、字重与小程序字号层级；没有明显换行或截断。
+- Spacing and layout rhythm: 新入口沿用原详情弹层的圆角、内边距、关闭按钮和底部贴合方式；图片卡片在弹层内完整显示，结束按钮与卡片保持稳定间距。
+- Colors and visual tokens: 两个入口复用深绿、浅绿、米白和既有边线令牌；推荐图片状态沿用首次准备的绿/红滑动语义。
+- Image quality and asset fidelity: 推荐态直接复用项目内真实菜品照片和现有裁切规则，没有占位图、CSS 绘图或拉伸变形。
+- Copy and content: “自己填写一道菜”和“看图片继续挑”明确说明两种任务；左滑加入、右滑不要与首次准备保持一致，没有把用户反馈原文写进界面。
+
+## Interaction and browser checks
+
+- 点击“添加菜”先打开方式选择，不再直接进入表单。
+- “自己填写一道菜”进入菜名、分类、主要材料表单；“换一种方式”可返回选择。
+- “看图片继续挑”进入真实菜品图片卡；浏览器实测左滑“番茄炖牛腩”后统计从 10 道变为 11 道、已加入数从 0 变为 1，随后进入下一张。
+- 弹层打开后，在手机区域执行 `620px` 纵向滚动，前后截图 SHA-256 完全一致；手机内容和外层页面均未翻动。
+- 验收后已通过界面恢复为 10 道演示基线。
+- `npm test`：15/15；`npm run build` 通过；浏览器 warning / error：0。
+
+## Comparison history
+
+1. Earlier P1: “添加菜”直接打开填写表单，不能选择复用首次准备的图片挑菜；弹层打开时背景仍可上下翻页。
+2. Fix: 增加方式选择、复用 `SwipeDishCard` 的图片挑菜流程，并同时锁定手机内容区与页面根滚动。
+3. Post-fix evidence: `qa/library-add-mode-comparison.png` 显示三种状态视觉一致；浏览器实测两个入口、左滑加入和滚动锁定全部通过。
+
+## Implementation checklist
+
+- [x] 添加菜先选择“自己填写”或“看图片继续挑”。
+- [x] 两个入口都可返回并关闭。
+- [x] 图片挑菜复用首次准备的真实图片、左右滑动与持久化菜品池。
+- [x] 任一添加菜弹层打开时禁止上下翻页。
+- [x] 模型测试、源码契约、构建、浏览器交互与控制台检查通过。
+
+final result: passed
+
+---
+
+# Design QA — 左滑加入、右滑不要
+
+## 对照证据
+
+- Source visual truth：`design-qa-screenshots/swipe-direction-20260827/01-before-direction-fix.png`（`869 × 768 @1×`），保留纯滑动卡片的既有视觉结构，作为本轮只调整方向语义的基线。
+- Rendered implementation：`design-qa-screenshots/swipe-direction-20260827/02-after-left-add-right-reject.png`（`884 × 777 @1×`），同一新用户挑菜状态，方向提示已经改为“左滑加入 / 右滑不要”。
+- Full-view comparison：`design-qa-screenshots/swipe-direction-20260827/03-full-comparison.png`，同页并排检查整体结构、手机构图和方向提示。
+- Focused comparison：`design-qa-screenshots/swipe-direction-20260827/04-phone-focus.png`，聚焦手机内方向说明、菜品卡、撤销和结束入口。
+- 归一化：两张截图都来自应用内浏览器、约 `884 × 781` CSS viewport、device density `1×`；本轮只判断方向语义及其反馈，基线截图与实现截图存在不超过 `15px × 9px` 的浏览器可视区差异，对照中未拉伸内容。
+
+## 结论与发现
+
+- 未发现需要继续处理的 P0 / P1 / P2 问题。
+- 左滑现在会把当前菜加入菜品库；右滑会把当前菜标记为不要，并进入下一张。
+- 方向提示、拖动中的红绿印章、判定结果和松手离场动画已经使用同一套方向语义，不会再发生结果正确但卡片反向飞出的跳变。
+- “撤销上一步”和“我选得差不多了”继续负责纠错和结束任务，不与左右滑动重复。
+
+## 五项视觉验收
+
+- 字体与层级：标题、菜名、材料、方向提示和辅助说明沿用原有字号、字重与行高；中文方向文案清晰可读。
+- 间距与版式：卡片、提示、撤销与结束入口的位置未变；小幅文案替换未造成换行、裁切或垂直节奏变化。
+- 色彩与令牌：左侧“加入”使用既有深绿，右侧“不要”使用既有暗红；与拖动印章的语义颜色一致。
+- 图片质量：菜品实图、卡片裁切、渐变遮罩和清晰度未变，无占位图、拉伸或压缩失真。
+- 文案与内容：运行原型和页面地图均统一为“左滑加入、右滑不要”，没有残留相反方向的说明。
+
+## 交互与工程检查
+
+- 右滑第一张菜后：已看数从 0 变为 1，已选数保持 0。
+- 重新载入后左滑第一张菜：已看数从 0 变为 1，已选数从 0 变为 1，荤菜计数同步为 1。
+- 页面控制台 warning / error：0。
+- `npm test`：11/11；`npm run build`、`npm run build:pages`、整站 Pages 构建和 `git diff --check` 均通过。
+
+## 对照迭代记录
+
+1. Earlier P1：左右滑动的结果语义与确认规则相反；初次反转判定后，松手离场动画仍沿用旧方向。
+2. Fix：统一反转判定、提示文案、拖动印章、语义颜色和离场方向，并补充方向契约测试。
+3. Post-fix evidence：同页与手机聚焦对照中，方向说明统一；浏览器实际左右拖动分别得到“加入”和“不要”的正确状态结果。
+
+final result: passed
+
+---
+
+# Design QA — 菜品库与添加菜（2026-08-31）
+
+## Comparison target
+
+- Source visual truth: `qa/library-final.png`（`869 × 768`，CSS viewport `869 × 768`，1×），当前已确认的菜品库视觉基线：10 道用户菜品、搜索、分类筛选和底部导航。
+- Rendered implementation: `qa/library-add-sheet.png`（`869 × 768`，CSS viewport `869 × 768`，1×），同一菜品库打开“添加菜”后的表单状态。
+- Full-view comparison evidence: `qa/library-comparison.png`，把基础状态和新增菜状态放在同一张比较画布中检查。
+- Focused region evidence: 同一比较画布内的手机区域；新增功能只影响手机内底部表单，手机外工程说明、菜品库摘要与导航同时保留，已足够判断组件级一致性，因此未再生成重复裁切图。
+- State: 已完成首次准备；菜品库仅显示已确认的 10 道菜；添加菜表单包含菜名、分类与主要材料。
+- Normalization: 两张截图来自同一浏览器、同一视口和同一设备缩放；未做拉伸，比较画布仅等比展示原图。
+- Runtime note: 项目没有 `check:runtime` 脚本；已执行现有 `npm test` 与 `npm run build` 作为运行和构建校验。
+
+## Findings
+
+- No actionable P0/P1/P2 differences remain.
+- P3: 添加菜暂不支持图片和做法录入；这是当前“先进入可排菜池”的有意最小范围，不影响本轮入口和数据闭环。
+
+## Required fidelity surfaces
+
+- Fonts and typography: 新表单沿用运行原型的系统中文字体、标题字重、9–11px 手机内辅助文字和一致的输入提示层级；没有截断或异常换行。
+- Spacing and layout rhythm: 搜索框与添加入口采用同一行网格；底部表单复用详情浮层的圆角、内边距和关闭位置，字段间距一致。
+- Colors and visual tokens: 深绿用于主操作和选中分类，米白作为手机背景，白色卡片与现有边线令牌一致；没有引入新的冲突色。
+- Image quality and asset fidelity: 新增状态未引入产品图片；手机框和状态栏继续复用现有高质量资产，图标来自项目已安装的 Radix Icons。
+- Copy and content: “我家的菜品”“添加菜”“保存后会进入你家的菜品池”都从用户动作出发，没有混入工程对象名或任务反馈原文。
+
+## Interaction and browser checks
+
+- 基线状态显示 10 道菜，不再回退为 38 道默认推荐池。
+- 点击“添加菜”可打开表单；菜名必填、荤菜/素菜/汤羹单选、主要材料选填。
+- 实测新增“芹菜炒香干”后统计从 10 道变为 11 道、素菜从 3 道变为 4 道；列表立即出现新菜。
+- 刷新后 11 道及新增菜仍保留，证明本地持久化生效；验收完成后已通过界面恢复为 10 道演示基线。
+- `npm test`：15/15 通过；`npm run build` 通过。
+- 浏览器运行日志仅有 Vite debug 和 React DevTools info，没有 warning / error。
+
+## Comparison history
+
+1. Earlier P1: 菜品库统计展示 38 道推荐池，与首次准备选出的 10 道菜不一致，刷新后也无法保证选择结果延续。
+2. Fix: 删除全量菜库回退；把用户确认菜品作为唯一菜品池并持久化；增加复用现有视觉令牌的“添加菜”表单。
+3. Post-fix evidence: `qa/library-comparison.png` 显示基础与新增状态在层级、颜色、字体、间距和导航上保持一致；浏览器交互确认新增、统计更新与刷新保留均正常。
+
+## Implementation checklist
+
+- [x] 菜品库只显示用户确认和手动新增的菜。
+- [x] 首次准备结果与菜品库、生成、换菜共享同一份菜品池。
+- [x] 添加菜入口、表单校验、去重和保存完成。
+- [x] 菜品池写入本地持久化，刷新后保留。
+- [x] 15 项模型/源码自检、生产构建和浏览器实测通过。
+
+final result: passed
+
+---
+
+# Design QA — 历史页表格与底部操作栏（2026-08-31）
+
+## Comparison target
+
+- Source visual truth 1: `design-qa-screenshots/history-table-20260831/source-history-before.png`（`869 × 768`, 1×），历史页改版前的逐餐卡片与漂浮按钮。
+- Source visual truth 2: `design-qa-screenshots/history-table-20260831/source-menu-table.png`（`869 × 768`, CSS viewport `869 × 768`, 1×），项目现有“修改菜单”表格组件。
+- Rendered implementation: `design-qa-screenshots/history-table-20260831/implementation-history-table.png`（`869 × 768`, CSS viewport `869 × 768`, 1×）。
+- Combined comparison: `design-qa-screenshots/history-table-20260831/comparison.png`（`1280 × 720`），同时呈现改版前、表格来源和改版后。
+- State: 已完成首次准备；历史页查看上周已保存菜单；5 天、午饭和晚饭、每餐 5 道菜。
+- Normalization: 表格来源与实现均由同一个浏览器标签在同一视口重新捕获；没有裁切、拉伸或密度换算。
+
+## Findings
+
+- No actionable P0/P1/P2 differences remain.
+- Intentional difference: 历史页一次展示每餐全部 5 道菜，信息密度高于“修改菜单”默认的荤菜视图；这是为了满足只读查看完整菜单，不是视觉漂移。
+
+## Required fidelity surfaces
+
+- Fonts and typography: 复用现有菜单表格的系统中文字体、日期、餐次轴和菜名字重；窄列内未出现溢出或意外换行。
+- Spacing and layout rhythm: 日期周导航保持居中；表格沿用三列可视宽度；复制操作栏占满手机内容宽度并固定在底部导航正上方，不再插入菜单内容中间。
+- Colors and visual tokens: 表格继续使用荤菜砖红、素菜绿色、汤羹蓝色分类边线；只读状态和复制操作使用项目既有深绿语义。
+- Image quality and asset fidelity: 本轮没有新增图片资产；继续复用真实手机边框、状态栏资产和 Radix 图标。
+- Copy and content: “只读菜单”“左右滑动查看每天安排”“复制这周到下周”分别说明状态、浏览方式和下一步操作，没有把开发指令写进产品界面。
+
+## Interaction and browser checks
+
+- 页面包含周一至周五、午饭和晚饭共 50 道菜，横向表格沿用既有拖动逻辑。
+- “复制这周到下周”固定在底部导航上方；点击后正确打开“复制整周菜单”确认框，取消可返回原历史页。
+- 13 项状态与导航测试、生产构建和 `git diff --check` 均通过。
+
+## Focused comparison
+
+- 未额外裁切局部图：本次仅涉及手机内的表格和底部操作栏，两者在 `869 × 768` 同视口全屏截图与三联对照图中均可直接辨认。
+
+## Comparison history
+
+1. Earlier P1: 复制按钮以 sticky 元素覆盖在餐次卡片之间，视觉上像漂浮在半空。
+2. Earlier P1: 历史菜单使用十张逐餐卡片，与项目已经建立的五天横向菜单表格不一致。
+3. Fix: 历史页改为固定顶部周导航、中间可滚动只读表格、底部独立操作栏；表格直接复用修改菜单的列宽、餐次轴、分类边线和横向拖动方式。
+4. Post-fix evidence: `comparison.png` 显示操作栏紧贴底部导航，表格结构与修改菜单页一致；没有剩余 P0/P1/P2 问题。
+
+## Implementation checklist
+
+- [x] 日期居中并保留左右切周。
+- [x] 历史菜单改为五天横向表格。
+- [x] 表格保持只读但可横向浏览。
+- [x] 复制操作栏固定在底部导航上方。
+- [x] 复制确认交互继续可用。
+- [x] 测试、构建和视觉对照通过。
+
+final result: passed
+
+---
+
+# Design QA — 纯滑动挑菜
+
+## 对照证据
+
+- Source visual truth：`design-qa-screenshots/swipe-only-20260827/01-before-assist-buttons.png`（`869 × 768 @1×`），卡片下方仍保留两个圆形点按辅助按钮。
+- Rendered implementation：`design-qa-screenshots/swipe-only-20260827/02-after-swipe-only.png`（`869 × 768 @1×`），同一视口、同一新用户挑菜状态，已彻底删除辅助按钮。
+- Full-view comparison：`design-qa-screenshots/swipe-only-20260827/03-full-comparison.png`，左侧修改前、右侧修改后。
+- Focused comparison：`design-qa-screenshots/swipe-only-20260827/04-phone-focus.png`，聚焦卡片、滑动提示、撤销与结束入口。
+- 归一化：两张原图均为约 `884 × 781` CSS viewport、`869 × 768` 截图像素、device density `1×`；对照图未拉伸。
+
+## 结论与发现
+
+- 未发现需要继续处理的 P0 / P1 / P2 问题。
+- 挑菜选择现在只有一种交互机制：右滑加入，左滑略过。
+- 卡片上方仍有明确的方向说明，拖动过程仍会在图片上显示“暂时不要 / 加入菜品库”印章反馈。
+- “撤销上一步”和“我选得差不多了”仍保留，分别负责纠错与结束任务，不与单道菜的选择重复。
+- 可见取舍：去掉了不便滑动用户的点按备选操作，以换取更单一、更明确的产品机制；这是本轮确认的产品决策。
+
+## 五项视觉验收
+
+- 字体与层级：所有字体、字号、行高和菜名层级未改；删除按钮后没有新增孤立文字。
+- 间距与版式：卡片下方直接进入撤销 / 计数与结束入口，空间更紧凑，无断层或裁切。
+- 色彩与令牌：删除按钮专用的红绿辅助色块，主色仍由图片、滑动印章和结束入口承担。
+- 图片质量：菜品实图、裁切、遮罩、清晰度和卡片堆叠效果未变。
+- 文案与内容：去除单道菜选择的所有按钮文案和辅助按钮语义；滑动方向和卡片反馈文案保留。
+
+## 交互与工程检查
+
+- 右滑第一张卡片后，已选数从 0 变为 1。
+- 左滑第二张卡片后，已看数变为 2，已选数仍为 1。
+- DOM 中不再存在点按辅助操作组；撤销和结束入口仍存在。
+- 页面控制台 warning / error：0。
+- `npm test`：11/11；`npm run build` 和 `git diff --check` 通过。
+
+## 对照迭代记录
+
+1. Earlier P2：虽然文字大按钮已收缩为圆形辅助按钮，但单道菜仍存在“滑动或点击”两种等价决策方式。
+2. Fix：删除辅助操作 DOM、样式与契约测试，只保留卡片滑动和滑动反馈。
+3. Post-fix evidence：同视口前后对照中，卡片下方的圆形按钮已完全消失；左右拖动实测仍正确更新已看 / 已选状态。
+
+final result: passed
+
+---
+
+# Design QA — 滑动为主、点按为辅的挑菜操作
+
+## 对照证据
+
+- Source visual truth：`design-qa-screenshots/swipe-assist-20260827/01-before.png`（`869 × 768 @1×`），左右滑动已成立，但卡片下方仍有两个高权重文字大按钮。
+- Rendered implementation：`design-qa-screenshots/swipe-assist-20260827/02-after.png`（`869 × 768 @1×`），同一应用内浏览器与首次挑菜步骤。
+- Full-view comparison：`design-qa-screenshots/swipe-assist-20260827/03-full-comparison.png`，左侧修改前、右侧修改后。
+- Focused comparison：`design-qa-screenshots/swipe-assist-20260827/04-phone-focus.png`，只比较手机选菜区和卡片下方的操作层级。
+- 视口与归一化：两张原图均来自约 `884 × 781` CSS viewport，截图像素尺寸均为 `869 × 768`，device density `1×`；对照图未拉伸。
+- State：两张都是“首次准备 · 挑选常吃菜”；菜名和已看计数不同，本轮仅比较操作层级，不比较内容状态。
+
+## 结论与发现
+
+- 未发现需要继续处理的 P0 / P1 / P2 问题。
+- 左右滑动、顶部方向提示和拖动印章成为主操作；卡片下方的两块文字大按钮已改为两个小型圆形辅助按钮。
+- 辅助按钮继续覆盖鼠标、键盘与不便滑动的使用情况，但不再与滑动争夺主操作层级。
+- P3：圆形按钮使用图标而不显示文字；首次使用者主要依赖卡片上方的“左滑不要 / 右滑加入”提示，这是有意的主次取舍。
+
+## 五项视觉验收
+
+- 字体与层级：标题、菜名、主料、滑动提示和结束入口的字号、字重未变；删除重复文字后层级更清晰。
+- 间距与版式：两个 `38px` 圆形按钮居中、间距 `14px`，操作区高度显著降低，“我选得差不多了”的位置没有被挤压。
+- 色彩与令牌：略过复用既有暗红，加入复用既有深绿和浅绿；去掉了原绿色实心大块与卡片的竞争。
+- 图片质量：菜品图、裁切、清晰度和卡片遮罩完全沿用既有实图，没有新增占位图或缩放失真。
+- 文案与内容：手机可见的重复“暂时不要 / 加入菜品库”大按钮文案已移除；图标按钮保留完整的中文 `aria-label` 和鼠标提示。
+
+## 交互与工程检查
+
+- 点击绿色辅助按钮后，已选数从 0 更新为 1，下一张菜品卡正常进入。
+- 鼠标向右拖动卡片超过阈值后，已选数从 1 更新为 2，滑动机制未受按钮改造影响。
+- 两个辅助按钮均保留明确的焦点反馈、按下反馈和可读名称。
+- 页面控制台 warning / error：0。
+- `npm test`：11/11；`npm run build` 和 `git diff --check` 通过。
+
+## 对照迭代记录
+
+1. Earlier P2：滑动已经是主机制，但下方两个文字大按钮执行完全相同的动作，形成双重主操作。
+2. Fix：保留滑动提示、拖动与印章反馈；把两个文字大按钮收成居中的略过 / 加入圆形辅助按钮，同步移除页面地图中重复的静态操作块。
+3. Post-fix evidence：同视口对照显示卡片成为唯一视觉主体，辅助按钮仍可点，鼠标拖动仍可完成加入。
+
+final result: passed
+
+---
+
 # Design QA — 周菜单鼠标拖动
 
 ## 对照证据
