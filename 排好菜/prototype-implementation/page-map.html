@@ -730,9 +730,6 @@
       .static-dish-card small { color: var(--green-dark); font-size: 7px; font-weight: 850; }
       .static-dish-card strong { margin-top: 3px; display: block; font-size: 13px; }
       .static-dish-card p { margin: 3px 0 0; color: var(--muted); font-size: 8px; }
-      .static-dish-actions { margin-top: 7px; display: grid; grid-template-columns: 1fr 1.35fr; gap: 6px; }
-      .static-dish-actions span { min-height: 36px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 9px; color: var(--muted); background: white; font-size: 8px; font-weight: 850; }
-      .static-dish-actions span:last-child { border-color: var(--green-dark); color: white; background: var(--green-dark); }
       .static-picker-complete { min-height: 42px; margin-top: 7px; padding: 7px 10px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #bad9cd; border-radius: 10px; color: var(--green-dark); background: var(--green-soft); }
       .static-picker-complete strong, .static-picker-complete small { display: block; }
       .static-picker-complete strong { font-size: 9px; }
@@ -1034,9 +1031,8 @@
           },
           onboardingStarter: {
             tab: "library", title: "挑出家里常吃的菜", state: "第 3 步", back: "返回", hideNav: true,
-            content: `<section class="card" style="margin-top:0"><small>荤菜 · 快速挑选 · 已看 7 道</small><h2>看图挑出家里会吃的菜</h2><p>推荐池有 18 道示例菜，觉得差不多时可以随时结束。</p></section>
+            content: `<section class="card" style="margin-top:0"><small>荤菜 · 快速挑选 · 已看 7 道</small><h2>左右滑动，挑出家里会吃的菜</h2><p>向左滑加入菜品库，向右滑不要；觉得差不多时可以随时结束。</p></section>
             <section class="static-dish-card"><img src="./assets/dishes/potato-beef.jpg" alt="土豆烧牛肉"><div><small>荤菜</small><strong>土豆烧牛肉</strong><p>主要材料 · 牛肉、土豆</p></div></section>
-            <div class="static-dish-actions"><span>暂时不要</span><span>加入菜品库</span></div>
             <div class="static-picker-complete"><span><strong>我选得差不多了</strong><small>已选 6 道 · 也可以继续挑</small></span><b>›</b></div>`
           },
           onboardingDishes: {
@@ -1047,11 +1043,12 @@
             <button class="primary green" type="button" data-advance>暂时没有，继续</button>`
           },
           onboardingReady: {
-            tab: "schedule", title: "准备完成", state: "可排菜", back: "返回", hideNav: true,
-            content: `<section class="success-card" style="margin-top:0"><small>首次准备已完成</small><strong>可以排第一周菜单了</strong><p>以后可以从“我的”修改餐型，从“菜品库”增减常用菜。</p></section>
-            <section class="rule-list"><div class="rule-row"><span>家庭餐次</span><strong>4 人 · 午饭和晚饭</strong></div><div class="rule-row"><span>排菜日期</span><strong>周一至周五</strong></div><div class="rule-row"><span>默认餐型</span><strong>2 荤 2 素 1 汤</strong></div><div class="rule-row"><span>可用菜品池</span><strong>38 道已确认</strong></div></section>
-            <div class="mini-note">第一次生成仍可换菜；保存后才会成为正式的本周菜单。</div>
-            <button class="primary" type="button" data-focus-target="w01">去排第一周菜单</button>`
+            tab: "schedule", title: "准备完成", state: "重复提醒", back: "返回", hideNav: true,
+            content: `<section class="success-card" style="margin-top:0"><small>首次准备已完成</small><strong>可以排菜，但会有重复</strong><p>现有菜品能填满每餐；补充不同主料后，午饭和晚饭更容易错开。</p></section>
+            <section class="card"><small>菜品池检查 · 可生成</small><h2>预计会有重复</h2><p>荤菜 7 道 · 6 种主料；素菜 4 道 · 4 种主料；汤羹 1 道 · 1 种主料。</p><div class="metrics"><span>建议再补 1 种汤羹主料</span></div></section>
+            <section class="rule-list"><div class="rule-row"><span>家庭餐次</span><strong>4 人 · 午饭和晚饭</strong></div><div class="rule-row"><span>排菜日期</span><strong>周一至周五</strong></div><div class="rule-row"><span>默认餐型</span><strong>2 荤 2 素 1 汤</strong></div><div class="rule-row"><span>可用菜品池</span><strong>12 道已确认</strong></div></section>
+            <div class="mini-note">用户可以继续补充菜品，也可以接受重复后生成完整菜单。</div>
+            <button class="primary" type="button" data-focus-target="w01">接受重复，去排菜单</button>`
           },
           start: {
             tab: "schedule", title: "本周菜单", state: "待生成",
@@ -1060,9 +1057,8 @@
               <div><strong data-week-label>9月7日—9月11日</strong><small data-week-sub>本周 · 周一至周五</small></div>
               <button type="button" data-week-move="1">下周</button>
             </div>
-            <section class="plan-state" data-generate-state><div><small>本周还没有菜单</small><strong>10 餐待安排</strong></div><span>待生成</span></section>
-            <section class="card"><small>默认排菜规则</small><h2>五天十餐，一次排好</h2><p>每餐 2 荤 2 素 1 汤，只使用已确认菜品，同一主料尽量错开。</p><div class="metrics"><span>5 天</span><span>10 餐</span><span>50 道菜</span></div></section>
-            <div class="mini-note">菜品池已就绪，生成后可以逐道调整。</div>
+            <section class="plan-state" data-generate-state><div><strong>10 餐待安排</strong></div><span>待生成</span></section>
+            <section class="card"><small>本周规则</small><h2>五天十餐，一次排好</h2><p>每餐 2 荤 2 素 1 汤 · 只用已确认菜品 · 主料尽量错开</p></section>
             <button class="primary" type="button" data-generate data-advance>生成本周菜单</button>`
           },
           review: {
