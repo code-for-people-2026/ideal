@@ -1,3 +1,58 @@
+# Design QA — 页面地图“本周排菜”同步（2026-09-01）
+
+## Comparison target
+
+- Source visual truth: `/tmp/paihaocai-qa-source-edit-v2.png`（Codex 应用内浏览器），当前 React 运行原型的“修改菜单”状态。
+- Rendered implementation: `/tmp/paihaocai-qa-page-map-edit-v2.png`（Codex 应用内浏览器），页面地图聚焦 `w02` 后的静态手机状态。
+- Full-view combined comparison: `/tmp/paihaocai-qa-edit-comparison.png`（`1753 × 781`），左侧为运行原型，右侧为页面地图聚焦状态。
+- Focused implementation evidence: `/tmp/paihaocai-page-map-confirm-focused.png` 与 `/tmp/paihaocai-page-map-history-focused.png`，分别检查确认保存和历史结果。
+- Viewport and normalization: 两侧均为当前桌面浏览器视口与 `1×` 密度；页面地图为了显示流程上下文会缩小手机，本轮比较信息结构、组件顺序、状态和文案，不做跨缩放像素级判断。
+- State: 已完成首次准备；本周菜单已生成；选中周一午饭荤菜；页面地图聚焦“本周排菜”。
+
+## Findings
+
+- No actionable P0/P1/P2 differences remain.
+- P3: 页面地图的手机会为保留前后步骤上下文而缩小，字号不与运行原型做 1:1 比较；单手机聚焦后可读性正常。
+- 周菜单视口比例一致：运行原型为 `250 / 122 = 2.05` 列，页面地图为 `218 / 106 = 2.05` 列；两者均完整展示两天，并通过横向滚动查看其余三天。
+
+## Required fidelity surfaces
+
+- Fonts and typography: 页面地图继续使用项目系统中文字体、标题字重和辅助文字层级；聚焦状态无截断，静态手机里的文字密度与运行原型一致。
+- Spacing and layout rhythm: 菜单表格、选中菜品卡、底部主操作和底部导航顺序与运行原型一致；确认页与历史页的主操作吸附在导航上方。
+- Colors and visual tokens: 米白底、白卡、砖红主操作、深绿确认态与浅绿导航选中态全部复用既有令牌。
+- Image quality and asset fidelity: 本轮没有新增图片资产；继续复用既有 iPhone 边框与状态栏资产，没有占位图或 CSS 绘图。
+- Copy and content: 删除旧的“自动换一道”“软规则提醒”和解释性提示；手机内只保留产品文案，客户目标与状态转换移动到手机框外连接线。
+
+## Interaction and browser checks
+
+- “本周排菜”筛选能聚焦正确泳道，共显示 7 个真实状态。
+- 点击 `w02`、`w06`、`w07` 可以分别聚焦调整、确认和历史结果；聚焦中心偏差为 `1px`，不会再被浏览器自动滚动带偏。
+- 确认页显示完整表格和“保存本周菜单”；历史页显示周切换、完整表格和“复制这周到下周”。
+- 页面 DOM 完整渲染，筛选和单手机聚焦均产生预期状态变化。
+- `npm test`：23/23；`npm run build:pages` 通过。
+
+## Comparison history
+
+1. Earlier P1: 页面地图仍保留 8 个旧状态，确认页使用餐次卡片、保存后有独立成功页，且手机内混有“软规则提醒”等运行原型已经删除的说明。
+2. Fix: 收敛为 7 个当前真实状态；更新调整、换菜、手选、确认和历史画面；把解释移至手机框外，并让保存后直接进入历史。
+3. Earlier P1: 自动化或键盘聚焦远处手机时，浏览器会让隐藏画布容器产生内部滚动，导致被选手机偏出视口。
+4. Fix: 聚焦前清除容器内部滚动，并使用画布内坐标计算目标中心。
+5. Post-fix evidence: `/tmp/paihaocai-page-map-confirm-focused.png` 和 `/tmp/paihaocai-page-map-history-focused.png` 中目标手机均居中、可读，前后节点只作为弱化上下文保留。
+6. Earlier P1: 页面地图使用独立的五列压缩表格，在同一手机宽度中会同时露出三列以上，与运行原型的两天横向轮播结构不一致。
+7. Fix: 删除页面地图专属的压缩周表，改为与运行原型同构的“餐次轴 + 两天列 + 横向滚动”，并新增结构回归测试。
+
+## Implementation checklist
+
+- [x] 本周排菜线与运行原型使用同一套 7 个状态。
+- [x] 手机内只展示真实产品内容。
+- [x] 规则、分支和结果说明位于手机框外。
+- [x] 确认与历史使用当前表格式菜单。
+- [x] 页面聚焦、构建和测试通过。
+
+final result: passed
+
+---
+
 # Design QA — “我的”产品、隐私与数据入口（2026-08-31）
 
 ## Comparison target
