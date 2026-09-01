@@ -162,10 +162,12 @@ export function createInitialState() {
     activeTab: "schedule",
     screen: "home",
     weekIndex: 1,
-    historyWeekIndex: 0,
+    historyWeekIndex: 1,
     menus: {
       0: { status: "saved", data: createMenu(0, household, mealPatterns["2-2-1"], demoDishPool) },
-      1: { status: "empty", data: null },
+      // ponytail: ready mode represents a returning user so history switching is explorable;
+      // reset-to-new-user still clears every week for the first-use journey.
+      1: { status: "saved", data: createMenu(1, household, mealPatterns["2-2-1"], demoDishPool) },
       2: { status: "empty", data: null },
     },
     selection: { dayIndex: 0, meal: "lunch", dishIndex: 0 },
@@ -207,6 +209,160 @@ export function createNewUserState() {
   };
 }
 
+function normalizedName(value) {
+  return String(value || "").trim().toLocaleLowerCase("zh-CN");
+}
+
+function sanitizeStarterDishIds(value) {
+  const names = new Set();
+  return (Array.isArray(value) ? value : []).filter((id) => {
+    const dish = library.find((item) => item.id === id);
+    const name = normalizedName(dish?.name);
+    if (!dish || names.has(name)) return false;
+    names.add(name);
+    return true;
+  });
+}
+
+function sanitizeManualDishes(value, reservedNames = new Set()) {
+  const names = new Set(reservedNames);
+  const ids = new Set();
+  return (Array.isArray(value) ? value : []).flatMap((dish, index) => {
+    const name = String(dish?.name || "").trim().slice(0, 40);
+    const normalized = normalizedName(name);
+    const id = typeof dish?.id === "string" && dish.id ? dish.id : `manual-${index}-${name}`;
+    if (!name || !Object.hasOwn(kindLabels, dish?.kind) || names.has(normalized) || ids.has(id)) return [];
+    names.add(normalized);
+    ids.add(id);
+    const main = String(dish.main || "待补充").trim().slice(0, 60) || "待补充";
+    return [{
+      id,
+      name,
+      kind: dish.kind,
+      main,
+      ingredients: main === "待补充" ? [] : [main],
+      uses: Number.isFinite(Number(dish.uses)) ? Math.max(0, Math.round(Number(dish.uses))) : 0,
+      note: typeof dish.note === "string" && dish.note.trim() ? dish.note.trim().slice(0, 80) : "手动添加的家常菜",
+    }];
+  }).slice(0, 30);
+}
+
+function sanitizeCustomStarterDishes(value, reservedNames = new Set()) {
+  const names = new Set(reservedNames);
+  return (Array.isArray(value) ? value : []).flatMap((item) => {
+    const name = String(item || "").trim().slice(0, 40);
+    const normalized = normalizedName(name);
+    if (!name || names.has(normalized)) return [];
+    names.add(normalized);
+    return [name];
+  }).slice(0, 8);
+}
+
+function sanitizeHousehold(value, fallback) {
+  const peopleValue = Number(value?.people);
+  const people = Number.isFinite(peopleValue) ? Math.max(1, Math.min(20, Math.round(peopleValue))) : fallback.people;
+  const meals = [...new Set((Array.isArray(value?.meals) ? value.meals : []).filter((meal) => Object.hasOwn(mealLabels, meal)))];
+  const dayIndexes = [...new Set((Array.isArray(value?.dayIndexes) ? value.dayIndexes : []).filter((day) => Number.isInteger(day) && day >= 0 && day < weekdayLabels.length))].sort((a, b) => a - b);
+  const safeMeals = meals.length > 0 ? meals : fallback.meals;
+  const safeDayIndexes = dayIndexes.length > 0 ? dayIndexes : fallback.dayIndexes;
+  return { people, meals: safeMeals, days: safeDayIndexes.length, dayIndexes: safeDayIndexes };
+}
+
+function sanitizeCustomPattern(value, fallback) {
+  return Object.fromEntries(Object.keys(kindLabels).map((kind) => {
+    const count = Number(value?.[kind]);
+    const maximum = kind === "soup" ? 2 : 3;
+    return [kind, Number.isFinite(count) ? Math.max(0, Math.min(maximum, Math.round(count))) : fallback[kind]];
+  }));
+}
+
+function sanitizeMealItems(value) {
+  return (Array.isArray(value) ? value : []).flatMap((item) => {
+    const name = String(item?.[0] || "").trim().slice(0, 40);
+    const kind = item?.[1];
+    return name && Object.hasOwn(kindLabels, kind) ? [[name, kind]] : [];
+  }).slice(0, 7);
+}
+
+function sanitizeMenuData(value) {
+  if (!Array.isArray(value)) return null;
+  const usedDays = new Set();
+  const days = value.flatMap((day) => {
+    const dayIndex = Number(day?.dayIndex);
+    if (!Number.isInteger(dayIndex) || dayIndex < 0 || dayIndex >= weekdayLabels.length || usedDays.has(dayIndex)) return [];
+    usedDays.add(dayIndex);
+    return [{
+      day: weekdayLabels[dayIndex],
+      dayIndex,
+      lunch: sanitizeMealItems(day.lunch),
+      dinner: sanitizeMealItems(day.dinner),
+    }];
+  }).slice(0, weekdayLabels.length);
+  return days.length > 0 ? days : null;
+}
+
+function sanitizeMenus(value, fallback) {
+  return Object.fromEntries(weeks.map((_, weekIndex) => {
+    const candidate = value?.[weekIndex];
+    if (!candidate || !["empty", "draft", "saved"].includes(candidate.status)) return [weekIndex, fallback[weekIndex]];
+    if (candidate.status === "empty") return [weekIndex, { status: "empty", data: null }];
+    const data = sanitizeMenuData(candidate.data);
+    return [weekIndex, data ? { status: candidate.status, data } : { status: "empty", data: null }];
+  }));
+}
+
+export function restorePrototypeData(state, saved) {
+  if (!saved || ![1, 2].includes(saved.version)) return state;
+  const starterDishIds = sanitizeStarterDishIds(saved.starterDishIds);
+  const selectedNames = new Set(starterDishIds.map((id) => normalizedName(library.find((dish) => dish.id === id)?.name)));
+  const manualDishes = sanitizeManualDishes(saved.manualDishes, selectedNames);
+  const reservedNames = new Set([...selectedNames, ...manualDishes.map((dish) => normalizedName(dish.name))]);
+  const customStarterDishes = sanitizeCustomStarterDishes(saved.customStarterDishes, reservedNames);
+  if (saved.version === 1) {
+    if (starterDishIds.length === 0 && manualDishes.length === 0 && customStarterDishes.length === 0) return state;
+    return { ...state, starterPoolBase: { meat: 0, veg: 0, soup: 0 }, starterDishIds, customStarterDishes, manualDishes };
+  }
+
+  const household = sanitizeHousehold(saved.household, state.household);
+  const mealPattern = Object.hasOwn(mealPatterns, saved.mealPattern) || saved.mealPattern === "custom" ? saved.mealPattern : state.mealPattern;
+  const customPattern = sanitizeCustomPattern(saved.customPattern, state.customPattern);
+  const emptyMenus = Object.fromEntries(weeks.map((_, index) => [index, { status: "empty", data: null }]));
+  const menus = sanitizeMenus(saved.menus, emptyMenus);
+  const weekIndex = Number.isInteger(saved.weekIndex) && saved.weekIndex >= 0 && saved.weekIndex < weeks.length ? saved.weekIndex : state.weekIndex;
+  const savedWeekIndexes = weeks.map((_, index) => index).filter((index) => menus[index].status === "saved");
+  const historyWeekIndex = Number.isInteger(saved.historyWeekIndex) && savedWeekIndexes.includes(saved.historyWeekIndex)
+    ? saved.historyWeekIndex
+    : savedWeekIndexes.at(-1) ?? state.historyWeekIndex;
+  return {
+    ...state,
+    household,
+    mealPattern,
+    customPattern,
+    starterPoolBase: { meat: 0, veg: 0, soup: 0 },
+    starterDishIds,
+    customStarterDishes,
+    manualDishes,
+    menus,
+    weekIndex,
+    historyWeekIndex,
+  };
+}
+
+export function serializePrototypeData(state) {
+  return {
+    version: 2,
+    household: state.household,
+    mealPattern: state.mealPattern,
+    customPattern: state.customPattern,
+    starterDishIds: state.starterDishIds,
+    customStarterDishes: state.customStarterDishes,
+    manualDishes: state.manualDishes || [],
+    menus: state.menus,
+    weekIndex: state.weekIndex,
+    historyWeekIndex: state.historyWeekIndex,
+  };
+}
+
 export function currentMealPattern(state) {
   return state.mealPattern === "custom" ? state.customPattern : mealPatterns[state.mealPattern];
 }
@@ -239,6 +395,11 @@ export function dishPoolStats(state) {
   });
   const custom = state.customStarterDishes.length;
   return { ...stats, custom, total: stats.meat + stats.veg + stats.soup + custom };
+}
+
+function hasDishName(state, name) {
+  const target = normalizedName(name);
+  return Boolean(target) && userLibrary(state).some((dish) => normalizedName(dish.name) === target);
 }
 
 export function userLibrary(state) {
@@ -369,11 +530,31 @@ export function reducer(state, action) {
       return { ...state, onboardingStep: 2, toast: null };
     case "ADD_CUSTOM_STARTER_DISH": {
       const value = String(action.value || "").trim();
-      if (!value || state.customStarterDishes.includes(value)) return state;
+      if (!value || hasDishName(state, value)) return state;
       return { ...state, customStarterDishes: [...state.customStarterDishes, value].slice(0, 8), toast: null };
     }
     case "REMOVE_CUSTOM_STARTER_DISH":
       return { ...state, customStarterDishes: state.customStarterDishes.filter((item) => item !== action.value), toast: null };
+    case "ADD_ONBOARDING_DISH": {
+      const name = String(action.dish?.name || "").trim().slice(0, 40);
+      const kind = action.dish?.kind;
+      if (!name || !Object.hasOwn(kindLabels, kind)) return state;
+      if (hasDishName(state, name)) return withLog(state, `菜品库里已经有「${name}」`);
+      const manualDishes = state.manualDishes || [];
+      if (manualDishes.length >= 30) return withLog(state, "自家菜已达到本原型的 30 道上限");
+      const dish = { id: action.dish.id || `onboarding-${manualDishes.length}-${name}`, name, kind, main: "待补充", ingredients: [], uses: 0, note: "首次准备时补充的家常菜" };
+      return withLog({ ...state, manualDishes: [...manualDishes, dish] }, `已补充「${name}」`);
+    }
+    case "REMOVE_MANUAL_DISH":
+      return { ...state, manualDishes: (state.manualDishes || []).filter((dish) => dish.id !== action.id), toast: null };
+    case "CLASSIFY_CUSTOM_DISH": {
+      const name = String(action.name || "").trim();
+      const kind = action.kind;
+      if (!name || !state.customStarterDishes.includes(name) || !Object.hasOwn(kindLabels, kind)) return state;
+      const manualDishes = state.manualDishes || [];
+      const dish = { id: `classified-${manualDishes.length}-${name}`, name, kind, main: "待补充", ingredients: [], uses: 0, note: "已补充分类的家常菜" };
+      return withLog({ ...state, customStarterDishes: state.customStarterDishes.filter((item) => item !== name), manualDishes: [...manualDishes, dish], libraryDetailId: null }, `已将「${name}」设为${kindLabels[kind]}`);
+    }
     case "COMPLETE_ONBOARDING": {
       // ponytail: direct test/demo completion gets one small usable pool; the real flow keeps the user's choices.
       const starterDishIds = state.starterDishIds.length > 0 ? state.starterDishIds : demoStarterDishIds;
@@ -443,16 +624,17 @@ export function reducer(state, action) {
       return { ...state, profilePanel: null };
     case "ADD_RECOMMENDED_DISH": {
       const dish = library.find((item) => item.id === action.id);
-      if (!dish || state.starterDishIds.includes(dish.id)) return state;
+      if (!dish || state.starterDishIds.includes(dish.id) || hasDishName(state, dish.name)) return state;
       return withLog({ ...state, starterDishIds: [...state.starterDishIds, dish.id], libraryFilter: "all", libraryQuery: "" }, `已加入「${dish.name}」`);
     }
     case "ADD_MANUAL_DISH": {
-      const name = String(action.dish?.name || "").trim();
-      const main = String(action.dish?.main || "").trim() || "待补充";
+      const name = String(action.dish?.name || "").trim().slice(0, 40);
+      const main = String(action.dish?.main || "").trim().slice(0, 60) || "待补充";
       const kind = action.dish?.kind;
       if (!name || !Object.hasOwn(kindLabels, kind)) return state;
-      if (userLibrary(state).some((dish) => dish.name.toLowerCase() === name.toLowerCase())) return withLog(state, `菜品库里已经有「${name}」`);
+      if (hasDishName(state, name)) return withLog(state, `菜品库里已经有「${name}」`);
       const manualDishes = state.manualDishes || [];
+      if (manualDishes.length >= 30) return withLog(state, "自家菜已达到本原型的 30 道上限");
       const dish = { id: action.dish.id || `manual-${manualDishes.length}-${name}`, name, kind, main, ingredients: main === "待补充" ? [] : [main], uses: 0, note: "手动添加的家常菜" };
       return withLog({ ...state, manualDishes: [...manualDishes, dish], addingDish: false, addDishMode: null, libraryFilter: "all", libraryQuery: "" }, `已添加「${name}」`);
     }

@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { createInitialState, createNewUserState, currentMealPattern, dishPoolReadiness, dishPoolStats, planStats, reducer, starterDishChoices, usableLibrary, userLibrary, visibleLibrary, weekRange } from "../src/model.js";
+import { createInitialState, createNewUserState, currentMealPattern, dishPoolReadiness, dishPoolStats, planStats, reducer, restorePrototypeData, serializePrototypeData, starterDishChoices, usableLibrary, userLibrary, visibleLibrary, weekRange } from "../src/model.js";
 
 test("生成、换菜、保存和历史复制共享同一份 WeekPlan", () => {
   let state = createInitialState();
@@ -24,6 +24,10 @@ test("生成、换菜、保存和历史复制共享同一份 WeekPlan", () => {
 
 test("历史页只在已保存周之间切换，不改变排菜单当前周", () => {
   let state = createInitialState();
+  assert.equal(state.historyWeekIndex, 1);
+  assert.equal(state.menus[0].status, "saved");
+  assert.equal(state.menus[1].status, "saved");
+
   state = reducer(state, { type: "GENERATE_DONE" });
   state = reducer(state, { type: "SAVE_MENU" });
   assert.equal(state.historyWeekIndex, 1);
@@ -115,6 +119,9 @@ test("菜品库只显示已确认菜品，并支持添加自家菜", () => {
   assert.equal(state.addDishMode, "recommend");
   assert.equal(dishPoolStats(state).total, 12);
   assert.ok(userLibrary(state).some((dish) => dish.id === "tomato-beef-brisket"));
+  const beforeDuplicateName = state.starterDishIds.length;
+  state = reducer(state, { type: "ADD_RECOMMENDED_DISH", id: "seaweed-soup" });
+  assert.equal(state.starterDishIds.length, beforeDuplicateName);
   state = reducer(state, { type: "CLOSE_ADD_DISH" });
   assert.equal(state.addDishMode, null);
 });
@@ -168,13 +175,43 @@ test("首次菜品池支持较大推荐池、自主结束、撤销和补充自�
   assert.deepEqual(state.customStarterDishes, []);
 });
 
+test("首次补充菜必须带分类、会参与生成，并拦截所有来源的重名", () => {
+  let state = { ...createNewUserState(), onboardingStep: 4, starterDishIds: ["beef-potato"] };
+  state = reducer(state, { type: "ADD_ONBOARDING_DISH", dish: { id: "duplicate", name: "土豆烧牛肉", kind: "meat" } });
+  assert.equal(state.manualDishes.length, 0);
+
+  state = reducer(state, { type: "ADD_ONBOARDING_DISH", dish: { id: "home-tofu", name: "家里的烧豆腐", kind: "veg" } });
+  assert.equal(state.manualDishes.length, 1);
+  assert.equal(usableLibrary(state).at(-1).name, "家里的烧豆腐");
+  assert.equal(dishPoolStats(state).veg, 1);
+
+  state = reducer(state, { type: "ADD_CUSTOM_STARTER_DISH", value: "待分类汤" });
+  assert.equal(dishPoolStats(state).total, 3);
+  assert.equal(usableLibrary(state).length, 2);
+  state = reducer(state, { type: "CLASSIFY_CUSTOM_DISH", name: "待分类汤", kind: "soup" });
+  assert.deepEqual(state.customStarterDishes, []);
+  assert.equal(usableLibrary(state).length, 3);
+  assert.equal(dishPoolStats(state).soup, 1);
+});
+
+test("首次挑菜已选数量永远不会超过已看数量", () => {
+  let state = { ...createNewUserState(), onboardingStep: 3 };
+  for (let index = 0; index < 8; index += 1) {
+    state = reducer(state, { type: "CHOOSE_STARTER_DISH", selected: index % 3 !== 0 });
+  }
+
+  assert.equal(state.starterDishDecisions.length, 8);
+  assert.equal(state.starterDishIds.length, 5);
+  assert.ok(state.starterDishIds.length <= state.starterDishDecisions.length);
+});
+
 test("首次挑选结果是菜品库、生成和换菜共用的唯一菜品池", () => {
   let state = { ...createNewUserState(), onboardingStep: 3 };
   for (let index = 0; index < 5; index += 1) state = reducer(state, { type: "CHOOSE_STARTER_DISH", selected: true });
-  state = reducer(state, { type: "ADD_CUSTOM_STARTER_DISH", value: "家里的烧豆腐" });
+  state = reducer(state, { type: "ADD_ONBOARDING_DISH", dish: { id: "home-tofu", name: "家里的烧豆腐", kind: "veg" } });
 
   assert.deepEqual(userLibrary(state).map((dish) => dish.name), ["土豆烧牛肉", "清炒西兰花", "可乐鸡翅", "蒜蓉菜心", "紫菜蛋花汤", "家里的烧豆腐"]);
-  assert.equal(usableLibrary(state).length, 5);
+  assert.equal(usableLibrary(state).length, 6);
   assert.equal(visibleLibrary(state).length, 6);
 
   state = reducer(state, { type: "COMPLETE_ONBOARDING" });
@@ -182,6 +219,63 @@ test("首次挑选结果是菜品库、生成和换菜共用的唯一菜品池",
   const generatedNames = state.menus[1].data.flatMap((day) => state.household.meals.flatMap((meal) => day[meal].map(([name]) => name)));
   const usableNames = new Set(usableLibrary(state).map((dish) => dish.name));
   assert.ok(generatedNames.every((name) => usableNames.has(name)));
+});
+
+test("家庭设置、菜品池和菜单记录可完整保存并恢复", () => {
+  let state = createInitialState();
+  state = reducer(state, { type: "SET_HOUSEHOLD_PEOPLE", value: 3 });
+  state = reducer(state, { type: "TOGGLE_HOUSEHOLD_DAY", value: 1 });
+  state = reducer(state, { type: "SET_MEAL_PATTERN", value: "custom" });
+  state = reducer(state, { type: "ADJUST_CUSTOM_PATTERN", kind: "veg", delta: -1 });
+  state = reducer(state, { type: "ADD_MANUAL_DISH", dish: { id: "home-tofu", name: "家里的烧豆腐", kind: "veg", main: "豆腐" } });
+  state = reducer(state, { type: "GENERATE_DONE" });
+  state = reducer(state, { type: "SAVE_MENU" });
+
+  const saved = serializePrototypeData(state);
+  const restored = restorePrototypeData(createInitialState(), saved);
+  assert.equal(saved.version, 2);
+  assert.equal(restored.household.people, 3);
+  assert.deepEqual(restored.household.dayIndexes, [0, 2, 3, 4]);
+  assert.equal(restored.mealPattern, "custom");
+  assert.deepEqual(restored.customPattern, { meat: 2, veg: 1, soup: 1 });
+  assert.ok(restored.manualDishes.some((dish) => dish.id === "home-tofu"));
+  assert.equal(restored.menus[1].status, "saved");
+  assert.deepEqual(restored.menus[1].data, state.menus[1].data);
+  assert.equal(restored.historyWeekIndex, 1);
+});
+
+test("旧版和异常本地数据会被兼容、限幅和去重", () => {
+  const legacy = restorePrototypeData(createInitialState(), {
+    version: 1,
+    starterDishIds: ["seaweed-soup", "seaweed-egg-soup", "missing"],
+    customStarterDishes: ["紫菜蛋花汤", "自家蒸菜"],
+    manualDishes: [{ id: "manual-1", name: "自家蒸菜", kind: "veg", main: "青菜" }],
+  });
+  assert.equal(legacy.starterDishIds.length, 1);
+  assert.deepEqual(legacy.customStarterDishes, []);
+  assert.equal(legacy.manualDishes.length, 1);
+
+  const restored = restorePrototypeData(createInitialState(), {
+    version: 2,
+    household: { people: 99, meals: ["invalid"], dayIndexes: [-1, 9] },
+    mealPattern: "invalid",
+    customPattern: { meat: 9, veg: -2, soup: 1 },
+    starterDishIds: ["beef-potato", "beef-potato"],
+    manualDishes: [{ id: "duplicate", name: "土豆烧牛肉", kind: "meat" }, { id: "bad", name: "坏数据", kind: "unknown" }],
+    customStarterDishes: ["土豆烧牛肉", "待分类菜", "待分类菜"],
+    menus: { 0: { status: "saved", data: [{ dayIndex: 99, lunch: [], dinner: [] }] } },
+    weekIndex: 99,
+    historyWeekIndex: 99,
+  });
+  assert.equal(restored.household.people, 20);
+  assert.deepEqual(restored.household.meals, ["lunch", "dinner"]);
+  assert.deepEqual(restored.household.dayIndexes, [0, 1, 2, 3, 4]);
+  assert.equal(restored.mealPattern, "2-2-1");
+  assert.deepEqual(restored.customPattern, { meat: 3, veg: 0, soup: 1 });
+  assert.deepEqual(restored.starterDishIds, ["beef-potato"]);
+  assert.deepEqual(restored.customStarterDishes, ["待分类菜"]);
+  assert.equal(restored.manualDishes.length, 0);
+  assert.equal(restored.weekIndex, 1);
 });
 
 test("首次设置会决定实际生成的天数、餐次和每餐结构", () => {

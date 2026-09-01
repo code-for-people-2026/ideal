@@ -35,9 +35,10 @@ import {
   onboardingSteps,
   planStats,
   reducer,
+  restorePrototypeData,
   selectedDish,
+  serializePrototypeData,
   starterDishChoices,
-  starterDishTargets,
   tabs,
   userLibrary,
   usableLibrary,
@@ -65,13 +66,11 @@ const PROTOTYPE_PROFILE_KEY = "paihaocai.prototype.dish-pool.v1";
 
 function restoreDishPool(state) {
   try {
+    // ponytail: `demo=new` is an explicit fresh-start boundary; do not mix a
+    // returning user's persisted dish pool into an in-progress first-use flow.
+    if (state.demoMode === "new") return state;
     const saved = JSON.parse(window.localStorage.getItem(PROTOTYPE_PROFILE_KEY));
-    if (!saved || saved.version !== 1) return state;
-    const starterDishIds = [...new Set((Array.isArray(saved.starterDishIds) ? saved.starterDishIds : []).filter((id) => library.some((dish) => dish.id === id)))];
-    const customStarterDishes = (Array.isArray(saved.customStarterDishes) ? saved.customStarterDishes : []).filter((name) => typeof name === "string" && name.trim()).slice(0, 8);
-    const manualDishes = (Array.isArray(saved.manualDishes) ? saved.manualDishes : []).filter((dish) => dish && typeof dish.id === "string" && typeof dish.name === "string" && Object.hasOwn(kindLabels, dish.kind)).map((dish) => ({ ...dish, name: dish.name.trim(), main: String(dish.main || "待补充") })).filter((dish) => dish.name).slice(0, 30);
-    if (state.demoMode === "ready" && starterDishIds.length === 0 && customStarterDishes.length === 0 && manualDishes.length === 0) return state;
-    return { ...state, starterPoolBase: { meat: 0, veg: 0, soup: 0 }, starterDishIds, customStarterDishes, manualDishes };
+    return restorePrototypeData(state, saved);
   } catch {
     return state;
   }
@@ -138,7 +137,7 @@ function AppHeader({ state, dispatch }) {
     <header className="app-bar">
       {showBack ? <button className="icon-button" type="button" onClick={goBack} aria-label="返回"><ChevronLeftIcon /></button> : <span />}
       <strong>{title}</strong>
-      <span className="prototype-badge">演示</span>
+      <span />
     </header>
   );
 }
@@ -309,21 +308,25 @@ function StarterStep({ state, dispatch }) {
     if (item) stats[item.kind] += 1;
     return stats;
   }, { meat: 0, veg: 0, soup: 0 });
-  const ready = Object.keys(starterDishTargets).every((kind) => selectedStats[kind] >= starterDishTargets[kind]);
-  const finishButton = <button className="dish-picker-complete" type="button" disabled={selected === 0} onClick={() => dispatch({ type: "FINISH_STARTER_DISH_PICK" })}><span><strong>我选得差不多了</strong><small>{ready ? "分类已经比较均衡，可以进入下一步" : "也可以先用这些，之后再继续补充"}</small></span><ChevronRightIcon /></button>;
+  const readiness = dishPoolReadiness(state);
+  const finishCopy = readiness.level === "ready" ? "分类已经比较均衡，可以进入下一步" : readiness.canGenerate ? "已经可以排菜，菜少时可能会重复" : "也可以先用这些，下一步继续补充";
+  const finishButton = <button className="dish-picker-complete" type="button" disabled={selected === 0} onClick={() => dispatch({ type: "FINISH_STARTER_DISH_PICK" })}><span><strong>我选得差不多了</strong><small>{finishCopy}</small></span><ChevronRightIcon /></button>;
   if (!dish) return <><section className="dish-pick-finished"><small>这一批推荐已经看完</small><h2>你挑了 {selected} 道常吃菜</h2><p>不用把所有菜一次想齐，现在结束或者再看一遍都可以。</p><div>{Object.entries(kindLabels).map(([kind, label]) => <span key={kind}><b>{selectedStats[kind]}</b>{label}</span>)}</div></section><button className="review-dishes-button" type="button" onClick={() => dispatch({ type: "REVIEW_STARTER_DISHES" })}>再看一遍推荐菜</button>{finishButton}</>;
   return <><section className="dish-pick-heading"><div><small>{kindLabels[dish.kind]} · 快速挑选</small><strong>已看 {completed} 道</strong></div><span><i style={{ width: `${(completed / starterDishChoices.length) * 100}%` }} /></span></section><SwipeDishCard dish={dish} nextDish={nextDish} onDecision={(selectedDishDecision) => dispatch({ type: "CHOOSE_STARTER_DISH", selected: selectedDishDecision })} /><footer className="dish-pick-footer"><button type="button" disabled={completed === 0} onClick={() => dispatch({ type: "UNDO_STARTER_DISH" })}>撤销上一步</button><span>已选 <b>{selected}</b> 道 · 荤 {selectedStats.meat} / 素 {selectedStats.veg} / 汤 {selectedStats.soup}</span></footer>{finishButton}</>;
 }
 
 function DishPoolStep({ state, dispatch }) {
   const [draft, setDraft] = useState("");
+  const [draftKind, setDraftKind] = useState("meat");
   const selectedDishes = state.starterDishIds.map((id) => library.find((item) => item.id === id)).filter(Boolean);
+  const addedDishes = state.manualDishes || [];
+  const duplicate = userLibrary(state).some((dish) => dish.name.trim().toLocaleLowerCase("zh-CN") === draft.trim().toLocaleLowerCase("zh-CN"));
   const addDish = () => {
-    if (!draft.trim()) return;
-    dispatch({ type: "ADD_CUSTOM_STARTER_DISH", value: draft });
+    if (!draft.trim() || duplicate) return;
+    dispatch({ type: "ADD_ONBOARDING_DISH", dish: { id: `onboarding-${Date.now()}`, name: draft, kind: draftKind } });
     setDraft("");
   };
-  return <><section className="supplement-hero"><small>已经挑选 {selectedDishes.length} 道</small><h2>还有家里常吃的菜吗？</h2><p>有就写菜名，没有可以直接继续。</p><div className="selected-dish-preview">{selectedDishes.length > 0 ? selectedDishes.map((dish) => <span key={dish.id}><img src={dish.image} alt="" /><b>{dish.name}</b></span>) : <em>还没有选择菜品。</em>}</div></section><form className="supplement-form" onSubmit={(event) => { event.preventDefault(); addDish(); }}><label><MagnifyingGlassIcon /><input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="例如：番茄炒蛋" aria-label="补充一道家常菜" /></label><button type="submit" disabled={!draft.trim()}>加入</button></form>{state.customStarterDishes.length > 0 && <div className="custom-dish-chips">{state.customStarterDishes.map((name) => <span key={name}>{name}<button type="button" aria-label={`移除${name}`} onClick={() => dispatch({ type: "REMOVE_CUSTOM_STARTER_DISH", value: name })}><Cross2Icon /></button></span>)}</div>}<div className="page-action"><PrimaryButton tone="green" onClick={() => dispatch({ type: "ONBOARDING_NEXT" })}>{state.customStarterDishes.length > 0 ? "确认补充并继续" : "暂时没有，继续"}</PrimaryButton></div></>;
+  return <><section className="supplement-hero"><small>已经挑选 {selectedDishes.length} 道</small><h2>还有家里常吃的菜吗？</h2><p>写下菜名并选好分类，它会直接加入菜品库。</p><div className="selected-dish-preview">{selectedDishes.length > 0 ? selectedDishes.map((dish) => <span key={dish.id}><img src={dish.image} alt="" /><b>{dish.name}</b></span>) : <em>还没有选择菜品。</em>}</div></section><form className="supplement-form" onSubmit={(event) => { event.preventDefault(); addDish(); }}><label><MagnifyingGlassIcon /><input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="例如：番茄炒蛋" aria-label="补充一道家常菜" /></label><button type="submit" disabled={!draft.trim() || duplicate}>加入</button><fieldset><legend>这道菜属于</legend><div>{Object.entries(kindLabels).map(([value, label]) => <button key={value} type="button" className={draftKind === value ? "active" : ""} aria-pressed={draftKind === value} onClick={() => setDraftKind(value)}>{label}</button>)}</div></fieldset>{duplicate && <small>菜品库里已经有这道菜了</small>}</form>{addedDishes.length > 0 && <div className="custom-dish-chips">{addedDishes.map((dish) => <span key={dish.id}>{dish.name} · {kindLabels[dish.kind]}<button type="button" aria-label={`移除${dish.name}`} onClick={() => dispatch({ type: "REMOVE_MANUAL_DISH", id: dish.id })}><Cross2Icon /></button></span>)}</div>}<div className="page-action"><PrimaryButton tone="green" onClick={() => dispatch({ type: "ONBOARDING_NEXT" })}>{addedDishes.length > 0 ? "确认补充并继续" : "暂时没有，继续"}</PrimaryButton></div></>;
 }
 
 function ReadyStep({ state, dispatch }) {
@@ -346,7 +349,7 @@ function ReadyStep({ state, dispatch }) {
     <>
       <section className={`onboarding-ready ${readiness.level}`}><HeroIcon /><small>{hero.small}</small><h2>{hero.title}</h2><p>{hero.body}</p></section>
       {readiness.level !== "ready" && <section className={`pool-readiness compact ${readiness.level}`}><strong>{readiness.level === "blocked" ? "需要先补充菜品" : "菜品较少，菜单会有重复"}</strong><span>{warningCopy}</span>{stats.custom > 0 && <small>{stats.custom} 道待分类菜暂不参与生成。</small>}</section>}
-      <section className="ready-summary compact"><div><span>家庭安排</span><strong>{state.household.people} 人 · {state.household.meals.map((meal) => mealLabels[meal]).join("和")} · {weekdaySummary(state.household.dayIndexes)}</strong></div><div><span>菜单基础</span><strong>{pattern.meat} 荤 {pattern.veg} 素 {pattern.soup} 汤 · {stats.total} 道菜</strong></div></section>
+      <section className="ready-summary compact"><div><span>家庭安排</span><strong>{state.household.people} 人 · {state.household.meals.map((meal) => mealLabels[meal]).join("和")} · {weekdaySummary(state.household.dayIndexes)}</strong></div><div><span>菜单基础</span><strong>{pattern.meat} 荤 {pattern.veg} 素 {pattern.soup} 汤 · {usableLibrary(state).length} 道可用</strong></div></section>
       {readiness.level === "blocked" ? <div className="page-action ready-actions"><PrimaryButton tone="green" icon={ArchiveIcon} onClick={() => dispatch({ type: "CONTINUE_STARTER_DISH_PICK" })}>继续补充菜品</PrimaryButton><button className="secondary-action" type="button" onClick={() => dispatch({ type: "EDIT_MEAL_PATTERN" })}>调整每餐结构</button></div> : readiness.level === "warning" ? <div className="page-action ready-actions"><PrimaryButton icon={MagicWandIcon} onClick={() => dispatch({ type: "COMPLETE_ONBOARDING" })}>接受重复，去排菜单</PrimaryButton><button className="secondary-action" type="button" onClick={() => dispatch({ type: "CONTINUE_STARTER_DISH_PICK" })}>继续补充菜品</button></div> : <div className="page-action"><PrimaryButton icon={MagicWandIcon} onClick={() => dispatch({ type: "COMPLETE_ONBOARDING" })}>去排第一周菜单</PrimaryButton></div>}
     </>
   );
@@ -372,7 +375,7 @@ function WeekToolbar({ state, dispatch, weekIndex = state.weekIndex, dayIndexes 
 
 function ScheduleHome({ state, dispatch }) {
   const weekState = state.menus[state.weekIndex];
-  const pool = dishPoolStats(state);
+  const usableDishCount = usableLibrary(state).length;
   const poolReadiness = dishPoolReadiness(state);
   const stats = planStats(state);
   const pattern = currentMealPattern(state);
@@ -386,7 +389,7 @@ function ScheduleHome({ state, dispatch }) {
         <span>{isEmpty ? "待生成" : isSaved ? "已保存" : "草稿"}</span>
       </section>
       <section className="rule-card"><h2>{stats.days} 天 {stats.mealCount} 餐，一次排好</h2><p>{state.household.meals.map((meal) => mealLabels[meal]).join("和")} · 每餐 {pattern.meat} 荤 {pattern.veg} 素 {pattern.soup} 汤</p></section>
-      {isEmpty && poolReadiness.level !== "ready" && <section className={`ready-card ${poolReadiness.level}`}><MagicWandIcon /><strong>{poolReadiness.level === "blocked" ? "菜品不足，需要先补充" : `${pool.total} 道菜可用，菜单可能有重复`}</strong></section>}
+      {isEmpty && poolReadiness.level !== "ready" && <section className={`ready-card ${poolReadiness.level}`}><MagicWandIcon /><strong>{poolReadiness.level === "blocked" ? "菜品不足，需要先补充" : `${usableDishCount} 道菜可用，菜单可能有重复`}</strong></section>}
       {isEmpty ? (
         <div className="page-action"><PrimaryButton onClick={() => dispatch({ type: "GENERATE_START" })} icon={MagicWandIcon} disabled={state.generating}>{state.generating ? "正在组合本周菜单…" : "生成本周菜单"}</PrimaryButton></div>
       ) : (
@@ -444,7 +447,7 @@ function MenuEditor({ state, dispatch }) {
 
   return (
     <div className="mobile-page menu-editor">
-      <section className="menu-board">
+      <div className="menu-editor-scroll"><section className="menu-board">
         <header className="menu-board-head"><div><small>{weekRange(state.weekIndex, menu.map((day) => day.dayIndex))}</small><strong>{stats.days} 天 {stats.mealCount} 餐菜单</strong></div><div className="segmented"><button type="button" className={state.viewKind === "meat" ? "active" : ""} onClick={() => dispatch({ type: "SET_VIEW_KIND", value: "meat" })}>荤菜</button><button type="button" className={state.viewKind === "all" ? "active" : ""} onClick={() => dispatch({ type: "SET_VIEW_KIND", value: "all" })}>全部</button></div></header>
         <div className="menu-grid" style={{ "--dish-count": visibleIndexes.length, "--meal-count": state.household.meals.length }}>
           <div className="meal-axis" aria-hidden="true"><span />{state.household.meals.map((meal) => <b key={meal}>{mealLabels[meal]}</b>)}</div>
@@ -458,8 +461,8 @@ function MenuEditor({ state, dispatch }) {
         </div>
       </section>
       <section className="selection-card"><div><small>{menu[state.selection.dayIndex].day}{mealLabels[state.selection.meal]} · {kindLabels[selected.kind]}</small><strong>{selected.name}</strong></div><div><button type="button" onClick={() => dispatch({ type: "OPEN_SWAP", mode: "smart" })}>换一道</button><button type="button" onClick={() => dispatch({ type: "OPEN_LIBRARY_PICK" })}>自己选</button></div></section>
-      <div className="soft-warning"><ClockIcon /><span>有 1 处主料可以再错开</span></div>
-      <div className="page-action sticky"><PrimaryButton onClick={() => dispatch({ type: "CONFIRM_MENU" })} icon={CheckIcon}>确认 {stats.mealCount} 餐菜单</PrimaryButton></div>
+      </div>
+      <div className="menu-editor-action-dock"><PrimaryButton onClick={() => dispatch({ type: "CONFIRM_MENU" })} icon={CheckIcon}>确认 {stats.mealCount} 餐菜单</PrimaryButton></div>
     </div>
   );
 }
@@ -474,11 +477,11 @@ function SwapScreen({ state, dispatch }) {
   }, [chosen, dispatch, state.candidateId]);
   return (
     <div className="mobile-page swap-screen">
-      <div className="swap-heading"><span>只换这一道</span><h2>{current.name}</h2><p>优先从同类菜中挑选，同时避开本周已使用的主料。</p></div>
+      <div className="swap-content-scroll"><div className="swap-heading"><span>只换这一道</span><h2>{current.name}</h2><p>优先从同类菜中挑选，同时避开本周已使用的主料。</p></div>
       <div className="locked-week"><CheckIcon />其他 {stats.dishCount - 1} 道菜保持不变</div>
       <div className="candidate-list">{candidates.map((dish) => <button key={dish.id} type="button" className={state.candidateId === dish.id ? "selected" : ""} onClick={() => dispatch({ type: "SELECT_CANDIDATE", id: dish.id })}><span className="radio">{state.candidateId === dish.id && <CheckIcon />}</span><span><strong>{dish.name}</strong><small>{dish.note}</small></span></button>)}</div>
-      <button className="browse-library" type="button" onClick={() => dispatch({ type: "OPEN_LIBRARY_PICK" })}><ArchiveIcon /><span><strong>在菜品库里自己选</strong></span><ChevronRightIcon /></button>
-      <div className="page-action sticky"><PrimaryButton onClick={() => dispatch({ type: "APPLY_CANDIDATE" })} icon={CheckIcon} disabled={!chosen}>保存这次替换</PrimaryButton></div>
+      <button className="browse-library" type="button" onClick={() => dispatch({ type: "OPEN_LIBRARY_PICK" })}><ArchiveIcon /><span><strong>在菜品库里自己选</strong></span><ChevronRightIcon /></button></div>
+      <div className="swap-action-dock"><PrimaryButton onClick={() => dispatch({ type: "APPLY_CANDIDATE" })} icon={CheckIcon} disabled={!chosen}>保存这次替换</PrimaryButton></div>
     </div>
   );
 }
@@ -489,7 +492,7 @@ function ReadonlyMenuTable({ menu, weekIndex, meals }) {
   const carouselDrag = useCarouselDrag();
   return (
     <section className="menu-board history-menu-board" aria-label="只读菜单表格">
-      <header className="menu-board-head"><div><strong>{stats.days} 天 {stats.mealCount} 餐菜单</strong></div><span>只读</span></header>
+      <header className="menu-board-head history-menu-head"><strong>菜单明细</strong><span>{stats.days} 天 · {stats.mealCount} 餐</span></header>
       <div className="menu-grid" style={{ "--dish-count": dishCount, "--meal-count": meals.length }}>
         <div className="meal-axis" aria-hidden="true"><span />{meals.map((meal) => <b key={meal}>{mealLabels[meal]}</b>)}</div>
         <div className="day-carousel" aria-label={`左右滑动查看${weekdaySummary(menu.map((day) => day.dayIndex))}`} {...carouselDrag}>
@@ -502,8 +505,7 @@ function ReadonlyMenuTable({ menu, weekIndex, meals }) {
 
 function ReviewScreen({ state, dispatch }) {
   const menu = state.menus[state.weekIndex].data;
-  const stats = planStats(state, menu);
-  return <div className="mobile-page review-screen"><section className="review-hero"><small>{weekRange(state.weekIndex, menu.map((day) => day.dayIndex))}</small><strong>确认后保存本周菜单</strong></section><ReadonlyMenuTable menu={menu} weekIndex={state.weekIndex} meals={state.household.meals} /><div className="page-action sticky"><PrimaryButton tone="green" onClick={() => dispatch({ type: "SAVE_MENU" })} icon={CheckIcon}>保存本周菜单</PrimaryButton></div></div>;
+  return <div className="mobile-page review-screen"><div className="review-table-scroll"><section className="review-hero"><small>{weekRange(state.weekIndex, menu.map((day) => day.dayIndex))}</small><strong>确认后保存本周菜单</strong></section><ReadonlyMenuTable menu={menu} weekIndex={state.weekIndex} meals={state.household.meals} /></div><div className="review-action-dock"><PrimaryButton tone="green" onClick={() => dispatch({ type: "SAVE_MENU" })} icon={CheckIcon}>保存本周菜单</PrimaryButton></div></div>;
 }
 
 function ScheduleScreen({ state, dispatch }) {
@@ -533,7 +535,7 @@ function AddDishChooser({ dispatch }) {
 }
 
 function RecommendedDishPicker({ state, dispatch }) {
-  const candidateIdsRef = useRef(library.filter((dish) => dish.image && dish.ingredients?.length && !userLibrary(state).some((item) => item.id === dish.id)).map((dish) => dish.id));
+  const candidateIdsRef = useRef(library.filter((dish) => dish.image && dish.ingredients?.length && !userLibrary(state).some((item) => item.id === dish.id || item.name === dish.name)).map((dish) => dish.id));
   const [index, setIndex] = useState(0);
   const [added, setAdded] = useState(0);
   const dish = library.find((item) => item.id === candidateIdsRef.current[index]);
@@ -566,7 +568,7 @@ function LibraryScreen({ state, dispatch }) {
       <div className="filter-row">{[["all", "全部"], ["meat", "荤菜"], ["veg", "素菜"], ["soup", "汤羹"]].map(([value, label]) => <button key={value} type="button" className={state.libraryFilter === value ? "active" : ""} onClick={() => dispatch({ type: "SET_LIBRARY_FILTER", value })}>{label}</button>)}</div>
       <div className="dish-list">{dishes.map((dish) => <button key={dish.id} type="button" disabled={state.pickingFromLibrary && dish.kind === "custom"} onClick={() => dispatch({ type: state.pickingFromLibrary ? "PICK_LIBRARY_DISH" : "OPEN_LIBRARY_DETAIL", id: dish.id })}><span className={`kind-dot ${dish.kind}`} /><span><strong>{dish.name}</strong><small>{dish.kind === "custom" ? "待补充" : kindLabels[dish.kind]}</small></span><ChevronRightIcon /></button>)}</div>
       {dishes.length === 0 && <div className="empty-result"><ArchiveIcon /><strong>没有找到匹配菜品</strong><button type="button" onClick={() => { dispatch({ type: "SET_LIBRARY_QUERY", value: "" }); dispatch({ type: "SET_LIBRARY_FILTER", value: "all" }); }}>清空筛选</button></div>}
-      {detail && <div className="sheet-backdrop" onClick={() => dispatch({ type: "CLOSE_LIBRARY_DETAIL" })}><section className="detail-sheet" onClick={(event) => event.stopPropagation()}><button className="sheet-close" type="button" onClick={() => dispatch({ type: "CLOSE_LIBRARY_DETAIL" })} aria-label="关闭"><Cross2Icon /></button><span>{detail.kind === "custom" ? "自家菜 · 待分类" : `${kindLabels[detail.kind]} · 主料 ${detail.main}`}</span><h2>{detail.name}</h2><p>{detail.kind === "custom" ? "这是首次准备时手动补充的菜，分类和材料可以之后在菜品库完善。" : `${detail.note}。近 8 周共安排 ${detail.uses} 次，生成时会与本周主料一起校验。`}</p><button type="button" onClick={() => dispatch({ type: "CLOSE_LIBRARY_DETAIL" })}>知道了</button></section></div>}
+      {detail && <div className="sheet-backdrop" onClick={() => dispatch({ type: "CLOSE_LIBRARY_DETAIL" })}><section className="detail-sheet" onClick={(event) => event.stopPropagation()}><button className="sheet-close" type="button" onClick={() => dispatch({ type: "CLOSE_LIBRARY_DETAIL" })} aria-label="关闭"><Cross2Icon /></button><span>{detail.kind === "custom" ? "自家菜 · 待分类" : `${kindLabels[detail.kind]} · 主料 ${detail.main}`}</span><h2>{detail.name}</h2><p>{detail.kind === "custom" ? "选好分类后，这道菜就能参与生成和换菜。" : `${detail.note}。近 8 周共安排 ${detail.uses} 次，生成时会与本周主料一起校验。`}</p>{detail.kind === "custom" ? <div className="detail-classify">{Object.entries(kindLabels).map(([kind, label]) => <button key={kind} type="button" onClick={() => dispatch({ type: "CLASSIFY_CUSTOM_DISH", name: detail.name, kind })}>设为{label}</button>)}</div> : <button type="button" onClick={() => dispatch({ type: "CLOSE_LIBRARY_DETAIL" })}>知道了</button>}</section></div>}
       {state.addingDish && <AddDishSheet state={state} dispatch={dispatch} />}
     </div>
   );
@@ -638,7 +640,7 @@ const profilePanelContent = {
   data: {
     label: "数据与权利",
     title: "个人信息与数据管理",
-    intro: "家庭设置和菜品池保存在当前浏览器。",
+    intro: "家庭设置、菜品池和菜单记录保存在当前浏览器。",
     bullets: ["查询和复制个人信息", "更正或补充不准确的信息", "删除数据或撤回同意", "了解数据删除和保留规则"],
   },
 };
@@ -715,7 +717,7 @@ function DevInspector({ state }) {
       <header><div><span>Live state</span><h2>当前工程状态</h2></div><i className={isNewUser ? "new-user" : ""} /> </header>
       <dl><div><dt>当前入口</dt><dd>{isNewUser ? "首次准备" : tabMeta[state.activeTab].label}</dd></div><div><dt>演示周</dt><dd>{weeks[state.weekIndex].short} · {weekRange(state.weekIndex, state.household.dayIndexes)}</dd></div><div><dt>菜单状态</dt><dd><code>{lifecycle}</code></dd></div><div><dt>当前选菜</dt><dd>{dish?.name || "尚未生成"}</dd></div></dl>
       <section><strong>最近操作</strong><ol>{state.log.map((item, index) => <li key={`${item}-${index}`}><span>{index + 1}</span>{item}</li>)}</ol></section>
-      <div className="mock-boundary"><strong>本地 Mock 边界</strong><p>这一版只演示界面和状态联动，不请求真实后端；刷新会按网址中的演示步骤恢复。</p></div>
+      <div className="mock-boundary"><strong>本地 Mock 边界</strong><p>这一版只演示界面和状态联动，不请求真实后端；已完成用户刷新后会恢复家庭设置、菜品池和菜单记录。</p></div>
     </aside>
   );
 }
@@ -724,12 +726,13 @@ export function App() {
   const [state, dispatch] = useReducer(reducer, undefined, getInitialState);
 
   useEffect(() => {
+    if (state.demoMode === "new") return;
     try {
-      window.localStorage.setItem(PROTOTYPE_PROFILE_KEY, JSON.stringify({ version: 1, starterDishIds: state.starterDishIds, customStarterDishes: state.customStarterDishes, manualDishes: state.manualDishes || [] }));
+      window.localStorage.setItem(PROTOTYPE_PROFILE_KEY, JSON.stringify(serializePrototypeData(state)));
     } catch {
       // ponytail: persistence is best-effort in the local prototype; in-memory behavior remains fully usable.
     }
-  }, [state.customStarterDishes, state.manualDishes, state.starterDishIds]);
+  }, [state.customPattern, state.customStarterDishes, state.demoMode, state.historyWeekIndex, state.household, state.manualDishes, state.mealPattern, state.menus, state.starterDishIds, state.weekIndex]);
 
   useEffect(() => {
     const locked = state.addingDish || Boolean(state.libraryDetailId) || Boolean(state.copyPrompt) || Boolean(state.profilePanel);
