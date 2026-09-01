@@ -412,7 +412,7 @@
         scrollbar-width: none;
       }
       .phone-node.no-nav .mobile-content { inset-bottom: 20px; }
-      .mobile-content::-webkit-scrollbar, .day-grid-scroll::-webkit-scrollbar { display: none; }
+      .mobile-content::-webkit-scrollbar, .static-day-carousel::-webkit-scrollbar { display: none; }
       .bottom-navigation {
         position: absolute;
         z-index: 12;
@@ -522,7 +522,7 @@
       }
 
       .menu-board { padding: 10px; border: 1px solid var(--line); border-radius: 14px; background: white; }
-      .menu-board header {
+      .menu-board > header {
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -530,9 +530,9 @@
         padding-bottom: 8px;
         border-bottom: 1px solid #eee6da;
       }
-      .menu-board header strong, .menu-board header small { display: block; }
-      .menu-board header strong { font-size: 14px; }
-      .menu-board header small { margin-top: 2px; color: var(--muted); font-size: 8px; }
+      .menu-board > header strong, .menu-board > header small { display: block; }
+      .menu-board > header strong { font-size: 14px; }
+      .menu-board > header small { margin-top: 2px; color: var(--muted); font-size: 8px; }
       .filter-row button, .filter-row [data-static-control] {
         min-height: 29px;
         padding: 0 9px;
@@ -547,28 +547,74 @@
       }
       .filter-row button.active, .filter-row [data-static-control].active { color: white; background: var(--green-dark); }
       .view-caption { color: var(--green-dark) !important; font-size: 9px !important; font-weight: 850; }
-      .day-grid-scroll { margin-top: 8px; overflow-x: auto; scrollbar-width: none; }
-      .day-grid {
-        width: max-content;
+      .static-menu-grid {
+        --dish-count: 2;
+        margin-top: 6px;
         display: grid;
-        grid-template-columns: 28px repeat(5, 112px);
-        gap: 5px;
+        grid-template-columns: 25px minmax(0, 1fr);
+        gap: 4px;
       }
-      .day-grid span, .day-grid .dish-cell {
-        min-height: 39px;
-        padding: 3px;
+      .static-meal-axis {
+        display: grid;
+        grid-template-rows: 42px repeat(2, calc(var(--dish-count) * 48px + (var(--dish-count) - 1) * 7px));
+        gap: 9px;
+      }
+      .static-meal-axis > span { border-bottom: 1px solid #eee6da; }
+      .static-meal-axis b {
         display: grid;
         place-items: center;
+        border-radius: 6px;
+        color: #6b655d;
+        background: #f6f1e8;
+        font-size: 10px;
+        letter-spacing: 2px;
+        line-height: 1;
+        text-orientation: upright;
+        writing-mode: vertical-rl;
+      }
+      .static-day-carousel {
+        min-width: 0;
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: calc((100% - 8px) / 2);
+        gap: 8px;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: inline proximity;
+        scrollbar-width: none;
+      }
+      .static-day-column { min-width: 0; scroll-snap-align: start; }
+      .static-day-column > header {
+        height: 42px;
+        padding-top: 2px;
+        border-bottom: 1px solid #eee6da;
+        text-align: center;
+      }
+      .static-day-column > header strong, .static-day-column > header small { display: block; }
+      .static-day-column > header strong { font-size: 11px; }
+      .static-day-column > header small { margin-top: 2px; color: var(--muted); font-size: 9px; }
+      .static-meal-cells { display: grid; gap: 7px; margin-top: 9px; }
+      .static-meal-cells span {
+        min-height: 48px;
+        padding: 4px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
         border: 1px solid var(--line);
+        border-left: 3px solid #d88374;
         border-radius: 7px;
         color: var(--ink);
         background: white;
         font-size: 9px;
-        font-weight: 800;
+        font-weight: 850;
+        line-height: 1.2;
         text-align: center;
       }
-      .day-grid .head { min-height: 28px; border: 0; background: transparent; font-size: 10px; }
-      .day-grid .meal { color: var(--muted); background: #f5f0e8; writing-mode: vertical-rl; }
+      .static-meal-cells span.veg { border-left-color: #70a98b; }
+      .static-meal-cells span.soup { border-left-color: #7fa7cf; }
+      .static-segmented { display: flex; gap: 3px; padding: 3px; border-radius: 8px; background: #f1ece4; }
+      .static-segmented span { min-width: 38px; padding: 6px 8px; border-radius: 6px; color: var(--muted); font-size: 8px; font-weight: 900; text-align: center; }
+      .static-segmented span.active { color: var(--green-dark); background: white; }
       .replace-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
       .replace-actions button, .replace-actions span, .replace-actions [data-static-control] {
         min-height: 42px;
@@ -608,6 +654,26 @@
         font-size: 9px;
         font-weight: 900;
       }
+      .selection-card > div:last-child { display: grid; gap: 5px; }
+      .locked-week, .picking-banner {
+        margin-top: 10px;
+        padding: 10px 11px;
+        border: 1px solid #c7dfd3;
+        border-radius: 11px;
+        color: var(--green-dark);
+        background: #edf8f3;
+        font-size: 9px;
+        font-weight: 850;
+      }
+      .picking-banner strong, .picking-banner small { display: block; }
+      .picking-banner small { margin-top: 4px; color: var(--muted); font-weight: 700; line-height: 1.45; }
+      .browse-library { margin-top: 9px; padding: 11px; border: 1px solid var(--line); border-radius: 11px; color: var(--green-dark); background: white; font-size: 10px; font-weight: 900; }
+      .map-action-dock { position: sticky; z-index: 8; bottom: -1px; margin: 12px -13px -13px; padding: 10px 13px 12px; border-top: 1px solid var(--line); background: rgba(255,255,255,.98); box-shadow: 0 -8px 18px rgba(52,41,31,.07); }
+      .map-action-dock .primary { margin-top: 0; }
+      .review-hero { margin-bottom: 9px; padding: 11px; border-radius: 11px; color: white; background: var(--green-dark); }
+      .review-hero small, .review-hero strong { display: block; }
+      .review-hero small { font-size: 8px; opacity: .76; }
+      .review-hero strong { margin-top: 4px; font-size: 15px; }
 
       .candidate-list, .dish-list, .meal-list, .history-list { display: grid; gap: 8px; margin-top: 11px; }
       .candidate-button, .dish-row, .history-week {
@@ -955,11 +1021,11 @@
           `<article class="meal-row"><header><strong>${title}</strong><span>${date}</span></header><p>${text}</p></article>`;
 
         const mealData = [
-          ["周一", "9/7", "萝卜焖牛腩、白切鸡、蒜蓉菜心、清炒西兰花、冬瓜虾皮汤", "梅菜扣肉、清蒸鲈鱼、荷塘小炒、手撕包菜、玉米排骨汤"],
-          ["周二", "9/8", "红烧排骨、番茄炒蛋、清炒油麦菜、香菇青菜、海带豆腐汤", "红烧牛腩、冬菇蒸肉饼、蒜蓉时蔬、清炒芦笋、番茄蛋汤"],
-          ["周三", "9/9", "香菇滑鸡、萝卜炖肉、清炒菠菜、酸辣土豆丝、菌菇汤", "糖醋排骨、芹菜炒肉、蚝油生菜、家常茄子、紫菜蛋花汤"],
-          ["周四", "9/10", "啤酒鸭、豆角炒肉、蒜蓉空心菜、清炒藕片、萝卜汤", "清炖狮子头、豉汁蒸鱼、小炒杏鲍菇、上汤娃娃菜、丝瓜蛋汤"],
-          ["周五", "9/11", "板栗烧鸡、木须肉、清炒小白菜、麻婆豆腐、莲藕排骨汤", "土豆焖鸭、红烧带鱼、蒜蓉西兰花、干煸四季豆、冬瓜肉丸汤"]
+          ["周一", "9/7", "可乐鸡翅、红烧排骨、蒜蓉菜心、鱼香茄子、玉米排骨汤", "萝卜焖牛腩、土豆烧牛肉、清炒西兰花、鱼香茄子、紫菜蛋花汤"],
+          ["周二", "9/8", "香菇滑鸡、可乐鸡翅、蒜蓉菜心、清炒西兰花、玉米排骨汤", "红烧排骨、萝卜焖牛腩、鱼香茄子、清炒西兰花、紫菜蛋花汤"],
+          ["周三", "9/9", "香菇滑鸡、土豆烧牛肉、蒜蓉菜心、清炒西兰花、玉米排骨汤", "红烧排骨、可乐鸡翅、鱼香茄子、蒜蓉菜心、紫菜蛋花汤"],
+          ["周四", "9/10", "土豆烧牛肉、萝卜焖牛腩、清炒西兰花、鱼香茄子、玉米排骨汤", "香菇滑鸡、可乐鸡翅、蒜蓉菜心、清炒西兰花、紫菜蛋花汤"],
+          ["周五", "9/11", "红烧排骨、土豆烧牛肉、鱼香茄子、蒜蓉菜心、玉米排骨汤", "香菇滑鸡、萝卜焖牛腩、清炒西兰花、鱼香茄子、紫菜蛋花汤"]
         ];
         const allMeals = mealData.flatMap(([day, date, lunch, dinner]) => [
           meal(`${day} · 午饭`, date, lunch),
@@ -985,14 +1051,26 @@
             </div>
           </div>`;
 
-        const menuGrid = (firstDish = "土豆烧牛肉") => `
-          <div class="day-grid-scroll" aria-label="左右滑动查看周一至周五">
-            <div class="day-grid">
-              <span class="head"></span><span class="head">周一</span><span class="head">周二</span><span class="head">周三</span><span class="head">周四</span><span class="head">周五</span>
-              <span class="meal">午饭</span><span class="dish-cell">${firstDish}</span><span class="dish-cell">红烧排骨</span><span class="dish-cell">香菇滑鸡</span><span class="dish-cell">啤酒鸭</span><span class="dish-cell">板栗烧鸡</span>
-              <span class="meal">晚饭</span><span class="dish-cell">梅菜扣肉</span><span class="dish-cell">红烧牛腩</span><span class="dish-cell">糖醋排骨</span><span class="dish-cell">清炖狮子头</span><span class="dish-cell">土豆焖鸭</span>
+        const menuGrid = (firstDish = "可乐鸡翅", dishCount = 2) => {
+          const rows = mealData.map(([day, date, lunch, dinner], index) => ({
+            day, date,
+            lunch: lunch.split("、").slice(0, dishCount),
+            dinner: dinner.split("、").slice(0, dishCount),
+          }));
+          rows[0].lunch[0] = firstDish;
+          const dishCells = dishes => dishes.map((dish, index) => `<span class="${index === 4 ? "soup" : index >= 2 ? "veg" : ""}">${dish}</span>`).join("");
+          return `<div class="static-menu-grid" style="--dish-count:${dishCount}">
+            <div class="static-meal-axis" aria-hidden="true"><span></span><b>午饭</b><b>晚饭</b></div>
+            <div class="static-day-carousel" aria-label="左右滑动查看周一至周五">
+              ${rows.map(({ day, date, lunch, dinner }) => `<section class="static-day-column">
+                <header><strong>${day}</strong><small>${date}</small></header>
+                <div class="static-meal-cells">${dishCells(lunch)}</div>
+                <div class="static-meal-cells">${dishCells(dinner)}</div>
+              </section>`).join("")}
             </div>
           </div>`;
+        };
+        const readonlyMenuGrid = (firstDish = "可乐鸡翅") => `<section class="menu-board"><header><div><strong>菜单明细</strong><small>5 天 · 10 餐</small></div><span class="view-caption">只读</span></header>${menuGrid(firstDish, 5)}</section>`;
 
         const historyCards = `
           <div class="history-list">
@@ -1037,9 +1115,9 @@
           },
           onboardingDishes: {
             tab: "library", title: "还想补充什么菜", state: "第 4 步", back: "返回", hideNav: true,
-            content: `<section class="card" style="margin-top:0"><small>第一轮挑选完成</small><h2>还有家里常吃的菜吗？</h2><p>写下菜名先加入，材料和分类以后再补充。</p><div class="static-selected-row"><span><img src="./assets/dishes/potato-beef.jpg" alt=""><b>土豆烧牛肉</b></span><span><img src="./assets/dishes/shiitake-chicken.jpg" alt=""><b>香菇滑鸡</b></span><span><img src="./assets/dishes/broccoli.jpg" alt=""><b>清炒西兰花</b></span></div></section>
-            <section class="form-row"><header><strong>补充一道家常菜</strong><small>可跳过</small></header><div class="search-field">例如：番茄炒蛋</div></section>
-            <div class="mini-note">首次准备只需要建立一个起点，以后仍可在菜品库继续增删。</div>
+            content: `<section class="card" style="margin-top:0"><small>第一轮挑选完成</small><h2>还有家里常吃的菜吗？</h2><p>写下菜名并选好分类，它会直接加入菜品库。</p><div class="static-selected-row"><span><img src="./assets/dishes/potato-beef.jpg" alt=""><b>土豆烧牛肉</b></span><span><img src="./assets/dishes/shiitake-chicken.jpg" alt=""><b>香菇滑鸡</b></span><span><img src="./assets/dishes/broccoli.jpg" alt=""><b>清炒西兰花</b></span></div></section>
+            <section class="form-row"><header><strong>补充一道家常菜</strong><small>可跳过</small></header><div class="search-field">例如：番茄炒蛋</div><div class="choice-row"><span class="choice-pill active">荤菜</span><span class="choice-pill">素菜</span><span class="choice-pill">汤羹</span></div></section>
+            <div class="mini-note">菜名和分类完整后才计入可用菜品；重复菜名不会再次加入。</div>
             <button class="primary green" type="button" data-advance>暂时没有，继续</button>`
           },
           onboardingReady: {
@@ -1051,56 +1129,55 @@
             <button class="primary" type="button" data-focus-target="w01">接受重复，去排菜单</button>`
           },
           start: {
-            tab: "schedule", title: "本周菜单", state: "待生成",
+            tab: "schedule", title: "本周菜单", state: "",
             content: `<div class="week-toolbar" data-week-picker>
               <button type="button" data-week-move="-1">上周</button>
               <div><strong data-week-label>9月7日—9月11日</strong><small data-week-sub>本周 · 周一至周五</small></div>
               <button type="button" data-week-move="1">下周</button>
             </div>
             <section class="plan-state" data-generate-state><div><strong>10 餐待安排</strong></div><span>待生成</span></section>
-            <section class="card"><small>本周规则</small><h2>五天十餐，一次排好</h2><p>每餐 2 荤 2 素 1 汤 · 只用已确认菜品 · 主料尽量错开</p></section>
+            <section class="card"><h2>5 天 10 餐，一次排好</h2><p>午饭和晚饭 · 每餐 2 荤 2 素 1 汤</p></section>
             <button class="primary" type="button" data-generate data-advance>生成本周菜单</button>`
           },
           review: {
-            tab: "schedule", title: "修改菜单", state: "调整中", back: "返回",
-            content: `<section class="menu-board"><header><div><strong>五天十餐菜单</strong><small>9月7日—11日 · 只读对照</small></div><small class="view-caption">当前查看：荤菜</small></header>${menuGrid()}</section>
-            <section class="selection-card"><div><small>周一午饭 · 荤菜</small><strong>土豆烧牛肉</strong></div><button type="button" data-advance>换这道</button></section>
-            <div class="mini-note">先比较一周分布，再只调整不合适的那一道。</div>
-            <button class="primary" type="button" data-focus-target="w06">直接确认十餐菜单</button>`
+            tab: "schedule", title: "修改菜单", state: "", back: "返回",
+            content: `<section class="menu-board"><header><div><small>9月7日—11日</small><strong>5 天 10 餐菜单</strong></div><div class="static-segmented"><span class="active">荤菜</span><span>全部</span></div></header>${menuGrid()}</section>
+            <section class="selection-card"><div><small>周一午饭 · 荤菜</small><strong>可乐鸡翅</strong></div><div><button type="button" data-advance>换一道</button><button type="button" data-focus-target="w04">自己选</button></div></section>
+            <div class="map-action-dock"><button class="primary" type="button" data-focus-target="w06">确认 10 餐菜单</button></div>`
           },
           replace: {
-            tab: "schedule", title: "替换菜品", state: "调整中", back: "返回",
-            content: `<section class="card" style="margin-top:0"><small>只换这一道</small><h2>土豆烧牛肉</h2><p>其他 49 道菜保持不变。</p></section>
-            <div class="replace-actions"><span>自动换一道（另一条路径）</span><button type="button" data-advance>去菜品库手选</button></div>
-            <div class="mini-note">选择一道候选菜，再保存本次替换。</div>
+            tab: "schedule", title: "替换菜品", state: "", back: "返回",
+            content: `<section class="card" style="margin-top:0"><small>只换这一道</small><h2>可乐鸡翅</h2><p>优先从同类菜中挑选，同时避开本周已使用的主料。</p></section>
+            <div class="locked-week">其他 49 道菜保持不变</div>
             ${candidates()}
-            <button class="primary" type="button" data-save-replacement data-focus-target="w05">保存这次替换</button>`
+            <div class="browse-library" data-focus-target="w04">在菜品库里自己选</div>
+            <div class="map-action-dock"><button class="primary" type="button" data-save-replacement data-focus-target="w05">保存这次替换</button></div>`
           },
           manualPick: {
-            tab: "library", title: "手选替换菜", state: "荤菜", back: "取消",
-            content: `<div class="notice"><strong>为“土豆烧牛肉”手选替换</strong></div>
-            <div class="mini-note">选择一道候选菜，再返回本周菜单。</div>
-            ${candidates(true)}
-            <button class="primary green" type="button" data-save-replacement data-advance>选中并返回菜单</button>`
+            tab: "library", title: "菜品库", state: "", back: "取消",
+            content: `<div class="picking-banner"><strong>手选一道荤菜</strong><small>选中后直接回到菜单，其他菜不变。</small></div>
+            <section class="plan-state"><div><strong>12 道菜</strong><small>荤 7 · 素 4 · 汤 1</small></div></section>
+            <div class="search-field">搜索菜名或主料</div>
+            <div class="filter-row"><span class="active">荤菜</span><span>素菜</span><span>汤羹</span></div>
+            <div class="dish-list"><div class="dish-row"><span><strong>萝卜焖牛腩</strong><small>荤菜</small></span><b>›</b></div><div class="dish-row"><span><strong>红烧排骨</strong><small>荤菜</small></span><b>›</b></div><div class="dish-row"><span><strong>香菇滑鸡</strong><small>荤菜</small></span><b>›</b></div></div>`
           },
           replacedReview: {
-            tab: "schedule", title: "修改菜单", state: "已替换", back: "返回",
-            content: `<section class="plan-state"><div><small>周一午饭已更新</small><strong>姜葱蒸鱼</strong></div><span>只改 1 道</span></section>
-            <section class="menu-board"><header><div><strong>五天十餐菜单</strong><small>9月7日—11日 · 只读对照</small></div><small class="view-caption">当前查看：荤菜</small></header>${menuGrid("姜葱蒸鱼")}</section>
-            <div class="mini-note">其他九个餐次保持原样，主料避重已重新检查。</div>
-            <button class="primary" type="button" data-advance>确认十餐菜单</button>`
+            tab: "schedule", title: "修改菜单", state: "", back: "返回",
+            content: `<section class="menu-board"><header><div><small>9月7日—11日</small><strong>5 天 10 餐菜单</strong></div><div class="static-segmented"><span class="active">荤菜</span><span>全部</span></div></header>${menuGrid("萝卜焖牛腩")}</section>
+            <section class="selection-card"><div><small>周一午饭 · 荤菜</small><strong>萝卜焖牛腩</strong></div><div><button type="button">换一道</button><button type="button">自己选</button></div></section>
+            <div class="map-action-dock"><button class="primary" type="button" data-advance>确认 10 餐菜单</button></div>`
           },
           confirm: {
-            tab: "schedule", title: "确认菜单", state: "待保存", back: "返回",
-            content: `<section class="hero"><small>9月7日—11日</small><strong>五天十餐，准备保存</strong><p>共 50 道菜，已保留 1 条软规则提醒。</p></section>
-            <div class="meal-list">${allMeals}</div>
-            <button class="primary green" type="button" data-save-menu data-advance>保存本周菜单</button>`
+            tab: "schedule", title: "确认菜单", state: "", back: "返回",
+            content: `<section class="review-hero"><small>9月7日—11日</small><strong>确认后保存本周菜单</strong></section>
+            ${readonlyMenuGrid("萝卜焖牛腩")}
+            <div class="map-action-dock"><button class="primary green" type="button" data-save-menu data-advance>保存本周菜单</button></div>`
           },
           saved: {
-            tab: "history", title: "菜单历史", state: "已保存",
-            content: `<section class="success-card" style="margin-top:0"><small>9月7日—9月11日</small><strong>本周菜单已保存</strong><p>5 天 · 10 餐 · 50 道菜</p></section>
-            <button class="history-week" type="button" data-advance style="margin-top:12px"><span><small>本周</small><strong>9月7日—9月11日</strong><small>保存后只读 · 下周可复制</small></span><b>查看完整菜单</b></button>
-            <div class="mini-note">以后从历史查看；需要复用时，先复制成新一周草稿。</div>`
+            tab: "history", title: "历史", state: "",
+            content: `<div class="week-toolbar"><span>‹</span><div><strong>9月7日—11日</strong><small>本周 · 已保存</small></div><span>›</span></div>
+            ${readonlyMenuGrid("萝卜焖牛腩")}
+            <div class="map-action-dock"><button class="primary green" type="button">复制这周到下周</button></div>`
           },
           historyList: {
             tab: "history", title: "历史", state: "已保存",
@@ -1237,26 +1314,24 @@
           },
           {
             key: "weekly", number: "02", y: 1300, label: "给家里排好本周菜单",
-            scene: "周末一次安排五天午晚餐；不合适的只换一道，最后保存到历史。",
+            scene: "生成整周菜单，点中具体菜品只换这一道，确认后直接保存到历史。",
             state: "核心旅程", result: "完成：本周菜单已保存，可查看、可复用",
             phones: [
               make("start", "w01", "02-01 · 开始排菜", "选好周次，准备排菜"),
-              make("review", "w02", "02-02 · 对照菜单", "对照五天十餐"),
-              make("replace", "w03", "02-03 · 替换菜品", "决定怎么换这一道"),
-              make("manualPick", "w04", "02-04 · 手选菜品", "从菜品库手选"),
-              make("replacedReview", "w05", "02-05 · 返回菜单", "回到菜单确认只改一道"),
-              make("confirm", "w06", "02-06 · 确认菜单", "查看总览并保存"),
-              make("saved", "w07", "02-07 · 保存完成", "看到保存成功"),
-              make("historyDetail", "w08", "02-08 · 完整结果", "从历史查看完整结果", { content: `<section class="plan-state"><div><small>9月7日—11日</small><strong>本周已保存</strong></div><span>只读</span></section><div class="meal-list">${allMeals}</div>` })
+              make("review", "w02", "02-02 · 调整菜单", "点中具体菜品再决定是否更换"),
+              make("replace", "w03", "02-03 · 同类换菜", "从同类候选中只换这一道"),
+              make("manualPick", "w04", "02-04 · 菜品库手选", "候选不合适时从菜品池手选"),
+              make("replacedReview", "w05", "02-05 · 返回调整", "替换后回到整周菜单"),
+              make("confirm", "w06", "02-06 · 确认并保存", "检查完整菜单后保存"),
+              make("saved", "w07", "02-07 · 历史结果", "保存后直接进入历史查看")
             ],
             arrows: [
               ["生成整周菜单"],
-              ["这道不合适，换一道"],
-              ["想自己挑，从菜品库手选"],
-              ["选好后回到本周菜单"],
-              ["只改这一道，其余不动"],
-              ["确认并保存"],
-              ["保存后查看完整菜单"]
+              ["点中具体菜品，只调整这一道"],
+              ["同类候选不合适，再去菜品库手选"],
+              ["选中后返回，其他菜保持不变"],
+              ["确认整周结果"],
+              ["保存后直接进入历史"]
             ]
           },
           {
@@ -1327,7 +1402,7 @@
                 <div class="status-bar"><strong>9:41</strong><img src="./assets/status/ios-status-icons.svg" alt=""></div>
                 <header class="app-bar">
                   ${phone.back ? `<button class="back-button" type="button" data-back-action>${phone.back}</button>` : "<span></span>"}
-                  <strong>${phone.title}</strong><span class="app-state">${phone.state}</span>
+                  <strong>${phone.title}</strong>${phone.state ? `<span class="app-state">${phone.state}</span>` : "<span></span>"}
                 </header>
                 <div class="mobile-content">${phone.content}</div>
                 ${phone.hideNav ? "" : nav(phone.tab)}
@@ -1410,6 +1485,7 @@
           const availableHeight = viewport.clientHeight - top - 54;
           const fit = Math.min(availableWidth / region.width, availableHeight / region.height);
           const minimum = name !== "all" ? (window.innerWidth < 720 ? .34 : .46) : .1;
+          viewport.scrollTo(0, 0);
           clearPhoneFocus();
           setLaneVisibility(name);
           state.scale = clamp(Math.max(fit, minimum), .1, 1.15);
@@ -1423,13 +1499,18 @@
         };
         const focusPhone = element => {
           const lane = element.closest(".lane");
+          viewport.scrollTo(0, 0);
           setLaneVisibility(lane.dataset.lane);
-          const boardRect = board.getBoundingClientRect();
-          const rect = element.getBoundingClientRect();
-          const x = (rect.left - boardRect.left) / state.scale;
-          const y = (rect.top - boardRect.top) / state.scale;
-          const width = rect.width / state.scale;
-          const height = rect.height / state.scale;
+          let x = 0;
+          let y = 0;
+          let current = element;
+          while (current && current !== board) {
+            x += current.offsetLeft;
+            y += current.offsetTop;
+            current = current.offsetParent;
+          }
+          const width = element.offsetWidth;
+          const height = element.offsetHeight;
           const top = window.innerWidth < 780 ? 188 : 150;
           const availableHeight = viewport.clientHeight - top - 34;
           state.scale = clamp(Math.max(Math.min((viewport.clientWidth - 44) / width, availableHeight / height, .92), .70), .70, .92);
