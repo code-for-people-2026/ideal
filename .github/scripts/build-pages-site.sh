@@ -82,8 +82,8 @@ while IFS= read -r manifest_line || [[ -n "$manifest_line" ]]; do
     exit 1
   fi
 
-  if printf '%s' "$public_route" | LC_ALL=C grep -q '[^A-Za-z-]'; then
-    echo "Public route must contain only English letters and hyphens: $public_route" >&2
+  if [[ ! "$public_route" =~ ^[a-z]+(-[a-z]+)*$ ]]; then
+    echo "Public route must be lowercase English kebab-case: $public_route" >&2
     exit 1
   fi
 
@@ -124,7 +124,17 @@ while IFS= read -r manifest_line || [[ -n "$manifest_line" ]]; do
     copy_file "$source_file" "$public_route/$source_relative_path"
   done < <(
     find "$prototype_root" \
-      \( -type d \( -name archive -o -name brand-exploration -o -name history \) -prune \) -o \
+      \( -type d \( \
+        -name archive -o \
+        -name brand-exploration -o \
+        -name docs -o \
+        -name event-materials -o \
+        -name history -o \
+        -name product-decisions -o \
+        -name qa -o \
+        -name research -o \
+        -name user-stories \
+      \) -prune \) -o \
       -type f \
       \( \
         -iname '*.html' -o -iname '*.htm' -o \

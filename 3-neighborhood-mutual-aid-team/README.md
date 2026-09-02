@@ -28,8 +28,7 @@
 ├── user-stories/
 ├── research/
 ├── brand-exploration/
-├── history/
-└── archive/
+└── history/
 ```
 
 ## 四类资料分别回答什么
