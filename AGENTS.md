@@ -10,4 +10,4 @@ The repo uses the default five-role triage label vocabulary. See `docs/agents/tr
 
 ### Domain docs
 
-The repo uses a single-context domain-doc layout. See `docs/agents/domain.md`.
+The repo uses a multi-context domain-doc layout. Start from `CONTEXT-MAP.md`, then read the relevant context's `CONTEXT.md`. See `docs/agents/domain.md`.
