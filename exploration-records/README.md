@@ -12,7 +12,6 @@
 
 - [`SESSIONS-2026-07-08.md`](./SESSIONS-2026-07-08.md)：2026 年 7–8 月工作总览与救援清单。
 - [`community-engagement/`](./community-engagement/)：社区、街道、物业、业委会、公益组织等进入路径的研究与沟通记录。
-- [`other-opportunities/`](./other-opportunities/)：未进入当前方向的其他业务机会。
 - [`product-narrative/`](./product-narrative/)：阶段性品牌与产品叙事页面。
 
 ## 使用边界

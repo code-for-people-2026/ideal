@@ -63,7 +63,7 @@
 在仓库根目录先生成与 gh-pages 相同的无数字路由产物，再启动静态文件服务：
 
 ```bash
-bash scripts/build-pages-site.sh /tmp/ideal-pages-preview
+bash .github/scripts/build-pages-site.sh /tmp/ideal-pages-preview
 python3 -m http.server 4173 --directory /tmp/ideal-pages-preview
 ```
 

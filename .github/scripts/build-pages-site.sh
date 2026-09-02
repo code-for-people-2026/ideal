@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd -P)"
 requested_output="${1:-$repo_root/_site}"
 
 mkdir -p "$requested_output"
@@ -157,7 +157,7 @@ while IFS= read -r manifest_line || [[ -n "$manifest_line" ]]; do
   done
 done < "$prototype_manifest"
 
-python3 "$repo_root/scripts/check-public-prototype-shell.py" "$output_dir"
+python3 "$repo_root/.github/scripts/check-public-prototype-shell.py" "$output_dir"
 
 touch "$output_dir/.nojekyll"
 

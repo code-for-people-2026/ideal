@@ -15,4 +15,4 @@ Run and verify the local prototype in the browser before handoff. The default en
 ## Build and verification
 
 - Keep the Vite multi-page inputs limited to `index.html` and `page-map.html` so only the runnable prototype and page map deploy under the same GitHub Pages path.
-- Run `npm test`, `npm run build`, and the repository-level `scripts/build-pages-site.sh` after changes to state behavior or deployment structure.
+- Run `npm test`, `npm run build`, and the repository-level `.github/scripts/build-pages-site.sh` after changes to state behavior or deployment structure.

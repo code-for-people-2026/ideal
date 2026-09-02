@@ -163,5 +163,5 @@
 - 必须保存“全部”、四条核心旅程、“补充验证”和单手机聚焦截图，并检查每张截图的叙事顺序和可读性。
 - 1280 × 720 和当前应用内浏览器视口均无工具栏遮挡、画布裁切或横向页面变形。
 - 页面控制台无 warning/error；键盘焦点清晰；`prefers-reduced-motion` 可用。
-- `npm test`、`npm run build:pages`、仓库级 `scripts/build-pages-site.sh` 和 `git diff --check` 全部通过。
+- `npm test`、`npm run build:pages`、仓库级 `.github/scripts/build-pages-site.sh` 和 `git diff --check` 全部通过。
 - 出现任一一票否决项，必须返工后再交付；未经本地评审，不提交、不推送、不合并。
