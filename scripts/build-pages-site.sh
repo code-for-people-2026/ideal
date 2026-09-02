@@ -25,7 +25,7 @@ find "$output_dir" -mindepth 1 -maxdepth 1 -exec rm -rf -- {} +
 
 copy_file() {
   local source_file="$1"
-  local relative_path="${source_file#"$repo_root/"}"
+  local relative_path="${2:-${source_file#"$repo_root/"}}"
 
   # GitHub Pages URLs are an English/ASCII-only public contract. Research and
   # historical assets may keep Chinese filenames in the repository, but they do
@@ -53,17 +53,48 @@ if [[ ! -f "$prototype_manifest" ]]; then
   exit 1
 fi
 
-while IFS= read -r prototype_dir || [[ -n "$prototype_dir" ]]; do
-  prototype_dir="${prototype_dir%%#*}"
-  prototype_dir="${prototype_dir#"${prototype_dir%%[![:space:]]*}"}"
-  prototype_dir="${prototype_dir%"${prototype_dir##*[![:space:]]}"}"
+public_routes=("")
 
-  [[ -z "$prototype_dir" ]] && continue
+while IFS= read -r manifest_line || [[ -n "$manifest_line" ]]; do
+  manifest_entry="${manifest_line%%#*}"
+  manifest_entry="${manifest_entry#"${manifest_entry%%[![:space:]]*}"}"
+  manifest_entry="${manifest_entry%"${manifest_entry##*[![:space:]]}"}"
 
-  if [[ "$prototype_dir" == */* || "$prototype_dir" == "." || "$prototype_dir" == ".." ]]; then
-    echo "Prototype entries must be root-level directory names: $prototype_dir" >&2
+  [[ -z "$manifest_entry" ]] && continue
+
+  prototype_dir=""
+  public_route=""
+  extra_field=""
+  read -r prototype_dir public_route extra_field <<< "$manifest_entry"
+
+  if [[ -z "$prototype_dir" || -z "$public_route" || -n "$extra_field" ]]; then
+    echo "Prototype entries must contain exactly: <source-directory> <public-route>: $manifest_entry" >&2
     exit 1
   fi
+
+  if [[ "$prototype_dir" == */* || "$prototype_dir" == "." || "$prototype_dir" == ".." ]]; then
+    echo "Prototype source must be a root-level directory name: $prototype_dir" >&2
+    exit 1
+  fi
+
+  if [[ "$public_route" == */* || "$public_route" == "." || "$public_route" == ".." ]]; then
+    echo "Public route must be a root-level path segment: $public_route" >&2
+    exit 1
+  fi
+
+  if printf '%s' "$public_route" | LC_ALL=C grep -q '[^A-Za-z-]'; then
+    echo "Public route must contain only English letters and hyphens: $public_route" >&2
+    exit 1
+  fi
+
+  for existing_route in "${public_routes[@]}"; do
+    [[ -z "$existing_route" ]] && continue
+    if [[ "$existing_route" == "$public_route" ]]; then
+      echo "Duplicate public route in pages-prototypes.txt: $public_route" >&2
+      exit 1
+    fi
+  done
+  public_routes+=("$public_route")
 
   if [[ ! -d "$repo_root/$prototype_dir" ]]; then
     echo "Missing prototype directory: $prototype_dir" >&2
@@ -89,7 +120,8 @@ while IFS= read -r prototype_dir || [[ -n "$prototype_dir" ]]; do
     done
 
     [[ "$inside_app" == true ]] && continue
-    copy_file "$source_file"
+    source_relative_path="${source_file#"$prototype_root/"}"
+    copy_file "$source_file" "$public_route/$source_relative_path"
   done < <(
     find "$prototype_root" \
       \( -type d \( -name archive -o -name brand-exploration -o -name history \) -prune \) -o \
@@ -108,6 +140,8 @@ while IFS= read -r prototype_dir || [[ -n "$prototype_dir" ]]; do
   for app_dir in "${app_dirs[@]}"; do
     [[ -z "$app_dir" ]] && continue
     app_path="${app_dir#"$repo_root/"}"
+    app_relative_path="${app_dir#"$prototype_root/"}"
+    app_public_path="$public_route/$app_relative_path"
     echo "Building $app_path for GitHub Pages"
     npm --prefix "$app_dir" ci
     npm --prefix "$app_dir" run build:pages
@@ -118,8 +152,8 @@ while IFS= read -r prototype_dir || [[ -n "$prototype_dir" ]]; do
       exit 1
     fi
 
-    mkdir -p "$output_dir/$app_path"
-    cp -a "$app_output/." "$output_dir/$app_path/"
+    mkdir -p "$output_dir/$app_public_path"
+    cp -a "$app_output/." "$output_dir/$app_public_path/"
   done
 done < "$prototype_manifest"
 

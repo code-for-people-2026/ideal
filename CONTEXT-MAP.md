@@ -6,9 +6,9 @@
 
 | 编号 | 中文名 | 英文名 | 当前角色 | 上下文边界 |
 |---|---|---|---|---|
-| 3.1 | 近邻闲置 | Neighborhood Exchange | 当前切入点 | 同一小区内的低风险普通闲置物品发布、表达意向与线下交接 |
-| 3.2 | 近邻互助组 | Neighborhood Mutual Aid Team | 上一阶段产品基线，暂缓扩展 | 已有邻里关系中的互助、亲历经验与有限信任网络 |
-| 3.3 | 牛马互助平台 | Niuma Mutual Aid Platform | 长期愿景，暂缓实现 | 跨群体互助、平台级连接、数据权属与治理机制 |
+| 1 | 近邻闲置 | Neighborhood Exchange | 当前切入点 | 同一小区内的低风险普通闲置物品发布、表达意向与线下交接 |
+| 3 | 近邻互助组 | Neighborhood Mutual Aid Team | 上一阶段产品基线，暂缓扩展 | 已有邻里关系中的互助、亲历经验与有限信任网络 |
+| 9 | 牛马互助平台 | Niuma Mutual Aid Platform | 长期愿景，暂缓实现 | 跨群体互助、平台级连接、数据权属与治理机制 |
 
 ### 术语约束
 
@@ -20,25 +20,25 @@
 ### 演进关系
 
 ```text
-3.1 Neighborhood Exchange
+1 Neighborhood Exchange
         │ 真实流转与信任证据
         ▼
-3.2 Neighborhood Mutual Aid Team
+3 Neighborhood Mutual Aid Team
         │ 多组复用与平台化必要性证据
         ▼
-3.3 Niuma Mutual Aid Platform
+9 Niuma Mutual Aid Platform
 ```
 
-箭头表示“满足证据门槛后允许扩展”，不是自动升级，也不是时间承诺。
+箭头表示“满足证据门槛后允许扩展”，不是自动升级，也不是时间承诺。1、3、9 之间有意留空，保留尚未被现实探索发现的中间层级。
 
-## 独立产品上下文
+## 关联与独立产品上下文
 
-| 中文名 | 英文名 / 目录 | 与核心演进链的关系 |
-|---|---|---|
-| 街坊味 | Kith Inn / `kith-inn/` | 可贡献本地供给、食物与手艺的发现经验；完整业务仍独立 |
-| 楼道收一收 | Hallway Harmony / `hallway-harmony/` | 可贡献闲置物回收与公共空间治理经验；完整业务仍独立 |
-| 排好菜 | Meal Mind / `meal-mind/` | 独立的家庭菜单规划产品 |
-| 赛博数学 | Cyber Math / `4.1-cyber-math/` | 独立的 AI 辅助数学教学方向 |
+| 编号 | 中文名 | 英文名 / 目录 | 与核心演进链的关系 |
+|---|---|---|---|
+| 3.1 | 街坊味 | Kith Inn / `3.1-kith-inn/` | 可贡献本地供给、食物与手艺的发现经验；完整业务仍独立 |
+| 3.2 | 楼道收一收 | Hallway Harmony / `3.2-hallway-harmony/` | 可贡献闲置物回收与公共空间治理经验；完整业务仍独立 |
+| 3.3 | 排好菜 | Meal Mind / `3.3-meal-mind/` | 从街坊味菜单能力中独立出的家庭菜单规划产品 |
+| 4.1 | 赛博数学 | Cyber Math / `4.1-cyber-math/` | 独立的 AI 辅助数学教学方向 |
 
 ## 跨上下文规则
 

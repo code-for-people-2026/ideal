@@ -11,9 +11,9 @@ from urllib.parse import unquote, urlsplit
 
 PUBLIC_SHELL_PAGES = (
     "index.html",
-    "3.2-neighborhood-mutual-aid-team/index.html",
-    "3.2-neighborhood-mutual-aid-team/prototype-customer/index.html",
-    "3.2-neighborhood-mutual-aid-team/prototype-implementation/index.html",
+    "neighborhood-mutual-aid-team/index.html",
+    "neighborhood-mutual-aid-team/prototype-customer/index.html",
+    "neighborhood-mutual-aid-team/prototype-implementation/index.html",
     "kith-inn/index.html",
     "kith-inn/prototype-customer/index.html",
     "kith-inn/prototype-implementation/index.html",
@@ -30,14 +30,14 @@ FROZEN_PUBLIC_PAGES = (
 
 CANONICAL_URLS = {
     "index.html": "https://ideal.codeforpeople.cn/",
-    "3.2-neighborhood-mutual-aid-team/index.html": (
-        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/"
+    "neighborhood-mutual-aid-team/index.html": (
+        "https://ideal.codeforpeople.cn/neighborhood-mutual-aid-team/"
     ),
-    "3.2-neighborhood-mutual-aid-team/prototype-customer/index.html": (
-        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/prototype-customer/"
+    "neighborhood-mutual-aid-team/prototype-customer/index.html": (
+        "https://ideal.codeforpeople.cn/neighborhood-mutual-aid-team/prototype-customer/"
     ),
-    "3.2-neighborhood-mutual-aid-team/prototype-implementation/index.html": (
-        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/prototype-implementation/"
+    "neighborhood-mutual-aid-team/prototype-implementation/index.html": (
+        "https://ideal.codeforpeople.cn/neighborhood-mutual-aid-team/prototype-implementation/"
     ),
 }
 
@@ -92,9 +92,9 @@ RECYCLE_HEADER_FORBIDDEN_MARKERS = (
 )
 PROTOTYPE_SHELL_SCRIPT_SRCS = {
     "index.html": "./prototype-shell.js",
-    "3.2-neighborhood-mutual-aid-team/index.html": "../prototype-shell.js",
-    "3.2-neighborhood-mutual-aid-team/prototype-customer/index.html": "../../prototype-shell.js",
-    "3.2-neighborhood-mutual-aid-team/prototype-implementation/index.html": "../../prototype-shell.js",
+    "neighborhood-mutual-aid-team/index.html": "../prototype-shell.js",
+    "neighborhood-mutual-aid-team/prototype-customer/index.html": "../../prototype-shell.js",
+    "neighborhood-mutual-aid-team/prototype-implementation/index.html": "../../prototype-shell.js",
     "kith-inn/index.html": "../prototype-shell.js",
     "kith-inn/prototype-customer/index.html": "../../prototype-shell.js",
     "kith-inn/prototype-implementation/index.html": "../../prototype-shell.js",
@@ -305,7 +305,7 @@ def main() -> None:
             if root_graph_markers:
                 fail("index.html must not render decorative graph anchor dots")
             if (
-                'href="./3.2-neighborhood-mutual-aid-team/" aria-label="打开近邻互助组原型入口"'
+                'href="./neighborhood-mutual-aid-team/" aria-label="打开近邻互助组原型入口"'
                 not in text
             ):
                 fail("index.html must link to the existing neighbors prototype directory")
