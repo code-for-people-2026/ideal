@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+  <!-- 灯笼（在线条下层，线绕灯半周） -->
+  <circle cx="812" cy="472" r="58" fill="#E8492D"/>
+  <circle cx="812" cy="744" r="58" fill="#E8492D"/>
+  <!-- 一笔：脚→身→头环→屋檐→手臂→灯杆绕两灯→穗 -->
+  <path d="M352 880
+           C420 800 458 705 468 606
+           C416 590 414 502 470 494
+           C532 486 534 592 474 606
+           C452 512 356 462 284 404
+           L456 232 L644 404 L836 404
+           A72 72 0 0 1 836 540
+           L836 676
+           A72 72 0 0 1 836 812
+           L836 896"
+        stroke="#1B2A52" stroke-width="42" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

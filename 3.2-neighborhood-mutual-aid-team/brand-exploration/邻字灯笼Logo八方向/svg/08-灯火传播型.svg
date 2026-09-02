@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+  <!-- 左侧一户：屋檐与人 -->
+  <path d="M192 424 L356 282 L520 424" stroke="#1B2A52" stroke-width="48" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="356" cy="496" r="46" fill="#1B2A52"/>
+  <path d="M356 548 L356 752" stroke="#1B2A52" stroke-width="48" stroke-linecap="round" fill="none"/>
+  <path d="M356 752 L304 846" stroke="#1B2A52" stroke-width="48" stroke-linecap="round" fill="none"/>
+  <path d="M356 752 L408 846" stroke="#1B2A52" stroke-width="48" stroke-linecap="round" fill="none"/>
+  <!-- 向前上方伸出的手臂 -->
+  <path d="M356 612 L646 566" stroke="#1B2A52" stroke-width="48" stroke-linecap="round" fill="none"/>
+  <!-- 灯杆 -->
+  <path d="M664 296 L664 876" stroke="#1B2A52" stroke-width="48" stroke-linecap="round" fill="none"/>
+  <path d="M664 328 L748 328" stroke="#1B2A52" stroke-width="40" stroke-linecap="round" fill="none"/>
+  <path d="M748 328 L748 876" stroke="#1B2A52" stroke-width="24" stroke-linecap="round" fill="none"/>
+  <!-- 两盏灯笼 -->
+  <rect x="712" y="368" width="72" height="28" rx="10" fill="#E8492D"/>
+  <ellipse cx="748" cy="490" rx="80" ry="90" fill="#E8492D"/>
+  <rect x="720" y="580" width="56" height="24" rx="9" fill="#E8492D"/>
+  <rect x="712" y="640" width="72" height="28" rx="10" fill="#E8492D"/>
+  <ellipse cx="748" cy="762" rx="80" ry="90" fill="#E8492D"/>
+  <rect x="720" y="852" width="56" height="24" rx="9" fill="#E8492D"/>
+  <path d="M748 876 L748 918" stroke="#E8492D" stroke-width="26" stroke-linecap="round" fill="none"/>
+  <!-- 向右传播的灯光 -->
+  <path d="M856 448 L908 428" stroke="#E8492D" stroke-width="26" stroke-linecap="round" fill="none"/>
+  <path d="M862 490 L920 490" stroke="#E8492D" stroke-width="26" stroke-linecap="round" fill="none"/>
+  <path d="M856 532 L908 552" stroke="#E8492D" stroke-width="26" stroke-linecap="round" fill="none"/>
+  <path d="M856 720 L908 700" stroke="#E8492D" stroke-width="26" stroke-linecap="round" fill="none"/>
+  <path d="M862 762 L920 762" stroke="#E8492D" stroke-width="26" stroke-linecap="round" fill="none"/>
+  <path d="M856 804 L908 824" stroke="#E8492D" stroke-width="26" stroke-linecap="round" fill="none"/>
+  <!-- 下一户的屋檐 -->
+  <path d="M860 940 L922 896 L984 940" stroke="#1B2A52" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="922" cy="954" r="9" fill="#E8492D"/>
+</svg>

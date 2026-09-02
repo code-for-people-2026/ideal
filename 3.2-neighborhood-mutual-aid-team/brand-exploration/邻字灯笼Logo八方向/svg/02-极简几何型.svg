@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+  <!-- 三角屋顶 -->
+  <path d="M292 430 L482 246 L672 430" stroke="#1B2A52" stroke-width="46" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- 圆头 -->
+  <circle cx="482" cy="522" r="46" fill="#1B2A52"/>
+  <!-- 斜伸的手臂 -->
+  <path d="M482 628 L830 486" stroke="#1B2A52" stroke-width="46" stroke-linecap="round" fill="none"/>
+  <!-- 身体与双腿 -->
+  <path d="M482 576 L482 792" stroke="#1B2A52" stroke-width="46" stroke-linecap="round" fill="none"/>
+  <path d="M482 792 L420 902" stroke="#1B2A52" stroke-width="46" stroke-linecap="round" fill="none"/>
+  <path d="M482 792 L544 902" stroke="#1B2A52" stroke-width="46" stroke-linecap="round" fill="none"/>
+  <!-- 竖直灯杆 -->
+  <path d="M830 236 L830 916" stroke="#1B2A52" stroke-width="46" stroke-linecap="round" fill="none"/>
+  <!-- 两盏圆形灯笼穿在杆上 -->
+  <circle cx="830" cy="600" r="78" fill="#E8492D"/>
+  <circle cx="830" cy="796" r="78" fill="#E8492D"/>
+</svg>

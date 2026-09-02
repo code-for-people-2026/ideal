@@ -11,33 +11,33 @@ from urllib.parse import unquote, urlsplit
 
 PUBLIC_SHELL_PAGES = (
     "index.html",
-    "牛马互助平台/index.html",
-    "牛马互助平台/prototype-customer/index.html",
-    "牛马互助平台/prototype-implementation/index.html",
-    "街坊味/index.html",
-    "街坊味/prototype-customer/index.html",
-    "街坊味/prototype-implementation/index.html",
-    "街坊味/prototype-implementation/prototype-customer/index.html",
-    "街坊味/prototype-implementation/prototype-taozi/index.html",
-    "楼道回收提醒/index.html",
+    "3.2-neighborhood-mutual-aid-team/index.html",
+    "3.2-neighborhood-mutual-aid-team/prototype-customer/index.html",
+    "3.2-neighborhood-mutual-aid-team/prototype-implementation/index.html",
+    "kith-inn/index.html",
+    "kith-inn/prototype-customer/index.html",
+    "kith-inn/prototype-implementation/index.html",
+    "kith-inn/prototype-implementation/prototype-customer/index.html",
+    "kith-inn/prototype-implementation/prototype-taozi/index.html",
+    "hallway-harmony/index.html",
 )
 
 FROZEN_PUBLIC_PAGES = (
-    "排好菜/index.html",
-    "排好菜/prototype-customer/index.html",
-    "排好菜/prototype-implementation/index.html",
+    "meal-mind/index.html",
+    "meal-mind/prototype-customer/index.html",
+    "meal-mind/prototype-implementation/index.html",
 )
 
 CANONICAL_URLS = {
     "index.html": "https://ideal.codeforpeople.cn/",
-    "牛马互助平台/index.html": (
-        "https://ideal.codeforpeople.cn/%E7%89%9B%E9%A9%AC%E4%BA%92%E5%8A%A9%E5%B9%B3%E5%8F%B0/"
+    "3.2-neighborhood-mutual-aid-team/index.html": (
+        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/"
     ),
-    "牛马互助平台/prototype-customer/index.html": (
-        "https://ideal.codeforpeople.cn/%E7%89%9B%E9%A9%AC%E4%BA%92%E5%8A%A9%E5%B9%B3%E5%8F%B0/prototype-customer/"
+    "3.2-neighborhood-mutual-aid-team/prototype-customer/index.html": (
+        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/prototype-customer/"
     ),
-    "牛马互助平台/prototype-implementation/index.html": (
-        "https://ideal.codeforpeople.cn/%E7%89%9B%E9%A9%AC%E4%BA%92%E5%8A%A9%E5%B9%B3%E5%8F%B0/prototype-implementation/"
+    "3.2-neighborhood-mutual-aid-team/prototype-implementation/index.html": (
+        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/prototype-implementation/"
     ),
 }
 
@@ -53,13 +53,13 @@ PUBLIC_BRAND_LOGO = (
 
 PERMANENT_REDIRECTS = {
     "牛马互助平台/消费者联盟-亲历推荐-prototype.html": (
-        "https://ideal.codeforpeople.cn/%E7%89%9B%E9%A9%AC%E4%BA%92%E5%8A%A9%E5%B9%B3%E5%8F%B0/"
+        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/"
     ),
     "牛马互助平台/近邻互助组-客户体验-prototype.html": (
-        "https://ideal.codeforpeople.cn/%E7%89%9B%E9%A9%AC%E4%BA%92%E5%8A%A9%E5%B9%B3%E5%8F%B0/prototype-customer/"
+        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/prototype-customer/"
     ),
     "牛马互助平台/近邻互助组-实施对照-prototype.html": (
-        "https://ideal.codeforpeople.cn/%E7%89%9B%E9%A9%AC%E4%BA%92%E5%8A%A9%E5%B9%B3%E5%8F%B0/prototype-implementation/"
+        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/prototype-implementation/"
     ),
 }
 
@@ -104,19 +104,19 @@ RECYCLE_HEADER_FORBIDDEN_MARKERS = (
 )
 PROTOTYPE_SHELL_SCRIPT_SRCS = {
     "index.html": "./prototype-shell.js",
-    "牛马互助平台/index.html": "../prototype-shell.js",
-    "牛马互助平台/prototype-customer/index.html": "../../prototype-shell.js",
-    "牛马互助平台/prototype-implementation/index.html": "../../prototype-shell.js",
-    "街坊味/index.html": "../prototype-shell.js",
-    "街坊味/prototype-customer/index.html": "../../prototype-shell.js",
-    "街坊味/prototype-implementation/index.html": "../../prototype-shell.js",
-    "街坊味/prototype-implementation/prototype-customer/index.html": (
+    "3.2-neighborhood-mutual-aid-team/index.html": "../prototype-shell.js",
+    "3.2-neighborhood-mutual-aid-team/prototype-customer/index.html": "../../prototype-shell.js",
+    "3.2-neighborhood-mutual-aid-team/prototype-implementation/index.html": "../../prototype-shell.js",
+    "kith-inn/index.html": "../prototype-shell.js",
+    "kith-inn/prototype-customer/index.html": "../../prototype-shell.js",
+    "kith-inn/prototype-implementation/index.html": "../../prototype-shell.js",
+    "kith-inn/prototype-implementation/prototype-customer/index.html": (
         "../../../prototype-shell.js"
     ),
-    "街坊味/prototype-implementation/prototype-taozi/index.html": (
+    "kith-inn/prototype-implementation/prototype-taozi/index.html": (
         "../../../prototype-shell.js"
     ),
-    "楼道回收提醒/index.html": "../prototype-shell.js",
+    "hallway-harmony/index.html": "../prototype-shell.js",
 }
 
 
@@ -306,17 +306,17 @@ def main() -> None:
             if root_graph_markers:
                 fail("index.html must not render decorative graph anchor dots")
             if (
-                'href="./牛马互助平台/" aria-label="打开近邻互助组原型入口"'
+                'href="./3.2-neighborhood-mutual-aid-team/" aria-label="打开近邻互助组原型入口"'
                 not in text
             ):
                 fail("index.html must link to the existing neighbors prototype directory")
 
-        if relative_path == "楼道回收提醒/index.html":
+        if relative_path == "hallway-harmony/index.html":
             recycle_header_markers = [
                 marker for marker in RECYCLE_HEADER_FORBIDDEN_MARKERS if marker in text
             ]
             if recycle_header_markers:
-                fail("楼道回收提醒/index.html must not render a duplicate product header")
+                fail("hallway-harmony/index.html must not render a duplicate product header")
 
         if text.count(PUBLIC_BRAND_LINK) != 1:
             fail(f"{relative_path} brand must link to the 码成仝 website home")

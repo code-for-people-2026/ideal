@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+  <!-- 精灵圆身（令的下半化作身体） -->
+  <ellipse cx="440" cy="648" rx="152" ry="168" fill="#1B2A52"/>
+  <!-- 屋檐帽（令的人字头，微微歪斜） -->
+  <path d="M250 502 Q448 276 668 462 Q452 540 250 502 Z" fill="#1B2A52"/>
+  <!-- 眼睛与微笑 -->
+  <circle cx="392" cy="610" r="19" fill="#FFFFFF"/>
+  <circle cx="492" cy="610" r="19" fill="#FFFFFF"/>
+  <path d="M402 686 Q442 712 482 686" stroke="#FFFFFF" stroke-width="16" stroke-linecap="round" fill="none"/>
+  <!-- 行走的双腿 -->
+  <path d="M396 796 L362 884" stroke="#1B2A52" stroke-width="46" stroke-linecap="round" fill="none"/>
+  <path d="M492 796 L532 880" stroke="#1B2A52" stroke-width="46" stroke-linecap="round" fill="none"/>
+  <!-- 举手扶杆 -->
+  <path d="M566 628 L788 556" stroke="#1B2A52" stroke-width="44" stroke-linecap="round" fill="none"/>
+  <!-- 灯杆（阝的竖） -->
+  <path d="M800 300 L800 884" stroke="#1B2A52" stroke-width="40" stroke-linecap="round" fill="none"/>
+  <path d="M800 330 L876 330" stroke="#1B2A52" stroke-width="36" stroke-linecap="round" fill="none"/>
+  <path d="M876 330 L876 898" stroke="#1B2A52" stroke-width="24" stroke-linecap="round" fill="none"/>
+  <!-- 两盏灯笼 -->
+  <rect x="840" y="372" width="72" height="28" rx="10" fill="#E8492D"/>
+  <ellipse cx="876" cy="496" rx="86" ry="94" fill="#E8492D"/>
+  <rect x="848" y="590" width="56" height="24" rx="9" fill="#E8492D"/>
+  <rect x="840" y="656" width="72" height="28" rx="10" fill="#E8492D"/>
+  <ellipse cx="876" cy="780" rx="86" ry="94" fill="#E8492D"/>
+  <rect x="848" y="874" width="56" height="24" rx="9" fill="#E8492D"/>
+  <path d="M876 898 L876 944" stroke="#E8492D" stroke-width="26" stroke-linecap="round" fill="none"/>
+</svg>

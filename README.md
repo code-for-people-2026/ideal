@@ -51,22 +51,26 @@
 
 ## 目录结构
 
+整体方向采用“产品演进蓝图”表达：从当前的 3.1 近邻闲置出发，只有在现实证据充分时才扩展到 3.2 近邻互助组和 3.3 牛马互助平台。见 [产品演进蓝图](./PRODUCT-EVOLUTION.md)与[产品上下文地图](./CONTEXT-MAP.md)。
+
 | 文件夹 | 内容 |
 |---|---|
 | `初期头脑风暴/` | 构想档案：v1.0 → v2.1 + 90 天规划 + 7×7 方向矩阵（思想演化，归档） |
 | `第一个产品/` | 核心资产：数据平权宣言、牛马互助协议、写作参考（对外网站与 webapp 的内容源）+ 摆摊前挑刺记录（grill 留痕 / AI 问答素材） |
 | `小金毛辩论赛摆摊/` | 2026 端午·华语辩坛小友赛 摆摊专属：易拉宝、传单、策划案、准备总览、对话备忘 |
-| [`牛马互助平台/`](./牛马互助平台/README.md) | 近邻互助组产品资料：客户体验原型、实施对照原型、产品决议与 User Stories |
-| [`街坊味/`](./街坊味/README.md) | 街坊味产品资料与整站子页面：结果型客户原型、桃子端与顾客端实施对照原型、产品决议与 User Stories |
-| [`排好菜/`](./排好菜/README.md) | “排好菜”独立菜单生成产品：用于领导评审的可点击工程原型，产品依据为 Kith 用户原型 |
-| [`楼道回收提醒/`](./楼道回收提醒/PRD.md) | “楼道收一收”小程序：住户扫楼层码提醒，收取师傅看待收楼层并一键销单 |
-| [`赛博数学/`](./赛博数学/README.md) | AI 辅助数学教学：龙岗一线数学老师 × 码成工。专题阶梯/思维台阶为核心，含需求梳理、资料索引、三次会议纪要 |
+| [`3.1-neighborhood-exchange/`](./3.1-neighborhood-exchange/README.md) | **当前探索**：近邻闲置，从同一小区的低风险普通闲置物品流转切入 |
+| [`3.2-neighborhood-mutual-aid-team/`](./3.2-neighborhood-mutual-aid-team/README.md) | **上一阶段基线**：近邻互助组（Mutual Aid Team）的产品决议、User Stories 与双原型 |
+| [`3.3-niuma-mutual-aid-platform/`](./3.3-niuma-mutual-aid-platform/README.md) | **长期愿景**：牛马互助平台的平台级草案与历史原型 |
+| [`kith-inn/`](./kith-inn/README.md) | 街坊味产品资料与整站子页面：结果型客户原型、桃子端与顾客端实施对照原型、产品决议与 User Stories |
+| [`hallway-harmony/`](./hallway-harmony/PRD.md) | 楼道收一收小程序：住户扫楼层码提醒，收取师傅看待收楼层并一键销单 |
+| [`meal-mind/`](./meal-mind/README.md) | 排好菜独立菜单生成产品：用于评审的可点击工程原型，产品依据为 Kith 用户原型 |
+| [`4.1-cyber-math/`](./4.1-cyber-math/README.md) | 赛博数学：AI 辅助数学教学，作为独立方向继续保留 |
 
 ## GitHub Pages 发布
 
 `main` 是产品资料和原型的权威来源；`gh-pages` 只保存可部署的 HTML 与必要静态资产。每次推送到 `main` 时，[GitHub Action](./.github/workflows/sync-prototypes-to-pages.yml) 会生成精简产物；只有产物发生变化才会更新 `gh-pages`。
 
-公开原型目录由 [`pages-prototypes.txt`](./pages-prototypes.txt) 显式登记。新增需要发布的原型时，将它的中文根目录名加入该文件即可。
+公开原型目录由 [`pages-prototypes.txt`](./pages-prototypes.txt) 显式登记。新增需要发布的原型时，将它的英文根目录名加入该文件即可。
 
 ## 状态
 

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+  <!-- 令：人字屋顶 -->
+  <path d="M188 396 L400 182" stroke="#1B2A52" stroke-width="58" stroke-linecap="round" fill="none"/>
+  <path d="M400 182 L612 388" stroke="#1B2A52" stroke-width="58" stroke-linecap="round" fill="none"/>
+  <!-- 令：点 = 人头 -->
+  <circle cx="400" cy="470" r="55" fill="#1B2A52"/>
+  <!-- 令：横撇 = 伸出的手臂 + 左腿 -->
+  <path d="M300 634 L748 634" stroke="#1B2A52" stroke-width="58" stroke-linecap="round" fill="none"/>
+  <path d="M432 660 Q396 800 316 872" stroke="#1B2A52" stroke-width="58" stroke-linecap="round" fill="none"/>
+  <!-- 令：点 = 右脚 -->
+  <path d="M472 756 L548 864" stroke="#1B2A52" stroke-width="58" stroke-linecap="round" fill="none"/>
+  <!-- 阝：竖 = 灯杆 -->
+  <path d="M736 258 L736 872" stroke="#1B2A52" stroke-width="58" stroke-linecap="round" fill="none"/>
+  <!-- 阝：横撇弯钩 = 挑竿 + 灯绳 -->
+  <path d="M736 288 L806 288" stroke="#1B2A52" stroke-width="44" stroke-linecap="round" fill="none"/>
+  <path d="M806 288 L806 740" stroke="#1B2A52" stroke-width="26" stroke-linecap="round" fill="none"/>
+  <!-- 两盏串联灯笼（收敛至字高约 2/3） -->
+  <rect x="774" y="342" width="64" height="26" rx="9" fill="#E8492D"/>
+  <ellipse cx="806" cy="434" rx="62" ry="68" fill="#E8492D"/>
+  <rect x="782" y="502" width="48" height="22" rx="8" fill="#E8492D"/>
+  <rect x="774" y="556" width="64" height="26" rx="9" fill="#E8492D"/>
+  <ellipse cx="806" cy="650" rx="62" ry="68" fill="#E8492D"/>
+  <rect x="782" y="718" width="48" height="22" rx="8" fill="#E8492D"/>
+  <path d="M806 740 L806 796" stroke="#E8492D" stroke-width="28" stroke-linecap="round" fill="none"/>
+</svg>
