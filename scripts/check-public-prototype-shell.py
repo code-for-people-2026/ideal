@@ -51,18 +51,6 @@ PUBLIC_BRAND_LOGO = (
     'alt="" width="36" height="36" />'
 )
 
-PERMANENT_REDIRECTS = {
-    "牛马互助平台/消费者联盟-亲历推荐-prototype.html": (
-        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/"
-    ),
-    "牛马互助平台/近邻互助组-客户体验-prototype.html": (
-        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/prototype-customer/"
-    ),
-    "牛马互助平台/近邻互助组-实施对照-prototype.html": (
-        "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/prototype-implementation/"
-    ),
-}
-
 COMMON_REQUIRED_MARKERS = (
     "prototype-shell.css",
     "public-prototype-page",
@@ -215,6 +203,17 @@ def main() -> None:
     site_dir = Path(sys.argv[1]).resolve()
     if not site_dir.is_dir():
         fail(f"missing built site directory: {site_dir}")
+
+    non_english_routes = sorted(
+        str(path.relative_to(site_dir))
+        for path in site_dir.rglob("*")
+        if not str(path.relative_to(site_dir)).isascii()
+    )
+    if non_english_routes:
+        fail(
+            "Pages artifact contains non-English route paths: "
+            + ", ".join(non_english_routes)
+        )
 
     shared_styles = site_dir / "prototype-shell.css"
     if not shared_styles.is_file():
@@ -381,50 +380,13 @@ def main() -> None:
 
         check_page_links(site_dir, relative_path, text)
 
-    redirect_paths = set(PERMANENT_REDIRECTS)
-    for relative_path, target_url in PERMANENT_REDIRECTS.items():
-        page = site_dir / relative_path
-        if not page.is_file():
-            fail(f"missing permanent compatibility redirect: {relative_path}")
-
-        text = page.read_text(encoding="utf-8")
-        required_redirect_markers = (
-            '<meta name="robots" content="noindex" />',
-            f'<meta http-equiv="refresh" content="0; url={target_url}" />',
-            f'<link rel="canonical" href="{target_url}" />',
-            f'const target = new URL("{target_url}");',
-            "target.search = window.location.search;",
-            "target.hash = window.location.hash;",
-            "window.location.replace(target.href);",
-            f'<a href="{target_url}">',
-        )
-        missing = [marker for marker in required_redirect_markers if marker not in text]
-        if missing:
-            fail(f"{relative_path} is not a direct canonical redirect")
-
-        parsed_target = urlsplit(target_url)
-        if parsed_target.scheme != "https" or parsed_target.netloc != "ideal.codeforpeople.cn":
-            fail(f"{relative_path} redirects outside the canonical ideal origin")
-
-        target_path = unquote(parsed_target.path).lstrip("/")
-        target_page = site_dir / target_path
-        if parsed_target.path.endswith("/"):
-            target_page /= "index.html"
-        if not target_page.is_file():
-            fail(f"{relative_path} redirects to a missing canonical page: {target_url}")
-        if str(target_page.relative_to(site_dir)) in redirect_paths:
-            fail(f"{relative_path} creates a multi-hop redirect: {target_url}")
-
-        check_page_links(site_dir, relative_path, text)
-
     for relative_path in FROZEN_PUBLIC_PAGES:
         if not (site_dir / relative_path).is_file():
-            fail(f"missing frozen compatibility or Paihaocai page: {relative_path}")
+            fail(f"missing frozen Meal Mind page: {relative_path}")
 
     print(
         "Public prototype shell check passed: "
         f"{len(PUBLIC_SHELL_PAGES)} redesigned pages and "
-        f"{len(PERMANENT_REDIRECTS)} direct compatibility redirects and "
         f"{len(FROZEN_PUBLIC_PAGES)} frozen pages are present."
     )
 

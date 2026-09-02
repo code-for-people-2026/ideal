@@ -1,5 +1,5 @@
 # One public, root-level prototype directory per line.
-# Use English source-directory names; legacy Chinese URLs are generated at build time.
+# Every published route must use an English/ASCII path.
 3.2-neighborhood-mutual-aid-team
 kith-inn
 hallway-harmony

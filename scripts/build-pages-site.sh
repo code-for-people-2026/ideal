@@ -27,6 +27,14 @@ copy_file() {
   local source_file="$1"
   local relative_path="${source_file#"$repo_root/"}"
 
+  # GitHub Pages URLs are an English/ASCII-only public contract. Research and
+  # historical assets may keep Chinese filenames in the repository, but they do
+  # not become public routes unless they are deliberately renamed first.
+  if printf '%s' "$relative_path" | LC_ALL=C grep -q '[^ -~]'; then
+    echo "Skipping non-English Pages path: $relative_path"
+    return
+  fi
+
   mkdir -p "$output_dir/$(dirname "$relative_path")"
   cp "$source_file" "$output_dir/$relative_path"
 }
@@ -114,64 +122,6 @@ while IFS= read -r prototype_dir || [[ -n "$prototype_dir" ]]; do
     cp -a "$app_output/." "$output_dir/$app_path/"
   done
 done < "$prototype_manifest"
-
-# Keep previously published Chinese routes working without keeping Chinese source
-# directories in the repository. The copies preserve deep historical links; the
-# root pages below immediately point visitors at the canonical English routes.
-copy_legacy_tree() {
-  local source_dir="$1"
-  local legacy_dir="$2"
-
-  mkdir -p "$output_dir/$legacy_dir"
-  cp -a "$output_dir/$source_dir/." "$output_dir/$legacy_dir/"
-}
-
-create_redirect() {
-  local relative_path="$1"
-  local target_url="$2"
-  local redirect_file="$output_dir/$relative_path"
-
-  mkdir -p "$(dirname "$redirect_file")"
-  {
-    printf '%s\n' '<!doctype html>'
-    printf '%s\n' '<html lang="zh-CN">'
-    printf '%s\n' '  <head>'
-    printf '%s\n' '    <meta charset="UTF-8" />'
-    printf '%s\n' '    <meta name="viewport" content="width=device-width, initial-scale=1" />'
-    printf '%s\n' '    <meta name="robots" content="noindex" />'
-    printf '%s\n' "    <meta http-equiv=\"refresh\" content=\"0; url=$target_url\" />"
-    printf '%s\n' "    <link rel=\"canonical\" href=\"$target_url\" />"
-    printf '%s\n' '    <title>原型入口已移动</title>'
-    printf '%s\n' '    <script>'
-    printf '%s\n' '      (() => {'
-    printf '%s\n' "        const target = new URL(\"$target_url\");"
-    printf '%s\n' '        target.search = window.location.search;'
-    printf '%s\n' '        target.hash = window.location.hash;'
-    printf '%s\n' '        window.location.replace(target.href);'
-    printf '%s\n' '      })();'
-    printf '%s\n' '    </script>'
-    printf '%s\n' '  </head>'
-    printf '%s\n' '  <body>'
-    printf '%s\n' "    <p>原型入口已移动到 <a href=\"$target_url\">新的英文路径</a>。</p>"
-    printf '%s\n' '  </body>'
-    printf '%s\n' '</html>'
-  } > "$redirect_file"
-}
-
-copy_legacy_tree "3.2-neighborhood-mutual-aid-team" "牛马互助平台"
-copy_legacy_tree "kith-inn" "街坊味"
-copy_legacy_tree "hallway-harmony" "楼道回收提醒"
-copy_legacy_tree "meal-mind" "排好菜"
-copy_legacy_tree "4.1-cyber-math" "赛博数学"
-
-create_redirect "牛马互助平台/index.html" "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/"
-create_redirect "牛马互助平台/消费者联盟-亲历推荐-prototype.html" "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/"
-create_redirect "牛马互助平台/近邻互助组-客户体验-prototype.html" "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/prototype-customer/"
-create_redirect "牛马互助平台/近邻互助组-实施对照-prototype.html" "https://ideal.codeforpeople.cn/3.2-neighborhood-mutual-aid-team/prototype-implementation/"
-create_redirect "街坊味/index.html" "https://ideal.codeforpeople.cn/kith-inn/"
-create_redirect "楼道回收提醒/index.html" "https://ideal.codeforpeople.cn/hallway-harmony/"
-create_redirect "排好菜/index.html" "https://ideal.codeforpeople.cn/meal-mind/"
-create_redirect "赛博数学/index.html" "https://ideal.codeforpeople.cn/4.1-cyber-math/"
 
 python3 "$repo_root/scripts/check-public-prototype-shell.py" "$output_dir"
 
