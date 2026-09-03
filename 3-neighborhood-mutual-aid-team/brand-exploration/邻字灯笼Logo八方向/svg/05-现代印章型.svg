@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+  <!-- 现代印章外框 -->
+  <rect x="196" y="196" width="632" height="632" rx="40" stroke="#1B2A52" stroke-width="36" fill="none"/>
+  <!-- 令：屋顶 -->
+  <path d="M302 352 L422 268 L542 352" stroke="#1B2A52" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- 令：人头 -->
+  <circle cx="422" cy="430" r="38" fill="#1B2A52"/>
+  <!-- 令：横 = 手臂，伸向灯杆 -->
+  <path d="M322 524 L702 524" stroke="#1B2A52" stroke-width="34" stroke-linecap="round" fill="none"/>
+  <!-- 令：方折撇腿 -->
+  <path d="M402 524 L402 706 L340 706" stroke="#1B2A52" stroke-width="34" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- 令：点 -->
+  <path d="M486 616 L486 700" stroke="#1B2A52" stroke-width="34" stroke-linecap="round" fill="none"/>
+  <!-- 阝：竖 = 灯杆 -->
+  <path d="M700 296 L700 772" stroke="#1B2A52" stroke-width="34" stroke-linecap="round" fill="none"/>
+  <!-- 阝：两个方形空间 = 两盏灯笼 -->
+  <rect x="654" y="352" width="92" height="92" fill="#E8492D"/>
+  <rect x="676" y="374" width="48" height="48" fill="#FFFFFF"/>
+  <rect x="654" y="580" width="92" height="92" fill="#E8492D"/>
+  <rect x="676" y="602" width="48" height="48" fill="#FFFFFF"/>
+</svg>

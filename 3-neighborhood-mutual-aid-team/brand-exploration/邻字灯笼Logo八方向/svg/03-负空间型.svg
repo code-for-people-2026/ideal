@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+  <!-- 凝聚的方形外轮廓 -->
+  <rect x="172" y="172" width="680" height="680" rx="110" fill="#1B2A52"/>
+  <!-- 负形：屋檐 -->
+  <path d="M300 396 L470 268 L616 388" stroke="#FFFFFF" stroke-width="50" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- 负形：人 -->
+  <circle cx="470" cy="478" r="48" fill="#FFFFFF"/>
+  <path d="M470 534 L470 748" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" fill="none"/>
+  <path d="M470 748 L408 830" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" fill="none"/>
+  <path d="M470 748 L532 830" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" fill="none"/>
+  <!-- 负形：伸出的手臂 -->
+  <path d="M470 620 L676 620" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" fill="none"/>
+  <!-- 负形：灯杆通道 -->
+  <path d="M700 340 L700 830" stroke="#FFFFFF" stroke-width="48" stroke-linecap="round" fill="none"/>
+  <!-- 负形灯位 + 灯笼 -->
+  <circle cx="700" cy="470" r="98" fill="#FFFFFF"/>
+  <circle cx="700" cy="720" r="98" fill="#FFFFFF"/>
+  <circle cx="700" cy="470" r="60" fill="#E8492D"/>
+  <circle cx="700" cy="720" r="60" fill="#E8492D"/>
+</svg>

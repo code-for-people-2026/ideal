@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <rect width="1024" height="1024" fill="#FFFFFF"/>
+  <!-- 剪纸屋顶（上弧下曲的月牙檐） -->
+  <path d="M236 428 Q470 160 704 428 Q470 330 236 428 Z" fill="#1B2A52"/>
+  <!-- 头（与屋顶相连） -->
+  <circle cx="470" cy="438" r="62" fill="#1B2A52"/>
+  <!-- 躯干与双腿 -->
+  <path d="M412 520 Q470 492 528 520 L528 714 Q530 762 552 812 L514 844 Q482 792 472 742 Q462 792 426 844 L388 812 Q410 762 412 714 Z" fill="#1B2A52"/>
+  <!-- 伸出的手臂（接灯杆） -->
+  <path d="M520 580 L800 572 L800 640 L520 648 Z" fill="#1B2A52"/>
+  <!-- 灯杆 -->
+  <rect x="786" y="372" width="44" height="520" rx="22" fill="#1B2A52"/>
+  <!-- 胸前镂空 -->
+  <circle cx="470" cy="640" r="18" fill="#FFFFFF"/>
+  <!-- 灯笼一（剪纸镂空） -->
+  <rect x="838" y="356" width="72" height="30" rx="10" fill="#E8492D"/>
+  <ellipse cx="874" cy="452" rx="90" ry="96" fill="#E8492D"/>
+  <rect x="846" y="548" width="56" height="26" rx="9" fill="#E8492D"/>
+  <ellipse cx="874" cy="452" rx="66" ry="12" fill="#FFFFFF"/>
+  <!-- 灯笼二 -->
+  <rect x="838" y="604" width="72" height="30" rx="10" fill="#E8492D"/>
+  <ellipse cx="874" cy="700" rx="90" ry="96" fill="#E8492D"/>
+  <rect x="846" y="796" width="56" height="26" rx="9" fill="#E8492D"/>
+  <ellipse cx="874" cy="700" rx="66" ry="12" fill="#FFFFFF"/>
+  <path d="M874 822 L874 878" stroke="#E8492D" stroke-width="24" stroke-linecap="round" fill="none"/>
+</svg>

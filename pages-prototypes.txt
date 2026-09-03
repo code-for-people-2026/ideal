@@ -1,7 +1,7 @@
-# One public, root-level prototype directory per line.
-# Add a new Chinese directory here when it should be published to GitHub Pages.
-牛马互助平台
-街坊味
-楼道回收提醒
-排好菜
-赛博数学
+# 每行一条映射：<numbered source directory> <public route>。
+# 源目录编号只用于组织仓库，永远不进入公开 URL。
+3-neighborhood-mutual-aid-team neighborhood-mutual-aid-team
+3.1-kith-inn kith-inn
+3.2-hallway-harmony hallway-harmony
+3.3-meal-mind meal-mind
+4.1-cyber-math cyber-math
