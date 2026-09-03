@@ -15,7 +15,9 @@
 
 ## 将 Pull Request 用作分诊入口
 
-**不把 PR 当作需求入口。**（如果本仓库将外部 PR 视为功能需求，请改为 `yes`；`/triage` 会读取此标志。）
+**PRs as a request surface: no.**
+
+这表示本仓库不把 PR 当作需求入口。如果未来将外部 PR 视为功能需求，将上述固定配置行的 `no` 改为 `yes`；`/triage` 会读取该配置。
 
 如果改为 `yes`，PR 使用与 Issue 相同的标签和状态，操作改用对应的 `gh pr` 命令：
 
