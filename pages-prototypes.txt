@@ -1,5 +1,5 @@
-# One mapping per line: <numbered source directory> <public route>.
-# Source numbers organize the repository and never enter public URLs.
+# 每行一条映射：<numbered source directory> <public route>。
+# 源目录编号只用于组织仓库，永远不进入公开 URL。
 3-neighborhood-mutual-aid-team neighborhood-mutual-aid-team
 3.1-kith-inn kith-inn
 3.2-hallway-harmony hallway-harmony

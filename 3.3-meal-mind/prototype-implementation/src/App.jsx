@@ -66,8 +66,8 @@ const PROTOTYPE_PROFILE_KEY = "paihaocai.prototype.dish-pool.v1";
 
 function restoreDishPool(state) {
   try {
-    // ponytail: `demo=new` is an explicit fresh-start boundary; do not mix a
-    // returning user's persisted dish pool into an in-progress first-use flow.
+    // 尾注：`demo=new` 是明确的全新开始边界，不得把回访用户持久化的菜品池
+    // 混入尚未完成的首次使用流程。
     if (state.demoMode === "new") return state;
     const saved = JSON.parse(window.localStorage.getItem(PROTOTYPE_PROFILE_KEY));
     return restorePrototypeData(state, saved);
@@ -730,7 +730,7 @@ export function App() {
     try {
       window.localStorage.setItem(PROTOTYPE_PROFILE_KEY, JSON.stringify(serializePrototypeData(state)));
     } catch {
-      // ponytail: persistence is best-effort in the local prototype; in-memory behavior remains fully usable.
+      // 尾注：本地原型只尽力持久化数据；即使持久化失败，内存中的行为仍完整可用。
     }
   }, [state.customPattern, state.customStarterDishes, state.demoMode, state.historyWeekIndex, state.household, state.manualDishes, state.mealPattern, state.menus, state.starterDishIds, state.weekIndex]);
 

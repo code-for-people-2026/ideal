@@ -1,19 +1,17 @@
-## Agent skills
+## Agent 工作指引
 
-### Repository standards
+### 仓库规范
 
-Before changing files, read `docs/agents/repository-standards.md`. Treat the
-originating issue or PR description as the change-specific spec; it may add
-requirements, but it does not silently replace repository-wide standards.
+修改文件前，先阅读 `docs/agents/repository-standards.md`。发起本次变更的 Issue 或 PR 说明是本次变更的规格；它可以增加要求，但不会默默取代全仓库规范。
 
-### Issue tracker
+### Issue 跟踪器
 
-Issues and PRDs for this repo live as GitHub issues. See `docs/agents/issue-tracker.md`.
+本仓库的 Issue 和 PRD 使用 GitHub Issues 管理。详见 `docs/agents/issue-tracker.md`。
 
-### Triage labels
+### 分诊标签
 
-The repo uses the default five-role triage label vocabulary. See `docs/agents/triage-labels.md`.
+本仓库使用默认的五角色分诊标签词汇。详见 `docs/agents/triage-labels.md`。
 
-### Domain docs
+### 领域文档
 
-The repo uses a multi-context domain-doc layout. Start from `CONTEXT-MAP.md`, then read the relevant context's `CONTEXT.md`. See `docs/agents/domain.md`.
+本仓库使用多上下文的领域文档布局。从 `CONTEXT-MAP.md` 开始，再阅读相关上下文的 `CONTEXT.md`。详见 `docs/agents/domain.md`。

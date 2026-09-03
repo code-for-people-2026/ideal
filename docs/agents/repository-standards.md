@@ -1,31 +1,31 @@
-# Repository Standards
+# 仓库规范
 
-These rules apply to the active repository unless a directory is explicitly
-marked as a historical snapshot. The originating issue or PR describes the
-scope of one change; this file records conventions that should remain true
-across changes.
+除非某个目录被明确标注为历史快照，以下规则适用于当前仓库。发起本次变更的 Issue 或 PR 说明界定单次变更范围；本文件记录应跨变更持续成立的约定。
 
-## Sources of truth
+## 语言与命名
 
-- `CONTEXT-MAP.md` defines product contexts, canonical names, and boundaries.
-- Each context's `CONTEXT.md` is its glossary. It defines domain language only;
-  it is not a PRD, implementation plan, or scratch pad.
-- `PRODUCT-EVOLUTION.md` defines the current product-evolution blueprint and
-  the evidence gates between its levels.
-- Product decisions, PRDs, and User Stories define behavior within one product
-  context. They do not automatically apply to another context.
-- The issue or PR description is the spec for a particular repository change.
-- `pages-prototypes.txt` is the allowlist and route map for public prototypes.
+- 面向人阅读的文档标题、正文、说明和代码注释使用中文。
+- 代码变量、函数、类型、API 字段、命令、新建或重命名的文件名、目录名和公开路由使用英文。
+- 外部工具的固定标签、协议名、Skill 名和产品的正式英文名保留原文，周围解释使用中文。
+- 现存中文路径视为待逐步迁移的历史遗留，不因一次无关变更大规模改名；当文件因结构调整被迁移或重命名时，改用英文路径并同步更新引用。
+- 历史快照保留原文，不为统一语言而追溯改写；新增的快照包装说明使用中文。
 
-When these sources disagree, do not silently choose one. Surface the conflict
-and resolve it in the appropriate source.
+## 权威信息源
 
-## Product directories and names
+- `CONTEXT-MAP.md` 定义产品上下文、固定名称和边界。
+- 每个上下文的 `CONTEXT.md` 是词汇表，只定义领域语言，不作为 PRD、实现计划或草稿区。
+- `PRODUCT-EVOLUTION.md` 定义当前的产品演进蓝图以及层级之间的证据门槛。
+- 产品决议、PRD 和 User Stories 定义单个产品上下文内的行为，不会自动适用到其他上下文。
+- Issue 或 PR 说明是单次仓库变更的规格。
+- `pages-prototypes.txt` 是公开原型的白名单与路由映射。
 
-Active top-level product directories use an English kebab-case slug with a
-numeric ordering prefix. The canonical set is:
+如果上述信息源相互冲突，不要默默选择其一。必须显式提出冲突，并在正确的信息源中解决。
 
-| Number | Chinese name | English name | Directory |
+## 产品目录与名称
+
+当前的顶层产品目录使用英文 kebab-case 短名和数字排序前缀。固定对照如下：
+
+| 编号 | 中文名 | 英文名 | 目录 |
 |---|---|---|---|
 | 1 | 近邻闲置 | Neighborhood Exchange | `1-neighborhood-exchange/` |
 | 3 | 近邻互助组 | Neighborhood Mutual Aid Team | `3-neighborhood-mutual-aid-team/` |
@@ -35,94 +35,60 @@ numeric ordering prefix. The canonical set is:
 | 3.3 | 排好菜 | Meal Mind | `3.3-meal-mind/` |
 | 4.1 | 赛博数学 | Cyber Math | `4.1-cyber-math/` |
 
-The following naming rules are normative:
+以下命名规则是强制约定：
 
-- `1`, `3`, and `9` are non-contiguous levels in a product-evolution
-  blueprint, not release numbers. Do not close their intentional gaps.
-- `3.1`, `3.2`, and `3.3` identify explorations related to level 3. They remain
-  separate top-level product contexts rather than subdirectories of level 3.
-- Assigning a new number requires a real product-boundary decision. An unused
-  number is not, by itself, a reason to fill the gap.
-- **Mutual Aid Team** is the fixed English expression for the product term
-  “互助组”; do not replace it with “Mutual Aid Group”.
-- **Niuma** is a brand transliteration; do not translate it as “Cattle”.
-- `4.1-cyber-math/` is independent of the `1 → 3 → 9` evolution chain.
+- `1`、`3` 和 `9` 是产品演进蓝图中不连续的层级，不是发布版本号。不得填平它们之间有意留下的空白。
+- `3.1`、`3.2` 和 `3.3` 表示与层级 3 有关的探索。它们仍是并列的顶层产品上下文，不放入层级 3 的子目录。
+- 只有真正确立新的产品边界后才能分配新编号。某个编号暂未使用，本身不构成填充它的理由。
+- **Mutual Aid Team** 是产品术语“互助组”的固定英文表达，不得替换为 **Mutual Aid Group**。
+- **Niuma** 是品牌音译，不得翻译为 **Cattle**。
+- `4.1-cyber-math/` 独立于 `1 → 3 → 9` 演进链。
 
-## Scope and historical material
+## 范围与历史材料
 
-- `1-neighborhood-exchange/` is the current product exploration.
-- `3-neighborhood-mutual-aid-team/` is the previous product baseline and is
-  retained without implying that its full scope is currently being built.
-- `9-niuma-mutual-aid-platform/` is the long-term vision; platform-level
-  implementation remains deferred until its evidence gates are met.
-- Reusing research or an interaction pattern across contexts does not transfer
-  feature scope, roles, permissions, promises, or data rights. Record a new
-  decision in the receiving context first.
-- Unique exploration records are historical evidence. Place cross-product
-  records under `exploration-records/` and context-specific superseded material
-  under that context's `history/` directory.
-- A historical package must identify its date or period, source when known,
-  and historical status. Language such as “current” inside a snapshot refers
-  to its original date, not the repository's present direction.
-- Historical prototypes demonstrate what was explored; they are not current
-  requirements and must not become public entry points accidentally.
-- Delete material only when the change explicitly calls for deletion, or when
-  it is a reproducible generated artifact or an exact duplicate whose source is
-  retained. Do not rewrite old records to make them appear consistent with a
-  later decision.
+- `1-neighborhood-exchange/` 是当前产品探索。
+- `3-neighborhood-mutual-aid-team/` 是上一阶段的产品基线，保留它不代表正在实现其完整范围。
+- `9-niuma-mutual-aid-platform/` 是长期愿景，在证据门槛得到满足之前，平台级实现仍然暂缓。
+- 跨上下文复用研究结论或交互模式，不会自动转移功能范围、角色、权限、承诺或数据权利。必须先在接收方上下文中记录新决策。
+- 独特的探索记录是历史证据。跨产品记录放在 `exploration-records/`，上下文内已被替代的材料放在该上下文的 `history/` 目录。
+- 历史包必须说明日期或时段、已知来源和历史状态。快照内的“当前”只指它当时的状态，不表示仓库现状。
+- 历史原型只用于说明当时探索过什么，不是当前需求，也不得意外变成公开入口。
+- 只有当本次变更明确要求删除，或者材料是可重建的生成物/已保留源文件的完全重复项时，才可删除。不得为了让旧记录看上去符合新决策而追溯改写。
 
-## Documentation responsibilities
+## 文档职责
 
-- A product `README.md` states the product's role and current status, then
-  points to its authoritative context, decisions, requirements, and prototypes.
-- `CONTEXT.md` contains only canonical domain terms and distinctions.
-- PRDs and User Stories describe intended behavior. Mark proposals, hypotheses,
-  targets, completed work, and abandoned ideas distinctly.
-- Use an ADR under `docs/adr/` for a hard-to-reverse, non-obvious decision made
-  between meaningful alternatives. Link it from affected guidance when useful.
-- Use relative links for repository files, and keep all links valid after moves.
-- Contact with a street office, community, property manager, owners' committee,
-  or resident is not official approval or endorsement. Preserve the actual
-  status of each interaction and do not present proposed metrics as results.
+- 产品 `README.md` 说明该产品的角色与当前状态，并指向其权威的上下文、决策、需求和原型。
+- `CONTEXT.md` 只包含固定领域术语和区分。
+- PRD 和 User Stories 描述预期行为。提案、假设、目标、已完成工作与已放弃想法必须明确区分。
+- 在 `docs/adr/` 下使用 ADR 记录“在有意义的多个选项中作出的、难以逆转且不直观的决策”，并在有帮助时从相关指引链接它。
+- 仓库文件使用相对链接，移动文件后必须保持所有链接有效。
+- 与街道、社区、物业、业委会或业主的接触不等于正式批准或背书。必须保留每次互动的真实状态，不得把拟定指标表述为已实现结果。
 
-## GitHub Pages and public routes
+## GitHub Pages 与公开路由
 
-- Numeric prefixes organize source directories and never enter public URLs.
-- Public route segments must be lowercase English kebab-case ASCII. Do not add
-  numbered or Chinese route aliases as new canonical URLs.
-- Every published product prototype must have one explicit
-  `source-directory public-route` entry in `pages-prototypes.txt`.
-- Do not infer publication from the presence of an `index.html`. Only allowlisted
-  sources belong in the generated Pages site.
-- Historical records, research, outreach logs, and internal working documents
-  are not published unless a change explicitly adds a reviewed public artifact.
-- Public material must not expose private contact details or turn unverified
-  statements into official facts.
+- 数字前缀只用于组织源目录，永远不进入公开 URL。
+- 公开路由段必须是小写英文 ASCII kebab-case。不得把带编号或中文的路由别名新增为固定 URL。
+- 每个对外发布的产品原型必须在 `pages-prototypes.txt` 中显式写一条 `source-directory public-route` 映射。
+- 不得因为某个目录存在 `index.html` 就推断它应该发布。只有白名单中的源目录才能进入 Pages 产物。
+- 历史记录、研究、接洽日志和内部工作文档默认不发布；只有当某次变更明确新增经过审查的公开产物时才可例外。
+- 公开材料不得暴露私人联系信息，也不得将未经核实的说法包装成正式事实。
 
-The separation between repository prefixes and public routes is recorded in
-[`docs/adr/0001-separate-product-ordering-from-public-routes.md`](../adr/0001-separate-product-ordering-from-public-routes.md).
+仓库前缀与公开路由的分离决策记录在 [`docs/adr/0001-separate-product-ordering-from-public-routes.md`](../adr/0001-separate-product-ordering-from-public-routes.md)。
 
-## Automation layout
+## 自动化布局
 
-- `.github/workflows/` contains GitHub Actions workflow YAML only.
-- Repository-specific helper programs called by workflows live in
-  `.github/scripts/` and are invoked explicitly from the workflow.
-- General-purpose development scripts belong in a top-level `scripts/`
-  directory only when they are not specific to GitHub automation.
-- Do not edit generated `gh-pages` contents by hand. `main` and the Pages build
-  process are authoritative.
+- `.github/workflows/` 只放 GitHub Actions Workflow YAML。
+- Workflow 调用的仓库专用辅助程序放在 `.github/scripts/`，并从 Workflow 中显式调用。
+- 与 GitHub 自动化无关的通用开发脚本才放在顶层 `scripts/` 目录。
+- 不得手工修改生成的 `gh-pages` 内容；`main` 和 Pages 构建流程才是权威来源。
 
-## Change and verification discipline
+## 变更与验证纪律
 
-- Keep repository restructuring separate from new product behavior or prototype
-  implementation unless the issue explicitly combines them.
-- Preserve file history during moves where practical, and update inbound links,
-  build paths, package paths, and publication mappings in the same change.
-- Do not use a cleanup as an opportunity to alter the meaning of historical
-  evidence or to expand an active product's scope.
-- Before merging a structural or publishing change, verify at minimum:
-  - repository-relative Markdown links resolve;
-  - the Pages build completes from its documented entry point;
-  - generated public top-level routes contain neither numeric prefixes nor
-    Chinese path segments;
-  - tests for every affected runnable prototype pass.
+- 除非 Issue 明确同时包含两者，仓库结构调整必须与新产品行为或原型实现分开。
+- 移动文件时尽量保留历史，并在同一次变更中更新入站链接、构建路径、依赖包路径和发布映射。
+- 不得借清理之机改变历史证据的原意，或扩大当前产品的范围。
+- 合并结构或发布变更前，至少验证：
+  - 仓库内 Markdown 相对链接可解析；
+  - Pages 可以从文档约定的入口完成构建；
+  - 生成的公开顶层路由不含数字前缀或中文路径段；
+  - 所有受影响的可运行原型测试通过。

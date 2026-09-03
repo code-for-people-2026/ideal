@@ -165,8 +165,8 @@ export function createInitialState() {
     historyWeekIndex: 1,
     menus: {
       0: { status: "saved", data: createMenu(0, household, mealPatterns["2-2-1"], demoDishPool) },
-      // ponytail: ready mode represents a returning user so history switching is explorable;
-      // reset-to-new-user still clears every week for the first-use journey.
+      // 尾注：`ready` 模式表示回访用户，因此可以探索历史周切换；
+      // `reset-to-new-user` 仍会清空每周数据，用于首次使用旅程。
       1: { status: "saved", data: createMenu(1, household, mealPatterns["2-2-1"], demoDishPool) },
       2: { status: "empty", data: null },
     },
@@ -556,7 +556,7 @@ export function reducer(state, action) {
       return withLog({ ...state, customStarterDishes: state.customStarterDishes.filter((item) => item !== name), manualDishes: [...manualDishes, dish], libraryDetailId: null }, `已将「${name}」设为${kindLabels[kind]}`);
     }
     case "COMPLETE_ONBOARDING": {
-      // ponytail: direct test/demo completion gets one small usable pool; the real flow keeps the user's choices.
+      // 尾注：测试或演示直接完成时会获得一个小型可用菜品池；真实流程保留用户的选择。
       const starterDishIds = state.starterDishIds.length > 0 ? state.starterDishIds : demoStarterDishIds;
       return withLog({ ...state, starterDishIds, demoMode: "ready", onboardingStep: 0, activeTab: "schedule", screen: "home", weekIndex: 1 }, "首次准备完成，可以排第一周菜单");
     }

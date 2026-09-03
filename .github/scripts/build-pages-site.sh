@@ -27,9 +27,8 @@ copy_file() {
   local source_file="$1"
   local relative_path="${2:-${source_file#"$repo_root/"}}"
 
-  # GitHub Pages URLs are an English/ASCII-only public contract. Research and
-  # historical assets may keep Chinese filenames in the repository, but they do
-  # not become public routes unless they are deliberately renamed first.
+  # GitHub Pages URL 以英文 ASCII 路径作为公开契约。研究与历史资产可在仓库中
+  # 暂时保留中文文件名，但在有意改为英文名之前不得成为公开路由。
   if printf '%s' "$relative_path" | LC_ALL=C grep -q '[^ -~]'; then
     echo "Skipping non-English Pages path: $relative_path"
     return
@@ -102,7 +101,7 @@ while IFS= read -r manifest_line || [[ -n "$manifest_line" ]]; do
   fi
 
   prototype_root="$repo_root/$prototype_dir"
-  # ponytail: empty sentinel keeps Bash 3.2 + `set -u` happy; loop bodies skip it.
+  # 尾注：空哨兵值用于兼容 Bash 3.2 与 `set -u`，循环体会跳过它。
   app_dirs=("")
 
   while IFS= read -r -d '' package_file; do

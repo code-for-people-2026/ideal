@@ -1,8 +1,3 @@
-# Separate product ordering from public routes
+# 分离产品排序与公开路由
 
-Product source directories use deliberate numeric prefixes so the repository
-can show the non-contiguous `1 → 3 → 9` evolution blueprint and its related
-explorations. Public GitHub Pages routes use stable English slugs without those
-prefixes: repository ordering may evolve as evidence reveals new product levels,
-but that must not force public URLs to change. The mapping is therefore explicit
-in `pages-prototypes.txt` rather than inferred from directory names.
+产品源目录有意使用数字前缀，以便仓库表达不连续的 `1 → 3 → 9` 演进蓝图及其关联探索。GitHub Pages 的公开路由则使用不带数字前缀的稳定英文短名：随着真实证据显示出新的产品层级，仓库排序可以继续演化，但不应因此迫使公开 URL 变更。因此，源目录与公开路由的映射必须显式写在 `pages-prototypes.txt` 中，不从目录名自动推断。
