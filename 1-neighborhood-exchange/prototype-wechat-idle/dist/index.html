@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><meta name="referrer" content="no-referrer">
+<title>群内访问</title>
+<meta name="description" content="输入本群访问密码，查看邻居的闲置物品。">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23274c3c'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-size='42' fill='white'%3E邻%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css"><script src="/app.js" defer></script>
+</head>
+<body>
+<header><button id="logout" class="logout" hidden>退出访问</button><span id="private-label" class="private">● 群内专属</span></header>
+<main>
+<section id="access-panel" class="access-panel" hidden aria-labelledby="access-title">
+<div class="access-mark" aria-hidden="true">邻</div><p class="eyebrow">群内专属 · 凭密码访问</p>
+<h1 id="access-title">群内访问</h1><p id="access-copy">请通过群内分享的专属链接访问。</p>
+<form id="access-form" hidden><label for="group-password">本群访问密码</label><input id="group-password" name="password" type="password" autocomplete="current-password" required maxlength="128" placeholder="输入群内分享的密码"><button id="unlock" type="submit">进入本群闲置</button><p id="access-error" role="alert"></p></form>
+</section>
+<div id="catalog-content" hidden>
+<section class="intro">
+<div><p class="eyebrow" id="date-range">最近一周</p><h1 id="page-title"></h1></div>
+<div class="summary"><span><strong id="photo-card-count">—</strong>条有图发布</span><span><strong id="photo-count">—</strong>张实拍 / 发布图</span><span><strong id="publisher-count">—</strong>位发布人</span></div>
+</section>
+<aside class="note" id="source-note">仅整理“司徒比特”账号最近一周的本地记录。转让状态以发布人最新回复为准。</aside>
+<div id="load-status" role="status">正在加载物品…</div>
+<section aria-labelledby="group-title" class="group-section">
+<div class="section-head"><div><p class="eyebrow">本周发布</p><h2 id="group-title">有图物品 <span class="count" id="group-count">—</span></h2></div><span class="section-hint">点击物品，查看发布人</span></div>
+<div class="cards" id="group-items"></div>
+</section>
+<section aria-labelledby="text-title" class="text-section">
+<div class="section-head"><div><p class="eyebrow">更多发布</p><h2 id="text-title">文字发布 <span class="count" id="text-count">—</span></h2></div></div>
+<p class="muted">原消息没有附图，保留文字描述和发布人。</p>
+<div class="compact-list" id="text-items"></div>
+</section>
+<footer>仅展示本群的消息、照片、头像和昵称，同群重复发布已合并。<br>求购、家教、招聘、房屋出租、充值及团购信息未计入物品列表。<br><span id="updated-at">每日凌晨 2 点检查本机已同步的微信记录。</span></footer>
+</div>
+</main>
+<dialog id="detail" aria-labelledby="detail-title"><button id="close" class="close" aria-label="关闭详情">×</button><div id="detail-content"></div></dialog>
+</body>
+</html>

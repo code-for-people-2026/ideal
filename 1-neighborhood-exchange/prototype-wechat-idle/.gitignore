@@ -1,0 +1,21 @@
+node_modules/
+public/
+.env*
+!.env.example
+.vercel/
+.neon
+test-results/
+playwright-report/
+.local/
+
+.agents/
+skills-lock.json
+
+# 仅提交页面源文件；群数据与所有真实媒体始终留在本地。
+!dist/
+dist/*
+!dist/app.js
+!dist/index.html
+!dist/style.css
+data/
+.openai/

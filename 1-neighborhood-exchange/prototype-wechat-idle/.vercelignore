@@ -1,0 +1,13 @@
+.git
+.openai
+.env*
+.neon
+.local
+public
+data
+tests
+test-results
+playwright-report
+README.md
+.agents
+skills-lock.json
