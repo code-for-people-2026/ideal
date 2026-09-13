@@ -1,0 +1,13 @@
+node_modules/
+.next/
+.vercel/
+.env*
+*.tsbuildinfo
+
+.runtime/
+sync.config.json
+LOCAL.md
+__pycache__/
+*.pyc
+.agents/
+skills-lock.json

@@ -1,28 +1,49 @@
-# 群订单对账工具
+# 微信群订单对账
 
-这是根据2026年9月10日实际群记录整理的独立对账工具，不属于展示用的双轨原型，也不改变现有 P0 的范围和收款语义。真实快照只在获知专属链接的浏览器内解密。
+这是已上线的 Next.js 对账工具，独立部署在 Vercel，数据库为 Neon。正式域名为 [duizhang.codex.codeforpeople.cn](https://duizhang.codex.codeforpeople.cn/)，三个群使用 `/taozi/`、`/jingjing/`、`/yuma/`。访问需要各群专属链接，完整凭证由站点持有人单独分发。
 
-## 目录与部署
+源码维护在本目录。该工具独立于街坊味展示原型和现有 P0：只整理经授权读取的微信接龙及付款证据，提供人工收款确认，不发起微信支付。
 
-- `taozi/`：桃子群入口。
-- `jingjing/`：静静群入口。
-- `yuma/`：鱼妈群入口。
-- `shared/`：三页共用的界面、对账模型和样式。
+## 功能与数据
 
-使用现有 `pages-prototypes.txt` 的 `3.1-kith-inn kith-inn` 映射，由主分支发布流程生成 `/kith-inn/order-ledger/<group>/`；不手工编辑 `gh-pages`。
+- 按北京时间展示日期和最近成功同步时间；今天位于日期栏最左侧。带凭证首次进入且今天没有订单时，选择最近有订单的日期。
+- 展示客户昵称、商品分量、金额及群内付款证据。人工确认写入 Neon，支持跨设备读取、撤销和并发版本检查。
+- 各群凭证独立存入当前浏览器 localStorage，验证后由 HttpOnly Cookie 建立会话；订单接口校验所属群。
+- `ledger_days` 保存每日订单快照，`ledger_confirmations` 保存人工确认及对应订单依据，`ledger_imports` 记录导入批次，`ledger_sync_status` 单独保存成功同步时间。
 
-## 访问与保存
+## 开发与验证
 
-订单中的昵称、地址、金额等内容全部包含在 AES-256-GCM 加密快照中。每群使用独立随机密钥，密钥仅通过专属链接片段传递，不写入 Git，也不发送给 Pages 服务器。知道完整链接的人可以读取对应群数据，请仅交给该群主。页面不加载第三方脚本，不发送订单和手动确认到远端。
+使用 Node.js 22.23 或更新版本，在本目录执行：
 
-手动收款记录按群隔离，保存在当前浏览器的 `localStorage`。刷新后保留，同浏览器标签页之间更新；不承诺跨设备或多人同步。清除网站数据会丢失手动记录。存储失败时显示错误，不假装保存成功。
+```sh
+npm ci
+npm run dev
+npm run build
+node --experimental-strip-types --test scripts/browser-session.test.mjs
+```
 
-群内收款回执、已转账待收款、红包待核金额与未见付款分别显示；群主可手动确认并撤销。未见群内付款不等于欠款。无法对应订单的收款另列提示，不自动抵扣。桃子和静静本人登记的明确份数沿用本次群记录汇总，不根据现有产品的“自家订单”术语推断为免收款。
+环境变量由 `.env.production.local` 或 Vercel 环境提供：
 
-## 数据更新
+| 变量 | 用途 |
+|---|---|
+| `DATABASE_URL` | Neon PostgreSQL 连接 |
+| `SESSION_SECRET` | 会话签名密钥 |
+| `LEDGER_KEY_HASHES` | 以三个群 slug 为键、SHA-256 凭证摘要为值的 JSON |
 
-当前快照截至2026年9月10日18:20，不自动同步微信。准备仓库外的 `tao.json`、`jing.json`、`yu.json` 后，使用 [加密脚本](../../scripts/encrypt-order-ledger.mjs) 生成各自的 `snapshot.json`，并将专属链接输出到仓库外。更新时保留既有订单ID；重新生成密钥后需要重新分发完整链接。
+新数据库执行 `npm run db:init`。`scripts/verify-db.mjs` 是显式运行的数据库集成检查，会创建并清理独立测试 schema；日常前端验证不需要运行它。
 
-## 验证
+## Vercel 部署
 
-运行 `node --test tests/order-ledger.test.mjs` 验证保存、撤销、群隔离、失败处理、金额统计与解密边界；运行 `.github/scripts/build-pages-site.sh` 验证 Pages 产物。
+复用现有 `duizhang` 项目，避免重新创建项目或数据库。在本目录执行 `vercel link --project duizhang`，然后 `vercel --prod`。若在 Vercel 连接本 GitHub 仓库，Root Directory 设置为 `3.1-kith-inn/order-ledger`，框架为 Next.js。
+
+代码迁移保留现有自定义域名、Neon 数据库和专属凭证。运行时配置、微信原始消息、订单导出与访问链接不进入 Git；`.gitignore` 和 `.vercelignore` 分别约束提交和部署边界。
+
+## 本机定时同步
+
+复制 [同步配置模板](./sync.config.example.json) 为本机 `sync.config.json`，填写现有账号、群和命令路径，运行时数据使用仓库外的私有目录。也可通过 `ORDER_LEDGER_CONFIG` 指定配置文件。
+
+每天北京时间凌晨 1 点由本机 Codex 定时任务按 [同步步骤](./SYNC.md) 执行。电脑和 Codex 需要可运行，微信消息需已同步。只有完成采集、分析和云端核验才更新成功同步时间；没有新增订单也记录本次成功检查。
+
+## GitHub Pages 撤下
+
+旧 `/kith-inn/order-ledger/{taozi,jingjing,yuma}/` 静态部署已由 Vercel 版本替代。旧静态入口、加密快照及生成脚本从当前源码移除；本目录存在 `vercel.json`，Pages 构建明确跳过这类独立应用，并检查产物中不存在旧入口。其他产品的 Pages 发布保持原有流程。

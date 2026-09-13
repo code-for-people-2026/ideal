@@ -1,7 +1,7 @@
 # 每行一条映射：<numbered source directory> <public route>。
 # 源目录编号只用于组织仓库，永远不进入公开 URL。
 3-neighborhood-mutual-aid-team neighborhood-mutual-aid-team
-# 包含 order-ledger/{taozi,jingjing,yuma} 独立入口；仅发布加密订单快照。
+# order-ledger 独立部署在 Vercel，由构建脚本排除。
 3.1-kith-inn kith-inn
 3.2-hallway-harmony hallway-harmony
 3.3-meal-mind meal-mind

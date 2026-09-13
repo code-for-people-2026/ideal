@@ -1,0 +1,10 @@
+.env*
+.git/
+scripts/
+SYNC.md
+
+sync.config*.json
+.runtime/
+LOCAL.md
+.agents/
+skills-lock.json

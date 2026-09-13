@@ -1,0 +1,13 @@
+{
+  "runtimeDir": "/absolute/path/to/private-runtime",
+  "wechatConfig": "/absolute/path/to/wechat/config.json",
+  "wechatCli": "/absolute/path/to/wechat-cli",
+  "wechatPython": "/absolute/path/to/python",
+  "account": "YOUR_WECHAT_ACCOUNT",
+  "accountDirectory": "YOUR_ACCOUNT_DIRECTORY",
+  "groups": {
+    "taozi": "YOUR_TAOZI_CHATROOM",
+    "jingjing": "YOUR_JINGJING_CHATROOM",
+    "yuma": "YOUR_YUMA_CHATROOM"
+  }
+}
