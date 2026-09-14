@@ -1,5 +1,7 @@
 {
   "runtimeDir": "/absolute/path/to/private-runtime",
+  "accessLinksFile": "/absolute/path/to/private-group-links.json",
+  "shareFontPath": "C:/Windows/Fonts/msyh.ttc",
   "wechatConfig": "/absolute/path/to/wechat/config.json",
   "wechatCli": "/absolute/path/to/wechat-cli",
   "wechatPython": "/absolute/path/to/python",

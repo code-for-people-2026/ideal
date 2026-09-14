@@ -16,6 +16,10 @@
 
 8. 核验完成后（包括没有新订单的情况），写本地报告 `<runtimeDir>/sync-日期.json`，包含 `{capturedAt,status:"verified",manualConfirmationsPreserved:true,totalOrders}`，时间来自本次采集 manifest，总数来自核验后的云端导出。运行 `node --env-file=.env.production.local scripts/record-sync.mjs <runtimeDir>/inbox/本次目录 <runtimeDir>/sync-日期.json`，检查三个群的同步时间已记录。此步骤仅更新同步状态，不改订单快照或人工确认。采集失败、分析未完成或云端核验失败时不执行此步骤；失败时保留上次成功同步时间。
 
+9. 成功同步后，运行 `node --experimental-strip-types scripts/generate-share.mjs`。本机 `sync.config.json` 中的 `accessLinksFile` 指向私有 JSON 文件，键为 taozi/jingjing/yuma，值为完整专属链接；`shareFontPath` 可指定中文字体。脚本读取云端接口（包含有效人工确认），对比各群日期的订单与异常说明，不把单纯同步时间变化视为更新。初次运行只为每群最近有订单的日期生成一张；以后为每个有变化的群日期生成图片。输出的 pending 是待发送清单；未成功发送的任务会保留，重复运行不会新建重复任务，同一天未发送的旧版会被新版替代。图片与状态都在 `<runtimeDir>/shares/`，不得提交到 Git 或公开托管。
+10. 阅读并使用 `computer-use` 技能，经 `@oai/sky` 的窗口 UI 操作本机微信。先从窗口列表确认当前账号，打开并核验收件人是「文件传输助手」，通过「发送文件」的选择文件对话框附加 pending 指定的 PNG。发送前核对群名、日期、图片和收件人；发送后检查图片消息实际出现且无失败标记。用户已经授权将这三群分享图片发送给自己的文件传输助手，不需要逐次再次请求确认。不得发送给任何群或其他联系人，不能改用微信内部接口、命令或操作系统脚本代替 computer-use。
+11. 每张核验成功后运行 `node --experimental-strip-types scripts/generate-share.mjs --sent 待发送ID`（可一次给多个已核验的 ID）。发送前或结果不确定时不得提前标记成功。失败保留队列并报告原因，下次先查看助手会话核对是否已经发出，避免不确定结果重试造成重复；采集失败时不生成新图，但已核验旧图的待发送任务可在确认当前状态后补发。电脑锁屏、微信未登录或 UI 工具不可用时不能宣称发送成功；数据库同步成功和图片发送成功分别报告。二维码包含群专属访问凭证，只向用户授权的本人文件传输助手发送。
+
 ## 本地配置与限制
 
 - `.env.production.local` 是 Vercel 拉取的数据库连接和站点会话配置，不打印、提交或上传到其他服务。微信密钥仅位于 `<runtimeDir>/wechat/`，不可上传。
