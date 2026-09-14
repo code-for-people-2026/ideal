@@ -10,14 +10,17 @@
     "dev": "node --env-file-if-exists=.env.local scripts/dev-server.mjs",
     "db:import": "node --env-file=.env.local scripts/import-snapshot.mjs",
     "db:check": "node scripts/import-snapshot.mjs --check",
-    "test": "node --test tests/snapshot.test.mjs tests/auth.test.mjs",
+    "test": "node --test tests/snapshot.test.mjs tests/auth.test.mjs tests/share.test.mjs",
     "test:browser": "node --env-file=.env.local --test tests/loading.test.mjs",
-    "build": "node scripts/verify-build.mjs"
+    "build": "node scripts/verify-build.mjs",
+    "share:export": "node scripts/export-share.mjs"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^1.1.0"
+    "@neondatabase/serverless": "^1.1.0",
+    "qrcode-generator": "^2.0.4"
   },
   "devDependencies": {
-    "@playwright/test": "^1.63.0"
+    "@playwright/test": "^1.63.0",
+    "jsqr": "^1.4.0"
   }
 }
