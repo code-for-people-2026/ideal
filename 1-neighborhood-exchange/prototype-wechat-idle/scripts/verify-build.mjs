@@ -12,11 +12,12 @@ for (const file of ['people.json', 'items.json', 'metadata.json']) {
 }
 // 仅发布无敏感数据的页面外壳；照片和头像只打包进鉴权函数。
 await mkdir('public', { recursive: true });
-const allowed = ['index.html', 'app.js', 'style.css'];
+const sources = { 'index.html': 'dist/index.html', 'app.js': 'dist/app.js', 'style.css': 'dist/style.css', 'share.js': 'web/share.js', 'qrcode.js': 'node_modules/qrcode-generator/dist/qrcode.mjs' };
+const allowed = Object.keys(sources);
 const groups = { baolong: '🌟宝龙二手闲置交易群🌟', luanshan: '峦山美地闲置物品小市集' };
 const outputFiles = [...allowed, ...Object.keys(groups).map(group => group + '.html')];
 for (const file of await readdir('public')) if (!outputFiles.includes(file)) throw new Error('公开产物包含非白名单文件');
-await Promise.all(allowed.map(file => copyFile(`dist/${file}`, `public/${file}`)));
+await Promise.all(allowed.map(file => copyFile(sources[file], `public/${file}`)));
 const template = await readFile('dist/index.html', 'utf8');
 for (const [group, name] of Object.entries(groups)) {
   await writeFile(`public/${group}.html`, template.replace('<title>群内访问</title>', `<title>${name}</title>`).replace('<h1 id="access-title">群内访问</h1>', `<h1 id="access-title">${name}</h1>`).replace('<h1 id="page-title"></h1>', `<h1 id="page-title">${name}</h1>`));

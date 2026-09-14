@@ -1,3 +1,4 @@
+import { openShare, resetShare } from '/share.js';
 const groups = {baolong:'🌟宝龙二手闲置交易群🌟',luanshan:'峦山美地闲置物品小市集'};
 const shortGroups = {baolong:'宝龙群',luanshan:'峦山美地群'};
 const pathGroup = location.pathname.replaceAll('/', '');
@@ -9,6 +10,8 @@ document.querySelector('#access-title').textContent = groups[activeGroup] || '�
 if (activeGroup) document.querySelector('#access-copy').textContent = '输入本群密码，查看物品照片与发布人。';
 const dialog = document.querySelector('#detail');
 let people = new Map();
+let currentCatalog = null;
+document.querySelector('#share-button').onclick = () => { if (currentCatalog) openShare(currentCatalog, activeGroup); };
 const el = (tag, cls, text) => {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -156,6 +159,9 @@ dialog.addEventListener('click', e => {
 });
 let loading = false;
 function lock() {
+  resetShare();
+  currentCatalog = null;
+  document.querySelector('#share-button').hidden = true;
   dialog.close();
   people.clear();
   for (const id of ['group-items', 'text-items', 'detail-content']) document.querySelector('#' + id).replaceChildren();
@@ -165,7 +171,7 @@ function lock() {
   document.querySelector('#logout').hidden = true;
   document.querySelector('#private-label').hidden = false;
 }
-async function unlockWithPassword(password) {
+async function unlockWithPassword(password, invite) {
   const button = document.querySelector('#unlock');
   const input = document.querySelector('#group-password');
   const error = document.querySelector('#access-error');
@@ -173,7 +179,7 @@ async function unlockWithPassword(password) {
   button.disabled = true;
   button.textContent = '正在验证…';
   try {
-    const response = await fetch('/api/access?group=' + activeGroup, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }), signal: AbortSignal.timeout(15000) });
+    const response = await fetch('/api/access?group=' + activeGroup, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(invite !== undefined ? { invite } : { password }), signal: AbortSignal.timeout(15000) });
     if (!response.ok) {
       error.textContent = response.status === 401 ? '密码不正确，请使用本群的访问密码。' : response.status === 429 ? '尝试次数过多，请 15 分钟后再试。' : '暂时无法验证，请稍后重试。';
       return;
@@ -223,6 +229,8 @@ async function init() {
   load.setAttribute('aria-busy', 'true');
   try {
     const { people: profiles, items, metadata } = await loadCatalog();
+    currentCatalog = { people: profiles, items, metadata };
+    document.querySelector('#share-button').hidden = false;
     document.querySelector('#access-panel').hidden = true;
     document.querySelector('#catalog-content').hidden = false;
     document.querySelector('#logout').hidden = false;
@@ -264,13 +272,15 @@ async function init() {
 }
 async function openPage() {
   const parameters = new URLSearchParams(location.hash.slice(1));
-  if (!parameters.has('password')) { await init(); return; }
+  if (!parameters.has('password') && !parameters.has('invite')) { await init(); return; }
   const password = parameters.get('password');
+  const invite = parameters.has('invite') ? parameters.get('invite') : undefined;
   parameters.delete('password');
+  parameters.delete('invite');
   // 分享密码只在片段中传递，验证前清除地址栏及当前历史条目。
   history.replaceState(null, '', location.pathname + location.search + (parameters.size ? '#' + parameters.toString() : ''));
   lock();
-  if (activeGroup) await unlockWithPassword(password);
+  if (activeGroup) await unlockWithPassword(password, invite);
 }
 openPage();
 window.addEventListener('hashchange', openPage);
