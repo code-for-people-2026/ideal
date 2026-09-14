@@ -17,6 +17,10 @@ npm-debug.log*
 .env
 .env.local
 .envrc.local
+.env.*
+!.env.example
+!.env.*.example
+.codex-remote-attachments/
 
 # Build artifacts
 dist/

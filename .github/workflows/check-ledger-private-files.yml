@@ -1,0 +1,26 @@
+name: 检查对账私有文件
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: 检查当前文件与 PR 新增提交
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [[ -n "$BASE_SHA" ]]; then
+            python3 .github/scripts/check-ledger-private-files.py --base "$BASE_SHA"
+          else
+            python3 .github/scripts/check-ledger-private-files.py
+          fi

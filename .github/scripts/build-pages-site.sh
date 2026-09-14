@@ -148,6 +148,8 @@ while IFS= read -r manifest_line || [[ -n "$manifest_line" ]]; do
 
   for app_dir in "${app_dirs[@]}"; do
     [[ -z "$app_dir" ]] && continue
+    # Vercel 应用不进入静态 Pages 构建或发布产物。
+    [[ -f "$app_dir/vercel.json" ]] && continue
     app_path="${app_dir#"$repo_root/"}"
     app_relative_path="${app_dir#"$prototype_root/"}"
     app_public_path="$public_route/$app_relative_path"
