@@ -1,0 +1,40 @@
+name: Node runtime checks
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  prototypes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - directory: 1-neighborhood-exchange/prototype-wechat-idle
+            node: '22.23.4'
+            test: test
+          - directory: 3.3-meal-mind/prototype-customer
+            node: '24.22.1'
+            test: test:sites
+          - directory: 3.3-meal-mind/prototype-implementation
+            node: '24.22.1'
+            test: test
+    defaults:
+      run:
+        working-directory: ${{ matrix.directory }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: ${{ matrix.directory }}/package-lock.json
+      - run: node --version
+      - run: npm ci
+      - run: npm run build
+      - run: npm run ${{ matrix.test }}
